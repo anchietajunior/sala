@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="400" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 7 — desenfileirar() remove 20
+  </text>
+
+  <!-- Nó 2 antigo (20) — agora liberado -->
+  <rect x="240" y="160" width="120" height="60" fill="#f0f0f0" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,4" rx="4"/>
+  <line x1="320" y1="160" x2="320" y2="220" stroke="#cfd6dd" stroke-width="2"/>
+  <text x="280" y="198" text-anchor="middle" font-size="22" fill="#aaa"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="340" y="198" text-anchor="middle" font-size="14" fill="#aaa">×</text>
+
+  <text x="300" y="145" text-anchor="middle" font-size="13" fill="#b54" font-weight="600" font-style="italic">
+    free()
+  </text>
+
+  <!-- inicio agora aponta para o nó 30 (em cima) -->
+  <text x="410" y="125" text-anchor="end" font-size="13" font-weight="600" fill="#2c5d8a">inicio →</text>
+  <line x1="415" y1="120" x2="450" y2="155" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="446,148 450,158 441,156" fill="#2c5d8a"/>
+
+  <!-- Nó: 30 (único restante) -->
+  <rect x="420" y="160" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="500" y1="160" x2="500" y2="220" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="460" y="198" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="520" y="198" text-anchor="middle" font-size="14" fill="#888">∅</text>
+
+  <!-- fim aponta também para 30 (em baixo) -->
+  <line x1="415" y1="265" x2="455" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="450,228 456,219 462,227" fill="#2c5d8a"/>
+  <text x="410" y="272" text-anchor="end" font-size="13" font-weight="600" fill="#2c5d8a">fim →</text>
+
+  <!-- Box de retorno -->
+  <rect x="300" y="280" width="200" height="32" fill="#fffbe6" stroke="#2c5d8a" stroke-width="1.5" rx="4"/>
+  <text x="400" y="302" text-anchor="middle" font-size="14" fill="#2c5d8a" font-weight="600">
+    retorno: 20
+  </text>
+
+  <!-- Nota -->
+  <text x="400" y="305" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic" opacity="0">.</text>
+</svg>

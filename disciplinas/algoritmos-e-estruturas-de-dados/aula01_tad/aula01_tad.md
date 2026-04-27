@@ -129,7 +129,7 @@ Para cada situação abaixo, identifique qual TAD descreve melhor o comportament
 - a) Botão "desfazer" (Ctrl+Z) de um editor de texto.
 - b) Fila de impressão de uma impressora compartilhada do laboratório.
 - c) Histórico de páginas visitadas no navegador (botão "voltar").
-- d) Atendimento por ordem de chegada na recepção do RU.
+- d) Atendimento por ordem de chegada na recepção de uma clínica.
 - e) Lista de tarefas (to-do) onde você sempre faz a mais antiga primeiro.
 
 *Critério de aceitação*: para cada item, indicar TAD + 1 linha de justificativa baseada **no comportamento** (LIFO, FIFO, etc.).

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- ========== TOPO: Lista duplamente encadeada ========== -->
+  <text x="450" y="35" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Lista duplamente encadeada
+  </text>
+
+  <!-- inicio -->
+  <text x="100" y="135" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">inicio →</text>
+
+  <!-- Rótulos (só no primeiro) -->
+  <text x="135" y="95" text-anchor="middle" font-size="10" fill="#888">ant</text>
+  <text x="180" y="95" text-anchor="middle" font-size="10" fill="#888">valor</text>
+  <text x="225" y="95" text-anchor="middle" font-size="10" fill="#888">prox</text>
+
+  <!-- Nó dupla 1: 10 -->
+  <rect x="115" y="105" width="135" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="155" y1="105" x2="155" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="210" y1="105" x2="210" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="135" y="142" text-anchor="middle" font-size="14" fill="#888">∅</text>
+  <text x="183" y="142" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="230" cy="135" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Setas nó1 <-> nó2 (duas direções) -->
+  <line x1="250" y1="128" x2="290" y2="128" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="285,123 297,128 285,133" fill="#2c5d8a"/>
+  <line x1="290" y1="142" x2="250" y2="142" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="255,137 243,142 255,147" fill="#2c5d8a"/>
+
+  <!-- Nó dupla 2: 20 -->
+  <rect x="300" y="105" width="135" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="340" y1="105" x2="340" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="395" y1="105" x2="395" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="320" cy="135" r="3.5" fill="#2c5d8a"/>
+  <text x="368" y="142" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="415" cy="135" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Setas nó2 <-> nó3 -->
+  <line x1="435" y1="128" x2="475" y2="128" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="470,123 482,128 470,133" fill="#2c5d8a"/>
+  <line x1="475" y1="142" x2="435" y2="142" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="440,137 428,142 440,147" fill="#2c5d8a"/>
+
+  <!-- Nó dupla 3: 30 -->
+  <rect x="485" y="105" width="135" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="525" y1="105" x2="525" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="580" y1="105" x2="580" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="505" cy="135" r="3.5" fill="#2c5d8a"/>
+  <text x="553" y="142" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="600" y="142" text-anchor="middle" font-size="14" fill="#888">∅</text>
+
+  <!-- fim -->
+  <text x="700" y="135" font-size="14" font-weight="600" fill="#2c5d8a">← fim</text>
+
+  <!-- Nota -->
+  <text x="450" y="200" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    Cada nó guarda ant (anterior) e prox (próximo). Percurso nos dois sentidos.
+  </text>
+
+  <!-- Separador -->
+  <line x1="100" y1="225" x2="800" y2="225" stroke="#cfd6dd" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ========== EMBAIXO: Lista circular ========== -->
+  <text x="450" y="265" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Lista circular (simplesmente encadeada)
+  </text>
+
+  <!-- inicio -->
+  <text x="100" y="370" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">inicio →</text>
+
+  <!-- Nó circ 1: 10 -->
+  <rect x="115" y="340" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="195" y1="340" x2="195" y2="400" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="155" y="378" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="215" cy="370" r="3.5" fill="#2c5d8a"/>
+
+  <line x1="235" y1="370" x2="285" y2="370" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="280,365 292,370 280,375" fill="#2c5d8a"/>
+
+  <!-- Nó circ 2: 20 -->
+  <rect x="295" y="340" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="375" y1="340" x2="375" y2="400" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="335" y="378" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="395" cy="370" r="3.5" fill="#2c5d8a"/>
+
+  <line x1="415" y1="370" x2="465" y2="370" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="460,365 472,370 460,375" fill="#2c5d8a"/>
+
+  <!-- Nó circ 3: 30 -->
+  <rect x="475" y="340" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="555" y1="340" x2="555" y2="400" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="515" y="378" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="575" cy="370" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Seta circular: nó3 -> nó1 (curva por baixo) -->
+  <path d="M 595 380 Q 595 460, 175 460 Q 175 460, 175 405"
+        fill="none" stroke="#2c5d8a" stroke-width="2.5" stroke-dasharray="0"/>
+  <polygon points="170,410 175,398 180,410" fill="#2c5d8a"/>
+
+  <!-- Anotação na curva -->
+  <text x="385" y="478" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    o último nó aponta de volta ao primeiro
+  </text>
+
+  <!-- Legenda final -->
+  <text x="450" y="515" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    Não há NULL ao final — a lista vira um anel; útil em rotação cíclica (round-robin, playlist em loop).
+  </text>
+</svg>

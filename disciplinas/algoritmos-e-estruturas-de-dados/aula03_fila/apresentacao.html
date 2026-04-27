@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 03 — Fila | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        /* Visualizações: imagens SVG dos diagramas das aulas */
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Bloco de resposta mínima nos exercícios — revelado por clique */
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+        .reveal .resposta pre {
+            font-size: 0.85em;
+            margin: 0.3em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol {
+            display: block;
+        }
+        .reveal li {
+            margin-bottom: 0.4em;
+        }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- 1. CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- 2. TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 03</p>
+            <h1>Fila</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                FIFO · primeira implementação concreta em C
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — código, header e <code>main</code> executável.
+            </p>
+        </section>
+
+        <!-- 3. SUMÁRIO -->
+        <section>
+            <h2>Roteiro da aula</h2>
+            <ol style="font-size: 0.85em;">
+                <li>Conceito — nível profundo</li>
+                <li>Conceito — nível simplificado</li>
+                <li>Visualização gráfica (7 passos)</li>
+                <li>Problema motivador</li>
+                <li>Analogias</li>
+                <li>Código em C</li>
+                <li>Exercícios práticos</li>
+                <li>Referências</li>
+            </ol>
+        </section>
+
+        <!-- BLOCO 1 — CONCEITO PROFUNDO -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 1</p>
+                <h2>Conceito — nível profundo</h2>
+            </section>
+
+            <section>
+                <h3>Fila, em uma frase</h3>
+                <p style="text-align: left;">
+                    TAD que representa uma sequência com <span class="destaque">inserção em uma extremidade</span>
+                    e <span class="destaque">remoção na oposta</span>, governada pela política
+                    <strong>FIFO</strong> (<em>First-In, First-Out</em>).
+                </p>
+                <p style="text-align: left; margin-top: 0.8em; font-size: 0.85em;">
+                    Aparece em qualquer cenário que precisa preservar a <strong>ordem temporal de chegada</strong>:
+                </p>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li>filas de impressão</li>
+                    <li>buffers de pacotes em redes</li>
+                    <li>escalonamento FCFS de processos</li>
+                    <li>filas de mensagens distribuídas</li>
+                </ul>
+                <p class="nota-rodape">
+                    Tratamento canônico: <em>Tenenbaum</em>, cap. 4 — <em>"Filas e listas"</em>;
+                    <em>Sedgewick</em>, Parte 1, cap. 4 — seção sobre <em>FIFO queues</em>.
+                </p>
+            </section>
+
+            <section>
+                <h3>TAD Fila — assinaturas</h3>
+                <pre><code class="language-c">criar()                    -&gt; Fila
+enfileirar(Fila, Inteiro)  -&gt; Fila
+desenfileirar(Fila)        -&gt; Fila        [erro se vazia]
+frente(Fila)               -&gt; Inteiro     [erro se vazia]
+vazia(Fila)                -&gt; Booleano</code></pre>
+            </section>
+
+            <section>
+                <h3>Axiomas — coração do FIFO</h3>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li><code>vazia(criar()) = verdadeiro</code></li>
+                    <li><code>vazia(enfileirar(F, x)) = falso</code></li>
+                    <li><code>frente(enfileirar(criar(), x)) = x</code></li>
+                    <li>
+                        <code>frente(enfileirar(F, x)) = frente(F)</code>
+                        quando <em>F</em> não-vazia
+                        <br><small style="color: #5a7a9a;">→ a frente continua sendo quem entrou antes</small>
+                    </li>
+                    <li>
+                        <code>desenfileirar(enfileirar(F, x)) = enfileirar(desenfileirar(F), x)</code>
+                        quando <em>F</em> não-vazia
+                        <br><small style="color: #5a7a9a;">→ remover passa "por dentro" da inserção: FIFO</small>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Representação interna — três opções</h3>
+                <table>
+                    <thead>
+                        <tr><th>Representação</th><th>Vantagem</th><th>Custo</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Vetor com deslocamento</td>
+                            <td>Simples</td>
+                            <td>Remover na frente: O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Vetor circular</td>
+                            <td>Tudo em O(1)</td>
+                            <td>Capacidade fixa</td>
+                        </tr>
+                        <tr style="background: #fffbe6;">
+                            <td><strong>Lista encadeada com inicio + fim</strong></td>
+                            <td>Tudo em O(1); dinâmica</td>
+                            <td>Ponteiro extra (8 B) + 1 <code>malloc</code> por nó</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape">
+                    Escolhida nesta aula: lista simplesmente encadeada com <code>inicio</code> e <code>fim</code>.
+                    <br>As três opções são cobertas em <em>CLRS</em>, cap. 10.1, e <em>Tenenbaum</em>, cap. 4.
+                </p>
+            </section>
+
+            <section>
+                <h3>Operações — todas em O(1)</h3>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li><code>enfileirar(x)</code>: cria nó, liga <code>fim</code> a ele, atualiza <code>fim</code>.</li>
+                    <li><code>desenfileirar()</code>: lê <code>inicio</code>, avança, libera o nó antigo.</li>
+                    <li><code>frente()</code>: lê o valor de <code>inicio</code> sem mexer.</li>
+                    <li><code>vazia()</code>: <code>inicio == NULL</code>.</li>
+                </ul>
+                <blockquote>
+                    Toda operação em <strong>O(1)</strong> — esse é o ganho que motivou a escolha pela lista.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Propriedades que devem sempre valer</h3>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li>
+                        <strong>Quando a fila está vazia</strong>: os dois ponteiros
+                        (<code>inicio</code> e <code>fim</code>) são <code>NULL</code> ao mesmo tempo.
+                    </li>
+                    <li>
+                        <strong>Quando há um único elemento</strong>: <code>inicio</code> e
+                        <code>fim</code> apontam para o <em>mesmo nó</em>.
+                    </li>
+                    <li>
+                        <strong>Quando há mais de um elemento</strong>: <code>fim-&gt;proximo</code>
+                        é <code>NULL</code> e seguindo <code>inicio</code> pelos campos
+                        <code>proximo</code> chega-se ao nó apontado por <code>fim</code>.
+                    </li>
+                </ul>
+                <p class="nota-rodape">
+                    Cada operação deve <strong>terminar</strong> deixando essas propriedades válidas.
+                    Atenção ao caso de desenfileirar o último elemento — é preciso zerar os <em>dois</em> ponteiros.
+                </p>
+            </section>
+        </section>
+
+        <!-- BLOCO 2 — CONCEITO SIMPLIFICADO -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Conceito — nível simplificado</h2>
+            </section>
+
+            <section>
+                <h3>A fila do banco</h3>
+                <ul style="text-align: left;">
+                    <li>Quem chega entra <strong>atrás</strong> → <code>enfileirar</code></li>
+                    <li>Quem é atendido sai <strong>pela frente</strong> → <code>desenfileirar</code></li>
+                    <li>Olhar o próximo a ser atendido → <code>frente</code></li>
+                    <li>Há alguém? → <code>vazia</code></li>
+                </ul>
+                <blockquote>
+                    A regra inviolável: <strong>ninguém fura a fila</strong>.
+                    Quem chegou primeiro é atendido primeiro. <em>FIFO.</em>
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A restrição é o que define</h3>
+                <p style="text-align: left;">
+                    A Fila <strong>não te deixa</strong> olhar o terceiro da fila, nem o último.
+                </p>
+                <p style="text-align: left;">
+                    Você só mexe nas <span class="destaque">duas pontas</span>.
+                </p>
+                <p style="text-align: left;">
+                    Essa restrição é o que torna a Fila <em>simples e rápida</em> — e o que faz dela
+                    uma estrutura <strong>diferente</strong> de uma lista genérica.
+                </p>
+            </section>
+        </section>
+
+        <!-- BLOCO 3 — VISUALIZAÇÃO GRÁFICA -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.7em; color: #666;">
+                    Ciclo completo: criar → 3× enfileirar → frente → 2× desenfileirar.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1 — fila_criar()</h3>
+                <img class="diagrama" src="img/01_criar.svg" alt="Fila vazia: inicio e fim apontam para NULL">
+            </section>
+
+            <section>
+                <h3>Passo 2 — enfileirar(10)</h3>
+                <img class="diagrama" src="img/02_enfileirar_10.svg" alt="Fila com um nó: inicio e fim apontam ambos para o nó com valor 10">
+            </section>
+
+            <section>
+                <h3>Passo 3 — enfileirar(20)</h3>
+                <img class="diagrama" src="img/03_enfileirar_20.svg" alt="Fila com dois nós (10, 20): inicio em 10, fim em 20">
+            </section>
+
+            <section>
+                <h3>Passo 4 — enfileirar(30)</h3>
+                <img class="diagrama" src="img/04_enfileirar_30.svg" alt="Fila com três nós (10, 20, 30): inicio em 10, fim em 30">
+            </section>
+
+            <section>
+                <h3>Passo 5 — frente() retorna 10</h3>
+                <img class="diagrama" src="img/05_frente.svg" alt="frente() lê o valor do nó apontado por inicio sem alterar a estrutura">
+            </section>
+
+            <section>
+                <h3>Passo 6 — desenfileirar() remove 10</h3>
+                <img class="diagrama" src="img/06_desenfileirar.svg" alt="Fila com dois nós (20, 30): inicio agora em 20; nó 10 liberado">
+            </section>
+
+            <section>
+                <h3>Passo 7 — desenfileirar() remove 20</h3>
+                <img class="diagrama" src="img/07_desenfileirar_2.svg" alt="Fila com um nó (30): inicio e fim apontam ambos para 30">
+                <p class="nota-rodape">
+                    Ao desenfileirar o último, <code>fim</code> também precisa ir para <code>NULL</code>.
+                </p>
+            </section>
+        </section>
+
+        <!-- BLOCO 4 — PROBLEMA MOTIVADOR -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Por que Fila existe?</h2>
+            </section>
+
+            <section>
+                <h3>A impressora compartilhada do laboratório</h3>
+                <p style="text-align: left;">
+                    Dezenas de alunos, uma única impressora. Todas as requisições chegam quase ao mesmo tempo.
+                </p>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>Sem ordenação: aluno azarado nunca recebe o trabalho.</li>
+                    <li>Recusar todas menos uma: tentativa eterna até dar certo.</li>
+                </ul>
+                <blockquote>
+                    Solução: toda requisição entra em uma <strong>Fila</strong>.
+                    Quem chegou primeiro imprime primeiro.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>O mesmo padrão em escala maior</h3>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>
+                        <span class="destaque">Buffer de pacotes em roteadores</span> — quando o roteador
+                        recebe mais rápido do que encaminha, os pacotes vão para uma fila.
+                    </li>
+                    <li>
+                        <span class="destaque">Escalonadores FCFS</span> — processos pedem CPU; o SO
+                        atende em ordem de chegada.
+                    </li>
+                    <li>
+                        <span class="destaque">Filas distribuídas</span> (RabbitMQ, AWS SQS, Kafka) —
+                        produtores enfileiram; consumidores desenfileiram. <em>Desacopla</em> quem produz
+                        de quem consome.
+                    </li>
+                </ul>
+                <p class="nota-rodape">
+                    Estrutura natural sempre que a ordem de chegada importa e ninguém pode ser pulado.
+                </p>
+            </section>
+        </section>
+
+        <!-- BLOCO 5 — ANALOGIAS -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>Fila do banco</h3>
+                <p style="text-align: left;">
+                    Você chega → vai para o <strong>fim</strong>. Quem está sendo atendido está na <strong>frente</strong>.
+                </p>
+                <p style="text-align: left;">
+                    Ninguém é atendido fora de ordem. As únicas pontas que importam são
+                    <code>inicio</code> e <code>fim</code> — o meio é invisível para a operação.
+                </p>
+            </section>
+
+            <section>
+                <h3>WhatsApp sem internet</h3>
+                <p style="text-align: left;">
+                    Você manda 5 mensagens em sequência sem sinal. Elas ficam <strong>enfileiradas</strong>
+                    no aparelho na ordem em que foram digitadas.
+                </p>
+                <p style="text-align: left;">
+                    Quando o sinal volta, o app envia uma a uma <strong>na ordem original</strong> —
+                    não a última primeiro, não em ordem aleatória.
+                </p>
+                <blockquote>FIFO puro.</blockquote>
+            </section>
+        </section>
+
+        <!-- BLOCO 6 — CÓDIGO EM C -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 6</p>
+                <h2>Código em C</h2>
+                <p style="font-size: 0.7em; color: #666;">
+                    Lista simplesmente encadeada com <code>inicio</code> e <code>fim</code>.
+                </p>
+            </section>
+
+            <section>
+                <h3>Um único arquivo: <code>fila.c</code></h3>
+                <p style="text-align: left;">
+                    Tudo num lugar só: <code>#include</code>s, structs, funções e <code>main()</code>.
+                </p>
+                <blockquote style="font-size: 0.78em;">
+                    Em uma aula futura sobre <strong>organização de projetos em C</strong>,
+                    veremos como dividir uma TAD em <code>fila.h</code> + <code>fila.c</code>
+                    (separação interface / implementação). Por enquanto, manter tudo num arquivo
+                    facilita ler de cima a baixo.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3><code>fila.c</code> — includes e structs</h3>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Cada elemento da fila vira um No.
+typedef struct No {
+    int valor;
+    struct No* proximo;
+} No;
+
+// A fila guarda a frente e o fim.
+typedef struct Fila {
+    No* inicio;
+    No* fim;
+} Fila;
+
+Fila* fila_criar(void) {
+    Fila* f = malloc(sizeof(Fila));
+    if (f == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    f-&gt;inicio = NULL;
+    f-&gt;fim = NULL;
+    return f;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>fila_enfileirar</code></h3>
+                <pre><code class="language-c">void fila_enfileirar(Fila* f, int valor) {
+    No* novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo-&gt;valor = valor;
+    novo-&gt;proximo = NULL;
+
+    if (fila_vazia(f)) {
+        // Fila estava vazia: o novo no e' tambem a frente.
+        f-&gt;inicio = novo;
+    } else {
+        // Liga o no que era o fim ao novo no.
+        f-&gt;fim-&gt;proximo = novo;
+    }
+    f-&gt;fim = novo;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>fila_desenfileirar</code></h3>
+                <pre><code class="language-c">int fila_desenfileirar(Fila* f) {
+    if (fila_vazia(f)) {
+        printf("erro: fila vazia\n");
+        exit(1);
+    }
+    No* removido = f-&gt;inicio;
+    int valor = removido-&gt;valor;
+
+    f-&gt;inicio = removido-&gt;proximo;
+    if (f-&gt;inicio == NULL) {
+        // Tiramos o ultimo elemento: a fila ficou vazia.
+        // O fim tambem precisa virar NULL — caso contrario continuaria
+        // apontando para o no que vamos liberar com free().
+        f-&gt;fim = NULL;
+    }
+    free(removido);
+    return valor;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>frente</code>, <code>vazia</code>, <code>destruir</code></h3>
+                <pre><code class="language-c">int fila_frente(Fila* f) {
+    if (fila_vazia(f)) {
+        printf("erro: fila vazia\n");
+        exit(1);
+    }
+    return f-&gt;inicio-&gt;valor;
+}
+
+int fila_vazia(Fila* f) {
+    return f-&gt;inicio == NULL;
+}
+
+void fila_destruir(Fila* f) {
+    No* atual = f-&gt;inicio;
+    while (atual != NULL) {
+        No* prox = atual-&gt;proximo;
+        free(atual);
+        atual = prox;
+    }
+    free(f);
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>main()</code> — programa demonstrativo</h3>
+                <pre><code class="language-c">int main(void) {
+    Fila* f = fila_criar();
+    fila_enfileirar(f, 10);
+    fila_enfileirar(f, 20);
+    fila_enfileirar(f, 30);
+
+    printf("Frente da fila: %d\n", fila_frente(f));
+
+    printf("Desenfileirando: ");
+    while (!fila_vazia(f)) {
+        printf("%d ", fila_desenfileirar(f));
+    }
+    printf("\n");
+
+    fila_destruir(f);
+    return 0;
+}</code></pre>
+                <p class="nota-rodape">
+                    A <code>main()</code> fica no mesmo <code>fila.c</code>, ao final do arquivo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Compilando e rodando</h3>
+                <pre><code class="language-bash">gcc -Wall -Wextra -o fila_demo fila.c
+./fila_demo</code></pre>
+                <p style="text-align: left; margin-top: 1em;">Saída:</p>
+                <pre><code class="language-text">Frente da fila: 10
+Desenfileirando: 10 20 30</code></pre>
+                <p class="nota-rodape">
+                    Um único arquivo, uma única invocação do <code>gcc</code>.
+                    A linha <code>10 20 30</code> é a prova empírica do FIFO.
+                </p>
+            </section>
+        </section>
+
+        <!-- BLOCO 7 — EXERCÍCIOS -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 7</p>
+                <h2>Exercícios práticos</h2>
+            </section>
+
+            <section>
+                <h3>Exercício 1 — trace na mão</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Fila inicial vazia. Sequência:
+                    <code>enf(7)</code>, <code>enf(3)</code>, <code>enf(11)</code>,
+                    <code>desenf</code>, <code>enf(5)</code>, <code>frente</code>,
+                    <code>desenf</code>, <code>desenf</code>.
+                </p>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Para cada operação, escreva o estado da fila e o valor retornado.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ul>
+                        <li><code>enf(7)</code> → <code>[7]</code></li>
+                        <li><code>enf(3)</code> → <code>[7, 3]</code></li>
+                        <li><code>enf(11)</code> → <code>[7, 3, 11]</code></li>
+                        <li><code>desenf</code> → <code>[3, 11]</code> · retorna <code>7</code></li>
+                        <li><code>enf(5)</code> → <code>[3, 11, 5]</code></li>
+                        <li><code>frente</code> → <code>[3, 11, 5]</code> · retorna <code>3</code></li>
+                        <li><code>desenf</code> → <code>[11, 5]</code> · retorna <code>3</code></li>
+                        <li><code>desenf</code> → <code>[5]</code> · retorna <code>11</code></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 2 — função <code>fila_imprimir</code></h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Adicione <code>void fila_imprimir(const Fila* f)</code> que imprime
+                    <code>[10, 20, 30]</code> da frente para o fim, ou <code>[]</code> se vazia.
+                </p>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Restrição: <strong>não</strong> usar <code>desenfileirar</code> (a função imprime sem alterar a fila).
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">void fila_imprimir(const Fila* f) {
+    printf("[");
+    for (No* a = f-&gt;inicio; a != NULL; a = a-&gt;proximo) {
+        printf("%d", a-&gt;valor);
+        if (a-&gt;proximo != NULL) printf(", ");
+    }
+    printf("]\n");
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 3 — buffer de tarefas</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Programa que lê inteiros até o usuário digitar <code>0</code>:
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>positivo → enfileirar.</li>
+                    <li>negativo → desenfileirar e imprimir o valor (ou <code>"fila vazia"</code>).</li>
+                    <li><code>0</code> → encerra e imprime estado final.</li>
+                </ul>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">int main(void) {
+    Fila* f = fila_criar();
+    int x;
+    while (scanf("%d", &amp;x) == 1 &amp;&amp; x != 0) {
+        if (x &gt; 0) fila_enfileirar(f, x);
+        else if (fila_vazia(f)) printf("fila vazia\n");
+        else printf("%d\n", fila_desenfileirar(f));
+    }
+    fila_imprimir(f);
+    fila_destruir(f);
+    return 0;
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 4 — inverter uma fila com uma pilha</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Use uma <strong>Pilha</strong> auxiliar para inverter uma <strong>Fila</strong> <code>F</code>.
+                    Ao final, <code>F</code> está invertida e a Pilha vazia.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-text">1. Enquanto F nao vazia:
+     x = desenfileirar(F)
+     empilhar(P, x)
+
+2. Enquanto P nao vazia:
+     y = desempilhar(P)
+     enfileirar(F, y)</code></pre>
+                    <p style="margin: 0.4em 0 0 0;">
+                        Fase 1: F → P preserva ordem mas guarda em LIFO.
+                        Fase 2: P → F sai em ordem inversa. <strong>O(n)</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 5 — Fila circular sobre vetor (desafio)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Reimplemente o mesmo TAD em um novo arquivo <code>fila_vetor.c</code>
+                    usando <strong>vetor</strong> com aritmética <strong>circular</strong>
+                    (<code>frente</code>/<code>tras</code>, <code>%</code> capacidade).
+                </p>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Mantenha as <strong>mesmas assinaturas</strong> de função e a mesma <code>main()</code>
+                    do <code>fila.c</code>. Compila e roda <strong>sem alterar a <code>main</code></strong>.
+                </p>
+                <blockquote style="font-size: 0.75em;">
+                    Mostra o poder do TAD: trocou a representação interna, o resultado observável não muda.
+                    É o axioma da Aula 01 colhendo frutos.
+                </blockquote>
+                <div class="resposta fragment fade-in">
+                    <strong>Esqueleto:</strong>
+<pre><code class="language-c">typedef struct Fila {
+    int* dados;
+    int capacidade;
+    int frente;
+    int tras;
+    int tamanho;
+} Fila;
+
+bool fila_enfileirar(Fila* f, int v) {
+    if (f-&gt;tamanho == f-&gt;capacidade) return false;
+    f-&gt;dados[f-&gt;tras] = v;
+    f-&gt;tras = (f-&gt;tras + 1) % f-&gt;capacidade;
+    f-&gt;tamanho++;
+    return true;
+}</code></pre>
+                    <p style="margin: 0.3em 0 0 0; font-size: 0.9em;">
+                        Implementação completa em <code>aula03_fila.md</code>.
+                    </p>
+                </div>
+            </section>
+        </section>
+
+        <!-- BLOCO 8 — REFERÊNCIAS -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.75em;">
+                <li>
+                    <strong>Tenenbaum, Langsam &amp; Augenstein</strong> —
+                    <em>Estruturas de Dados Usando C</em>, cap. 4 (filas e listas).
+                </li>
+                <li>
+                    <strong>Sedgewick, R.</strong> —
+                    <em>Algoritmos em C</em>, Parte 1, cap. 4
+                    (<em>FIFO queues and generalized queues</em>).
+                </li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.7em; color: #666;">
+                <li>CLRS — cap. 10.1 (pilhas e filas, com fila circular sobre vetor).</li>
+                <li>Ziviani — capítulo de filas (em português).</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Próxima aula</h1>
+            <h2>Aula 04 — Pilha</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                A outra face da moeda: LIFO sobre lista encadeada.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

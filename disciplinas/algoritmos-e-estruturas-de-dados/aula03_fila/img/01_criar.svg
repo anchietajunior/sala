@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 240"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 1 — fila_criar()
+  </text>
+
+  <!-- Ponteiros âncora apontando para NULL -->
+  <text x="180" y="125" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">inicio →</text>
+  <text x="240" y="125" text-anchor="middle" font-size="16" fill="#888" font-style="italic">NULL</text>
+
+  <text x="380" y="125" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">fim →</text>
+  <text x="440" y="125" text-anchor="middle" font-size="16" fill="#888" font-style="italic">NULL</text>
+
+  <!-- Estado -->
+  <line x1="100" y1="170" x2="600" y2="170" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="200" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    fila vazia · invariante I1: inicio == fim == NULL
+  </text>
+</svg>

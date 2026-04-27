@@ -39,11 +39,11 @@ Este `CLAUDE.md` é **apenas o guia** para criação das aulas — ele nunca con
   - `NN` é o número da aula com **dois dígitos** e zero à esquerda (`01`, `02`, ..., `15`).
   - `tema` é o tema em **snake_case minúsculo, sem acento** (`tad`, `pilha`, `fila`, `lista_encadeada`, `arvore_binaria`, `busca_binaria`, `ordenacao_quicksort`).
 - Dentro da pasta, o conteúdo da aula em Markdown vive em `aulaNN_tema.md` (mesmo nome da pasta, com extensão `.md`).
-- Códigos-fonte em C produzidos para a aula (do bloco 6 e dos exercícios) ficam **na mesma pasta**, em arquivos separados (`pilha.h`, `pilha.c`, `main.c`, `exercicio_03.c`, etc.). Quando criar código, criar os arquivos `.h`/`.c`/`.c` reais ao lado do `.md`, não apenas dentro de blocos do markdown.
+- Códigos-fonte em C produzidos para a aula (do bloco 6 e dos exercícios) ficam **na mesma pasta**, **em um único arquivo `.c`** que contém tudo: `#include`s do sistema, structs, funções da estrutura/algoritmo e a `main()` demonstrativa. Não criar arquivos `.h` (cabeçalhos) e não dividir a implementação em múltiplos `.c` ligados por *includes* nesta fase da disciplina — modularização em `.h`/`.c` separados é tema de aula futura sobre **organização de projetos em C**, não do bloco 6 das aulas de estrutura. Exercícios que pedem outro programa também devem ficar em arquivos `.c` autossuficientes (`exercicio_03.c` com seu próprio `main`).
 - Exemplos válidos:
   - `aula01_tad/aula01_tad.md`
-  - `aula02_pilha/aula02_pilha.md` + `aula02_pilha/pilha.h` + `aula02_pilha/pilha.c` + `aula02_pilha/main.c`
-  - `aula07_arvore_binaria/aula07_arvore_binaria.md`
+  - `aula03_fila/aula03_fila.md` + `aula03_fila/fila.c` (único arquivo, contém struct + funções + `main`)
+  - `aula07_arvore_binaria/aula07_arvore_binaria.md` + `aula07_arvore_binaria/arvore.c`
 
 ### Numeração
 
@@ -61,14 +61,14 @@ Tratam de **conceitos sobre** estruturas e algoritmos — não de uma estrutura 
 - Recursão como paradigma
 - Paradigmas de projeto (divisão e conquista, programação dinâmica, guloso)
 
-Aulas conceituais têm **7 blocos** (numeração de 1 a 7). **Não criar `.h`, `.c` ou `main.c`** na pasta da aula — implementação concreta é responsabilidade das aulas das estruturas específicas. Os exercícios são conceituais (identificar conceitos no cotidiano, aplicar axiomas, escrever especificações curtas), **não** de codificação. Quando um exercício precisar de notação formal ou axiomas para funcionar, **inlinear** o conteúdo no próprio enunciado.
+Aulas conceituais têm **7 blocos** (numeração de 1 a 7). **Não criar arquivos `.c`** na pasta da aula — implementação concreta é responsabilidade das aulas das estruturas específicas. Os exercícios são conceituais (identificar conceitos no cotidiano, aplicar axiomas, escrever especificações curtas), **não** de codificação. Quando um exercício precisar de notação formal ou axiomas para funcionar, **inlinear** o conteúdo no próprio enunciado.
 
 ### Aulas de implementação
 Tratam de **uma estrutura ou algoritmo específico**. Exemplos:
 - Pilha, Fila, Lista Encadeada, Árvore Binária, Tabela Hash, Grafo
 - Busca Binária, Bubble Sort, Quicksort, BFS, DFS, Dijkstra
 
-Aulas de implementação têm **8 blocos** (numeração de 1 a 8). O **bloco 6 traz código C completo e executável**, com **arquivos reais** (`.h`/`.c`/`main.c`) na pasta da aula, conforme as regras de código C abaixo. Os exercícios (bloco 7) misturam codificação e raciocínio.
+Aulas de implementação têm **8 blocos** (numeração de 1 a 8). O **bloco 6 traz código C completo e executável** em **um único arquivo `.c`** na pasta da aula (struct + funções + `main` no mesmo arquivo), conforme as regras de código C abaixo. **Não usar arquivos `.h`** — cabeçalhos e modularização são tema de aula futura sobre organização de projetos em C; nesta fase, todo o código vive num só `.c` autossuficiente. Os exercícios (bloco 7) misturam codificação e raciocínio; quando pedirem um programa adicional, ele também é um único `.c` (ex.: `exercicio_03.c`).
 
 > **Regra prática**: a Aula 01 (TAD) é conceitual; da Aula 02 em diante, cada aula sobre uma estrutura/algoritmo concreto é de implementação. Em caso de dúvida sobre a classificação, perguntar antes de produzir.
 
@@ -131,7 +131,7 @@ Um problema computacional **real e reconhecível** que esse conceito resolve. Ex
 O aluno deve sair desse bloco pensando: *"ah, então é por isso que isso existe."*
 
 ### 5. Analogias
-**1 a 2 analogias do mundo real** que iluminam o conceito. Priorize cenários do **cotidiano brasileiro/universitário** quando fizer sentido (fila do RU, pilha de provas para corrigir, árvore genealógica, agenda de contatos, lista de chamada).
+**1 a 2 analogias do mundo real** que iluminam o conceito. Priorize cenários **universalmente reconhecíveis** — fila do banco, fila do caixa do supermercado, pilha de provas para corrigir, pilha de bandejas em restaurante self-service, árvore genealógica, agenda de contatos, lista de chamada. **Evite siglas e jargão local** (não escrever "RU", "DCE", "BU" etc., mesmo que sejam comuns no campus): nem todo aluno é veterano e nem toda apresentação fica restrita ao público interno.
 
 ### 6. Código em C *(somente em aulas de implementação)*
 
@@ -139,12 +139,21 @@ O aluno deve sair desse bloco pensando: *"ah, então é por isso que isso existe
 
 Em aulas de implementação, o bloco traz uma implementação **simples e legível** do conceito. Regras obrigatórias:
 
+- **Um único arquivo `.c`** por aula contendo tudo: `#include`s, `typedef struct` das estruturas, todas as funções da estrutura/algoritmo e a `main()` demonstrativa. **Não criar arquivos `.h`** — cabeçalhos e separação interface/implementação são tema de aula futura sobre organização de projetos em C; supor que o aluno já conhece esse conceito quebra a regra de não presumir conhecimento prévio.
+- **Implementação a mais simples possível** que resolva o problema. O público-alvo está vendo C **pela primeira vez**. Em particular, **evitar** nesta fase da disciplina:
+  - `<stdbool.h>` e o tipo `bool` — usar `int` retornando `0`/`1` (mais primitivo, sem precisar explicar um header novo).
+  - `const` em parâmetros — útil em código profissional, mas é mais um conceito a explicar.
+  - Funções não essenciais à TAD (ex.: contadores de tamanho, *getters* extras) — só inclua o que está no contrato mínimo do TAD discutido no bloco 1.
+  - `fprintf(stderr, ...)` — usar `printf("erro: ...\n")`. Quando a pré-condição é violada (ex.: desenfileirar de fila vazia), encerrar com `exit(1)` em vez de retornar valor sentinela. Mais simples de ler e de raciocinar.
+  - Tratamento de `NULL` defensivo em todos os pontos de entrada (ex.: `if (f == NULL) return;` no destruir) — nesta fase basta deixar a pré-condição clara em comentário.
+- **Comentários sempre autoexplicativos no contexto do próprio arquivo `.c`**. Se a aula define propriedades/invariantes no `.md` e os rotula como "I1", "I2", "I3", **não usar esses rótulos em comentários no código**. O aluno pode estar lendo só o `.c` (sem o `.md` ao lado) e não tem como saber o que "I1" significa. Em vez de `// preserva I1`, escrever uma frase completa: `// O fim tambem precisa virar NULL — caso contrario continuaria apontando para o no que vamos liberar com free()`.
+- Vale a mesma regra para o `.md` (prosa) e para a apresentação Reveal.js: **não usar rótulos abreviados** (I1/I2/I3, A1/A2/...) cujo significado depende de uma lista numerada anterior. Preferir frases completas como "Quando a fila está vazia, ambos os ponteiros são NULL". Em axiomas de TAD (bloco 1, axiomas A1, A2...), a numeração ainda é útil porque eles são apresentados em bloco fechado de definições; em invariantes em prosa corrida, o rótulo prejudica mais do que ajuda.
 - **Legibilidade > performance**. Nunca use truques que confundam o aluno.
 - **Nomes descritivos**: `topo`, `inicio`, `fim`, `tamanho`, `chave`, `valor`, `proximo`, `anterior`. Use português quando ajudar a clareza didática; mantenha inglês para termos universais (`malloc`, `printf`, `NULL`, `struct`).
 - **Comentários explicam o porquê**, não o quê. Evite `// incrementa i`. Prefira `// avançamos para o próximo nó porque já processamos o atual`.
-- **Sempre inclua os `#include` necessários** e uma `main()` **executável e demonstrativa** que exercita a estrutura/algoritmo com um exemplo real.
-- **Compile limpo com `gcc -Wall -Wextra arquivo.c`** — sem warnings.
-- **Prefira `typedef struct` nomeado** a structs anônimas: `typedef struct No { ... } No;`.
+- **Sempre inclua os `#include` necessários** (`<stdio.h>`, `<stdlib.h>`, `<stdbool.h>` etc.) e uma `main()` **executável e demonstrativa** que exercita a estrutura/algoritmo com um exemplo real.
+- **Compile limpo com `gcc -Wall -Wextra arquivo.c`** — sem warnings. Como o código é um único arquivo, a linha de compilação fica simples: `gcc -Wall -Wextra -o demo fila.c && ./demo`.
+- **Prefira `typedef struct` nomeado** a structs anônimas: `typedef struct No { ... } No;`. A struct fica **definida por extenso** no arquivo (não há .h, então não há "tipo opaco" a essa altura — o cliente vê os campos; encapsulamento estrito vem com a aula de modularização).
 - **Evite truques de ponteiro** sem antes explicá-los em comentário ou texto adjacente.
 - **Sempre libere memória alocada** (`free`) quando aplicável — é didático.
 - **Trate erros de alocação** (`if (p == NULL)`) — também é didático.
@@ -175,7 +184,7 @@ Quando útil, citar também CLRS ou Ziviani como leitura complementar.
 
 ## Pedagogia e Linguagem
 
-Duas diretrizes fundamentais que se aplicam a **todo** material da disciplina (aulas `.md`, apresentações Reveal.js, exercícios, comentários de código):
+Três diretrizes fundamentais que se aplicam a **todo** material da disciplina (aulas `.md`, apresentações Reveal.js, exercícios, comentários de código):
 
 ### 1. Não supor conhecimento prévio sobre o assunto abordado
 
@@ -185,6 +194,8 @@ Cada aula é **autocontida**. Não presumir que o aluno já conhece termos, conc
 - **Acompanhar formalismos com exemplos concretos** que tornem a notação legível (ex.: ao apresentar `T = (V, O, A)`, mostrar o que cada letra significa com um caso da Pilha).
 - O **bloco 1 ("nível profundo")** é rigoroso, mas autocontido — não é "nível para quem já sabe".
 - Ao referenciar aula anterior, **retomar brevemente** o conceito antes de usá-lo (ex.: "lembrando que uma fila é FIFO — primeiro a entrar, primeiro a sair —, ...").
+
+**Conceitos avançados a evitar nos primeiros blocos** (a menos que sejam o tema da aula): localidade de cache, hierarquia de memória, *cache miss*, *branch prediction*, paginação, escalonamento do SO, alinhamento de memória, *false sharing*, vetorização SIMD, MMU, TLB. Esses conceitos pertencem a Sistemas Operacionais e Arquitetura de Computadores — citá-los para justificar uma escolha de estrutura de dados em uma disciplina introdutória rompe com o pacto de não supor conhecimento prévio. Quando uma comparação parecer depender deles, **substituir o argumento** por um motivo que dependa apenas do que já foi ensinado: número de chamadas a `malloc`, *overhead* de ponteiros (em bytes), deslocamento de elementos em vetor, capacidade fixa, etc.
 
 ### 2. Não usar termos coloquiais ou apelidos para conceitos técnicos
 
@@ -198,7 +209,20 @@ Preferir sempre o **vocabulário canônico** da literatura (Tenenbaum, Sedgewick
 | "pegar" (um elemento) | **obter** / acessar |
 | "jogar fora" | **descartar** / remover |
 
-**Analogias narrativas** em blocos didáticos (máquina de café, controle remoto, cantina, fila do RU) seguem **permitidas e estimuladas** — o que se evita é cunhar apelidos coloquiais para **conceitos técnicos da matéria**. A regra: termos técnicos seguem a literatura; analogias narrativas são livres.
+**Analogias narrativas** em blocos didáticos (máquina de café, controle remoto, cantina, fila do banco) seguem **permitidas e estimuladas** — o que se evita é cunhar apelidos coloquiais para **conceitos técnicos da matéria**. A regra: termos técnicos seguem a literatura; analogias narrativas são livres, desde que não usem siglas ou jargão local que dependa de contexto interno (não escrever "RU", "DCE" etc.).
+
+### 3. Citar a bibliografia base nos blocos conceituais
+
+O **bloco 1** (nível profundo) e, quando fizer sentido, o **bloco 4** (problema motivador) **devem citar inline** a bibliografia base da disciplina nos pontos relevantes do texto — não apenas no bloco final de Referências. As citações inline são ponteiros rápidos para o aluno saber, durante a leitura, onde aprofundar.
+
+Como aplicar:
+
+- **Ao introduzir o conceito principal** da aula, citar entre parênteses o capítulo do Tenenbaum e/ou do Sedgewick onde o tópico é tratado (ex.: *"... (Tenenbaum, cap. 4; Sedgewick, Parte 1, cap. 3)"*).
+- **Ao apresentar uma variante ou subtema**, citar a referência específica se houver cobertura particular do ponto (ex.: lista circular tem seção própria em Tenenbaum cap. 5).
+- **Ao apresentar definições formais ou tabelas de complexidade**, indicar a fonte canônica quando útil (ex.: *"a tabela de complexidade segue CLRS, cap. 10"*).
+- **O bloco final de Referências continua existindo** e mantém o detalhamento completo (página/seção, leituras complementares). As citações inline apenas pontuam o texto onde o aluno pode parar e aprofundar.
+
+A mesma regra vale na **apresentação Reveal.js**: pelo menos um slide do bloco 1 deve trazer a citação inline, em fonte menor (`<small>` ou `<p class="nota-rodape">`), para não competir com o conteúdo principal.
 
 ## Visualizações Gráficas — padrão da disciplina
 

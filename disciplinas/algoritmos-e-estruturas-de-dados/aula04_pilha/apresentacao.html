@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 04 — Pilha | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+        .reveal .resposta pre {
+            font-size: 0.85em;
+            margin: 0.3em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- 1. CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- 2. TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 04</p>
+            <h1>Pilha</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                LIFO · o gêmeo da Fila
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — mesma família da Fila,
+                política oposta, código <em>ainda mais simples</em>.
+            </p>
+        </section>
+
+        <!-- 3. SUMÁRIO -->
+        <section>
+            <h2>Roteiro da aula</h2>
+            <ol style="font-size: 0.85em;">
+                <li>Conceito — nível profundo</li>
+                <li>Conceito — nível simplificado</li>
+                <li>Visualização gráfica (7 passos)</li>
+                <li>Problema motivador</li>
+                <li>Analogias</li>
+                <li>Código em C</li>
+                <li>Exercícios práticos</li>
+                <li>Referências</li>
+            </ol>
+        </section>
+
+        <!-- BLOCO 1 — CONCEITO PROFUNDO -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 1</p>
+                <h2>Conceito — nível profundo</h2>
+            </section>
+
+            <section>
+                <h3>Pilha, em uma frase</h3>
+                <p style="text-align: left;">
+                    TAD com <span class="destaque">inserção e remoção em uma única extremidade</span>
+                    chamada <span class="destaque">topo</span>, governada pela política
+                    <strong>LIFO</strong> (<em>Last-In, First-Out</em>).
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Onde a Fila tem duas pontas distintas, a Pilha tem <strong>uma só</strong>.
+                </p>
+                <blockquote>
+                    A estrutura mais simples possível em que a ordem importa —
+                    e uma das mais usadas em computação.
+                </blockquote>
+                <p class="nota-rodape">
+                    Tratamento canônico: <em>Tenenbaum</em>, cap. 2 — <em>"Pilhas"</em>;
+                    <em>Sedgewick</em>, Parte 1, cap. 4 — <em>pushdown stacks</em>.
+                </p>
+            </section>
+
+            <section>
+                <h3>Onde a Pilha aparece</h3>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>
+                        <span class="destaque">Pilha de chamadas</span> — toda função empilha
+                        um <em>frame</em>; <code>return</code> desempilha.
+                    </li>
+                    <li>
+                        <span class="destaque">Ctrl+Z</span> — cada ação executada vira entrada
+                        empilhada; cada desfazer desempilha.
+                    </li>
+                    <li>
+                        <span class="destaque">"Voltar" do navegador</span> — cada página visitada
+                        empilha; voltar desempilha.
+                    </li>
+                    <li>
+                        <span class="destaque">Validação de parênteses</span> — abre empilha; fecha
+                        desempilha e confere.
+                    </li>
+                    <li>
+                        <span class="destaque">Recursão → iteração</span> — pilha explícita
+                        substitui a pilha implícita do programa.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>TAD Pilha — assinaturas</h3>
+                <pre><code class="language-c">criar()                  -&gt; Pilha
+empilhar(Pilha, Inteiro) -&gt; Pilha
+desempilhar(Pilha)       -&gt; Pilha       [erro se vazia]
+topo(Pilha)              -&gt; Inteiro     [erro se vazia]
+vazia(Pilha)             -&gt; Booleano</code></pre>
+            </section>
+
+            <section>
+                <h3>Axiomas — coração do LIFO</h3>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li><code>vazia(criar()) = verdadeiro</code></li>
+                    <li><code>vazia(empilhar(P, x)) = falso</code></li>
+                    <li><code>topo(empilhar(P, x)) = x</code></li>
+                    <li>
+                        <code>desempilhar(empilhar(P, x)) = P</code>
+                        <br><small style="color: #5a7a9a;">→ <strong>LIFO</strong>: empilhar e desempilhar devolve a pilha original.</small>
+                    </li>
+                </ul>
+                <blockquote style="font-size: 0.78em;">
+                    Compare com a Fila:
+                    <code>desenfileirar(enfileirar(F, x)) = enfileirar(desenfileirar(F), x)</code>
+                    — lá o <code>x</code> "passa por dentro" da remoção. Aqui, ele simplesmente sai.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Representação interna escolhida</h3>
+                <table>
+                    <thead>
+                        <tr><th>Representação</th><th>Vantagem</th><th>Custo</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Vetor com <code>topo</code> como índice</td>
+                            <td>Memória contígua; uma única alocação</td>
+                            <td>Capacidade fixa</td>
+                        </tr>
+                        <tr style="background: #fffbe6;">
+                            <td><strong>Lista encadeada com <code>topo</code></strong></td>
+                            <td>Tudo O(1); dinâmica; <em>sem casos especiais</em></td>
+                            <td>Ponteiro extra (8 B) + 1 <code>malloc</code> por nó</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape">
+                    Tudo no início da lista: <code>empilhar</code> = inserir no início; <code>desempilhar</code> = remover do início.
+                    Não precisa de <code>fim</code>.
+                </p>
+            </section>
+
+            <section>
+                <h3>Operações — todas em O(1)</h3>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li><code>empilhar(x)</code>: novo nó <code>proximo = topo</code>; <code>topo = novo</code>.</li>
+                    <li><code>desempilhar()</code>: lê <code>topo</code>, salva <code>topo-&gt;proximo</code> em <code>topo</code>, libera o antigo.</li>
+                    <li><code>topo()</code>: lê o valor de <code>topo</code> sem mexer.</li>
+                    <li><code>vazia()</code>: <code>topo == NULL</code>.</li>
+                </ul>
+                <p class="nota-rodape">
+                    Menos casos especiais que a Fila — não há "primeiro/último elemento" para tratar à parte.
+                </p>
+            </section>
+
+            <section>
+                <h3>Propriedades que devem sempre valer</h3>
+                <ul style="text-align: left;">
+                    <li>
+                        <strong>Quando a pilha está vazia</strong>: <code>topo == NULL</code>.
+                    </li>
+                    <li>
+                        <strong>Quando há ao menos um elemento</strong>: <code>topo != NULL</code>
+                        e seguindo <code>proximo</code> a partir do <code>topo</code> chega-se a um
+                        nó cujo <code>proximo</code> é <code>NULL</code> (o fundo).
+                    </li>
+                </ul>
+                <blockquote>
+                    Comparada à Fila, a Pilha tem <strong>menos propriedades</strong> a manter
+                    porque tem <strong>menos estado</strong>. É realmente das mais simples
+                    estruturas de dados — e uma das mais usadas.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- BLOCO 2 — CONCEITO SIMPLIFICADO -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Conceito — nível simplificado</h2>
+            </section>
+
+            <section>
+                <h3>A pilha de bandejas do restaurante self-service</h3>
+                <ul style="text-align: left;">
+                    <li>Bandeja nova → <strong>em cima</strong> da última (<code>empilhar</code>).</li>
+                    <li>Bandeja para usar → pega <strong>a do topo</strong> (<code>desempilhar</code>).</li>
+                    <li>Olhar o topo sem pegar → <code>topo</code>.</li>
+                    <li>Há bandejas? → <code>vazia</code>.</li>
+                </ul>
+                <blockquote>
+                    A regra central: <strong>só se mexe no topo</strong>.
+                    Do meio e do fundo: inacessíveis enquanto não desempilhar tudo em cima.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A restrição é o que define</h3>
+                <p style="text-align: left;">
+                    Parece dura — mas é exatamente isso que torna a Pilha
+                    <span class="destaque">simples e veloz</span>.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    E é a estrutura natural para qualquer situação que precisa
+                    <strong>desfazer na ordem inversa</strong>.
+                </p>
+            </section>
+        </section>
+
+        <!-- BLOCO 3 — VISUALIZAÇÃO GRÁFICA -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.7em; color: #666;">
+                    Ciclo completo: criar → 3× empilhar → topo → 2× desempilhar.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1 — pilha_criar()</h3>
+                <img class="diagrama" src="img/01_criar.svg" alt="Pilha vazia: topo aponta para NULL">
+            </section>
+
+            <section>
+                <h3>Passo 2 — empilhar(10)</h3>
+                <img class="diagrama" src="img/02_empilhar_10.svg" alt="Pilha com um nó: topo aponta para o nó 10; nó aponta para NULL">
+            </section>
+
+            <section>
+                <h3>Passo 3 — empilhar(20)</h3>
+                <img class="diagrama" src="img/03_empilhar_20.svg" alt="Pilha com dois nós: topo em 20; 20 aponta para 10; 10 aponta para NULL">
+            </section>
+
+            <section>
+                <h3>Passo 4 — empilhar(30)</h3>
+                <img class="diagrama" src="img/04_empilhar_30.svg" alt="Pilha com três nós: topo em 30; 30 → 20 → 10 → NULL">
+            </section>
+
+            <section>
+                <h3>Passo 5 — topo() retorna 30</h3>
+                <img class="diagrama" src="img/05_topo.svg" alt="topo() lê o valor do nó apontado por topo sem alterar nada">
+            </section>
+
+            <section>
+                <h3>Passo 6 — desempilhar() remove 30</h3>
+                <img class="diagrama" src="img/06_desempilhar.svg" alt="Pilha com dois nós (20, 10): topo agora em 20; nó 30 liberado">
+            </section>
+
+            <section>
+                <h3>Passo 7 — desempilhar() remove 20</h3>
+                <img class="diagrama" src="img/07_desempilhar_2.svg" alt="Pilha com um nó (10): topo aponta para 10; 10 aponta para NULL">
+                <p class="nota-rodape">
+                    <strong>Diferente da Fila</strong>: não há caso especial para o último elemento — basta um único ponteiro <code>topo</code>.
+                </p>
+            </section>
+        </section>
+
+        <!-- BLOCO 4 — PROBLEMA MOTIVADOR -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Por que Pilha existe?</h2>
+            </section>
+
+            <section>
+                <h3>Como o Ctrl+Z funciona?</h3>
+                <p style="text-align: left;">
+                    Ctrl+Z desfaz a <strong>última</strong> ação. De novo, a penúltima. De novo, a antepenúltima.
+                </p>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    Como o editor sabe? Mantém uma <span class="destaque">Pilha de ações</span>:
+                </p>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>Cada ação do usuário → <code>empilhar</code>.</li>
+                    <li>Cada Ctrl+Z → <code>desempilhar</code> e reverter.</li>
+                    <li>Ctrl+Y (refazer) → segunda pilha que recebe o desfeito.</li>
+                </ul>
+                <blockquote style="font-size: 0.78em;">
+                    Uma Fila aqui seria desastrosa: começaria desfazendo a <em>primeira</em>
+                    ação ("abrir o arquivo"), não a mais recente.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A pilha de chamadas</h3>
+                <p style="text-align: left;">
+                    Função <code>A</code> chama <code>B</code>, que chama <code>C</code>:
+                </p>
+                <pre style="font-size: 0.6em; text-align: left; max-width: 360px; margin: 0 auto;"><code class="language-text">[ frame de C ]   ← topo (executando)
+[ frame de B ]
+[ frame de A ]
+[ ... main ... ]</code></pre>
+                <p style="text-align: left; margin-top: 1em;">
+                    Cada <code>return</code> <strong>desempilha</strong> e devolve o controle
+                    a quem chamou.
+                </p>
+                <p class="nota-rodape">É <em>literalmente</em> uma Pilha — o nome não é coincidência.</p>
+            </section>
+        </section>
+
+        <!-- BLOCO 5 — ANALOGIAS -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>Pilha de bandejas no restaurante self-service</h3>
+                <p style="text-align: left;">
+                    Bandejas chegam limpas → vão <strong>em cima</strong>.<br>
+                    Você precisa de uma → pega <strong>a do topo</strong>.
+                </p>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    A pilha cresce por cima quando vêm novas; encolhe pelo topo quando saem.
+                    Você nunca vê a do meio.
+                </p>
+                <blockquote>LIFO literal.</blockquote>
+            </section>
+
+            <section>
+                <h3>Pilha de pratos sujos</h3>
+                <p style="text-align: left;">
+                    Você termina a refeição → o prato vai <strong>em cima</strong>.
+                </p>
+                <p style="text-align: left;">
+                    Quando vai lavar → começa pelo <strong>topo</strong> (o último colocado).
+                </p>
+                <blockquote>
+                    Última coisa suja, primeira coisa limpa.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- BLOCO 6 — CÓDIGO EM C -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 6</p>
+                <h2>Código em C</h2>
+                <p style="font-size: 0.7em; color: #666;">
+                    Lista simplesmente encadeada com <code>topo</code> apenas.
+                </p>
+            </section>
+
+            <section>
+                <h3>Um único arquivo: <code>pilha.c</code></h3>
+                <p style="text-align: left;">
+                    Tudo num lugar só: <code>#include</code>s, structs, funções e <code>main()</code>.
+                </p>
+                <blockquote style="font-size: 0.78em;">
+                    Em uma aula futura sobre <strong>organização de projetos em C</strong>,
+                    veremos como dividir uma TAD em <code>pilha.h</code> + <code>pilha.c</code>
+                    (separação interface / implementação). Por enquanto, manter tudo num arquivo
+                    facilita ler de cima a baixo.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3><code>pilha.c</code> — includes e structs</h3>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Cada elemento da pilha vira um No.
+typedef struct No {
+    int valor;
+    struct No* proximo;
+} No;
+
+// A pilha guarda apenas o topo.
+typedef struct Pilha {
+    No* topo;
+} Pilha;
+
+Pilha* pilha_criar(void) {
+    Pilha* p = malloc(sizeof(Pilha));
+    if (p == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    p-&gt;topo = NULL;
+    return p;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>pilha_empilhar</code></h3>
+                <pre><code class="language-c">void pilha_empilhar(Pilha* p, int valor) {
+    No* novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo-&gt;valor = valor;
+
+    // O proximo do novo no e' o antigo topo (que pode ser NULL
+    // se a pilha estava vazia — sem caso especial!).
+    novo-&gt;proximo = p-&gt;topo;
+    p-&gt;topo = novo;
+}</code></pre>
+                <p class="nota-rodape">
+                    Note: <strong>nenhum <code>if</code></strong> para diferenciar pilha vazia ou não.
+                </p>
+            </section>
+
+            <section>
+                <h3><code>pilha_desempilhar</code></h3>
+                <pre><code class="language-c">int pilha_desempilhar(Pilha* p) {
+    if (pilha_vazia(p)) {
+        printf("erro: pilha vazia\n");
+        exit(1);
+    }
+    No* removido = p-&gt;topo;
+    int valor = removido-&gt;valor;
+
+    // O topo "afunda" um nivel. Se removido era o ultimo,
+    // removido-&gt;proximo era NULL e topo vira NULL — sem caso especial.
+    p-&gt;topo = removido-&gt;proximo;
+    free(removido);
+    return valor;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>topo</code>, <code>vazia</code>, <code>destruir</code></h3>
+                <pre><code class="language-c">int pilha_topo(Pilha* p) {
+    if (pilha_vazia(p)) {
+        printf("erro: pilha vazia\n");
+        exit(1);
+    }
+    return p-&gt;topo-&gt;valor;
+}
+
+int pilha_vazia(Pilha* p) {
+    return p-&gt;topo == NULL;
+}
+
+void pilha_destruir(Pilha* p) {
+    No* atual = p-&gt;topo;
+    while (atual != NULL) {
+        No* prox = atual-&gt;proximo;
+        free(atual);
+        atual = prox;
+    }
+    free(p);
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>main()</code> — programa demonstrativo</h3>
+                <pre><code class="language-c">int main(void) {
+    Pilha* p = pilha_criar();
+    pilha_empilhar(p, 10);
+    pilha_empilhar(p, 20);
+    pilha_empilhar(p, 30);
+
+    printf("Topo da pilha: %d\n", pilha_topo(p));
+
+    printf("Desempilhando: ");
+    while (!pilha_vazia(p)) {
+        printf("%d ", pilha_desempilhar(p));
+    }
+    printf("\n");
+
+    pilha_destruir(p);
+    return 0;
+}</code></pre>
+                <p class="nota-rodape">
+                    A <code>main()</code> fica no mesmo <code>pilha.c</code>, ao final do arquivo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Compilando e contraste com a Fila</h3>
+                <pre><code class="language-bash">gcc -Wall -Wextra -o pilha_demo pilha.c
+./pilha_demo</code></pre>
+                <p style="text-align: left; margin-top: 0.8em;">Saída:</p>
+                <pre><code class="language-text">Topo da pilha: 30
+Desempilhando: 30 20 10</code></pre>
+                <blockquote style="font-size: 0.78em;">
+                    Compare com a Fila: <code>10 20 30</code>.
+                    <strong>Mesma representação</strong> (lista encadeada),
+                    <strong>resultados opostos</strong> — porque o <em>contrato</em> é diferente.
+                    A lição central da Aula 01 colhendo frutos.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- BLOCO 7 — EXERCÍCIOS -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 7</p>
+                <h2>Exercícios práticos</h2>
+            </section>
+
+            <section>
+                <h3>Exercício 1 — trace na mão</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Pilha vazia. Sequência:
+                    <code>emp(7)</code>, <code>emp(3)</code>, <code>emp(11)</code>,
+                    <code>desemp</code>, <code>emp(5)</code>, <code>topo</code>,
+                    <code>desemp</code>, <code>desemp</code>.
+                </p>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Estado (topo → base) e retorno por operação.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ul>
+                        <li><code>emp(7)</code> → <code>[7]</code></li>
+                        <li><code>emp(3)</code> → <code>[3, 7]</code></li>
+                        <li><code>emp(11)</code> → <code>[11, 3, 7]</code></li>
+                        <li><code>desemp</code> → <code>[3, 7]</code> · retorna <code>11</code></li>
+                        <li><code>emp(5)</code> → <code>[5, 3, 7]</code></li>
+                        <li><code>topo</code> → <code>[5, 3, 7]</code> · retorna <code>5</code></li>
+                        <li><code>desemp</code> → <code>[3, 7]</code> · retorna <code>5</code></li>
+                        <li><code>desemp</code> → <code>[7]</code> · retorna <code>3</code></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 2 — <code>pilha_imprimir</code></h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Imprime <code>[30, 20, 10]</code> do topo para a base, ou <code>[]</code> se vazia.
+                    Sem usar <code>desempilhar</code>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">void pilha_imprimir(const Pilha* p) {
+    printf("[");
+    for (No* a = p-&gt;topo; a != NULL; a = a-&gt;proximo) {
+        printf("%d", a-&gt;valor);
+        if (a-&gt;proximo != NULL) printf(", ");
+    }
+    printf("]\n");
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 3 — parênteses balanceados</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    <code>parenteses_balanceados(s)</code> retorna <code>true</code> se
+                    <code>(</code>, <code>[</code>, <code>{</code> estão pareados e aninhados.
+                </p>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Ex.: <code>"(a+b)*[c-d]"</code> → <code>true</code>;
+                    <code>"({a)})"</code> → <code>false</code>; <code>"(("</code> → <code>false</code>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Ideia:</strong> abre → empilha o tipo; fecha → desempilha e confere.
+                    Final vazia → ok.
+<pre><code class="language-c">bool parenteses_balanceados(const char* s) {
+    Pilha* p = pilha_criar();
+    for (int i = 0; s[i]; i++) {
+        int abre  = abre_para_codigo(s[i]);
+        int fecha = fecha_para_codigo(s[i]);
+        if (abre) pilha_empilhar(p, abre);
+        else if (fecha) {
+            if (pilha_vazia(p) || pilha_desempilhar(p) != fecha) {
+                pilha_destruir(p); return false;
+            }
+        }
+    }
+    bool ok = pilha_vazia(p);
+    pilha_destruir(p);
+    return ok;
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 4 — inverter string com pilha</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    <code>inverter_string(s)</code> modifica a string <em>in-place</em>.
+                    Compare custo de tempo e espaço com a versão "dois índices".
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">void inverter_string(char* s) {
+    Pilha* p = pilha_criar();
+    int n = 0;
+    while (s[n]) { pilha_empilhar(p, (int) s[n]); n++; }
+    for (int i = 0; i &lt; n; i++) s[i] = (char) pilha_desempilhar(p);
+    pilha_destruir(p);
+}</code></pre>
+                    <p style="margin: 0.4em 0 0 0;">
+                        Tempo: <strong>O(n)</strong>. Espaço: <strong>O(n) extra</strong>
+                        (a pilha). Versão "dois índices" troca pontas em
+                        <strong>O(1) extra</strong> — preferível em produção. Aqui
+                        o ponto é mostrar LIFO.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 5 — Fila com duas pilhas (desafio)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Implemente uma <strong>Fila</strong> usando <strong>apenas</strong>
+                    duas pilhas (<code>P_in</code> e <code>P_out</code>).
+                </p>
+                <ul style="text-align: left; font-size: 0.75em;">
+                    <li><code>enfileirar(x)</code> → empilha em <code>P_in</code>.</li>
+                    <li><code>desenfileirar()</code> → se <code>P_out</code> vazia, transfere tudo de <code>P_in</code> para <code>P_out</code> (LIFO de LIFO = FIFO!); depois desempilha <code>P_out</code>.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Análise amortizada: cada elemento atravessa <code>P_in</code>→<code>P_out</code> no máximo <strong>uma vez</strong>. Custo <strong>amortizado O(1)</strong>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Trecho-chave:</strong>
+<pre><code class="language-c">static void transferir_se_preciso(Fila2P* f) {
+    if (pilha_vazia(f-&gt;out)) {
+        while (!pilha_vazia(f-&gt;in))
+            pilha_empilhar(f-&gt;out, pilha_desempilhar(f-&gt;in));
+    }
+}
+
+int fila2p_desenfileirar(Fila2P* f) {
+    transferir_se_preciso(f);
+    return pilha_desempilhar(f-&gt;out);
+}</code></pre>
+                    <p style="margin: 0.3em 0 0 0; font-size: 0.9em;">
+                        Implementação completa em <code>aula04_pilha.md</code>.
+                    </p>
+                </div>
+            </section>
+        </section>
+
+        <!-- BLOCO 8 — REFERÊNCIAS -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.75em;">
+                <li>
+                    <strong>Tenenbaum, Langsam &amp; Augenstein</strong> —
+                    <em>Estruturas de Dados Usando C</em>, cap. 2 (pilhas), com o exemplo
+                    do verificador de parênteses.
+                </li>
+                <li>
+                    <strong>Sedgewick, R.</strong> —
+                    <em>Algoritmos em C</em>, Parte 1, cap. 4 (<em>pushdown stacks</em>).
+                </li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.7em; color: #666;">
+                <li>CLRS — cap. 10.1 (pilhas e filas, implementação por vetor).</li>
+                <li>Knuth, <em>TAOCP</em> vol. 1, §2.2.1 — referência histórica.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Pilha</h1>
+            <h2>Próxima aula em breve</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Já temos lista, fila e pilha. Próximo passo: outras estruturas lineares,
+                buscas e ordenações.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>
