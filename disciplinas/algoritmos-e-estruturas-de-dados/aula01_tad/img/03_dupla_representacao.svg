@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- ========== ESQUERDA: Vetor ========== -->
+  <text x="225" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Implementação A — Vetor</text>
+
+  <!-- Rótulos de índice -->
+  <text x="105" y="100" text-anchor="middle" font-size="13" fill="#888">0</text>
+  <text x="165" y="100" text-anchor="middle" font-size="13" fill="#888">1</text>
+  <text x="225" y="100" text-anchor="middle" font-size="13" fill="#888">2</text>
+  <text x="285" y="100" text-anchor="middle" font-size="13" fill="#888">3</text>
+  <text x="345" y="100" text-anchor="middle" font-size="13" fill="#888">4</text>
+
+  <!-- Células preenchidas -->
+  <rect x="75" y="115" width="60" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="105" y="155" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5</text>
+
+  <rect x="135" y="115" width="60" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="165" y="155" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">8</text>
+
+  <!-- Células vazias -->
+  <rect x="195" y="115" width="60" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2"/>
+  <rect x="255" y="115" width="60" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2"/>
+  <rect x="315" y="115" width="60" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2"/>
+
+  <!-- Indicador "topo = 1" -->
+  <line x1="165" y1="220" x2="165" y2="188" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="158,193 165,180 172,193" fill="#2c5d8a"/>
+  <text x="165" y="245" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">topo = 1</text>
+
+  <!-- Separador vertical -->
+  <line x1="450" y1="80" x2="450" y2="320" stroke="#cfd6dd" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ========== DIREITA: Lista encadeada ========== -->
+  <text x="675" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Implementação B — Lista encadeada</text>
+
+  <!-- Entrada "topo →" -->
+  <text x="495" y="170" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">topo →</text>
+
+  <!-- Rótulos dos campos -->
+  <text x="545" y="125" text-anchor="middle" font-size="11" fill="#888">valor</text>
+  <text x="605" y="125" text-anchor="middle" font-size="11" fill="#888">prox</text>
+
+  <!-- Nó 1 -->
+  <rect x="505" y="135" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="585" y1="135" x2="585" y2="195" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="545" y="173" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">8</text>
+  <circle cx="605" cy="165" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Seta nó1 -> nó2 -->
+  <line x1="625" y1="165" x2="665" y2="165" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="660,160 672,165 660,170" fill="#2c5d8a"/>
+
+  <!-- Nó 2 -->
+  <rect x="672" y="135" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="752" y1="135" x2="752" y2="195" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="712" y="173" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5</text>
+  <text x="772" y="173" text-anchor="middle" font-size="14" fill="#888">∅</text>
+
+  <!-- Rótulo NULL -->
+  <text x="800" y="170" font-size="13" fill="#888" font-style="italic">(NULL)</text>
+
+  <!-- ========== Rodapé: mesmo contrato ========== -->
+  <line x1="100" y1="360" x2="800" y2="360" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="450" y="400" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">↓ ambas respondem ao mesmo contrato ↓</text>
+  <text x="450" y="445" text-anchor="middle" font-size="22" font-weight="700" fill="#2c5d8a">topo() → retorna 8</text>
+</svg>

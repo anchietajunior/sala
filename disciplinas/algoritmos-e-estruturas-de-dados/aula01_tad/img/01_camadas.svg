@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- Camada 1: Programa Cliente -->
+  <rect x="200" y="20" width="400" height="90" rx="8"
+        fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2"/>
+  <text x="400" y="58" text-anchor="middle" font-size="20" font-weight="600" fill="#2c5d8a">PROGRAMA CLIENTE</text>
+  <text x="400" y="86" text-anchor="middle" font-size="14" fill="#5a7a9a">vê apenas as operações públicas</text>
+
+  <!-- Seta 1 -->
+  <line x1="400" y1="115" x2="400" y2="175" stroke="#5a7a9a" stroke-width="2.5"/>
+  <polygon points="392,167 400,183 408,167" fill="#5a7a9a"/>
+  <text x="510" y="150" font-size="13" fill="#888" font-style="italic">só pode chamar o contrato</text>
+
+  <!-- Camada 2: Interface (caixa em destaque) -->
+  <rect x="120" y="195" width="560" height="240" rx="10"
+        fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5"/>
+  <text x="400" y="227" text-anchor="middle" font-size="22" font-weight="700" fill="#2c5d8a">INTERFACE — contrato</text>
+  <line x1="160" y1="248" x2="640" y2="248" stroke="#2c5d8a" stroke-width="1" opacity="0.3"/>
+
+  <!-- Lista de operações (monospace) -->
+  <text x="240" y="282" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17" fill="#222">criar()</text>
+  <text x="240" y="312" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17" fill="#222">empilhar(p, x)</text>
+  <text x="240" y="342" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17" fill="#222">desempilhar(p)</text>
+  <text x="240" y="372" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17" fill="#222">topo(p)</text>
+  <text x="240" y="402" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="17" fill="#222">vazia(p)</text>
+
+  <!-- Seta 2 -->
+  <line x1="400" y1="450" x2="400" y2="510" stroke="#5a7a9a" stroke-width="2.5"/>
+  <polygon points="392,502 400,518 408,502" fill="#5a7a9a"/>
+  <text x="510" y="485" font-size="13" fill="#888" font-style="italic">abaixo daqui é segredo</text>
+
+  <!-- Camada 3: Implementação (esmaecida, tracejada) -->
+  <rect x="200" y="528" width="400" height="80" rx="8"
+        fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="400" y="565" text-anchor="middle" font-size="20" font-weight="600" fill="#5a7a9a">IMPLEMENTAÇÃO (oculta)</text>
+  <text x="400" y="592" text-anchor="middle" font-size="13" fill="#888" font-style="italic">assunto da Aula 02</text>
+</svg>
