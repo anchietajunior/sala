@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Build C (aulas de implementação)
+*.o
+*.out
+*.exe
+*.dSYM/
+a.out
+
+# Logs e temporários
+*.log
+*.tmp
+
+# Claude Code (não versionar)
+.claude/
