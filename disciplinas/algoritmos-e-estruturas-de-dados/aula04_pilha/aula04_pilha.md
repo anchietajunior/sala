@@ -313,7 +313,7 @@ Desempilhando: 30 20 10
 
 A linha `Desempilhando: 30 20 10` é a **prova empírica do LIFO** — exatamente a **ordem inversa** da entrada. Compare com a Fila, em que a saída foi `10 20 30` (mesma ordem da entrada).
 
-Esse contraste é didaticamente precioso: **mesma representação interna** (lista encadeada), **resultados opostos** — porque o **contrato** (TAD) é diferente. Reforça a lição central da Aula 01.
+Esse contraste é didaticamente precioso: **mesma representação interna** (lista encadeada), **resultados opostos** — porque o **contrato** (TAD) é diferente. É o que o TAD promete: o comportamento observável é definido pelo contrato, não pela estrutura escolhida para implementá-lo.
 
 ---
 

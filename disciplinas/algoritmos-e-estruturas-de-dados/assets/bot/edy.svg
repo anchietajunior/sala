@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="Edy — assistente da disciplina">
+    <!-- Fundo circular na cor primária da disciplina -->
+    <circle cx="40" cy="40" r="38" fill="#2c5d8a"/>
+
+    <!-- Detalhe de antena (referência discreta a "robô assistente") -->
+    <line x1="40" y1="6" x2="40" y2="14" stroke="#e8f0f8" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="40" cy="6" r="2.6" fill="#e8f0f8"/>
+
+    <!-- Olhos: retângulos arredondados brancos -->
+    <rect x="22" y="32" width="12" height="14" rx="3" fill="#ffffff"/>
+    <rect x="46" y="32" width="12" height="14" rx="3" fill="#ffffff"/>
+
+    <!-- Pupilas em azul escuro, levemente deslocadas para dar expressão atenta -->
+    <rect x="26" y="36" width="4" height="6" rx="1.5" fill="#2c5d8a"/>
+    <rect x="50" y="36" width="4" height="6" rx="1.5" fill="#2c5d8a"/>
+
+    <!-- Sorriso: arco branco discreto -->
+    <path d="M 26 56 Q 40 66 54 56" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

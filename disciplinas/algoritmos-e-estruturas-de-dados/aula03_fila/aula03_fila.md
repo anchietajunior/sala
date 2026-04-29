@@ -14,7 +14,7 @@ A Fila é, ao lado da Pilha, uma das duas estruturas lineares mais usadas da com
 
 ### Especificação formal — TAD Fila
 
-Reusando a notação da Aula 01:
+Um **TAD** (Tipo Abstrato de Dados) define uma estrutura pelo seu **contrato observável** — os valores que ela armazena, as operações que oferece e os axiomas que essas operações satisfazem — sem comprometer-se com nenhuma representação interna específica. A notação abaixo lista, em três blocos, os **tipos** envolvidos, as **operações** com suas assinaturas e os **axiomas** que descrevem como as operações se relacionam:
 
 ```
 TAD Fila de Inteiros
@@ -487,7 +487,7 @@ Ao enfileirar, calcule `tras = (tras + 1) % 100`. Ao desenfileirar, `frente = (f
 > }
 > ```
 >
-> A `main` é literalmente a mesma do `fila.c` da aula. Ela compila e produz a mesma saída — porque depende **apenas das assinaturas** das funções, não da representação interna. É o axioma da Aula 01 colhendo frutos: o que muda é só a struct `Fila` e o corpo das funções; o cliente não percebe a diferença.
+> A `main` é literalmente a mesma do `fila.c` da aula. Ela compila e produz a mesma saída — porque depende **apenas das assinaturas** das funções, não da representação interna. É o que o TAD promete colhendo frutos na prática: o que muda é só a struct `Fila` e o corpo das funções; o cliente não percebe a diferença.
 
 ---
 

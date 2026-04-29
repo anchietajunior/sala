@@ -6,14 +6,14 @@
     <title>Aula 04 — Pilha | Algoritmos e Estruturas de dados</title>
 
     <!-- Reveal.js core -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
 
     <!-- Tema claro -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
 
     <!-- Highlight.js tema claro para blocos de código -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
 
     <style>
         :root {
@@ -171,21 +171,6 @@
                 Aula <strong>de implementação</strong> — mesma família da Fila,
                 política oposta, código <em>ainda mais simples</em>.
             </p>
-        </section>
-
-        <!-- 3. SUMÁRIO -->
-        <section>
-            <h2>Roteiro da aula</h2>
-            <ol style="font-size: 0.85em;">
-                <li>Conceito — nível profundo</li>
-                <li>Conceito — nível simplificado</li>
-                <li>Visualização gráfica (7 passos)</li>
-                <li>Problema motivador</li>
-                <li>Analogias</li>
-                <li>Código em C</li>
-                <li>Exercícios práticos</li>
-                <li>Referências</li>
-            </ol>
         </section>
 
         <!-- BLOCO 1 — CONCEITO PROFUNDO -->
@@ -634,7 +619,7 @@ Desempilhando: 30 20 10</code></pre>
                     Compare com a Fila: <code>10 20 30</code>.
                     <strong>Mesma representação</strong> (lista encadeada),
                     <strong>resultados opostos</strong> — porque o <em>contrato</em> é diferente.
-                    A lição central da Aula 01 colhendo frutos.
+                    O comportamento observável é definido pelo TAD, não pela estrutura.
                 </blockquote>
             </section>
         </section>
@@ -814,9 +799,9 @@ int fila2p_desenfileirar(Fila2P* f) {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
 
 <script>
     Reveal.initialize({
