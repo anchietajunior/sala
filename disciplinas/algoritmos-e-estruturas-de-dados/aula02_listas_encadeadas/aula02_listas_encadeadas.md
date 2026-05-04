@@ -72,12 +72,6 @@ A partir dessa base, surgem **variantes** que mudam pequenas decisões de projet
 - **Circular**. Em vez de o último nó apontar para `NULL`, ele aponta de volta para o primeiro, formando um anel contínuo. Não há mais "fim" explícito — apenas um ponto inicial. Pode ser circular simples ou circular dupla. Tenenbaum dedica seção própria às listas circulares no cap. 5.
 - **Ordenada × não ordenada**. Decisão **ortogonal** às anteriores. Em uma lista **ordenada**, os nós são mantidos classificados pelo valor da chave (cada inserção localiza a posição correta antes de religar). Em uma lista **não ordenada**, os nós entram em ordem arbitrária. A escolha depende de qual operação domina o uso: lista ordenada paga custo na inserção para ganhar custo na busca por proximidade; lista não ordenada faz o oposto.
 
-#### Sentinelas e nós de cabeçalho
-
-Tanto Tenenbaum (caps. 4 e 5) quanto Cormen et al. (cap. 10.2) destacam um truque importante de implementação: incluir na lista um **nó fictício** — chamado **sentinela** ou **nó de cabeçalho** — que **não armazena dados da aplicação**, mas existe para **simplificar o código**. Sem sentinela, o código de inserção e remoção precisa tratar separadamente o caso *"estou mexendo no primeiro nó"* — porque o primeiro nó é apontado pelo ponteiro externo `início`, não por outro nó. Com sentinela, o primeiro nó "real" passa a ser sempre apontado pelo nó de cabeçalho, e os casos limite somem do código. O nó de cabeçalho também pode guardar **informações globais** sobre a lista, como o tamanho atual.
-
-Cormen et al. (cap. 10.2) faz um alerta importante: o uso de sentinelas é uma decisão de **engenharia**, não dogma. Em programas que mantêm **muitas listas pequenas** (centenas ou milhares delas), cada sentinela é um nó que ocupa memória sem armazenar dado útil — o desperdício acumulado pode ser considerável. Em listas grandes ou em quantidade pequena, o ganho de simplicidade compensa.
-
 #### Padrões de acesso — FIFO e LIFO
 
 Há ainda dois padrões que aparecem o tempo todo associados a listas encadeadas — mas que são **políticas de comportamento**, não estruturas:
@@ -142,7 +136,6 @@ A conclusão clássica: **listas são fortes onde vetores são fracos** (inserir
 
 - **Espaço *overhead*** por nó. Cada nó precisa armazenar ao menos um ponteiro (8 bytes em sistemas de 64 bits), somado à carga útil. Em listas com milhões de elementos pequenos, esse acréscimo é considerável.
 - **Cada nó é uma alocação individual** com `malloc` (e libera-se com `free`). Um vetor faz uma única alocação para todos os elementos. Quanto mais nós, mais chamadas de alocação a lista paga.
-- **Sentinelas em excesso**, como já alertado, podem desperdiçar memória em programas que mantêm milhares de listas muito pequenas — cada nó de cabeçalho ocupa espaço sem armazenar dado útil.
 
 ### Camada 6 — Conexões e variantes
 
@@ -274,9 +267,9 @@ Para cada cenário, decida se a melhor representação é **vetor** ou **lista e
 
 ## 6. Referências
 
-- **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo 4 (*"Filas e listas"*) e capítulo 5 (*"Listas em C"*). Apresenta a lista simples, a duplamente encadeada e a circular com o nível de detalhe canônico da disciplina; cobre também sentinelas e nós de cabeçalho.
+- **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo 4 (*"Filas e listas"*) e capítulo 5 (*"Listas em C"*). Apresenta a lista simples, a duplamente encadeada e a circular com o nível de detalhe canônico da disciplina.
 
-- **Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.** — *Algoritmos: Teoria e Prática* (CLRS). Capítulo 10, seções 10.2 (*"Listas ligadas"*) e 10.3 (*"Implementando ponteiros e objetos"*). Trata formalmente as variantes (simples, dupla, circular, ordenada/não ordenada), o uso de sentinelas, a implementação por vetores paralelos e a lista livre (`ALLOCATE-OBJECT`/`FREE-OBJECT`).
+- **Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.** — *Algoritmos: Teoria e Prática* (CLRS). Capítulo 10, seções 10.2 (*"Listas ligadas"*) e 10.3 (*"Implementando ponteiros e objetos"*). Trata formalmente as variantes (simples, dupla, circular, ordenada/não ordenada), a implementação por vetores paralelos e a lista livre (`ALLOCATE-OBJECT`/`FREE-OBJECT`).
 
 - **Sedgewick, R.** — *Algoritmos em C*, Parte 1, capítulo 3 (*"Estruturas de dados elementares"*), seção sobre **listas ligadas**. Discussão sucinta com diagramas excelentes.
 

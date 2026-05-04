@@ -571,31 +571,6 @@
             </section>
 
             <section>
-                <h3>Sentinelas e nós de cabeçalho</h3>
-                <p style="text-align: left; font-size: 0.82em;">
-                    Truque clássico de implementação destacado em
-                    <em>Tenenbaum</em> (caps. 4–5) e <em>Cormen et al.</em> (cap. 10.2):
-                    incluir um <span class="destaque">nó fictício</span> na lista
-                    que <strong>não armazena dados da aplicação</strong>.
-                </p>
-                <ul style="text-align: left; font-size: 0.78em;">
-                    <li>
-                        Elimina o caso especial "estou mexendo no primeiro nó" —
-                        os ponteiros sempre apontam para algo, nunca para <code>NULL</code>.
-                    </li>
-                    <li>
-                        Pode guardar <em>informação global</em> da lista
-                        (tamanho atual, por exemplo).
-                    </li>
-                </ul>
-                <p class="nota-rodape">
-                    <strong>Alerta de Cormen</strong>: em programas com milhares
-                    de listas pequenas, o desperdício acumulado de sentinelas
-                    pode ser considerável.
-                </p>
-            </section>
-
-            <section>
                 <h3>FIFO e LIFO — <em>padrões de acesso</em>, não estruturas</h3>
                 <p style="text-align: left;">
                     São <span class="destaque">políticas de comportamento</span>:
@@ -756,7 +731,6 @@
                             <li>Sem acesso aleatório (k-ésimo em O(n)).</li>
                             <li><strong>Overhead</strong> de ponteiro por nó (8 bytes em 64 bits).</li>
                             <li>Cada nó é uma alocação individual com <code>malloc</code>.</li>
-                            <li>Sentinelas em excesso → desperdício de memória.</li>
                         </ul>
                     </div>
                 </div>
@@ -1079,7 +1053,7 @@
                 <li>
                     <strong>Tenenbaum, Langsam &amp; Augenstein</strong> —
                     <em>Estruturas de Dados Usando C</em>, caps. 4 (filas e listas)
-                    e 5 (listas em C). Variantes, sentinelas, lista livre.
+                    e 5 (listas em C). Variantes e lista livre.
                 </li>
                 <li>
                     <strong>Cormen, Leiserson, Rivest &amp; Stein</strong> (CLRS) —
