@@ -277,7 +277,7 @@ typedef struct Fila {
 } Fila;
 
 // Cria uma fila vazia.
-Fila* fila_criar(void) {
+Fila* criar(void) {
     Fila* f = malloc(sizeof(Fila));
     if (f == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -289,12 +289,12 @@ Fila* fila_criar(void) {
 }
 
 // Verdadeiro (1) se a fila nao tem nenhum elemento.
-int fila_vazia(Fila* f) {
+int vazia(Fila* f) {
     return f->inicio == NULL;
 }
 
 // Coloca um valor no fim da fila.
-void fila_enfileirar(Fila* f, int valor) {
+void enfileirar(Fila* f, int valor) {
     No* novo = malloc(sizeof(No));
     if (novo == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -303,7 +303,7 @@ void fila_enfileirar(Fila* f, int valor) {
     novo->valor = valor;
     novo->proximo = NULL;
 
-    if (fila_vazia(f)) {
+    if (vazia(f)) {
         // Fila estava vazia: o novo no e' tambem a frente.
         f->inicio = novo;
     } else {
@@ -315,8 +315,8 @@ void fila_enfileirar(Fila* f, int valor) {
 
 // Remove e devolve o valor da frente da fila.
 // Pre-requisito: a fila nao pode estar vazia.
-int fila_desenfileirar(Fila* f) {
-    if (fila_vazia(f)) {
+int desenfileirar(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
@@ -336,8 +336,8 @@ int fila_desenfileirar(Fila* f) {
 }
 
 // Devolve o valor da frente sem remover.
-int fila_frente(Fila* f) {
-    if (fila_vazia(f)) {
+int frente(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
@@ -345,7 +345,7 @@ int fila_frente(Fila* f) {
 }
 
 // Libera toda a memoria usada pela fila.
-void fila_destruir(Fila* f) {
+void destruir(Fila* f) {
     No* atual = f->inicio;
     while (atual != NULL) {
         No* proximo = atual->proximo;
@@ -357,20 +357,20 @@ void fila_destruir(Fila* f) {
 
 // Programa demonstrativo.
 int main(void) {
-    Fila* f = fila_criar();
+    Fila* f = criar();
 
-    fila_enfileirar(f, 10);
-    fila_enfileirar(f, 20);
-    fila_enfileirar(f, 30);
-    printf("Frente da fila: %d\n", fila_frente(f));
+    enfileirar(f, 10);
+    enfileirar(f, 20);
+    enfileirar(f, 30);
+    printf("Frente da fila: %d\n", frente(f));
 
     printf("Desenfileirando: ");
-    while (!fila_vazia(f)) {
-        printf("%d ", fila_desenfileirar(f));
+    while (!vazia(f)) {
+        printf("%d ", desenfileirar(f));
     }
     printf("\n");
 
-    fila_destruir(f);
+    destruir(f);
     return 0;
 }
 ```
@@ -412,7 +412,7 @@ typedef struct Fila {
     No* fim;
 } Fila;
 
-Fila* fila_criar(void) {
+Fila* criar(void) {
     Fila* f = malloc(sizeof(Fila));
     if (f == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -423,11 +423,11 @@ Fila* fila_criar(void) {
     return f;
 }
 
-int fila_vazia(Fila* f) {
+int vazia(Fila* f) {
     return f->inicio == NULL;
 }
 
-void fila_enfileirar(Fila* f, int valor) {
+void enfileirar(Fila* f, int valor) {
     No* novo = malloc(sizeof(No));
     if (novo == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -437,7 +437,7 @@ void fila_enfileirar(Fila* f, int valor) {
     novo->proximo = NULL;
     novo->anterior = f->fim;   // o anterior do novo e' o antigo fim
 
-    if (fila_vazia(f)) {
+    if (vazia(f)) {
         // Fila estava vazia: o novo no tambem e' a frente.
         f->inicio = novo;
     } else {
@@ -447,8 +447,8 @@ void fila_enfileirar(Fila* f, int valor) {
     f->fim = novo;
 }
 
-int fila_desenfileirar(Fila* f) {
-    if (fila_vazia(f)) {
+int desenfileirar(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
@@ -467,15 +467,15 @@ int fila_desenfileirar(Fila* f) {
     return valor;
 }
 
-int fila_frente(Fila* f) {
-    if (fila_vazia(f)) {
+int frente(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
     return f->inicio->valor;
 }
 
-void fila_destruir(Fila* f) {
+void destruir(Fila* f) {
     No* atual = f->inicio;
     while (atual != NULL) {
         No* proximo = atual->proximo;
@@ -487,20 +487,20 @@ void fila_destruir(Fila* f) {
 
 // A main e' literalmente identica a do fila.c.
 int main(void) {
-    Fila* f = fila_criar();
+    Fila* f = criar();
 
-    fila_enfileirar(f, 10);
-    fila_enfileirar(f, 20);
-    fila_enfileirar(f, 30);
-    printf("Frente da fila: %d\n", fila_frente(f));
+    enfileirar(f, 10);
+    enfileirar(f, 20);
+    enfileirar(f, 30);
+    printf("Frente da fila: %d\n", frente(f));
 
     printf("Desenfileirando: ");
-    while (!fila_vazia(f)) {
-        printf("%d ", fila_desenfileirar(f));
+    while (!vazia(f)) {
+        printf("%d ", desenfileirar(f));
     }
     printf("\n");
 
-    fila_destruir(f);
+    destruir(f);
     return 0;
 }
 ```
@@ -538,7 +538,7 @@ typedef struct Fila {
     No* fim;
 } Fila;
 
-Fila* fila_criar(void) {
+Fila* criar(void) {
     Fila* f = malloc(sizeof(Fila));
     if (f == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -548,11 +548,11 @@ Fila* fila_criar(void) {
     return f;
 }
 
-int fila_vazia(Fila* f) {
+int vazia(Fila* f) {
     return f->fim == NULL;
 }
 
-void fila_enfileirar(Fila* f, int valor) {
+void enfileirar(Fila* f, int valor) {
     No* novo = malloc(sizeof(No));
     if (novo == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -560,7 +560,7 @@ void fila_enfileirar(Fila* f, int valor) {
     }
     novo->valor = valor;
 
-    if (fila_vazia(f)) {
+    if (vazia(f)) {
         // Unico elemento: aponta para si mesmo, fechando o anel.
         novo->proximo = novo;
     } else {
@@ -571,8 +571,8 @@ void fila_enfileirar(Fila* f, int valor) {
     f->fim = novo;   // o novo passa a ser o fim
 }
 
-int fila_desenfileirar(Fila* f) {
-    if (fila_vazia(f)) {
+int desenfileirar(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
@@ -590,16 +590,16 @@ int fila_desenfileirar(Fila* f) {
     return valor;
 }
 
-int fila_frente(Fila* f) {
-    if (fila_vazia(f)) {
+int frente(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
     return f->fim->proximo->valor;
 }
 
-void fila_destruir(Fila* f) {
-    if (!fila_vazia(f)) {
+void destruir(Fila* f) {
+    if (!vazia(f)) {
         // Quebra o anel para conseguir percorrer ate o fim.
         No* atual = f->fim->proximo;
         f->fim->proximo = NULL;
@@ -613,20 +613,20 @@ void fila_destruir(Fila* f) {
 }
 
 int main(void) {
-    Fila* f = fila_criar();
+    Fila* f = criar();
 
-    fila_enfileirar(f, 10);
-    fila_enfileirar(f, 20);
-    fila_enfileirar(f, 30);
-    printf("Frente da fila: %d\n", fila_frente(f));
+    enfileirar(f, 10);
+    enfileirar(f, 20);
+    enfileirar(f, 30);
+    printf("Frente da fila: %d\n", frente(f));
 
     printf("Desenfileirando: ");
-    while (!fila_vazia(f)) {
-        printf("%d ", fila_desenfileirar(f));
+    while (!vazia(f)) {
+        printf("%d ", desenfileirar(f));
     }
     printf("\n");
 
-    fila_destruir(f);
+    destruir(f);
     return 0;
 }
 ```
@@ -674,14 +674,14 @@ Considere uma fila vazia e a seguinte sequência de operações: `enfileirar(7)`
 > | `desenfileirar`    | `[5]`                | `11`    |
 
 **Exercício 2 — Função `imprimir`.**
-Adicione a `fila.c` (versão simplesmente encadeada) uma função `void fila_imprimir(Fila* f)` que imprime os valores da fila no formato `[10, 20, 30]` da frente para o fim, ou `[]` se vazia. **Não** pode usar `fila_desenfileirar`. Acrescente chamadas a essa função na `main()` antes e depois das operações.
+Adicione a `fila.c` (versão simplesmente encadeada) uma função `void imprimir(Fila* f)` que imprime os valores da fila no formato `[10, 20, 30]` da frente para o fim, ou `[]` se vazia. **Não** pode usar `desenfileirar`. Acrescente chamadas a essa função na `main()` antes e depois das operações.
 
 *Critério de aceitação*: função fica no mesmo `fila.c`; a `main()` chama antes e depois; saída coerente.
 
 > **Resposta mínima aceitável**
 >
 > ```c
-> void fila_imprimir(Fila* f) {
+> void imprimir(Fila* f) {
 >     printf("[");
 >     No* atual = f->inicio;
 >     while (atual != NULL) {
@@ -696,7 +696,7 @@ Adicione a `fila.c` (versão simplesmente encadeada) uma função `void fila_imp
 > A função percorre a lista lendo `valor` e `proximo` sem modificar nada.
 
 **Exercício 3 — O bug do ponteiro suspenso.**
-No `fila.c`, **comente** a linha `f->fim = NULL;` dentro de `fila_desenfileirar` (a que zera o `fim` quando a fila fica vazia). Compile e rode o programa com `valgrind ./fila_demo` (ou apenas `./fila_demo` se não tiver Valgrind). Em seguida, adicione na `main()` mais um ciclo: depois do `while` que esvazia a fila, chame `fila_enfileirar(f, 99); fila_desenfileirar(f);` e imprima o resultado. Descreva o que acontece e por quê.
+No `fila.c`, **comente** a linha `f->fim = NULL;` dentro de `desenfileirar` (a que zera o `fim` quando a fila fica vazia). Compile e rode o programa com `valgrind ./fila_demo` (ou apenas `./fila_demo` se não tiver Valgrind). Em seguida, adicione na `main()` mais um ciclo: depois do `while` que esvazia a fila, chame `enfileirar(f, 99); desenfileirar(f);` e imprima o resultado. Descreva o que acontece e por quê.
 
 *Critério de aceitação*: identificar que, sem zerar `fim`, ao reenfileirar `99` numa fila vazia o código entra no ramo "fila vazia" e atualiza `inicio` corretamente, **mas o `fim` antigo continua apontando para memória já liberada**; o próximo `enfileirar` em fila não-vazia tentaria escrever em `fim->proximo`, com comportamento indefinido. É a armadilha que Tenenbaum (cap. 4) destaca.
 

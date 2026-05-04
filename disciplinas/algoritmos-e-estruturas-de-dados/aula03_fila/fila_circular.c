@@ -14,7 +14,7 @@ typedef struct Fila {
     No* fim;
 } Fila;
 
-Fila* fila_criar(void) {
+Fila* criar(void) {
     Fila* f = malloc(sizeof(Fila));
     if (f == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -24,11 +24,11 @@ Fila* fila_criar(void) {
     return f;
 }
 
-int fila_vazia(Fila* f) {
+int vazia(Fila* f) {
     return f->fim == NULL;
 }
 
-void fila_enfileirar(Fila* f, int valor) {
+void enfileirar(Fila* f, int valor) {
     No* novo = malloc(sizeof(No));
     if (novo == NULL) {
         printf("erro: memoria insuficiente\n");
@@ -36,7 +36,7 @@ void fila_enfileirar(Fila* f, int valor) {
     }
     novo->valor = valor;
 
-    if (fila_vazia(f)) {
+    if (vazia(f)) {
         // Unico elemento: o no aponta para si mesmo, fechando o anel.
         novo->proximo = novo;
     } else {
@@ -49,8 +49,8 @@ void fila_enfileirar(Fila* f, int valor) {
     f->fim = novo;   // o novo passa a ser o fim
 }
 
-int fila_desenfileirar(Fila* f) {
-    if (fila_vazia(f)) {
+int desenfileirar(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
@@ -69,16 +69,16 @@ int fila_desenfileirar(Fila* f) {
     return valor;
 }
 
-int fila_frente(Fila* f) {
-    if (fila_vazia(f)) {
+int frente(Fila* f) {
+    if (vazia(f)) {
         printf("erro: fila vazia\n");
         exit(1);
     }
     return f->fim->proximo->valor;
 }
 
-void fila_destruir(Fila* f) {
-    if (!fila_vazia(f)) {
+void destruir(Fila* f) {
+    if (!vazia(f)) {
         // Quebra o anel para conseguir percorrer linearmente
         // sem cair em loop infinito.
         No* atual = f->fim->proximo;
@@ -95,19 +95,19 @@ void fila_destruir(Fila* f) {
 // A main e' literalmente identica as outras duas versoes —
 // mesmo cliente, outra representacao interna.
 int main(void) {
-    Fila* f = fila_criar();
+    Fila* f = criar();
 
-    fila_enfileirar(f, 10);
-    fila_enfileirar(f, 20);
-    fila_enfileirar(f, 30);
-    printf("Frente da fila: %d\n", fila_frente(f));
+    enfileirar(f, 10);
+    enfileirar(f, 20);
+    enfileirar(f, 30);
+    printf("Frente da fila: %d\n", frente(f));
 
     printf("Desenfileirando: ");
-    while (!fila_vazia(f)) {
-        printf("%d ", fila_desenfileirar(f));
+    while (!vazia(f)) {
+        printf("%d ", desenfileirar(f));
     }
     printf("\n");
 
-    fila_destruir(f);
+    destruir(f);
     return 0;
 }

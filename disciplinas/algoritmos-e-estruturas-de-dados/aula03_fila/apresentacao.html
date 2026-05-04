@@ -575,7 +575,7 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             </section>
 
             <section>
-                <h3>Passo 1 — fila_criar()</h3>
+                <h3>Passo 1 — criar()</h3>
                 <img class="diagrama" src="img/01_criar.svg" alt="Fila vazia: inicio e fim apontam para NULL">
             </section>
 
@@ -774,7 +774,7 @@ typedef struct Fila {
     No* fim;
 } Fila;
 
-Fila* fila_criar(void) {
+Fila* criar(void) {
     Fila* f = malloc(sizeof(Fila));
     if (f == NULL) { printf("erro: memoria\n"); exit(1); }
     f-&gt;inicio = NULL;
@@ -784,19 +784,49 @@ Fila* fila_criar(void) {
             </section>
 
             <section>
+                <h3><code>fila.c</code> — <code>vazia</code>, <code>frente</code> e <code>destruir</code></h3>
+                <pre><code class="language-c">// Devolve 1 se a fila nao tem nenhum elemento, 0 caso contrario.
+int vazia(Fila* f) {
+    return f-&gt;inicio == NULL;
+}
+
+// Le o valor da frente sem remover. Pre-condicao: fila nao vazia.
+int frente(Fila* f) {
+    if (vazia(f)) { printf("erro: fila vazia\n"); exit(1); }
+    return f-&gt;inicio-&gt;valor;
+}
+
+// Libera toda a memoria usada pela fila.
+void destruir(Fila* f) {
+    No* atual = f-&gt;inicio;
+    while (atual != NULL) {
+        No* proximo = atual-&gt;proximo;
+        free(atual);
+        atual = proximo;
+    }
+    free(f);
+}</code></pre>
+                <p class="nota-rodape">
+                    <code>vazia</code> aparece nas próximas funções como
+                    teste de pré-condição — usada em
+                    <code>enfileirar</code> e <code>desenfileirar</code>.
+                </p>
+            </section>
+
+            <section>
                 <h3><code>fila.c</code> — <code>enfileirar</code> e <code>desenfileirar</code></h3>
-                <pre><code class="language-c">void fila_enfileirar(Fila* f, int valor) {
+                <pre><code class="language-c">void enfileirar(Fila* f, int valor) {
     No* novo = malloc(sizeof(No));
     if (novo == NULL) { printf("erro: memoria\n"); exit(1); }
     novo-&gt;valor = valor;
     novo-&gt;proximo = NULL;
-    if (fila_vazia(f)) f-&gt;inicio = novo;
+    if (vazia(f)) f-&gt;inicio = novo;
     else f-&gt;fim-&gt;proximo = novo;
     f-&gt;fim = novo;
 }
 
-int fila_desenfileirar(Fila* f) {
-    if (fila_vazia(f)) { printf("erro: vazia\n"); exit(1); }
+int desenfileirar(Fila* f) {
+    if (vazia(f)) { printf("erro: vazia\n"); exit(1); }
     No* removido = f-&gt;inicio;
     int valor = removido-&gt;valor;
     f-&gt;inicio = removido-&gt;proximo;
@@ -832,13 +862,13 @@ typedef struct Fila {
     No* fim;
 } Fila;
 
-void fila_enfileirar(Fila* f, int valor) {
+void enfileirar(Fila* f, int valor) {
     No* novo = malloc(sizeof(No));
     if (novo == NULL) { printf("erro: memoria\n"); exit(1); }
     novo-&gt;valor = valor;
     novo-&gt;proximo = NULL;
     novo-&gt;anterior = f-&gt;fim;          // novidade: aponta para o antigo fim
-    if (fila_vazia(f)) f-&gt;inicio = novo;
+    if (vazia(f)) f-&gt;inicio = novo;
     else f-&gt;fim-&gt;proximo = novo;
     f-&gt;fim = novo;
 }</code></pre>
@@ -846,8 +876,8 @@ void fila_enfileirar(Fila* f, int valor) {
 
             <section>
                 <h3><code>fila_dupla.c</code> — <code>desenfileirar</code></h3>
-                <pre><code class="language-c">int fila_desenfileirar(Fila* f) {
-    if (fila_vazia(f)) { printf("erro: vazia\n"); exit(1); }
+                <pre><code class="language-c">int desenfileirar(Fila* f) {
+    if (vazia(f)) { printf("erro: vazia\n"); exit(1); }
     No* removido = f-&gt;inicio;
     int valor = removido-&gt;valor;
     f-&gt;inicio = removido-&gt;proximo;
@@ -884,11 +914,11 @@ void fila_enfileirar(Fila* f, int valor) {
     No* fim;   // único ponteiro externo
 } Fila;
 
-void fila_enfileirar(Fila* f, int valor) {
+void enfileirar(Fila* f, int valor) {
     No* novo = malloc(sizeof(No));
     if (novo == NULL) { printf("erro: memoria\n"); exit(1); }
     novo-&gt;valor = valor;
-    if (fila_vazia(f)) {
+    if (vazia(f)) {
         novo-&gt;proximo = novo;          // único elemento aponta para si
     } else {
         novo-&gt;proximo = f-&gt;fim-&gt;proximo;  // novo aponta para o que era o inicio
@@ -900,8 +930,8 @@ void fila_enfileirar(Fila* f, int valor) {
 
             <section>
                 <h3><code>fila_circular.c</code> — <code>desenfileirar</code></h3>
-                <pre><code class="language-c">int fila_desenfileirar(Fila* f) {
-    if (fila_vazia(f)) { printf("erro: vazia\n"); exit(1); }
+                <pre><code class="language-c">int desenfileirar(Fila* f) {
+    if (vazia(f)) { printf("erro: vazia\n"); exit(1); }
     No* frente = f-&gt;fim-&gt;proximo;        // o inicio é o proximo do fim
     int valor = frente-&gt;valor;
     if (frente == f-&gt;fim) {
@@ -1001,10 +1031,10 @@ Desenfileirando: 10 20 30</code></pre>
             </section>
 
             <section>
-                <h3>Exercício 2 — função <code>fila_imprimir</code></h3>
+                <h3>Exercício 2 — função <code>imprimir</code></h3>
                 <p style="text-align: left; font-size: 0.8em;">
                     Adicione a <code>fila.c</code> uma função
-                    <code>void fila_imprimir(Fila* f)</code> que imprime
+                    <code>void imprimir(Fila* f)</code> que imprime
                     <code>[10, 20, 30]</code> da frente para o fim, ou <code>[]</code>.
                 </p>
                 <p style="text-align: left; font-size: 0.8em;">
@@ -1012,7 +1042,7 @@ Desenfileirando: 10 20 30</code></pre>
                 </p>
                 <div class="resposta fragment fade-in">
                     <strong>Resposta:</strong>
-<pre><code class="language-c">void fila_imprimir(Fila* f) {
+<pre><code class="language-c">void imprimir(Fila* f) {
     printf("[");
     for (No* a = f-&gt;inicio; a != NULL; a = a-&gt;proximo) {
         printf("%d", a-&gt;valor);
@@ -1027,11 +1057,11 @@ Desenfileirando: 10 20 30</code></pre>
                 <h3>Exercício 3 — o bug do ponteiro suspenso</h3>
                 <p style="text-align: left; font-size: 0.78em;">
                     Em <code>fila.c</code>, comente a linha <code>f-&gt;fim = NULL;</code>
-                    dentro de <code>fila_desenfileirar</code>.
+                    dentro de <code>desenfileirar</code>.
                 </p>
                 <p style="text-align: left; font-size: 0.78em;">
                     Adicione na <code>main()</code> mais um ciclo:
-                    <code>fila_enfileirar(f, 99); fila_desenfileirar(f);</code>
+                    <code>enfileirar(f, 99); desenfileirar(f);</code>
                     <strong>após</strong> o <code>while</code> que esvazia a fila.
                 </p>
                 <p style="text-align: left; font-size: 0.78em;">
