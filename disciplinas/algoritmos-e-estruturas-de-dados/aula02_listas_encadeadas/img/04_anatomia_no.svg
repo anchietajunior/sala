@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- Título -->
+  <text x="450" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Anatomia de um nó
+  </text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Dois grupos de campos: dado (carga útil) e ligação (ponteiro para outro nó).
+  </text>
+
+  <!-- Tipo do nó -->
+  <text x="450" y="120" text-anchor="middle" font-size="13" fill="#888" font-style="italic">
+    No (nó de lista simplesmente encadeada)
+  </text>
+
+  <!-- Nó central -->
+  <rect x="320" y="140" width="260" height="100" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="6"/>
+  <line x1="450" y1="140" x2="450" y2="240" stroke="#2c5d8a" stroke-width="2"/>
+
+  <!-- Conteúdo do nó: valor -->
+  <text x="385" y="172" text-anchor="middle" font-size="11" fill="#888">valor</text>
+  <text x="385" y="208" text-anchor="middle" font-size="26" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">42</text>
+
+  <!-- Conteúdo do nó: proximo -->
+  <text x="515" y="172" text-anchor="middle" font-size="11" fill="#888">proximo</text>
+  <circle cx="515" cy="205" r="5" fill="#2c5d8a"/>
+
+  <!-- Seta saindo do ponteiro -->
+  <line x1="520" y1="205" x2="650" y2="205" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="645,200 657,205 645,210" fill="#2c5d8a"/>
+  <text x="700" y="210" font-size="14" fill="#888" font-style="italic">próximo nó</text>
+
+  <!-- Callout: campo de dado -->
+  <line x1="385" y1="240" x2="385" y2="290" stroke="#5a7a9a" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="385" y="312" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">
+    campo de dado
+  </text>
+  <text x="385" y="332" text-anchor="middle" font-size="12" fill="#5a7a9a">
+    carga útil — o valor que
+  </text>
+  <text x="385" y="350" text-anchor="middle" font-size="12" fill="#5a7a9a">
+    o nó armazena para a aplicação
+  </text>
+
+  <!-- Callout: campo de ligação -->
+  <line x1="515" y1="240" x2="515" y2="290" stroke="#5a7a9a" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="515" y="312" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">
+    campo de ligação
+  </text>
+  <text x="515" y="332" text-anchor="middle" font-size="12" fill="#5a7a9a">
+    ponteiro — endereço de
+  </text>
+  <text x="515" y="350" text-anchor="middle" font-size="12" fill="#5a7a9a">
+    outro nó na memória
+  </text>
+
+  <!-- Legenda inferior -->
+  <line x1="100" y1="396" x2="800" y2="396" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="450" y="420" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    A topologia da estrutura encadeada é determinada pela quantidade e pelo significado dos campos de ligação.
+  </text>
+</svg>

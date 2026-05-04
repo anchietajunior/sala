@@ -351,9 +351,9 @@ Sem CDN, sem inicialização de runtime — o browser renderiza SVG nativamente.
 
 Vale para **aulas conceituais** (tipicamente diagramas de relacionamento — camadas, sequências) e **aulas de implementação** (tipicamente diagramas de estrutura — arrays, listas, árvores). A regra de tecnologia é a mesma; o que muda é o tipo de diagrama predominante.
 
-## Edy — assistente didático nas apresentações
+## Eddy — assistente didático nas apresentações
 
-As apresentações Reveal.js da disciplina contam com um **mascote-assistente** chamado **Edy**. Edy aparece em **slides dedicados** (sempre em sua própria `<section>`, nunca sobreposto ao conteúdo de outro slide) trazendo:
+As apresentações Reveal.js da disciplina contam com um **mascote-assistente** chamado **Eddy**. Eddy aparece em **slides dedicados** (sempre em sua própria `<section>`, nunca sobreposto ao conteúdo de outro slide) trazendo:
 
 - **Citações da bibliografia**: "Turma, segundo Tenenbaum, listas encadeadas são..."
 - **Curiosidades históricas**: "Turma, o algoritmo de Dijkstra foi proposto por Edsger Dijkstra em 1959, num café em Amsterdã."
@@ -362,32 +362,32 @@ As apresentações Reveal.js da disciplina contam com um **mascote-assistente** 
 
 ### Identidade
 
-- **Nome**: Edy.
-- **Avatar**: SVG circular azul (`#2c5d8a`) com rostinho minimalista. Arquivo: `assets/bot/edy.svg`.
+- **Nome**: Eddy.
+- **Avatar**: SVG circular azul (`#2c5d8a`) com rostinho minimalista. Arquivo: `assets/bot/eddy.svg`.
 - **Voz**: trata a turma sempre como "**Turma**". Usa tom acolhedor, curto, direto. Sempre cita a fonte quando faz referência a livro/autor/data.
 
 ### Por que slide dedicado, e não cartão sobreposto
 
-Slide dedicado é a regra **inegociável** desta disciplina. Cartão flutuante no canto **sempre** tem risco de sobrepor conteúdo do slide vizinho — e foi assim que o Edy nasceu, quebrado. Slide próprio:
+Slide dedicado é a regra **inegociável** desta disciplina. Cartão flutuante no canto **sempre** tem risco de sobrepor conteúdo do slide vizinho — e foi assim que o Eddy nasceu, quebrado. Slide próprio:
 
 - Garante zero sobreposição, em qualquer slide, de qualquer aula.
-- Cria pausa natural na narrativa: "agora o Edy quer dizer algo".
+- Cria pausa natural na narrativa: "agora o Eddy quer dizer algo".
 - Dá destaque visual à fala (avatar grande, cartão central com sombra).
 - Mantém a apresentação previsível — quem clica para avançar sabe exatamente o que vem.
 
 ### Estrutura HTML padrão
 
-Cada aparição do Edy é uma `<section>` separada dentro de `<div class="slides">`, no ponto onde a fala faz sentido na narrativa:
+Cada aparição do Eddy é uma `<section>` separada dentro de `<div class="slides">`, no ponto onde a fala faz sentido na narrativa:
 
 ```html
-<section class="edy-slide">
-    <div class="edy-card">
-        <div class="edy-avatar">
-            <img src="../assets/bot/edy.svg" alt="Edy">
+<section class="eddy-slide">
+    <div class="eddy-card">
+        <div class="eddy-avatar">
+            <img src="../assets/bot/eddy.svg" alt="Eddy">
         </div>
-        <div class="edy-balao">
-            <strong class="edy-nome">Edy</strong>
-            <p class="edy-fala">
+        <div class="eddy-balao">
+            <strong class="eddy-nome">Eddy</strong>
+            <p class="eddy-fala">
                 Turma, segundo Tenenbaum, uma lista encadeada é uma sequência
                 de nós onde cada nó aponta para o próximo.
                 <cite>Tenenbaum, cap. 5 — Listas em C</cite>
@@ -401,11 +401,11 @@ O `<cite>` é opcional — usar quando a fala tiver fonte explícita (autor, cap
 
 ### Variante de estilo
 
-- `.edy-card--longo` (no `<div class="edy-card">`) — aumenta a largura máxima do cartão para falas mais extensas (citação com vários autores, lista de aplicações).
+- `.eddy-card--longo` (no `<div class="eddy-card">`) — aumenta a largura máxima do cartão para falas mais extensas (citação com vários autores, lista de aplicações).
 
 ### Inclusão do CSS na apresentação
 
-Cada `apresentacao.html` precisa linkar o CSS do Edy **uma única vez**, junto dos outros stylesheets no `<head>`:
+Cada `apresentacao.html` precisa linkar o CSS do Eddy **uma única vez**, junto dos outros stylesheets no `<head>`:
 
 ```html
 <link rel="stylesheet" href="../assets/bot/bot.css">
@@ -413,7 +413,7 @@ Cada `apresentacao.html` precisa linkar o CSS do Edy **uma única vez**, junto d
 
 Caminho relativo (`../assets/bot/bot.css`) porque cada apresentação vive em `aulaNN_tema/apresentacao.html`.
 
-### Quando usar o Edy
+### Quando usar o Eddy
 
 Distribuir **com parcimônia** — aproximadamente **1 aparição a cada 5–8 slides**, nos pontos onde uma referência externa, dado histórico ou exemplo de uso real **agrega de verdade**. Excesso quebra o ritmo da aula. Diretrizes:
 
@@ -421,7 +421,7 @@ Distribuir **com parcimônia** — aproximadamente **1 aparição a cada 5–8 s
 - **Bloco 3 (Problema Motivador)**: aparição com exemplo de aplicação real ("Turma, isso é exatamente como o navegador implementa o histórico de páginas visitadas...").
 - **Bloco 4 (Analogias)**: aparição opcional com curiosidade que reforça a analogia.
 - **Bloco 5 (Código em C)**: aparição com dica de armadilha comum, **se** houver alguma específica do trecho de código exibido.
-- **Bloco 6 (Exercícios)**: o Edy nunca **dá** a resposta — apenas **provoca** ("Turma, antes de ver a solução, tente identificar quem é o caso base e quem é o passo recursivo.").
+- **Bloco 6 (Exercícios)**: o Eddy nunca **dá** a resposta — apenas **provoca** ("Turma, antes de ver a solução, tente identificar quem é o caso base e quem é o passo recursivo.").
 
 ### Conteúdo das falas — regras
 

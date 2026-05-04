@@ -15,7 +15,7 @@
     <!-- Highlight.js tema claro para blocos de código -->
     <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
 
-    <!-- Edy — assistente didático da disciplina -->
+    <!-- Eddy — assistente didático da disciplina -->
     <link rel="stylesheet" href="../assets/bot/bot.css">
 
     <style>
@@ -259,14 +259,14 @@
                 </p>
             </section>
 
-            <section class="edy-slide">
-                <div class="edy-card">
-                    <div class="edy-avatar">
-                        <img src="../assets/bot/edy.svg" alt="Edy">
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
                     </div>
-                    <div class="edy-balao">
-                        <strong class="edy-nome">Edy</strong>
-                        <p class="edy-fala">
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
                             Turma, segundo Tenenbaum, uma lista encadeada é uma
                             coleção de elementos onde a ordem é dada não pela
                             posição na memória, mas pelos próprios ponteiros que
@@ -314,6 +314,190 @@
                     Os nós podem estar espalhados pela memória em endereços
                     completamente distintos — só os ponteiros importam.
                 </p>
+            </section>
+
+            <!-- ----- APROFUNDAMENTO — O NÓ COMO UNIDADE DE CONSTRUÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Aprofundamento da Camada 2</p>
+                <h3>O nó — unidade de construção</h3>
+                <p style="text-align: left;">
+                    Lista, pilha, fila, árvore, grafo, tabela hash com encadeamento
+                    — todas elas são, no fundo,
+                    <span class="destaque">conjuntos de nós ligados por ponteiros</span>.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Estudar o nó com cuidado é estudar a base sobre a qual quase
+                    toda estrutura dinâmica do curso será construída — o mesmo
+                    conceito reaparece especializado em cada estrutura nova.
+                </p>
+                <p class="nota-rodape">
+                    Tratamento canônico: <em>Tenenbaum</em>, cap. 5;
+                    <em>Cormen et al.</em>, cap. 10.
+                </p>
+            </section>
+
+            <section>
+                <h3>Composição — dois grupos de campos</h3>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li>
+                        <span class="destaque">Campo(s) de dado</span> — a
+                        <em>carga útil</em>: valor ou registro que o nó armazena
+                        (um <code>int</code>, um nome, uma struct inteira).
+                    </li>
+                    <li>
+                        <span class="destaque">Campo(s) de ligação</span> — um
+                        ou mais <em>ponteiros</em> para outros nós. São eles
+                        que dão forma à estrutura final.
+                    </li>
+                </ul>
+                <blockquote style="font-size: 0.82em;">
+                    A quantidade e o significado dos campos de ligação
+                    <strong>determinam a topologia</strong> — e, portanto, o
+                    tipo — da estrutura final.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Anatomia de um nó</h3>
+                <img class="diagrama" src="img/04_anatomia_no.svg"
+                     alt="Anatomia de um nó: à esquerda o campo de valor (carga útil), à direita o campo de ponteiro proximo apontando para outro nó">
+            </section>
+
+            <section>
+                <h3>Família de nós — mesmo conceito, ligações diferentes</h3>
+                <img class="diagrama" src="img/05_familia_de_nos.svg"
+                     alt="Quatro nós lado a lado: lista simples (1 ponteiro), lista dupla (2 ponteiros), árvore binária (esq/dir) e grafo (lista de adjacência)">
+                <p class="nota-rodape">
+                    O dado é equivalente em todos. Muda apenas o
+                    <strong>padrão de ligações</strong>.
+                </p>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, ao entender o nó da lista simples vocês já
+                            terão boa parte do mapa mental para lista dupla,
+                            árvore binária e grafo — basta ajustar o número e
+                            o significado dos ponteiros. Esse é o motivo de
+                            tantas estruturas serem chamadas, em conjunto, de
+                            <em>estruturas baseadas em nó</em>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Tópicos importantes — struct autorreferenciada</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Em C, um nó é um <code>typedef struct</code> que contém
+                    <strong>um ponteiro para o próprio tipo</strong> que está
+                    sendo definido — construção chamada
+                    <span class="destaque">struct autorreferenciada</span>
+                    (Tenenbaum, cap. 5).
+                </p>
+                <pre><code class="language-c" data-trim>typedef struct No {
+    int valor;
+    struct No *proximo;   // referência ao próprio tipo
+} No;</code></pre>
+                <p style="text-align: left; font-size: 0.74em; margin-top: 0.6em;">
+                    Dentro da definição, é obrigatório usar o
+                    <strong>tag</strong> <code>struct No</code>. Trocar por
+                    <code>No *proximo</code> ali dentro <strong>não compila</strong>:
+                    o <code>typedef</code> só conclui o nome <code>No</code>
+                    no <code>;</code> final, depois do <code>}</code>.
+                </p>
+                <p class="nota-rodape">
+                    Fora da definição, <code>struct No *p</code> e
+                    <code>No *p</code> são equivalentes. Implementação concreta:
+                    a partir da Aula 03 (Fila).
+                </p>
+            </section>
+
+            <section>
+                <h3>Tópicos importantes — alocação dinâmica</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Cada nó é criado em tempo de execução por uma chamada a
+                    <code>malloc(sizeof(No))</code> — <em>malloc</em> =
+                    <em>memory allocation</em>.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>
+                        <code>malloc</code> reserva uma região do tamanho exato
+                        de um <code>No</code> e devolve o endereço dela.
+                    </li>
+                    <li>
+                        Quando o nó é descartado, a memória é devolvida com
+                        <code>free</code>.
+                    </li>
+                    <li>
+                        Lista com mil elementos → <strong>~mil chamadas a
+                        <code>malloc</code></strong> ao longo da vida.
+                    </li>
+                </ul>
+                <p class="nota-rodape">
+                    Esse custo motiva a <em>lista livre</em> (Camada 6).
+                </p>
+            </section>
+
+            <section>
+                <h3>Tópicos importantes — <code>NULL</code> como fronteira</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    <code>NULL</code> sinaliza, em qualquer campo de ligação,
+                    <em>"não há nó aqui"</em> — é a
+                    <span class="destaque">fronteira da estrutura</span>.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>Lista simples: último nó tem <code>proximo = NULL</code>.</li>
+                    <li>Lista vazia: <code>inicio = NULL</code>.</li>
+                    <li>Folha de árvore: <code>esquerda = NULL</code> e <code>direita = NULL</code>.</li>
+                </ul>
+                <blockquote style="font-size: 0.8em;">
+                    Tentar percorrer a partir de <code>NULL</code> é o erro
+                    mais comum em estruturas encadeadas — em geral causa uma
+                    falha de segmentação (<em>segmentation fault</em>).
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Tópicos importantes — preço do ponteiro &amp; identidade</h3>
+                <div class="duas-colunas">
+                    <div>
+                        <h4 style="color: #2c5d8a;">Preço do ponteiro</h4>
+                        <ul style="font-size: 0.74em;">
+                            <li>Cada ponteiro: <strong>8 bytes</strong> em sistemas de 64 bits.</li>
+                            <li>
+                                Nó com um <code>int</code> (4 B) paga
+                                <em>mais</em> em ligação do que em dado.
+                            </li>
+                            <li>
+                                Custo só pesa em listas grandes com elementos pequenos.
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #2c5d8a;">Identidade pelo endereço</h4>
+                        <ul style="font-size: 0.74em;">
+                            <li>
+                                Identidade do nó = seu
+                                <strong>endereço de memória</strong>.
+                            </li>
+                            <li>
+                                Dois nós com o mesmo valor são
+                                <em>nós distintos</em>.
+                            </li>
+                            <li>
+                                Operações que recebem "o nó alvo" recebem o
+                                ponteiro — não o valor da chave.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </section>
 
             <!-- ----- CAMADA 3 — PROPRIEDADES E COMPORTAMENTO ----- -->
@@ -661,14 +845,14 @@
                 </ul>
             </section>
 
-            <section class="edy-slide">
-                <div class="edy-card">
-                    <div class="edy-avatar">
-                        <img src="../assets/bot/edy.svg" alt="Edy">
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
                     </div>
-                    <div class="edy-balao">
-                        <strong class="edy-nome">Edy</strong>
-                        <p class="edy-fala">
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
                             Turma, esta aula é a base sobre a qual praticamente
                             todas as próximas se apoiam — Pilha, Fila, e até
                             estruturas mais sofisticadas como tabelas hash com
@@ -768,14 +952,14 @@
                 </p>
             </section>
 
-            <section class="edy-slide">
-                <div class="edy-card edy-card--longo">
-                    <div class="edy-avatar">
-                        <img src="../assets/bot/edy.svg" alt="Edy">
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
                     </div>
-                    <div class="edy-balao">
-                        <strong class="edy-nome">Edy</strong>
-                        <p class="edy-fala">
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
                             Turma, listas encadeadas resolvem problemas como
                             histórico de undo em editores, gerenciamento da fila de
                             processos prontos no kernel do Linux e a própria pilha

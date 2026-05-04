@@ -1,21 +1,21 @@
 /* ========================================================================
-   Edy — assistente didático da disciplina
+   Eddy — assistente didático da disciplina
    ------------------------------------------------------------------------
-   Edy aparece em SEU PRÓPRIO SLIDE, dedicado e sem sobreposição com o
+   Eddy aparece em SEU PRÓPRIO SLIDE, dedicado e sem sobreposição com o
    conteúdo principal. Cada aparição é um <section> separado — uma pausa
-   na apresentação onde o Edy traz uma referência, curiosidade histórica,
+   na apresentação onde o Eddy traz uma referência, curiosidade histórica,
    exemplo de aplicação ou dica.
 
    Uso esperado dentro de um <div class="slides"> Reveal.js:
 
-       <section class="edy-slide">
-           <div class="edy-card">
-               <div class="edy-avatar">
-                   <img src="../assets/bot/edy.svg" alt="Edy">
+       <section class="eddy-slide">
+           <div class="eddy-card">
+               <div class="eddy-avatar">
+                   <img src="../assets/bot/eddy.svg" alt="Eddy">
                </div>
-               <div class="edy-balao">
-                   <strong class="edy-nome">Edy</strong>
-                   <p class="edy-fala">
+               <div class="eddy-balao">
+                   <strong class="eddy-nome">Eddy</strong>
+                   <p class="eddy-fala">
                        Turma, segundo Tenenbaum, ...
                        <cite>Tenenbaum, cap. 5 — Listas em C</cite>
                    </p>
@@ -24,11 +24,11 @@
        </section>
    ======================================================================== */
 
-.reveal section.edy-slide {
+.reveal section.eddy-slide {
     /* Slide dedicado — herda layout do Reveal, sem ajustes especiais */
 }
 
-.reveal .edy-slide .edy-card {
+.reveal .eddy-slide .eddy-card {
     display: flex;
     gap: 32px;
     align-items: center;
@@ -43,24 +43,24 @@
     text-align: left;
 }
 
-.reveal .edy-slide .edy-avatar {
+.reveal .eddy-slide .eddy-avatar {
     flex: 0 0 auto;
     width: 140px;
     height: 140px;
 }
 
-.reveal .edy-slide .edy-avatar img {
+.reveal .eddy-slide .eddy-avatar img {
     width: 100%;
     height: 100%;
     display: block;
 }
 
-.reveal .edy-slide .edy-balao {
+.reveal .eddy-slide .eddy-balao {
     flex: 1;
     min-width: 0;
 }
 
-.reveal .edy-slide .edy-nome {
+.reveal .eddy-slide .eddy-nome {
     color: #2c5d8a;
     font-weight: 600;
     font-size: 1.4em;
@@ -69,7 +69,7 @@
     letter-spacing: 0.3px;
 }
 
-.reveal .edy-slide .edy-nome::before {
+.reveal .eddy-slide .eddy-nome::before {
     content: "";
     display: inline-block;
     width: 8px;
@@ -80,14 +80,14 @@
     vertical-align: middle;
 }
 
-.reveal .edy-slide .edy-fala {
+.reveal .eddy-slide .eddy-fala {
     margin: 0;
     color: #222;
     font-size: 0.78em;
     line-height: 1.55;
 }
 
-.reveal .edy-slide .edy-fala cite {
+.reveal .eddy-slide .eddy-fala cite {
     color: #5a7a9a;
     font-style: italic;
     font-size: 0.92em;
@@ -97,6 +97,6 @@
 
 /* Variante para falas mais longas (curiosidade histórica detalhada,
    citação com vários autores) — apenas aumenta a largura permitida. */
-.reveal .edy-slide .edy-card.edy-card--longo {
+.reveal .eddy-slide .eddy-card.eddy-card--longo {
     max-width: 980px;
 }

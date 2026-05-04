@@ -253,6 +253,46 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                 </blockquote>
             </section>
 
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, segundo Tenenbaum, a Pilha é o TAD em que
+                            inserções e remoções acontecem na mesma ponta — e é
+                            justamente o axioma <code>desempilhar(empilhar(P, x)) = P</code>
+                            que define o comportamento LIFO de forma puramente
+                            algébrica, sem precisar falar em ponteiros ou memória.
+                            <cite>Tenenbaum, cap. 2 — Pilhas</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>O nó da Pilha é o nó da lista simples</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    A representação interna desta aula é construída sobre o
+                    <span class="destaque">nó</span> apresentado em
+                    <em>"O nó — unidade de construção"</em> na Aula 02.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>
+                        Mesmo nó: campo <code>valor</code> (carga útil) +
+                        campo <code>proximo</code> (ligação).
+                    </li>
+                    <li>
+                        O que muda: <span class="destaque">política LIFO</span>
+                        (em vez de FIFO) e <strong>estado externo enxuto</strong>
+                        — um único ponteiro <code>topo</code>, sem
+                        <code>fim</code>.
+                    </li>
+                </ul>
+            </section>
+
             <section>
                 <h3>Representação interna escolhida</h3>
                 <table>
@@ -435,6 +475,25 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                 </p>
                 <p class="nota-rodape">É <em>literalmente</em> uma Pilha — o nome não é coincidência.</p>
             </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, a <em>stack overflow</em> que vocês já viram
+                            em mensagens de erro é exatamente <strong>essa</strong>
+                            pilha de chamadas estourando: cada chamada empilha
+                            um <em>frame</em>, e quando há recursão sem caso
+                            base a pilha cresce sem parar até esgotar a região
+                            de memória reservada para ela.
+                        </p>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <!-- BLOCO 5 — ANALOGIAS -->
@@ -557,6 +616,27 @@ Pilha* pilha_criar(void) {
     free(removido);
     return valor;
 }</code></pre>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, atenção à <strong>ordem</strong> em
+                            <code>desempilhar</code>: primeiro salvamos
+                            <code>removido-&gt;proximo</code> em <code>topo</code>,
+                            <strong>e só depois</strong> chamamos <code>free</code>.
+                            Inverter essa ordem deixa <code>topo</code> apontando
+                            para memória que acabou de ser liberada — um
+                            <em>ponteiro suspenso</em> que provoca falhas
+                            obscuras na próxima operação.
+                        </p>
+                    </div>
+                </div>
             </section>
 
             <section>

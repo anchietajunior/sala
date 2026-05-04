@@ -50,6 +50,8 @@ O **axioma A4** é o **coração do LIFO**: ele diz que "empilhar `x` e em segui
 
 ### Representação interna escolhida
 
+> A representação interna desta aula é construída sobre o **nó** apresentado na sub-seção *"O nó — unidade de construção das estruturas encadeadas"* da Aula 02. O nó da Pilha é exatamente o nó da lista simplesmente encadeada — um campo de valor (a carga útil) e um campo `proximo` (o ponteiro de ligação). O que muda não é o nó: é a **política de acesso** (LIFO em vez de FIFO) e, em comparação com a Fila, o **estado externo enxuto** (apenas o ponteiro `topo`, sem `fim`).
+
 Como na Fila, há mais de uma forma de implementar. CLRS (cap. 10, seção 10.1) cobre as duas opções com pseudocódigo claro; Tenenbaum (cap. 2) traz a implementação em C de cada uma:
 
 | Representação | Vantagem | Custo |

@@ -18,6 +18,44 @@ A diferença essencial em relação a um **vetor** está em **como a ordem dos e
 
 Para que o programa consiga **encontrar** o primeiro nó da lista, mantém-se separadamente um **ponteiro externo** chamado **início** (em inglês, *head*) que aponta para o primeiro elemento. Esse ponteiro **não é um nó** — é apenas o "endereço de entrada" da lista. Quando a lista está vazia, `início` vale `NULL`, indicando que não há nenhum nó. Sem esse ponteiro, a lista inteira ficaria perdida na memória — não haveria por onde começar a percorrê-la.
 
+#### O nó — unidade de construção das estruturas encadeadas
+
+O **nó** é a peça fundamental sobre a qual toda estrutura baseada em ligações é construída. **Lista**, **pilha**, **fila**, **árvore**, **grafo** e **tabela hash com encadeamento** são, no fundo, **conjuntos de nós ligados por ponteiros** seguindo regras particulares (Tenenbaum, cap. 5; Cormen et al., cap. 10). Estudar o nó com cuidado é, portanto, estudar a base sobre a qual quase toda estrutura dinâmica que veremos no curso será construída — a economia de aprendizado é grande, porque o mesmo conceito reaparece especializado em cada estrutura nova.
+
+Um nó tem, em sua forma mais geral, **dois grupos de campos**:
+
+- **Campo(s) de dado** — a *carga útil* do nó: o valor (ou registro) que o nó armazena para a aplicação. Pode ser um único `int`, um nome de aluno, ou uma estrutura inteira (matrícula, nome, notas, ...) — qualquer tipo que faça sentido para o problema modelado.
+- **Campo(s) de ligação** — um ou mais *ponteiros* para outros nós. São esses ponteiros que dão forma à estrutura final: um único ponteiro `proximo` produz uma lista simples; dois ponteiros (`proximo` e `anterior`) produzem uma lista dupla; dois ponteiros (`esquerda` e `direita`) produzem uma árvore binária; um ponteiro para uma lista interna de vizinhos produz a representação de um grafo por listas de adjacência.
+
+A consequência didática é forte: **a quantidade e o significado dos campos de ligação determinam a topologia — e, portanto, o tipo — da estrutura final**. A parte de dado pode ser idêntica em todas; o que diferencia uma lista de uma árvore é apenas como os nós se ligam entre si.
+
+![Anatomia de um nó: o campo de dado guarda a carga útil; o campo de ligação guarda o endereço do próximo nó](img/04_anatomia_no.svg)
+
+A figura abaixo mostra como o **mesmo conceito de nó** se especializa em estruturas distintas apenas pelo número e pelo significado de seus ponteiros. A mensagem central é a economia de aprendizado: ao entender o nó da lista simples, o aluno já tem boa parte do mapa mental para entender lista dupla, árvore binária e grafo — basta ajustar o padrão de ligações.
+
+![Família de nós: lista simples, lista dupla, árvore binária e grafo compartilham a mesma anatomia, com padrões de ligação distintos](img/05_familia_de_nos.svg)
+
+##### Tópicos importantes relacionados ao nó
+
+- **Struct autorreferenciada**. Em C, um nó é representado por um `typedef struct` que contém **um ponteiro para o próprio tipo** que está sendo definido. Essa construção tem nome canônico — *struct autorreferenciada* (Tenenbaum, cap. 5) — e é o que permite a um nó "apontar para outro nó do mesmo tipo". A forma usual é:
+
+    ```c
+    typedef struct No {
+        int valor;
+        struct No *proximo;   // referência ao próprio tipo
+    } No;
+    ```
+
+    O detalhe sintático que costuma confundir está em **por que `struct No *proximo` em vez de `No *proximo`**. A diferença não está só na palavra `struct` — está em **qual nome existe naquele ponto do texto**. Em C, a linha `typedef struct No { ... } No;` declara, na verdade, **dois nomes**: o *tag* `struct No`, que passa a existir já a partir do `{` de abertura; e o *typedef* `No`, que só passa a existir após o `;` final, depois do `}`. Como o ponteiro é declarado **dentro** do bloco, somente o *tag* está disponível ali — escrever apenas `No *proximo` não compila, porque o nome `No` (do `typedef`) ainda não foi criado. **Fora** da definição (em qualquer outra parte do programa), `struct No *p` e `No *p` são equivalentes. A implementação concreta dessa struct aparece a partir da Aula 03.
+
+- **Alocação dinâmica por nó**. Cada nó é criado em **tempo de execução** por uma chamada à função `malloc(sizeof(No))` da biblioteca padrão de C — *malloc* significa *memory allocation*, alocação de memória. O `malloc` reserva, no espaço livre da memória do programa, uma região do tamanho exato de um `No` e devolve o endereço dessa região. Quando o nó deixa de ser necessário (porque foi removido da lista), a memória precisa ser devolvida ao sistema com `free`. A consequência prática: uma lista com mil elementos faz aproximadamente mil chamadas a `malloc` ao longo da sua vida — cada uma com um pequeno custo. Esse é um dos motivos pelos quais existe a *lista livre*, apresentada na Camada 6.
+
+- **`NULL` como terminador**. O valor especial `NULL` é o que sinaliza, em qualquer campo de ligação, *"não há nó aqui"*. Em uma lista simples, o último nó tem `proximo = NULL`. Em uma lista vazia, o ponteiro externo `inicio = NULL`. Em uma árvore, uma folha tem `esquerda = NULL` e `direita = NULL`. **`NULL` é a fronteira da estrutura** — onde um campo de ligação aponta para `NULL`, a estrutura termina naquela direção. Tentar percorrer a partir de `NULL` é o erro de programação mais comum em estruturas encadeadas: causa em geral uma falha de segmentação (*segmentation fault*).
+
+- **O "preço do ponteiro"**. Em sistemas de 64 bits, cada ponteiro ocupa **8 bytes**. Um nó simplesmente encadeado que guarda um único `int` (4 bytes) paga, portanto, *mais* memória pelo ponteiro de ligação do que pelo próprio dado. Esse custo só passa a pesar em listas muito grandes com elementos muito pequenos; quando a carga útil é uma struct com vários campos (nome, matrícula, notas), os 8 bytes tornam-se proporcionalmente irrelevantes. A análise quantitativa aprofundada — comparando lista e vetor — aparece na Camada 5.
+
+- **Identidade pelo endereço**. Diferentemente do índice de um vetor (uma posição numérica fixa), a identidade de um nó é o seu **endereço de memória**. Dois nós que armazenam o mesmo valor não são "o mesmo nó" — são dois nós distintos que apenas coincidem no campo de dado. Essa distinção é importante quando uma operação recebe o nó alvo *por ponteiro*: o ponteiro identifica univocamente *qual* nó da estrutura deve ser operado, mesmo que vários nós contenham a mesma chave.
+
 ### Camada 3 — Propriedades e comportamento
 
 A partir dessa estrutura básica (nós com chave + ponteiro, acessados por um ponteiro externo `início`), surgem **propriedades essenciais** que valem para qualquer lista encadeada:
