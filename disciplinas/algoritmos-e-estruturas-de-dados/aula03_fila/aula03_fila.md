@@ -122,7 +122,7 @@ A leitura prática: as três representações encadeadas têm o **mesmo perfil d
 
 #### Vantagens e desvantagens das encadeadas em relação ao vetor
 
-**Vantagens.** A principal força das listas encadeadas para Fila está no **gerenciamento de memória**. Diversas filas (e pilhas) podem compartilhar a mesma área de memória livre — um *pool* de nós disponíveis, gerenciado por uma lista livre como vimos na Aula 02. As filas crescem e diminuem sob demanda, eliminando o problema de *overflow* de uma estrutura individual: enquanto houver memória total disponível no sistema, qualquer fila pode crescer. E nunca é preciso **deslocar elementos**, problema obrigatório em vetor não-circular ao remover na frente.
+**Vantagens.** A principal força das listas encadeadas para Fila está no **tamanho dinâmico**: as filas crescem e diminuem sob demanda, eliminando o problema de *overflow* de uma estrutura individual — enquanto houver memória disponível no sistema, qualquer fila pode crescer. E nunca é preciso **deslocar elementos**, problema obrigatório em vetor não-circular ao remover na frente.
 
 **Desvantagens.** Cada nó da fila consome **espaço extra** (*overhead*) para manter o ponteiro `proximo` (e, na versão dupla, também `anterior`). Em sistemas de 64 bits, são 8 bytes por ponteiro além do valor armazenado. Além disso, a alocação e a liberação dinâmica de cada nó (`malloc`/`free`) exigem **tempo do sistema** — em comparação com a manipulação direta de índices num vetor pré-alocado, esse custo se acumula em filas com milhões de operações.
 

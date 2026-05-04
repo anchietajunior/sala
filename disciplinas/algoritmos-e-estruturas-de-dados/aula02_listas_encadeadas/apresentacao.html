@@ -440,9 +440,6 @@
                         <code>malloc</code></strong> ao longo da vida.
                     </li>
                 </ul>
-                <p class="nota-rodape">
-                    Esse custo motiva a <em>lista livre</em> (Camada 6).
-                </p>
             </section>
 
             <section>
@@ -742,61 +739,6 @@
             <!-- ----- CAMADA 6 — CONEXÕES E VARIANTES ----- -->
             <section>
                 <p class="titulo-bloco">Camada 6</p>
-                <h3>Implementação alternativa — vetores paralelos</h3>
-                <p style="text-align: left; font-size: 0.82em;">
-                    Cormen et al. (cap. 10.3) mostra que listas podem ser
-                    <strong>sintetizadas usando vetores</strong>, sem alocação dinâmica.
-                </p>
-                <p style="text-align: left; font-size: 0.78em; margin-top: 0.6em;">
-                    A ideia é a mesma — só muda o tipo do "endereço":
-                    <span class="destaque">índice</span> em vez de
-                    <span class="destaque">endereço de memória</span>.
-                </p>
-                <ul style="text-align: left; font-size: 0.74em;">
-                    <li>
-                        <strong>Arranjos paralelos</strong> — um vetor <code>chave[]</code>
-                        para os dados, outro <code>proximo[]</code> para os índices.
-                    </li>
-                    <li>
-                        <strong>Arranjo único</strong> — cada nó ocupa
-                        várias posições consecutivas (chave em <code>i</code>,
-                        próximo em <code>i+1</code>, ...).
-                    </li>
-                </ul>
-                <p class="nota-rodape">
-                    Útil em sistemas embarcados, bancos de dados em arquivo,
-                    qualquer ambiente que evite <code>malloc</code>/<code>free</code>.
-                </p>
-            </section>
-
-            <section>
-                <h3>Lista livre — gerenciando os nós disponíveis</h3>
-                <p style="text-align: left; font-size: 0.82em;">
-                    Para evitar chamar o sistema operacional o tempo todo,
-                    mantém-se uma <span class="destaque">lista livre</span>
-                    (<em>free list</em>) — reserva de nós disponíveis para reuso.
-                </p>
-                <ul style="text-align: left; font-size: 0.76em;">
-                    <li>
-                        <code>getnode()</code> / <code>ALLOCATE-OBJECT</code> — retira
-                        um nó da lista livre para a aplicação.
-                    </li>
-                    <li>
-                        <code>freenode(p)</code> / <code>FREE-OBJECT</code> — devolve
-                        o nó <code>p</code> à reserva.
-                    </li>
-                </ul>
-                <blockquote style="font-size: 0.8em;">
-                    Funciona como uma <strong>pilha de blocos de memória reaproveitáveis</strong>.
-                </blockquote>
-                <p class="nota-rodape">
-                    Padrão recorrente em alocadores de memória, <em>pools</em> de objetos
-                    e bancos de dados. <em>Cormen et al.</em>, cap. 10.3;
-                    <em>Tenenbaum</em>, cap. 5.
-                </p>
-            </section>
-
-            <section>
                 <h3>Onde reaparece no curso</h3>
                 <ul style="text-align: left; font-size: 0.78em;">
                     <li>
@@ -1053,13 +995,12 @@
                 <li>
                     <strong>Tenenbaum, Langsam &amp; Augenstein</strong> —
                     <em>Estruturas de Dados Usando C</em>, caps. 4 (filas e listas)
-                    e 5 (listas em C). Variantes e lista livre.
+                    e 5 (listas em C). Variantes da lista encadeada.
                 </li>
                 <li>
                     <strong>Cormen, Leiserson, Rivest &amp; Stein</strong> (CLRS) —
-                    <em>Algoritmos: Teoria e Prática</em>, cap. 10, seções 10.2
-                    (listas ligadas) e 10.3 (implementação por vetores;
-                    <code>ALLOCATE-OBJECT</code>/<code>FREE-OBJECT</code>).
+                    <em>Algoritmos: Teoria e Prática</em>, cap. 10, seção 10.2
+                    (listas ligadas).
                 </li>
                 <li>
                     <strong>Sedgewick, R.</strong> —

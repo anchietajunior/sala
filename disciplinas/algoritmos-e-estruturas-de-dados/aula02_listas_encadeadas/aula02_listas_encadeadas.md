@@ -48,7 +48,7 @@ A figura abaixo mostra como o **mesmo conceito de nó** se especializa em estrut
 
     O detalhe sintático que costuma confundir está em **por que `struct No *proximo` em vez de `No *proximo`**. A diferença não está só na palavra `struct` — está em **qual nome existe naquele ponto do texto**. Em C, a linha `typedef struct No { ... } No;` declara, na verdade, **dois nomes**: o *tag* `struct No`, que passa a existir já a partir do `{` de abertura; e o *typedef* `No`, que só passa a existir após o `;` final, depois do `}`. Como o ponteiro é declarado **dentro** do bloco, somente o *tag* está disponível ali — escrever apenas `No *proximo` não compila, porque o nome `No` (do `typedef`) ainda não foi criado. **Fora** da definição (em qualquer outra parte do programa), `struct No *p` e `No *p` são equivalentes. A implementação concreta dessa struct aparece a partir da Aula 03.
 
-- **Alocação dinâmica por nó**. Cada nó é criado em **tempo de execução** por uma chamada à função `malloc(sizeof(No))` da biblioteca padrão de C — *malloc* significa *memory allocation*, alocação de memória. O `malloc` reserva, no espaço livre da memória do programa, uma região do tamanho exato de um `No` e devolve o endereço dessa região. Quando o nó deixa de ser necessário (porque foi removido da lista), a memória precisa ser devolvida ao sistema com `free`. A consequência prática: uma lista com mil elementos faz aproximadamente mil chamadas a `malloc` ao longo da sua vida — cada uma com um pequeno custo. Esse é um dos motivos pelos quais existe a *lista livre*, apresentada na Camada 6.
+- **Alocação dinâmica por nó**. Cada nó é criado em **tempo de execução** por uma chamada à função `malloc(sizeof(No))` da biblioteca padrão de C — *malloc* significa *memory allocation*, alocação de memória. O `malloc` reserva, no espaço livre da memória do programa, uma região do tamanho exato de um `No` e devolve o endereço dessa região. Quando o nó deixa de ser necessário (porque foi removido da lista), a memória precisa ser devolvida ao sistema com `free`. A consequência prática: uma lista com mil elementos faz aproximadamente mil chamadas a `malloc` ao longo da sua vida — cada uma com um pequeno custo.
 
 - **`NULL` como terminador**. O valor especial `NULL` é o que sinaliza, em qualquer campo de ligação, *"não há nó aqui"*. Em uma lista simples, o último nó tem `proximo = NULL`. Em uma lista vazia, o ponteiro externo `inicio = NULL`. Em uma árvore, uma folha tem `esquerda = NULL` e `direita = NULL`. **`NULL` é a fronteira da estrutura** — onde um campo de ligação aponta para `NULL`, a estrutura termina naquela direção. Tentar percorrer a partir de `NULL` é o erro de programação mais comum em estruturas encadeadas: causa em geral uma falha de segmentação (*segmentation fault*).
 
@@ -139,25 +139,7 @@ A conclusão clássica: **listas são fortes onde vetores são fracos** (inserir
 
 ### Camada 6 — Conexões e variantes
 
-A família das listas encadeadas é a base sobre a qual várias outras estruturas serão construídas no curso, e admite **implementações alternativas** importantes:
-
-#### Implementação por vetores paralelos
-
-Cormen et al. (cap. 10.3) mostra que listas encadeadas podem ser **sintetizadas usando vetores**, sem alocação dinâmica de memória. Em vez de ponteiros para a memória do sistema, usam-se **índices** de um vetor — cada nó é uma entrada do vetor, e o "ponteiro próximo" passa a ser o índice da próxima entrada. Há duas variantes comuns:
-
-- **Arranjos paralelos**: um vetor `chave[]` para os dados, outro `proximo[]` para os índices, com a mesma posição `i` representando o nó `i`.
-- **Arranjo único com deslocamentos**: um único vetor onde cada nó ocupa várias posições consecutivas (ex.: posição `i` para chave, `i+1` para próximo).
-
-A ideia é a mesma da implementação com ponteiros — só muda o **tipo do "endereço"**: índice em vez de endereço de memória. Útil em sistemas embarcados, bancos de dados em arquivo, e qualquer ambiente sem (ou que evite) `malloc`/`free`.
-
-#### Lista livre — gerenciamento dos nós disponíveis
-
-Para gerenciar a criação e destruição de nós sem chamar o sistema operacional o tempo todo, Cormen et al. (cap. 10.3) e Tenenbaum (cap. 5) descrevem a **lista livre** (*free list*): uma estrutura auxiliar que mantém uma reserva de **nós disponíveis** para uso futuro. As operações canônicas são:
-
-- `getnode()` (ou `ALLOCATE-OBJECT` no CLRS) — retira um nó da lista livre e devolve para a aplicação.
-- `freenode(p)` (ou `FREE-OBJECT`) — devolve o nó `p` à lista livre, marcando-o como disponível novamente.
-
-Na prática, a lista livre funciona como uma **pilha de blocos de memória reaproveitáveis**, evitando o custo repetido de chamadas a `malloc`/`free`. É um padrão recorrente em alocadores de memória, *pools* de objetos e bancos de dados.
+A família das listas encadeadas é a base sobre a qual várias outras estruturas serão construídas no curso.
 
 #### Estruturas que reaparecem no curso
 
@@ -166,7 +148,7 @@ Na prática, a lista livre funciona como uma **pilha de blocos de memória reapr
 - **Listas duplamente encadeadas** aparecem em editores de texto (cursor que caminha em ambas as direções), histórico de navegação de browsers (botões "voltar" e "avançar") e estruturas mais complexas como árvores que precisam de referência ao pai.
 - **Listas circulares** aparecem em escalonadores *round-robin* do sistema operacional, em *playlists* com modo "repetir tudo" e em algoritmos sobre dados intrinsecamente cíclicos (algoritmo de Josephus).
 
-Cada uma dessas estruturas é tema de aulas próprias — esta aula apenas estabelece o vocabulário comum, as variantes, o gerenciamento de memória e os padrões de acesso (FIFO, LIFO) que reaparecerão sistematicamente.
+Cada uma dessas estruturas é tema de aulas próprias — esta aula apenas estabelece o vocabulário comum, as variantes e os padrões de acesso (FIFO, LIFO) que reaparecerão sistematicamente.
 
 ---
 
@@ -269,7 +251,7 @@ Para cada cenário, decida se a melhor representação é **vetor** ou **lista e
 
 - **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo 4 (*"Filas e listas"*) e capítulo 5 (*"Listas em C"*). Apresenta a lista simples, a duplamente encadeada e a circular com o nível de detalhe canônico da disciplina.
 
-- **Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.** — *Algoritmos: Teoria e Prática* (CLRS). Capítulo 10, seções 10.2 (*"Listas ligadas"*) e 10.3 (*"Implementando ponteiros e objetos"*). Trata formalmente as variantes (simples, dupla, circular, ordenada/não ordenada), a implementação por vetores paralelos e a lista livre (`ALLOCATE-OBJECT`/`FREE-OBJECT`).
+- **Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.** — *Algoritmos: Teoria e Prática* (CLRS). Capítulo 10, seção 10.2 (*"Listas ligadas"*). Trata formalmente as variantes (simples, dupla, circular, ordenada/não ordenada).
 
 - **Sedgewick, R.** — *Algoritmos em C*, Parte 1, capítulo 3 (*"Estruturas de dados elementares"*), seção sobre **listas ligadas**. Discussão sucinta com diagramas excelentes.
 
