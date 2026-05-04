@@ -4,29 +4,63 @@
 
 ---
 
-## 1. Conceito — Nível Profundo
+## 1. Conceito — Aprofundamento Progressivo
 
-### Pilha, em uma frase
+### Camada 1 — A intuição inicial
 
-Uma **Pilha** é o TAD que representa uma sequência de elementos com **inserção e remoção em uma única extremidade**, chamada **topo**, governada pela política **LIFO** (*Last-In, First-Out*) — o último elemento que entrou é o primeiro a sair (Tenenbaum, cap. 2 — *"Pilhas"*; Sedgewick, *Algoritmos em C*, Parte 1, cap. 4 — seção sobre **pushdown stacks**; referência histórica em Knuth, *TAOCP* vol. 1, §2.2.1).
+Imagine uma pilha de bandejas no balcão de um restaurante self-service. Bandejas novas vão **em cima** das que já estavam ali; quem precisa usar uma pega sempre **a do topo**, nunca uma do meio nem a do fundo. Essa restrição extremamente simples — *"só vejo e só mexo no topo"* — é toda a ideia da estrutura de dados chamada **Pilha**: a última coisa a entrar é a primeira a sair, e o que está embaixo só fica acessível depois que tudo em cima foi retirado.
 
-Onde a Fila tem duas pontas distintas (`inicio` e `fim`), a Pilha tem **uma só** ponta operacional. Isso a torna a estrutura mais simples possível em que a ordem temporal de chegada importa: ela só preserva a **ordem inversa**, descartando tudo que não esteja no topo.
+### Camada 2 — Definição informal com vocabulário básico
 
-A Pilha é onipresente em computação:
+Uma **Pilha** (em inglês, *stack*) é uma estrutura linear de elementos com a seguinte restrição de acesso: **insere-se e remove-se sempre na mesma extremidade**, chamada **topo** (em inglês, *top*). Os elementos abaixo do topo ficam ocultos: não há operação que os acesse diretamente. Essa política de acesso recebe o nome **LIFO** (*Last-In, First-Out*) — o último elemento que entrou é o primeiro a sair (Tenenbaum, cap. 2 — *Pilhas*; Sedgewick, *Algoritmos em C*, Parte 1, cap. 4 — seção sobre *pushdown stacks*; referência histórica em Knuth, *TAOCP* vol. 1, §2.2.1).
 
-- **Pilha de chamadas** que toda linguagem de programação mantém durante a execução — cada chamada de função empilha um *frame* com variáveis locais e endereço de retorno; o `return` desempilha.
-- **Histórico de "desfazer"** (Ctrl+Z) em editores, IDEs, ferramentas gráficas — cada ação executada vira uma entrada empilhada; cada desfazer desempilha.
-- **Histórico de navegação** ("voltar") em browsers e em apps mobile — cada página/tela visitada vai para a pilha; "voltar" desempilha.
-- **Avaliação de expressões** com parênteses — ao percorrer a expressão, parênteses de abertura são empilhados e os de fechamento desempilham, validando o pareamento.
-- **Algoritmos recursivos transformados em iterativos** — a recursão usa a pilha implícita do programa; a versão iterativa usa uma pilha explícita.
+Para que essa restrição seja útil em prática, a Pilha oferece um conjunto pequeno de operações:
 
-### Especificação formal — TAD Pilha
+- **empilhar** (*push*) — coloca um novo elemento no **topo**.
+- **desempilhar** (*pop*) — remove e devolve o elemento do **topo**.
+- **topo** — apenas **lê** o elemento do topo, sem removê-lo.
+- **vazia** — informa se há ou não elementos na pilha.
+
+Note o que a Pilha **não** oferece: você não pode olhar o terceiro elemento, nem inserir no meio, nem remover o do fundo. Como na Fila, **a restrição é a feature**, não a limitação — é justamente o que torna a Pilha simples, previsível e rápida.
+
+### Camada 3 — Propriedades e comportamento
+
+> A representação interna desta aula é construída sobre o **nó** apresentado na sub-seção *"O nó — unidade de construção das estruturas encadeadas"* da Aula 02. O nó da Pilha é exatamente o nó da lista simplesmente encadeada — um campo de valor (a carga útil) e um campo `proximo` (o ponteiro de ligação). O que muda não é o nó: é a **política de acesso** (LIFO em vez de FIFO) e o **estado externo enxuto** — apenas o ponteiro `topo`, sem `fim`.
+
+#### Um único ponteiro torna tudo simples
+
+Onde a Fila precisa de **dois** ponteiros externos (`inicio` e `fim`) para que `enfileirar` e `desenfileirar` operem ambos em O(1), a Pilha precisa de **um só**: o ponteiro `topo`. Toda operação acontece no início da lista — empilhar é "inserir no início", desempilhar é "remover do início". Não é preciso ter `fim` porque ninguém nunca acessa o fim da pilha.
+
+Esse "estado externo enxuto" tem uma consequência muito didática: o código da Pilha **não tem casos especiais**. Diferente da Fila — onde `desenfileirar` precisa cuidar do caso "removeu o último, agora a pilha ficou vazia, preciso zerar `fim`" —, na Pilha o `desempilhar` simplesmente faz `topo = topo->proximo`, e se isso resultar em `NULL` está tudo certo: a pilha ficou vazia. Não há armadilha.
+
+#### As operações em detalhe
+
+- **Inserção (`empilhar`)**. Aloca-se um novo nó com o valor desejado. O `proximo` do novo nó passa a apontar para o **antigo topo** (que pode ser `NULL` se a pilha estava vazia — sem caso especial). Em seguida, `topo` é atualizado para o nó novo. Custo: **O(1)**.
+
+- **Remoção (`desempilhar`)**. Lê-se o valor do nó apontado por `topo`. Salva-se o `proximo` desse nó em `topo`. Libera-se o nó antigo com `free`. **Atenção à ordem**: primeiro atualizar `topo`, **só depois** chamar `free` — inverter essa ordem deixa `topo` apontando para memória já liberada, criando um **ponteiro suspenso** (*dangling pointer*) que provoca falhas obscuras na próxima operação. Custo: **O(1)**.
+
+- **Consulta (`topo`)**. Retorna o valor do nó apontado por `topo` sem alterar nada. Custo: **O(1)**.
+
+- **Vazia**. Testa se `topo == NULL`. Custo: **O(1)**.
+
+#### Invariantes (propriedades que devem sempre valer)
+
+Algumas propriedades têm de continuar verdadeiras antes e depois de cada operação — chamamos isso de **invariantes** da estrutura. Para esta Pilha são duas:
+
+- **Quando a pilha está vazia**, o ponteiro `topo` é `NULL`.
+- **Quando a pilha tem ao menos um elemento**, `topo` é diferente de `NULL` e, seguindo os ponteiros `proximo` a partir do nó apontado por `topo`, chega-se a um nó cujo `proximo` é `NULL` — o fundo da pilha.
+
+A Pilha tem **menos invariantes** que a Fila porque tem menos estado interno (um ponteiro em vez de dois). É realmente uma das estruturas de dados mais simples que existe — e, como veremos na Camada 6, uma das mais utilizadas.
+
+### Camada 4 — Definição formal e notação
+
+Um **TAD** (Tipo Abstrato de Dados) define uma estrutura pelo seu **contrato observável** — os valores que armazena, as operações que oferece e os axiomas que essas operações satisfazem — sem comprometer-se com nenhuma representação interna específica. Para a Pilha, o TAD é (Tenenbaum, cap. 2):
 
 ```
 TAD Pilha de Inteiros
 
   Tipos:
-    Pilha                                       (a estrutura)
+    Pilha
     Inteiro
     Booleano
 
@@ -46,57 +80,55 @@ TAD Pilha de Inteiros
     A6. desempilhar(criar())                          = erro
 ```
 
-O **axioma A4** é o **coração do LIFO**: ele diz que "empilhar `x` e em seguida desempilhar **devolve a pilha original**". Em palavras: o último elemento a entrar é exatamente o primeiro a sair, sem afetar nada do que estava embaixo. Compare com o axioma análogo da Fila (`desenfileirar(enfileirar(F, x)) = enfileirar(desenfileirar(F), x)`) — lá o `x` "passa por dentro" da remoção; aqui, ele simplesmente sai. Tenenbaum (cap. 2) apresenta exatamente esse contraste de axiomas como definição operacional de Pilha vs. Fila.
+O **axioma A4** é o **coração do LIFO**: ele diz que *"empilhar `x` e em seguida desempilhar devolve a pilha original"*. Em palavras: o último elemento a entrar é exatamente o primeiro a sair, sem afetar nada do que estava embaixo. Compare com o axioma análogo da Fila — `desenfileirar(enfileirar(F, x)) = enfileirar(desenfileirar(F), x)`. Lá o `x` "passa por dentro" da remoção; aqui, ele simplesmente sai. Tenenbaum (cap. 2) apresenta exatamente esse contraste de axiomas como definição operacional de Pilha vs. Fila.
 
-### Representação interna escolhida
+#### A representação interna como tupla
 
-> A representação interna desta aula é construída sobre o **nó** apresentado na sub-seção *"O nó — unidade de construção das estruturas encadeadas"* da Aula 02. O nó da Pilha é exatamente o nó da lista simplesmente encadeada — um campo de valor (a carga útil) e um campo `proximo` (o ponteiro de ligação). O que muda não é o nó: é a **política de acesso** (LIFO em vez de FIFO) e, em comparação com a Fila, o **estado externo enxuto** (apenas o ponteiro `topo`, sem `fim`).
+Para a versão simplesmente encadeada com ponteiro `topo`, a Pilha pode ser descrita pela tupla:
 
-Como na Fila, há mais de uma forma de implementar. CLRS (cap. 10, seção 10.1) cobre as duas opções com pseudocódigo claro; Tenenbaum (cap. 2) traz a implementação em C de cada uma:
+`P = (N, valor, proximo, topo)`
 
-| Representação | Vantagem | Custo |
-|---|---|---|
-| Vetor com `topo` como índice | Memória contígua; uma única alocação no início | Capacidade fixa (ou *realloc* eventual) |
-| **Lista simplesmente encadeada com `topo`** | Tudo em O(1); tamanho dinâmico; código simplíssimo | Ponteiro extra por nó (8 bytes); cada nó é uma alocação individual com `malloc` |
+onde:
 
-A escolha desta aula é a **lista simplesmente encadeada com um único ponteiro `topo`**. A grande simplicidade vem do fato de que **toda operação acontece no início da lista**: empilhar é "inserir no início", desempilhar é "remover do início". Não é preciso ter `fim` — ninguém nunca acessa o fim da pilha.
+- **N** é o conjunto (possivelmente vazio) dos nós da pilha.
+- **valor: N → V** associa cada nó a um inteiro.
+- **proximo: N → N ∪ {NULL}** associa cada nó ao seguinte (mais perto do fundo da pilha), ou `NULL` se for o nó de fundo.
+- **topo ∈ N ∪ {NULL}** é o ponteiro externo para o último elemento empilhado (`NULL` se a pilha estiver vazia).
 
-Sob essa representação:
+A invariante "vazia ⇔ topo = NULL" liga formalmente o estado lógico da pilha ao estado físico do ponteiro.
 
-- `empilhar(x)` cria um nó com valor `x`, faz seu `proximo` apontar para o `topo` antigo e atualiza `topo`. **O(1).**
-- `desempilhar()` lê o valor do nó apontado por `topo`, salva o `proximo` dele em `topo`, libera o nó antigo. **O(1).**
-- `topo()` retorna o valor do nó apontado por `topo` sem alterar nada. **O(1).**
-- `vazia()` testa se `topo == NULL`. **O(1).**
+### Camada 5 — Análise de complexidade
 
-Toda operação em O(1) e o código tem **menos casos especiais** que a Fila (não há o caso "primeiro/último elemento" que na Fila exige cuidar dos dois ponteiros).
+A análise se faz em termos de **n**, o número de elementos da pilha. Comparando as duas representações canônicas (CLRS, cap. 10.1; Tenenbaum, cap. 2):
 
-### Propriedades que devem sempre valer
+| Operação        | Vetor com `topo`-índice | Lista encadeada com `topo` |
+|-----------------|--------------------------|-----------------------------|
+| `empilhar`      | O(1)*                    | **O(1)**                    |
+| `desempilhar`   | O(1)                     | **O(1)**                    |
+| `topo`          | O(1)                     | **O(1)**                    |
+| `vazia`         | O(1)                     | **O(1)**                    |
 
-Algumas propriedades têm de continuar verdadeiras antes e depois de cada operação — chamamos isso de **invariantes** da estrutura. Para esta Pilha são duas:
+\* O vetor pode precisar de `realloc` quando esgota a capacidade — operação eventual de O(n) que, distribuída entre todos os `empilhar`, dá um custo amortizado de O(1). Em vetor de tamanho fixo, simplesmente acontece *overflow*.
 
-- **Quando a pilha está vazia**, o ponteiro `topo` é `NULL`.
-- **Quando a pilha tem ao menos um elemento**, `topo` é diferente de `NULL` e, seguindo os ponteiros `proximo` a partir do nó apontado por `topo`, chega-se a um nó cujo `proximo` é `NULL` — o fundo da pilha.
+Todas as operações principais em **O(1)** independentemente da representação. A diferença entre as duas está em outros eixos: o vetor faz **uma única alocação** (mais econômico em memória, ótimo desempenho de acesso) mas tem **capacidade fixa** ou paga por `realloc`; a lista encadeada **cresce sob demanda** e tem capacidade ilimitada (até o limite da memória do sistema), mas **paga 8 bytes de ponteiro por nó** e exige uma chamada a `malloc` por elemento empilhado.
 
-Cada operação tem de **terminar deixando essas duas propriedades válidas**. Comparada à Fila, a Pilha tem menos propriedades a manter porque tem menos estado interno (um único ponteiro em vez de dois). É realmente uma das estruturas de dados mais simples que existe — e é também uma das mais usadas.
+A escolha entre as duas é uma decisão de engenharia que depende do uso. Pilhas pequenas e bem-conhecidas favorecem o vetor; pilhas que podem crescer arbitrariamente — como a pilha de chamadas de uma linguagem de propósito geral — favorecem a lista. Esta aula implementa a versão encadeada por ser **mais simples de codificar**, sem casos especiais, e ter **tamanho dinâmico**. O *overhead* de ponteiros é exatamente o "preço do ponteiro" discutido na sub-seção *"O nó"* da Aula 02.
 
----
+### Camada 6 — Conexões e variantes
 
-## 2. Conceito — Nível Simplificado
+A Pilha é onipresente em computação, e os exemplos cobrem áreas muito distintas:
 
-Pense na **pilha de bandejas de um restaurante self-service**.
+- **Pilha de chamadas** que toda linguagem de programação mantém durante a execução. Cada chamada de função empilha um *frame* com variáveis locais e endereço de retorno; o `return` desempilha. A mensagem de erro *stack overflow* é literalmente essa pilha estourando — recursão sem caso base faz a pilha crescer sem parar até esgotar a memória reservada para ela.
+- **Histórico de "desfazer"** (Ctrl+Z) em editores, IDEs e ferramentas gráficas. Cada ação executada vira uma entrada empilhada; cada desfazer desempilha. O "refazer" (Ctrl+Y) usa uma **segunda pilha** que recebe o que foi desfeito.
+- **Histórico de navegação** ("voltar") em browsers e em apps mobile. Cada página/tela visitada vai para a pilha; o botão "voltar" desempilha.
+- **Avaliação de expressões com parênteses**. Ao percorrer a expressão, parênteses de abertura são empilhados e os de fechamento desempilham e conferem com o topo, validando o pareamento.
+- **Algoritmos recursivos transformados em iterativos**. A recursão usa a pilha implícita do programa; a versão iterativa usa uma pilha explícita.
 
-- Bandeja nova: vai **em cima** da última. Esse é o `empilhar`.
-- Bandeja para usar: você pega **a do topo** (não vai cavar embaixo). Esse é o `desempilhar`.
-- Para saber qual é a próxima sem pegar ainda, basta olhar o topo. Esse é o `topo`.
-- Para saber se há bandejas, olha-se a pilha. Esse é o `vazia`.
-
-A regra central: **só se mexe no topo**. A do meio e a do fundo são inacessíveis enquanto não se desempilhar tudo o que está em cima delas.
-
-Essa restrição parece dura, mas é exatamente isso que faz a Pilha ser **simples e veloz**. E, surpreendentemente, é a estrutura natural para qualquer situação que precisa **desfazer na ordem inversa** — Ctrl+Z, voltar no navegador, retornar de funções aninhadas.
+A própria implementação da Pilha admite duas variantes principais — **vetor com `topo`-índice** (com ou sem `realloc`) e **lista simplesmente encadeada com `topo`** (a desta aula). Lista duplamente encadeada e lista circular não trazem ganho para a Pilha: todas as operações já estão em O(1) com lista simples, e ponteiros adicionais só acrescentariam custo de memória sem benefício observável. A Pilha é também peça de construção de algoritmos clássicos — **DFS** (busca em profundidade) em grafos é o exemplo mais conhecido; surge naturalmente em aulas futuras quando estudarmos travessia de grafos e árvores.
 
 ---
 
-## 3. Visualização Gráfica
+## 2. Visualização Gráfica
 
 Ciclo de vida completo: criação, três `empilhar`, uma consulta `topo`, dois `desempilhar` até esvaziar.
 
@@ -144,7 +176,7 @@ Mesma lógica. Resta o nó `[10]`, com `proximo == NULL` (volta a ser o fundo da
 
 ---
 
-## 4. Problema Motivador
+## 3. Problema Motivador
 
 > *"Como o botão Ctrl+Z funciona?"*
 
@@ -173,7 +205,7 @@ A Pilha aparece em qualquer situação que pede *"o mais recente é o mais relev
 
 ---
 
-## 5. Analogias
+## 4. Analogias
 
 **1. Pilha de bandejas no balcão de um restaurante self-service.**
 As bandejas chegam limpas e são colocadas **em cima** da pilha existente. Quando você precisa de uma, pega a **do topo** — não a do meio, não a do fundo. A pilha cresce para cima quando vêm bandejas novas; encolhe pelo topo quando os clientes as retiram. Você nunca vê a do meio. Esse é o **LIFO** literal.
@@ -183,7 +215,7 @@ Você termina uma refeição: o prato vai **em cima** da pilha de pratos sujos. 
 
 ---
 
-## 6. Código em C
+## 5. Código em C
 
 Note como o código é **mais curto** que o da Fila — menos casos especiais, menos invariantes, mesma legibilidade.
 
@@ -319,7 +351,7 @@ Esse contraste é didaticamente precioso: **mesma representação interna** (lis
 
 ---
 
-## 7. Exercícios Práticos
+## 6. Exercícios Práticos
 
 **Exercício 1 — Trace na mão.**
 Considere uma pilha vazia e a sequência: `empilhar(7)`, `empilhar(3)`, `empilhar(11)`, `desempilhar`, `empilhar(5)`, `topo`, `desempilhar`, `desempilhar`. Para cada operação, escreva o estado da pilha (do topo para a base) e o valor retornado quando aplicável.
@@ -361,134 +393,9 @@ Adicione ao `pilha.c` uma função `void pilha_imprimir(Pilha* p)` que imprime o
 >
 > O percurso é a partir de `topo`, na direção do `proximo` — exatamente a ordem topo → base.
 
-**Exercício 3 — Verificador de parênteses balanceados.**
-Escreva uma função `bool parenteses_balanceados(const char* s)` que retorna `true` se a string `s` tem todos os parênteses `(`, `[`, `{` corretamente pareados e aninhados, e `false` caso contrário. Use uma `Pilha` de caracteres como auxiliar (adapte o tipo se preferir, ou mapeie cada abertura para um inteiro).
-
-Exemplos: `"(a+b)*[c-d]"` → `true`; `"({a)})"` → `false` (fecha `)` quando o topo era `{`); `"(("` → `false` (sobra abertura no fim).
-
-*Critério de aceitação*: programa compila e classifica corretamente os 3 exemplos acima e mais 2 casos seus de teste.
-
-> **Resposta mínima aceitável**
->
-> ```c
-> // Mapeamento simples: '(' → 1, '[' → 2, '{' → 3.
-> static int abre_para_codigo(char c) {
->     if (c == '(') return 1;
->     if (c == '[') return 2;
->     if (c == '{') return 3;
->     return 0;
-> }
-> static int fecha_para_codigo(char c) {
->     if (c == ')') return 1;
->     if (c == ']') return 2;
->     if (c == '}') return 3;
->     return 0;
-> }
->
-> bool parenteses_balanceados(const char* s) {
->     Pilha* p = pilha_criar();
->     for (int i = 0; s[i] != '\0'; i++) {
->         int abre = abre_para_codigo(s[i]);
->         int fecha = fecha_para_codigo(s[i]);
->         if (abre) {
->             pilha_empilhar(p, abre);
->         } else if (fecha) {
->             if (pilha_vazia(p) || pilha_desempilhar(p) != fecha) {
->                 pilha_destruir(p);
->                 return false;
->             }
->         }
->     }
->     bool ok = pilha_vazia(p);
->     pilha_destruir(p);
->     return ok;
-> }
-> ```
->
-> **Por que funciona**: cada abertura empilha; cada fechamento desempilha e confere se bate. Pilha vazia ao fim → tudo fechado. Sobrar coisa → abertura sem fechamento.
-
-**Exercício 4 — Inverter uma string com pilha.**
-Escreva `void inverter_string(char* s)` que recebe uma string e a modifica **in-place** para a versão invertida (`"abcd"` → `"dcba"`), usando uma `Pilha` auxiliar. Discuta em uma linha qual o custo de tempo e espaço comparado a inverter trocando as pontas com dois índices.
-
-*Critério de aceitação*: a função funciona para entradas vazias, de 1 caractere e maiores; comparação de custo com a versão "dois índices".
-
-> **Resposta mínima aceitável**
->
-> ```c
-> void inverter_string(char* s) {
->     Pilha* p = pilha_criar();
->     int n = 0;
->     while (s[n] != '\0') {
->         pilha_empilhar(p, (int) s[n]);
->         n++;
->     }
->     for (int i = 0; i < n; i++) {
->         s[i] = (char) pilha_desempilhar(p);
->     }
->     pilha_destruir(p);
-> }
-> ```
->
-> **Custo**: tempo O(n) (uma passada para empilhar, outra para desempilhar). **Espaço**: O(n) extra (a pilha). A versão "dois índices" trocando `s[i]` com `s[n-1-i]` faz a mesma coisa em O(n) tempo mas com **O(1)** de espaço extra. A versão com pilha é mais didática (mostra LIFO), mas pior em espaço — preferir os dois índices em produção.
-
-**Exercício 5 — Fila usando duas pilhas (desafio).**
-Implemente uma `Fila` (com `enfileirar`, `desenfileirar`, `frente`, `vazia`) usando **apenas duas pilhas** (`P_in` e `P_out`) como armazenamento interno — **nenhum nó, nenhuma lista** seu. Estratégia clássica:
-
-- `enfileirar(x)` empilha em `P_in`.
-- `desenfileirar()` se `P_out` está vazia, **transfere** todos os elementos de `P_in` para `P_out` (desempilhando de um, empilhando no outro). Em seguida, desempilha `P_out` e retorna.
-- `frente()` mesma lógica de `desenfileirar`, mas usa `topo` no fim.
-
-Analise o custo amortizado de `desenfileirar`: aparentemente é O(n) no pior caso, mas **cada elemento atravessa de `P_in` para `P_out` no máximo uma vez ao longo de sua vida** — então a soma do trabalho de `n` operações é O(n), o que dá custo amortizado **O(1)** por operação.
-
-*Critério de aceitação*: implementação que compila e roda; saída de FIFO correta para uma sequência de teste; explicação escrita do raciocínio amortizado.
-
-> **Resposta mínima aceitável**
->
-> ```c
-> typedef struct {
->     Pilha* in;
->     Pilha* out;
-> } Fila2P;
->
-> Fila2P* fila2p_criar(void) {
->     Fila2P* f = malloc(sizeof(Fila2P));
->     f->in = pilha_criar();
->     f->out = pilha_criar();
->     return f;
-> }
->
-> void fila2p_enfileirar(Fila2P* f, int x) {
->     pilha_empilhar(f->in, x);
-> }
->
-> static void transferir_se_preciso(Fila2P* f) {
->     if (pilha_vazia(f->out)) {
->         while (!pilha_vazia(f->in)) {
->             pilha_empilhar(f->out, pilha_desempilhar(f->in));
->         }
->     }
-> }
->
-> int fila2p_desenfileirar(Fila2P* f) {
->     transferir_se_preciso(f);
->     return pilha_desempilhar(f->out);   // erro se ambas vazias
-> }
->
-> int fila2p_frente(Fila2P* f) {
->     transferir_se_preciso(f);
->     return pilha_topo(f->out);
-> }
->
-> bool fila2p_vazia(const Fila2P* f) {
->     return pilha_vazia(f->in) && pilha_vazia(f->out);
-> }
-> ```
->
-> **Análise amortizada**: cada elemento `x` enfileirado entra em `P_in` (1 operação), eventualmente é transferido para `P_out` (1 desempilhar + 1 empilhar = 2 operações) e por fim é desempilhado de `P_out` (1 operação). Total no ciclo de vida de `x`: **4 operações de pilha O(1)**. Em uma sequência de `n` enfileiramentos seguida por `n` desenfileiramentos, o total é **O(n)** — daí o custo amortizado **O(1)** por operação, mesmo com o "pior caso" pontual de O(n). É um raciocínio que volta na disciplina sempre que se fala em vetor dinâmico (cap. de tabelas dinâmicas, Sedgewick).
-
 ---
 
-## 8. Referências
+## 7. Referências
 
 - **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo 2, *"Pilhas"*, com a discussão de implementação por vetor e por lista encadeada, e o exemplo clássico do verificador de parênteses balanceados.
 

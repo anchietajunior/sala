@@ -15,6 +15,9 @@
     <!-- Highlight.js tema claro para blocos de código -->
     <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
 
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
     <style>
         :root {
             --r-main-font-size: 32px;
@@ -173,78 +176,212 @@
             </p>
         </section>
 
-        <!-- BLOCO 1 — CONCEITO PROFUNDO -->
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO, 6 CAMADAS)   -->
+        <!-- ============================================================ -->
         <section>
             <section>
                 <p class="titulo-bloco">Bloco 1</p>
-                <h2>Conceito — nível profundo</h2>
+                <h2>Conceito — aprofundamento progressivo</h2>
+                <p style="font-size: 0.78em; color: #666; margin-top: 1em;">
+                    Da intuição inicial à definição formal,
+                    <strong>uma camada por vez</strong>.
+                </p>
+                <ol style="text-align: left; font-size: 0.7em; color: #666; margin-top: 1em;">
+                    <li>Intuição inicial</li>
+                    <li>Definição informal</li>
+                    <li>Propriedades e comportamento</li>
+                    <li>Definição formal e notação</li>
+                    <li>Análise de complexidade</li>
+                    <li>Conexões e variantes</li>
+                </ol>
             </section>
 
+            <!-- ----- CAMADA 1 — INTUIÇÃO INICIAL ----- -->
             <section>
-                <h3>Pilha, em uma frase</h3>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>A intuição inicial</h3>
                 <p style="text-align: left;">
-                    TAD com <span class="destaque">inserção e remoção em uma única extremidade</span>
-                    chamada <span class="destaque">topo</span>, governada pela política
-                    <strong>LIFO</strong> (<em>Last-In, First-Out</em>).
-                </p>
-                <p style="text-align: left; margin-top: 0.8em;">
-                    Onde a Fila tem duas pontas distintas, a Pilha tem <strong>uma só</strong>.
+                    Imagine uma <strong>pilha de bandejas</strong> de restaurante self-service:
+                    bandejas novas vão <strong>em cima</strong> das que já estavam ali; quem
+                    precisa de uma pega <strong>a do topo</strong>, nunca a do meio nem a do fundo.
                 </p>
                 <blockquote>
-                    A estrutura mais simples possível em que a ordem importa —
-                    e uma das mais usadas em computação.
+                    Toda a ideia é essa: <em>"só vejo e só mexo no topo"</em> —
+                    a última coisa a entrar é a primeira a sair, e o que está
+                    embaixo só fica acessível depois que tudo em cima foi retirado.
                 </blockquote>
                 <p class="nota-rodape">
-                    Tratamento canônico: <em>Tenenbaum</em>, cap. 2 — <em>"Pilhas"</em>;
+                    Essa restrição extremamente simples define a estrutura chamada
+                    <strong>Pilha</strong>.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 2 — DEFINIÇÃO INFORMAL ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>Definição informal — vocabulário básico</h3>
+                <p style="text-align: left;">
+                    Uma <span class="destaque">Pilha</span> (<em>stack</em>) é uma estrutura
+                    linear de elementos com uma restrição de acesso clara:
+                </p>
+                <blockquote>
+                    Insere-se e remove-se sempre na <strong>mesma extremidade</strong>,
+                    chamada <span class="destaque">topo</span> (<em>top</em>).
+                </blockquote>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    Os elementos abaixo do topo ficam <strong>ocultos</strong> — não há operação
+                    que os acesse diretamente. A política recebe o nome
+                    <span class="destaque">LIFO</span> (<em>Last-In, First-Out</em>).
+                </p>
+                <p class="nota-rodape">
+                    Tratamento canônico: <em>Tenenbaum</em>, cap. 2 — <em>Pilhas</em>;
                     <em>Sedgewick</em>, Parte 1, cap. 4 — <em>pushdown stacks</em>.
                 </p>
             </section>
 
             <section>
-                <h3>Onde a Pilha aparece</h3>
+                <h3>As operações</h3>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>
+                        <span class="destaque">empilhar</span> (<em>push</em>) — coloca um novo
+                        elemento no <strong>topo</strong>.
+                    </li>
+                    <li>
+                        <span class="destaque">desempilhar</span> (<em>pop</em>) — remove e devolve
+                        o elemento do <strong>topo</strong>.
+                    </li>
+                    <li>
+                        <span class="destaque">topo</span> — apenas <em>lê</em> o elemento do topo,
+                        sem removê-lo.
+                    </li>
+                    <li>
+                        <span class="destaque">vazia</span> — informa se há ou não elementos na pilha.
+                    </li>
+                </ul>
+                <blockquote style="font-size: 0.82em;">
+                    Como na Fila, <strong>a restrição é a feature</strong>, não a limitação —
+                    é o que torna a Pilha simples, previsível e rápida.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 3 — PROPRIEDADES E COMPORTAMENTO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 3 — ponte com a Aula 02</p>
+                <h3>O nó da Pilha é o nó da lista simples</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    A representação interna desta aula é construída sobre o
+                    <span class="destaque">nó</span> apresentado em
+                    <em>"O nó — unidade de construção"</em> na Aula 02.
+                </p>
                 <ul style="text-align: left; font-size: 0.78em;">
                     <li>
-                        <span class="destaque">Pilha de chamadas</span> — toda função empilha
-                        um <em>frame</em>; <code>return</code> desempilha.
+                        Mesmo nó: campo <code>valor</code> (carga útil) +
+                        campo <code>proximo</code> (ligação).
                     </li>
                     <li>
-                        <span class="destaque">Ctrl+Z</span> — cada ação executada vira entrada
-                        empilhada; cada desfazer desempilha.
-                    </li>
-                    <li>
-                        <span class="destaque">"Voltar" do navegador</span> — cada página visitada
-                        empilha; voltar desempilha.
-                    </li>
-                    <li>
-                        <span class="destaque">Validação de parênteses</span> — abre empilha; fecha
-                        desempilha e confere.
-                    </li>
-                    <li>
-                        <span class="destaque">Recursão → iteração</span> — pilha explícita
-                        substitui a pilha implícita do programa.
+                        O que muda: <span class="destaque">política LIFO</span>
+                        (em vez de FIFO) e <strong>estado externo enxuto</strong>
+                        — um único ponteiro <code>topo</code>, sem <code>fim</code>.
                     </li>
                 </ul>
             </section>
 
             <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>Um único ponteiro torna tudo simples</h3>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li>
+                        Fila precisa de <strong>dois</strong> ponteiros (<code>inicio</code> +
+                        <code>fim</code>) para que ambas as operações sejam O(1).
+                    </li>
+                    <li>
+                        Pilha precisa de <strong>um só</strong>: o ponteiro <code>topo</code>.
+                        Empilhar = inserir no início. Desempilhar = remover do início.
+                    </li>
+                </ul>
+                <blockquote style="font-size: 0.82em;">
+                    Consequência didática: o código da Pilha
+                    <strong>não tem casos especiais</strong>.
+                    <code>desempilhar</code> faz <code>topo = topo-&gt;proximo</code> e pronto —
+                    se virar <code>NULL</code>, a pilha ficou vazia. Sem armadilha.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>As operações em detalhe</h3>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>
+                        <code>empilhar(x)</code> — aloca novo nó; <code>novo-&gt;proximo = topo</code>;
+                        <code>topo = novo</code>. <strong>O(1)</strong>.
+                    </li>
+                    <li>
+                        <code>desempilhar()</code> — lê valor de <code>topo</code>; salva
+                        <code>topo-&gt;proximo</code> em <code>topo</code>; libera o nó antigo.
+                        <strong>O(1)</strong>.
+                    </li>
+                    <li>
+                        <code>topo()</code> — devolve <code>topo-&gt;valor</code> sem alterar.
+                        <strong>O(1)</strong>.
+                    </li>
+                    <li>
+                        <code>vazia()</code> — testa <code>topo == NULL</code>.
+                        <strong>O(1)</strong>.
+                    </li>
+                </ul>
+                <p class="nota-rodape">
+                    Atenção em <code>desempilhar</code>: <strong>primeiro</strong> atualizar
+                    <code>topo</code>, <strong>só depois</strong> chamar <code>free</code> —
+                    inverter cria ponteiro suspenso (<em>dangling pointer</em>).
+                </p>
+            </section>
+
+            <section>
+                <h3>Invariantes — sempre verdadeiras</h3>
+                <ul style="text-align: left;">
+                    <li>
+                        <strong>Pilha vazia</strong>: <code>topo == NULL</code>.
+                    </li>
+                    <li>
+                        <strong>Pilha com pelo menos um elemento</strong>:
+                        <code>topo != NULL</code>; seguindo <code>proximo</code>
+                        a partir de <code>topo</code> chega-se a um nó cujo
+                        <code>proximo</code> é <code>NULL</code> (o fundo).
+                    </li>
+                </ul>
+                <blockquote style="font-size: 0.82em;">
+                    Pilha tem <strong>menos invariantes</strong> que a Fila porque tem
+                    <strong>menos estado</strong> — um ponteiro em vez de dois.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 4 — DEFINIÇÃO FORMAL E NOTAÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
                 <h3>TAD Pilha — assinaturas</h3>
                 <pre><code class="language-c">criar()                  -&gt; Pilha
 empilhar(Pilha, Inteiro) -&gt; Pilha
 desempilhar(Pilha)       -&gt; Pilha       [erro se vazia]
 topo(Pilha)              -&gt; Inteiro     [erro se vazia]
 vazia(Pilha)             -&gt; Booleano</code></pre>
+                <p class="nota-rodape">
+                    O <strong>TAD</strong> define a estrutura pelo seu contrato observável,
+                    sem fixar representação interna (<em>Tenenbaum</em>, cap. 2).
+                </p>
             </section>
 
             <section>
                 <h3>Axiomas — coração do LIFO</h3>
                 <ul style="text-align: left; font-size: 0.8em;">
-                    <li><code>vazia(criar()) = verdadeiro</code></li>
-                    <li><code>vazia(empilhar(P, x)) = falso</code></li>
-                    <li><code>topo(empilhar(P, x)) = x</code></li>
+                    <li><strong>A1</strong>. <code>vazia(criar()) = verdadeiro</code></li>
+                    <li><strong>A2</strong>. <code>vazia(empilhar(P, x)) = falso</code></li>
+                    <li><strong>A3</strong>. <code>topo(empilhar(P, x)) = x</code></li>
                     <li>
-                        <code>desempilhar(empilhar(P, x)) = P</code>
+                        <strong>A4</strong>. <code>desempilhar(empilhar(P, x)) = P</code>
                         <br><small style="color: #5a7a9a;">→ <strong>LIFO</strong>: empilhar e desempilhar devolve a pilha original.</small>
                     </li>
+                    <li><strong>A5</strong>. <code>topo(criar()) = erro</code></li>
+                    <li><strong>A6</strong>. <code>desempilhar(criar()) = erro</code></li>
                 </ul>
                 <blockquote style="font-size: 0.78em;">
                     Compare com a Fila:
@@ -261,11 +398,10 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, segundo Tenenbaum, a Pilha é o TAD em que
-                            inserções e remoções acontecem na mesma ponta — e é
-                            justamente o axioma <code>desempilhar(empilhar(P, x)) = P</code>
-                            que define o comportamento LIFO de forma puramente
-                            algébrica, sem precisar falar em ponteiros ou memória.
+                            Turma, segundo Tenenbaum, é justamente o axioma
+                            <code>desempilhar(empilhar(P, x)) = P</code> que define
+                            o comportamento LIFO de forma puramente algébrica,
+                            sem precisar falar em ponteiros ou memória.
                             <cite>Tenenbaum, cap. 2 — Pilhas</cite>
                         </p>
                     </div>
@@ -273,122 +409,136 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             </section>
 
             <section>
-                <h3>O nó da Pilha é o nó da lista simples</h3>
-                <p style="text-align: left; font-size: 0.82em;">
-                    A representação interna desta aula é construída sobre o
-                    <span class="destaque">nó</span> apresentado em
-                    <em>"O nó — unidade de construção"</em> na Aula 02.
+                <h3>Representação interna como tupla</h3>
+                <p style="text-align: left;">
+                    Para a versão simplesmente encadeada com ponteiro <code>topo</code>:
                 </p>
-                <ul style="text-align: left; font-size: 0.78em;">
-                    <li>
-                        Mesmo nó: campo <code>valor</code> (carga útil) +
-                        campo <code>proximo</code> (ligação).
-                    </li>
-                    <li>
-                        O que muda: <span class="destaque">política LIFO</span>
-                        (em vez de FIFO) e <strong>estado externo enxuto</strong>
-                        — um único ponteiro <code>topo</code>, sem
-                        <code>fim</code>.
-                    </li>
+                <blockquote style="font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.95em;">
+                    P = (N, valor, proximo, topo)
+                </blockquote>
+                <ul style="text-align: left; font-size: 0.76em;">
+                    <li><strong>N</strong> — conjunto (possivelmente vazio) dos nós da pilha.</li>
+                    <li><strong>valor: N → V</strong> — associa cada nó a um inteiro.</li>
+                    <li><strong>proximo: N → N ∪ {NULL}</strong> — associa cada nó ao seguinte (mais perto do fundo), ou <code>NULL</code> se for o fundo.</li>
+                    <li><strong>topo ∈ N ∪ {NULL}</strong> — ponteiro externo para o último elemento empilhado.</li>
                 </ul>
+                <p class="nota-rodape">
+                    Invariante: <em>vazia ⇔ topo = NULL</em>.
+                </p>
             </section>
 
+            <!-- ----- CAMADA 5 — ANÁLISE DE COMPLEXIDADE ----- -->
             <section>
-                <h3>Representação interna escolhida</h3>
-                <table>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>Análise — operações principais</h3>
+                <p style="font-size: 0.7em; color: #666;">
+                    Análise canônica: <em>CLRS</em>, cap. 10.1; <em>Tenenbaum</em>, cap. 2.
+                </p>
+                <table style="font-size: 0.8em;">
                     <thead>
-                        <tr><th>Representação</th><th>Vantagem</th><th>Custo</th></tr>
+                        <tr>
+                            <th>Operação</th>
+                            <th>Vetor com <code>topo</code>-índice</th>
+                            <th>Lista encadeada com <code>topo</code></th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Vetor com <code>topo</code> como índice</td>
-                            <td>Memória contígua; uma única alocação</td>
-                            <td>Capacidade fixa</td>
-                        </tr>
-                        <tr style="background: #fffbe6;">
-                            <td><strong>Lista encadeada com <code>topo</code></strong></td>
-                            <td>Tudo O(1); dinâmica; <em>sem casos especiais</em></td>
-                            <td>Ponteiro extra (8 B) + 1 <code>malloc</code> por nó</td>
-                        </tr>
+                        <tr><td><code>empilhar</code></td><td>O(1)*</td><td><strong>O(1)</strong></td></tr>
+                        <tr><td><code>desempilhar</code></td><td>O(1)</td><td><strong>O(1)</strong></td></tr>
+                        <tr><td><code>topo</code></td><td>O(1)</td><td><strong>O(1)</strong></td></tr>
+                        <tr><td><code>vazia</code></td><td>O(1)</td><td><strong>O(1)</strong></td></tr>
                     </tbody>
                 </table>
                 <p class="nota-rodape">
-                    Tudo no início da lista: <code>empilhar</code> = inserir no início; <code>desempilhar</code> = remover do início.
-                    Não precisa de <code>fim</code>.
+                    * Vetor pode precisar de <code>realloc</code> eventual O(n) — distribuído,
+                    custo amortizado O(1).
                 </p>
             </section>
 
             <section>
-                <h3>Operações — todas em O(1)</h3>
-                <ul style="text-align: left; font-size: 0.8em;">
-                    <li><code>empilhar(x)</code>: novo nó <code>proximo = topo</code>; <code>topo = novo</code>.</li>
-                    <li><code>desempilhar()</code>: lê <code>topo</code>, salva <code>topo-&gt;proximo</code> em <code>topo</code>, libera o antigo.</li>
-                    <li><code>topo()</code>: lê o valor de <code>topo</code> sem mexer.</li>
-                    <li><code>vazia()</code>: <code>topo == NULL</code>.</li>
-                </ul>
+                <h3>Vetor × lista — escolha de engenharia</h3>
+                <div class="duas-colunas">
+                    <div>
+                        <h4 style="color: #2c5d8a;">Vetor</h4>
+                        <ul style="font-size: 0.74em;">
+                            <li>Uma única alocação.</li>
+                            <li>Mais econômico em memória.</li>
+                            <li>Acesso muito rápido.</li>
+                            <li><strong>Capacidade fixa</strong> ou paga <code>realloc</code>.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #2c5d8a;">Lista encadeada</h4>
+                        <ul style="font-size: 0.74em;">
+                            <li>Cresce sob demanda.</li>
+                            <li>Capacidade ilimitada.</li>
+                            <li>Código <em>sem casos especiais</em>.</li>
+                            <li><strong>8 B/nó</strong> + 1 <code>malloc</code> por elemento.</li>
+                        </ul>
+                    </div>
+                </div>
                 <p class="nota-rodape">
-                    Menos casos especiais que a Fila — não há "primeiro/último elemento" para tratar à parte.
+                    Esta aula implementa a versão encadeada — mais simples, tamanho dinâmico.
+                    O custo de ponteiros é o "preço do ponteiro" da Aula 02.
                 </p>
             </section>
 
+            <!-- ----- CAMADA 6 — CONEXÕES E VARIANTES ----- -->
             <section>
-                <h3>Propriedades que devem sempre valer</h3>
-                <ul style="text-align: left;">
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde a Pilha aparece</h3>
+                <ul style="text-align: left; font-size: 0.78em;">
                     <li>
-                        <strong>Quando a pilha está vazia</strong>: <code>topo == NULL</code>.
+                        <span class="destaque">Pilha de chamadas</span> — toda função empilha
+                        um <em>frame</em>; <code>return</code> desempilha.
                     </li>
                     <li>
-                        <strong>Quando há ao menos um elemento</strong>: <code>topo != NULL</code>
-                        e seguindo <code>proximo</code> a partir do <code>topo</code> chega-se a um
-                        nó cujo <code>proximo</code> é <code>NULL</code> (o fundo).
+                        <span class="destaque">Ctrl+Z</span> — cada ação executada vira entrada
+                        empilhada; cada desfazer desempilha.
+                    </li>
+                    <li>
+                        <span class="destaque">"Voltar" do navegador</span> — cada página visitada
+                        empilha; voltar desempilha.
+                    </li>
+                    <li>
+                        <span class="destaque">Validação de parênteses</span> — abre empilha;
+                        fecha desempilha e confere.
+                    </li>
+                    <li>
+                        <span class="destaque">Recursão → iteração</span> — pilha explícita
+                        substitui a pilha implícita do programa.
                     </li>
                 </ul>
-                <blockquote>
-                    Comparada à Fila, a Pilha tem <strong>menos propriedades</strong> a manter
-                    porque tem <strong>menos estado</strong>. É realmente das mais simples
-                    estruturas de dados — e uma das mais usadas.
+            </section>
+
+            <section>
+                <h3>Variantes da Pilha</h3>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li>
+                        <span class="destaque">Vetor com <code>topo</code>-índice</span> —
+                        com ou sem <code>realloc</code>.
+                    </li>
+                    <li>
+                        <span class="destaque">Lista simplesmente encadeada com <code>topo</code></span>
+                        — a desta aula.
+                    </li>
+                </ul>
+                <blockquote style="font-size: 0.82em;">
+                    Lista <strong>dupla</strong> e <strong>circular</strong> não trazem ganho —
+                    todas as operações já estão em O(1) com lista simples; ponteiros
+                    extras só acrescentam custo de memória.
                 </blockquote>
+                <p class="nota-rodape">
+                    Pilha aparece como peça de construção em algoritmos clássicos —
+                    <strong>DFS</strong> (busca em profundidade) em grafos, em aulas futuras.
+                </p>
             </section>
         </section>
 
-        <!-- BLOCO 2 — CONCEITO SIMPLIFICADO -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA -->
         <section>
             <section>
                 <p class="titulo-bloco">Bloco 2</p>
-                <h2>Conceito — nível simplificado</h2>
-            </section>
-
-            <section>
-                <h3>A pilha de bandejas do restaurante self-service</h3>
-                <ul style="text-align: left;">
-                    <li>Bandeja nova → <strong>em cima</strong> da última (<code>empilhar</code>).</li>
-                    <li>Bandeja para usar → pega <strong>a do topo</strong> (<code>desempilhar</code>).</li>
-                    <li>Olhar o topo sem pegar → <code>topo</code>.</li>
-                    <li>Há bandejas? → <code>vazia</code>.</li>
-                </ul>
-                <blockquote>
-                    A regra central: <strong>só se mexe no topo</strong>.
-                    Do meio e do fundo: inacessíveis enquanto não desempilhar tudo em cima.
-                </blockquote>
-            </section>
-
-            <section>
-                <h3>A restrição é o que define</h3>
-                <p style="text-align: left;">
-                    Parece dura — mas é exatamente isso que torna a Pilha
-                    <span class="destaque">simples e veloz</span>.
-                </p>
-                <p style="text-align: left; margin-top: 0.8em;">
-                    E é a estrutura natural para qualquer situação que precisa
-                    <strong>desfazer na ordem inversa</strong>.
-                </p>
-            </section>
-        </section>
-
-        <!-- BLOCO 3 — VISUALIZAÇÃO GRÁFICA -->
-        <section>
-            <section>
-                <p class="titulo-bloco">Bloco 3</p>
                 <h2>Visualização gráfica</h2>
                 <p style="font-size: 0.7em; color: #666;">
                     Ciclo completo: criar → 3× empilhar → topo → 2× desempilhar.
@@ -434,10 +584,10 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             </section>
         </section>
 
-        <!-- BLOCO 4 — PROBLEMA MOTIVADOR -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR -->
         <section>
             <section>
-                <p class="titulo-bloco">Bloco 4</p>
+                <p class="titulo-bloco">Bloco 3</p>
                 <h2>Por que Pilha existe?</h2>
             </section>
 
@@ -496,10 +646,10 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             </section>
         </section>
 
-        <!-- BLOCO 5 — ANALOGIAS -->
+        <!-- BLOCO 4 — ANALOGIAS -->
         <section>
             <section>
-                <p class="titulo-bloco">Bloco 5</p>
+                <p class="titulo-bloco">Bloco 4</p>
                 <h2>Analogias</h2>
             </section>
 
@@ -530,10 +680,10 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             </section>
         </section>
 
-        <!-- BLOCO 6 — CÓDIGO EM C -->
+        <!-- BLOCO 5 — CÓDIGO EM C -->
         <section>
             <section>
-                <p class="titulo-bloco">Bloco 6</p>
+                <p class="titulo-bloco">Bloco 5</p>
                 <h2>Código em C</h2>
                 <p style="font-size: 0.7em; color: #666;">
                     Lista simplesmente encadeada com <code>topo</code> apenas.
@@ -704,10 +854,10 @@ Desempilhando: 30 20 10</code></pre>
             </section>
         </section>
 
-        <!-- BLOCO 7 — EXERCÍCIOS -->
+        <!-- BLOCO 6 — EXERCÍCIOS -->
         <section>
             <section>
-                <p class="titulo-bloco">Bloco 7</p>
+                <p class="titulo-bloco">Bloco 6</p>
                 <h2>Exercícios práticos</h2>
             </section>
 
@@ -756,96 +906,9 @@ Desempilhando: 30 20 10</code></pre>
                 </div>
             </section>
 
-            <section>
-                <h3>Exercício 3 — parênteses balanceados</h3>
-                <p style="text-align: left; font-size: 0.78em;">
-                    <code>parenteses_balanceados(s)</code> retorna <code>true</code> se
-                    <code>(</code>, <code>[</code>, <code>{</code> estão pareados e aninhados.
-                </p>
-                <p style="text-align: left; font-size: 0.78em;">
-                    Ex.: <code>"(a+b)*[c-d]"</code> → <code>true</code>;
-                    <code>"({a)})"</code> → <code>false</code>; <code>"(("</code> → <code>false</code>.
-                </p>
-                <div class="resposta fragment fade-in">
-                    <strong>Ideia:</strong> abre → empilha o tipo; fecha → desempilha e confere.
-                    Final vazia → ok.
-<pre><code class="language-c">bool parenteses_balanceados(const char* s) {
-    Pilha* p = pilha_criar();
-    for (int i = 0; s[i]; i++) {
-        int abre  = abre_para_codigo(s[i]);
-        int fecha = fecha_para_codigo(s[i]);
-        if (abre) pilha_empilhar(p, abre);
-        else if (fecha) {
-            if (pilha_vazia(p) || pilha_desempilhar(p) != fecha) {
-                pilha_destruir(p); return false;
-            }
-        }
-    }
-    bool ok = pilha_vazia(p);
-    pilha_destruir(p);
-    return ok;
-}</code></pre>
-                </div>
-            </section>
-
-            <section>
-                <h3>Exercício 4 — inverter string com pilha</h3>
-                <p style="text-align: left; font-size: 0.8em;">
-                    <code>inverter_string(s)</code> modifica a string <em>in-place</em>.
-                    Compare custo de tempo e espaço com a versão "dois índices".
-                </p>
-                <div class="resposta fragment fade-in">
-                    <strong>Resposta:</strong>
-<pre><code class="language-c">void inverter_string(char* s) {
-    Pilha* p = pilha_criar();
-    int n = 0;
-    while (s[n]) { pilha_empilhar(p, (int) s[n]); n++; }
-    for (int i = 0; i &lt; n; i++) s[i] = (char) pilha_desempilhar(p);
-    pilha_destruir(p);
-}</code></pre>
-                    <p style="margin: 0.4em 0 0 0;">
-                        Tempo: <strong>O(n)</strong>. Espaço: <strong>O(n) extra</strong>
-                        (a pilha). Versão "dois índices" troca pontas em
-                        <strong>O(1) extra</strong> — preferível em produção. Aqui
-                        o ponto é mostrar LIFO.
-                    </p>
-                </div>
-            </section>
-
-            <section>
-                <h3>Exercício 5 — Fila com duas pilhas (desafio)</h3>
-                <p style="text-align: left; font-size: 0.78em;">
-                    Implemente uma <strong>Fila</strong> usando <strong>apenas</strong>
-                    duas pilhas (<code>P_in</code> e <code>P_out</code>).
-                </p>
-                <ul style="text-align: left; font-size: 0.75em;">
-                    <li><code>enfileirar(x)</code> → empilha em <code>P_in</code>.</li>
-                    <li><code>desenfileirar()</code> → se <code>P_out</code> vazia, transfere tudo de <code>P_in</code> para <code>P_out</code> (LIFO de LIFO = FIFO!); depois desempilha <code>P_out</code>.</li>
-                </ul>
-                <p style="text-align: left; font-size: 0.78em;">
-                    Análise amortizada: cada elemento atravessa <code>P_in</code>→<code>P_out</code> no máximo <strong>uma vez</strong>. Custo <strong>amortizado O(1)</strong>.
-                </p>
-                <div class="resposta fragment fade-in">
-                    <strong>Trecho-chave:</strong>
-<pre><code class="language-c">static void transferir_se_preciso(Fila2P* f) {
-    if (pilha_vazia(f-&gt;out)) {
-        while (!pilha_vazia(f-&gt;in))
-            pilha_empilhar(f-&gt;out, pilha_desempilhar(f-&gt;in));
-    }
-}
-
-int fila2p_desenfileirar(Fila2P* f) {
-    transferir_se_preciso(f);
-    return pilha_desempilhar(f-&gt;out);
-}</code></pre>
-                    <p style="margin: 0.3em 0 0 0; font-size: 0.9em;">
-                        Implementação completa em <code>aula04_pilha.md</code>.
-                    </p>
-                </div>
-            </section>
         </section>
 
-        <!-- BLOCO 8 — REFERÊNCIAS -->
+        <!-- BLOCO 7 — REFERÊNCIAS -->
         <section>
             <h2>Referências</h2>
             <ul style="text-align: left; font-size: 0.75em;">

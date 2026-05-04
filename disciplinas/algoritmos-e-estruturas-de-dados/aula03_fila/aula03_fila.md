@@ -695,48 +695,6 @@ Adicione a `fila.c` (versão simplesmente encadeada) uma função `void imprimir
 >
 > A função percorre a lista lendo `valor` e `proximo` sem modificar nada.
 
-**Exercício 3 — O bug do ponteiro suspenso.**
-No `fila.c`, **comente** a linha `f->fim = NULL;` dentro de `desenfileirar` (a que zera o `fim` quando a fila fica vazia). Compile e rode o programa com `valgrind ./fila_demo` (ou apenas `./fila_demo` se não tiver Valgrind). Em seguida, adicione na `main()` mais um ciclo: depois do `while` que esvazia a fila, chame `enfileirar(f, 99); desenfileirar(f);` e imprima o resultado. Descreva o que acontece e por quê.
-
-*Critério de aceitação*: identificar que, sem zerar `fim`, ao reenfileirar `99` numa fila vazia o código entra no ramo "fila vazia" e atualiza `inicio` corretamente, **mas o `fim` antigo continua apontando para memória já liberada**; o próximo `enfileirar` em fila não-vazia tentaria escrever em `fim->proximo`, com comportamento indefinido. É a armadilha que Tenenbaum (cap. 4) destaca.
-
-> **Resposta mínima aceitável**
->
-> Ao remover o último elemento sem zerar `fim`, o ponteiro `fim` vira um *dangling pointer* (suspenso) — aponta para memória já devolvida ao sistema com `free()`. No próximo `enfileirar` em fila não-vazia, o código `f->fim->proximo = novo` desreferencia esse ponteiro inválido, causando comportamento indefinido (crash, corrupção, ou — pior — funcionamento aparente seguido de bug obscuro depois). A linha `f->fim = NULL` existe exatamente para impedir esse cenário.
-
-**Exercício 4 — Inverter uma fila usando uma pilha.**
-Sabendo que uma Pilha é LIFO e uma Fila é FIFO, escreva (em pseudocódigo ou em C) um algoritmo que recebe uma Fila `F` e a **inverte** — ao final, o elemento que era a frente vira o último e vice-versa — usando como estrutura auxiliar uma **Pilha** `P` (e nenhuma outra estrutura). Após o algoritmo, `F` está invertida e `P` está vazia.
-
-*Critério de aceitação*: descrever o algoritmo em duas fases (esvaziar `F` para `P`, depois esvaziar `P` para `F`) e justificar por que a fila final fica invertida.
-
-> **Resposta mínima aceitável**
->
-> ```
-> 1. Enquanto F nao estiver vazia:
->      x = desenfileirar(F)
->      empilhar(P, x)
-> 2. Enquanto P nao estiver vazia:
->      y = desempilhar(P)
->      enfileirar(F, y)
-> ```
->
-> **Por que inverte**: na fase 1, os elementos saem de `F` na ordem original (frente → fim) e entram em `P` em LIFO. Na fase 2, saem de `P` em ordem **inversa à de entrada** (último-a-entrar-primeiro-a-sair) e voltam para `F` na nova ordem. Resultado: o que era frente ficou no fim. Custo total: **O(n)**.
-
-**Exercício 5 — Comparando as três implementações (desafio).**
-Escreva um pequeno programa-teste que execute a **mesma sequência de operações** sobre as três implementações (`fila.c`, `fila_dupla.c`, `fila_circular.c`) e verifique que produzem **a mesma saída**. Use a sequência: `enfileirar(1)`, `enfileirar(2)`, `enfileirar(3)`, `desenfileirar` (verificar = 1), `enfileirar(4)`, `enfileirar(5)`, `desenfileirar` (= 2), `desenfileirar` (= 3), `desenfileirar` (= 4), `desenfileirar` (= 5). Em seguida, modifique cada uma das três implementações para imprimir, **em comentário ao final do arquivo**, qual aspecto da estrutura interna ela explora (dois ponteiros + um sentido; dois ponteiros + dois sentidos; um ponteiro + anel).
-
-*Critério de aceitação*: as três implementações compilam, rodam, e produzem a mesma saída — `Desenfileirando: 1 2 3 4 5`. O exercício mostra na prática que **o TAD é um contrato observável**: trocar a representação interna não muda o comportamento externo, e a escolha entre as três passa a ser orientada por outros critérios (extensibilidade futura, simplicidade do código, gosto pessoal).
-
-> **Resposta mínima aceitável**
->
-> A saída esperada de cada um dos três programas, com a sequência de teste, é:
->
-> ```
-> Desenfileirando: 1 2 3 4 5
-> ```
->
-> A `main()` adaptada (idêntica para os três) chama as funções na ordem do enunciado e imprime cada valor desenfileirado. O ponto pedagógico é que o **mesmo cliente** funciona com as três implementações sem nenhuma alteração — a escolha entre lista simples, dupla ou circular é uma decisão de implementação que **o TAD esconde do cliente**.
-
 ---
 
 ## 7. Referências
