@@ -615,10 +615,10 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                 <p style="text-align: left;">
                     Função <code>A</code> chama <code>B</code>, que chama <code>C</code>:
                 </p>
-                <pre style="font-size: 0.6em; text-align: left; max-width: 360px; margin: 0 auto;"><code class="language-text">[ frame de C ]   ← topo (executando)
-[ frame de B ]
-[ frame de A ]
-[ ... main ... ]</code></pre>
+                <pre style="font-size: 0.7em; text-align: left; width: max-content; max-width: 100%; margin: 0 auto;"><code class="language-text">[ chamada de C ]   &lt;- topo (executando)
+[ chamada de B ]
+[ chamada de A ]
+[ ..... main ..... ]</code></pre>
                 <p style="text-align: left; margin-top: 1em;">
                     Cada <code>return</code> <strong>desempilha</strong> e devolve o controle
                     a quem chamou.
