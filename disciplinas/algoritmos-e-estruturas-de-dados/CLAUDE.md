@@ -86,7 +86,7 @@ A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas an
 
 **Camadas obrigatórias, na ordem**:
 
-1. **Intuição inicial (1 parágrafo curto)**. O que é, em linguagem totalmente coloquial, sem nenhum jargão técnico, em poucas frases. Tipo "imagine que você precisa..." ou "pense numa situação em que...". Esta camada existe para que **antes** de qualquer terminologia o aluno já tenha uma imagem mental do que estamos falando.
+1. **Introdução (1 parágrafo curto)**. O que é, em linguagem totalmente coloquial, sem nenhum jargão técnico, em poucas frases. Tipo "imagine que você precisa..." ou "pense numa situação em que...". Esta camada existe para que **antes** de qualquer terminologia o aluno já tenha uma imagem mental do que estamos falando.
 
 2. **Definição informal com vocabulário básico (2 a 4 parágrafos)**. Apresenta o conceito introduzindo só os termos técnicos **estritamente necessários** para nomeá-lo (ex.: "elemento", "operação", "ordem de inserção"). Cada termo novo é definido **no primeiro uso**. Aqui o aluno aprende **o que** a estrutura/algoritmo faz e **por que** ela existe — ainda sem nenhum formalismo.
 
@@ -245,6 +245,127 @@ Como aplicar:
 - **O bloco final de Referências continua existindo** e mantém o detalhamento completo (página/seção, leituras complementares). As citações inline apenas pontuam o texto onde o aluno pode parar e aprofundar.
 
 A mesma regra vale na **apresentação Reveal.js**: pelo menos um slide do bloco 1 deve trazer a citação inline, em fonte menor (`<small>` ou `<p class="nota-rodape">`), para não competir com o conteúdo principal.
+
+### 4. Todo slide tem uma linha de contexto antes do conteúdo técnico
+
+**A aula é projetada em sala**, não é material para leitura silenciosa. O aluno olha para o slide por alguns segundos e precisa **entender, sozinho, do que aquele slide trata** — mesmo que o professor não tenha começado a falar ainda. Slides que vão **direto do título para uma fórmula, tabela, bloco de código, lista de axiomas ou notação simbólica** quebram esse pacto: o aluno vê símbolos sem nenhuma pista do que está olhando ou por que aquilo importa.
+
+**Regra concreta**: em **toda** `<section>` da apresentação Reveal.js, **logo após o `<h3>` do slide deve vir uma linha curta de contexto** (idealmente **1 frase**, no máximo 2, em prosa, fonte normal). Essa linha responde a uma ou às duas perguntas abaixo — não as duas ao mesmo tempo se 1 já basta:
+
+1. **O que o aluno está prestes a ver?** ("Vamos olhar a complexidade das três operações lado a lado.")
+2. **Por que aquilo importa / qual a chave de leitura?** ("Tudo gira em torno da altura `h`.")
+
+Só **depois** dessa linha-ponte aparecem tabelas, fórmulas, blocos `<pre><code>`, notação simbólica (`A = (N, valor, esq, dir, raiz)`), listas de axiomas (A1, A2, ...) ou listas técnicas densas.
+
+**Exemplo ruim** (slide órfão — título grudado no símbolo, aluno não sabe o que está olhando):
+
+```html
+<section>
+    <h3>Representação interna como tupla</h3>
+    <p>A = (N, valor, esq, dir, raiz)</p>
+    <ul>
+        <li><strong>N</strong> — conjunto dos nós</li>
+        ...
+    </ul>
+</section>
+```
+
+**Exemplo bom** (a frase-ponte explica o que vem e por quê):
+
+```html
+<section>
+    <h3>Representação interna como tupla</h3>
+    <p style="text-align: left;">
+        Agora formalizamos a árvore como uma <strong>tupla matemática</strong> — uma
+        forma compacta de listar tudo que define uma árvore: o conjunto de nós,
+        as funções que ligam cada nó a seu valor e a seus filhos, e o ponteiro
+        externo de entrada.
+    </p>
+    <p style="text-align: center; font-family: monospace;">
+        A = (N, valor, esq, dir, raiz)
+    </p>
+    <ul>
+        <li><strong>N</strong> — conjunto dos nós</li>
+        ...
+    </ul>
+</section>
+```
+
+**Diretrizes de estilo da linha-ponte**:
+
+- **Curta**: 1 frase. Se sentir necessidade de 2, releia — quase sempre uma delas é dispensável. Não é hora de explicar tudo; é hora de **enquadrar** o que vem em seguida.
+- **Em prosa**, fonte normal do slide (não usar `<small>` ou `nota-rodape` — a frase-ponte é parte do conteúdo principal).
+- **Conecta com a narrativa**: pode começar com "Agora vamos...", "Lado a lado, comparamos...", "Aqui vemos...", "Para entender, observe que...".
+- **Nunca repete literalmente o título**: o título já está logo acima; a linha-ponte agrega contexto novo.
+- **Aplica-se inclusive a slides de tabela de complexidade, axiomas do TAD, definições tupla, blocos de código C, e qualquer slide de visualização SVG** (no slide do SVG, a linha-ponte diz o que o aluno deve enxergar no diagrama).
+
+**Exceções**:
+- **Slide-título do bloco** (quando existir) e **slide do Eddy** não precisam da linha-ponte, pois sua função é puramente sinalizar transição ou trazer fala curta autocontida.
+- **Slides puramente narrativos** (parágrafos de prosa contínua sem nenhum bloco técnico) também não precisam — eles **já são** contexto puro.
+
+### 5. Uma ideia por slide, voz que conversa *(regra principal de design de slide)*
+
+> Esta é a **regra mais importante** para apresentações da disciplina. Em caso de conflito com qualquer outra regra de slide (incluindo a regra 4), **esta vence**.
+
+**O problema**: o slide não é apostila projetada. Aluno em sala lê em 5–10 segundos e volta a ouvir o professor. Se o slide despeja **três ideias em dois parágrafos densos**, o aluno fica preso na leitura, e a fala do professor passa por cima sem ancorar em nada visual. O slide deixa de **apoiar** a aula e passa a **competir** com ela.
+
+**A regra concreta — três princípios**:
+
+1. **Uma ideia por slide.** Se o seu rascunho tem 2 ou 3 ideias, **fatie em 2 ou 3 slides**. Cada `<section>` carrega um único ponto que o professor vai destacar de viva voz.
+
+2. **Voz que conversa, não que disserta.** Frases curtas. Linguagem do dia a dia. Sem subordinação pesada do tipo *"e isso faz com que, por sua vez, ...".* Quando der para usar bullet curto em vez de parágrafo, prefira bullet.
+
+3. **Texto enxuto.** Limite prático para o corpo do slide:
+   - **Prosa pura**: até ~40 palavras.
+   - **Prosa + bullet list**: até ~80 palavras combinadas.
+   - **Bullet list pura**: até 5 itens de até 12 palavras cada.
+   - Datas, autores, citações secundárias, exceções, asteriscos — vão para o **slide do Eddy** (se vale uma pausa) ou para `nota-rodape` (se é detalhe). Nunca para o corpo.
+
+**Exemplo ruim** (três ideias densas em um slide só — empurra o aluno para ler):
+
+```html
+<section>
+    <h3>Por que árvore binária balanceada importa</h3>
+    <p>Inserções aleatórias tendem, na média, a altura O(log n). Mas inserções
+    em ordem crescente (1, 2, 3, 4, ...) degeneram a BST: cada nova vai à direita
+    do anterior, formando uma cadeia linear. A altura passa a n − 1, e a busca
+    volta a ser O(n) — toda a vantagem da estrutura se perde.</p>
+    <p>A solução são as árvores binárias balanceadas — AVL (1962) e rubro-negra
+    (1972/1978) são as mais conhecidas. Executam rotações ao final de cada
+    inserção/remoção para manter altura O(log n) garantida, não apenas esperada.</p>
+</section>
+```
+
+**Exemplo bom** (mesma matéria, fatiada em 2 slides + Eddy):
+
+```html
+<section>
+    <h3>E se inserirmos em ordem?</h3>
+    <p>Insira 1, 2, 3, 4, 5 numa BST vazia. <strong>Cada novo vai à direita</strong>
+    do anterior — a árvore vira uma fila vertical.</p>
+    <blockquote>Altura = <em>n</em>. Busca volta a O(<em>n</em>). Perdemos tudo.</blockquote>
+</section>
+
+<section>
+    <h3>A correção: rotações</h3>
+    <p>Árvores <strong>balanceadas</strong> fazem pequenas rotações depois de
+    cada inserção para manter a altura próxima de log <em>n</em> —
+    <strong>sempre</strong>, não só na média.</p>
+    <p class="nota-rodape">As mais conhecidas: AVL e rubro-negra. Implementação
+    fica para a aula dedicada.</p>
+</section>
+
+<section class="eddy-slide">
+    <!-- Eddy fala da história: AVL (1962) e rubro-negra (1972). -->
+</section>
+```
+
+**Diretrizes complementares**:
+
+- **Cortar > acrescentar.** Antes de publicar um slide, pergunte: *"que palavras posso remover sem perder o ponto?"*. Quase sempre sobra texto.
+- **Bullets ganham de parágrafos** quando há comparação ou enumeração. Mas bullets longos viram parágrafos disfarçados — limite item a ~12 palavras.
+- **Negrito é seu amigo.** Em vez de escrever mais para dar ênfase, **negrite** a palavra-chave da frase. O olho do aluno pula direto para ela.
+- **O professor preenche o resto.** Se o slide tem o título, a ideia central e um destaque visual (bullet, blockquote, código curto), o professor tem espaço para improvisar, contar uma história, perguntar para a turma. Slide cheio rouba esse espaço.
 
 ## Visualizações Gráficas — padrão da disciplina
 
@@ -485,7 +606,7 @@ Para subir Reveal.js (ou highlight.js) de versão: criar uma **pasta nova** `ven
 ## Regras Gerais de Conduta
 
 - **Apresentações Reveal.js não têm slide de "Roteiro da aula".** Após a capa institucional + o slide de título da aula, a apresentação parte direto para o Bloco 1. O sumário cumpre função apenas em material escrito (e mesmo no `.md` ele é dispensável quando os títulos `##` já dão a navegação).
-- **Não pule blocos nem camadas.** Se eu pedir "monte a aula sobre X", todos os blocos aplicáveis ao tipo da aula vêm — 7 em aulas de implementação, 6 em conceituais — mesmo que o tema seja simples. E dentro do bloco 1, todas as camadas de aprofundamento vêm em ordem, sem omitir a intuição inicial nem a definição formal.
+- **Não pule blocos nem camadas.** Se eu pedir "monte a aula sobre X", todos os blocos aplicáveis ao tipo da aula vêm — 7 em aulas de implementação, 6 em conceituais — mesmo que o tema seja simples. E dentro do bloco 1, todas as camadas de aprofundamento vêm em ordem, sem omitir a introdução nem a definição formal.
 - **Não invente referências.** Se não souber o capítulo exato, diga "ver capítulo de pilhas em Tenenbaum" em vez de chutar números.
 - **Quando o tema for grande** (ex.: "Grafos"), pergunte se quero a aula introdutória ou um recorte específico (BFS, DFS, Dijkstra, etc.) antes de produzir.
 - **Quando eu pedir só código**, entregue só código — mas mantenha as regras de legibilidade.

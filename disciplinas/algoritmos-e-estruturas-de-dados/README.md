@@ -18,6 +18,7 @@ A bibliografia base é **Tenenbaum — Estruturas de Dados Usando C** e **Sedgew
 | 02 | Listas Encadeadas (FIFO/LIFO, duplas, circulares) | Conceitual | [aula02_listas_encadeadas/aula02_listas_encadeadas.md](aula02_listas_encadeadas/aula02_listas_encadeadas.md) | [aula02_listas_encadeadas/apresentacao.html](aula02_listas_encadeadas/apresentacao.html) |
 | 03 | Fila (Queue) | Implementação | [aula03_fila/aula03_fila.md](aula03_fila/aula03_fila.md) | [aula03_fila/apresentacao.html](aula03_fila/apresentacao.html) |
 | 04 | Pilha (Stack) | Implementação | [aula04_pilha/aula04_pilha.md](aula04_pilha/aula04_pilha.md) | [aula04_pilha/apresentacao.html](aula04_pilha/apresentacao.html) |
+| 05 | Árvores e Árvores Binárias (BST + 3 travessias) | Implementação | [aula05_arvore_binaria/aula05_arvore_binaria.md](aula05_arvore_binaria/aula05_arvore_binaria.md) | [aula05_arvore_binaria/apresentacao.html](aula05_arvore_binaria/apresentacao.html) |
 
 ## Convenções
 

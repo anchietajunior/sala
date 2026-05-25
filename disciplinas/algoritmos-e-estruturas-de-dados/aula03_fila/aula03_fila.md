@@ -6,7 +6,7 @@
 
 ## 1. Conceito — Aprofundamento Progressivo
 
-### Camada 1 — A intuição inicial
+### Camada 1 — Introdução
 
 Imagine uma **fila do banco**. Quem chega entra atrás de todo mundo; quem é atendido sai pela frente. Ninguém fura, ninguém é atendido fora de ordem. A regra é simples e inviolável: **quem chegou primeiro, sai primeiro**. Toda a estrutura computacional chamada **Fila** existe para modelar exatamente esse comportamento — qualquer cenário em que a ordem temporal de chegada precise ser respeitada e nenhum elemento possa ser pulado.
 

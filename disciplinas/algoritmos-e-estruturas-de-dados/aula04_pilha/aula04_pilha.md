@@ -6,7 +6,7 @@
 
 ## 1. Conceito — Aprofundamento Progressivo
 
-### Camada 1 — A intuição inicial
+### Camada 1 — Introdução
 
 Imagine uma pilha de bandejas no balcão de um restaurante self-service. Bandejas novas vão **em cima** das que já estavam ali; quem precisa usar uma pega sempre **a do topo**, nunca uma do meio nem a do fundo. Essa restrição extremamente simples — *"só vejo e só mexo no topo"* — é toda a ideia da estrutura de dados chamada **Pilha**: a última coisa a entrar é a primeira a sair, e o que está embaixo só fica acessível depois que tudo em cima foi retirado.
 

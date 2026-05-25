@@ -6,7 +6,7 @@
 
 ## 1. Conceito — Aprofundamento Progressivo
 
-### Camada 1 — A intuição inicial
+### Camada 1 — Introdução
 
 Imagine que você precisa guardar uma sequência de coisas — nomes de alunos, mensagens recebidas, comandos digitados — e que essa sequência **muda o tempo todo**: às vezes cresce, às vezes encolhe, e você não sabe de antemão quantas coisas vai ter ao final do dia. Você não quer reservar um espaço gigante "por garantia" e desperdiçar memória; você também não quer ficar sem espaço no meio do caminho. A solução intuitiva é guardar **cada coisa em seu próprio lugarzinho separado**, e fazer com que cada lugarzinho **saiba onde está o próximo**. Quando precisar de mais espaço, cria-se mais um lugarzinho; quando algo é descartado, libera-se o lugarzinho dele. É exatamente essa ideia que vira **lista encadeada**.
 

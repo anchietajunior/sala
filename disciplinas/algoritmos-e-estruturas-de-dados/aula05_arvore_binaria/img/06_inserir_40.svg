@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 460"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 6 — inserir(40)
+  </text>
+
+  <!-- raiz -> 50 -->
+  <text x="290" y="100" text-anchor="end" font-size="16" font-weight="600" fill="#2c5d8a">raiz →</text>
+
+  <!-- Arestas -->
+  <line x1="350" y1="95" x2="220" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="95" x2="480" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="210" x2="140" y2="325" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="210" x2="300" y2="325" stroke="#2c5d8a" stroke-width="2"/>
+
+  <!-- Nó 50 -->
+  <circle cx="350" cy="95" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="102" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+
+  <!-- Nó 30 -->
+  <circle cx="220" cy="210" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="220" y="217" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+
+  <!-- Nó 70 -->
+  <circle cx="480" cy="210" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="480" y="217" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+
+  <!-- pernas NULL do 70 -->
+  <line x1="465" y1="233" x2="445" y2="275" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="495" y1="233" x2="515" y2="275" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="445" y="293" text-anchor="middle" font-size="14" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">∅</text>
+  <text x="515" y="293" text-anchor="middle" font-size="14" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">∅</text>
+
+  <!-- Nó 20 -->
+  <circle cx="140" cy="325" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="140" y="332" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+
+  <!-- pernas NULL do 20 -->
+  <line x1="125" y1="348" x2="105" y2="390" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="155" y1="348" x2="175" y2="390" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="105" y="408" text-anchor="middle" font-size="14" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">∅</text>
+  <text x="175" y="408" text-anchor="middle" font-size="14" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">∅</text>
+
+  <!-- Nó 40 (novo, em destaque) -->
+  <circle cx="300" cy="325" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5"/>
+  <text x="300" y="332" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+
+  <!-- pernas NULL do 40 -->
+  <line x1="285" y1="348" x2="265" y2="390" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="315" y1="348" x2="335" y2="390" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="265" y="408" text-anchor="middle" font-size="14" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">∅</text>
+  <text x="335" y="408" text-anchor="middle" font-size="14" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">∅</text>
+
+  <!-- separador + nota -->
+  <line x1="100" y1="420" x2="600" y2="420" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="445" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    40 &lt; 50 → esquerda · 40 &gt; 30 → direita · 40 é menor que 50 e maior que 30
+  </text>
+</svg>

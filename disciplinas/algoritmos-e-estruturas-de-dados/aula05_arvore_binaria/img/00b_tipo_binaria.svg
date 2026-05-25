@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 440"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Tipo 2 — Árvore binária (sem ordenação)
+  </text>
+  <text x="350" y="62" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    no máximo 2 filhos por nó · valores podem estar em qualquer arrumação
+  </text>
+
+  <!-- raiz -->
+  <text x="290" y="115" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">raiz →</text>
+
+  <!-- Arestas -->
+  <line x1="350" y1="110" x2="220" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="110" x2="480" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="225" x2="140" y2="340" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="225" x2="300" y2="340" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="480" y1="225" x2="560" y2="340" stroke="#2c5d8a" stroke-width="2"/>
+
+  <!-- Nó 7 (raiz) -->
+  <circle cx="350" cy="110" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="117" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">7</text>
+
+  <!-- Nó 3 -->
+  <circle cx="220" cy="225" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="220" y="232" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">3</text>
+
+  <!-- Nó 5 (à direita de 7, mas 5 < 7 — viola BST) -->
+  <circle cx="480" cy="225" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="480" y="232" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5</text>
+
+  <!-- Nó 9 (à esquerda de 3, mas 9 > 3 — viola BST) -->
+  <circle cx="140" cy="340" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="140" y="347" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">9</text>
+
+  <!-- Nó 1 -->
+  <circle cx="300" cy="340" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="300" y="347" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1</text>
+
+  <!-- Nó 8 -->
+  <circle cx="560" cy="340" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="560" y="347" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">8</text>
+
+  <!-- Marcas de violação da regra de BST -->
+  <text x="525" y="180" font-size="12" fill="#b54040" font-weight="600">5 &lt; 7</text>
+  <text x="100" y="295" font-size="12" fill="#b54040" font-weight="600">9 &gt; 3</text>
+
+  <!-- separador + nota -->
+  <line x1="100" y1="395" x2="600" y2="395" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="420" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    é binária (≤ 2 filhos) mas não é BST · 5 está à direita de 7; 9 está à esquerda de 3
+  </text>
+</svg>

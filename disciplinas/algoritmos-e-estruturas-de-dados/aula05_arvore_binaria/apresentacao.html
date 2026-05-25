@@ -1,0 +1,1316 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 05 — Árvores e Árvores Binárias | Algoritmos e Estruturas de dados</title>
+
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 540px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+        .reveal .resposta pre {
+            font-size: 0.85em;
+            margin: 0.3em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- ============================================================ -->
+        <!-- CAPA INSTITUCIONAL                                            -->
+        <!-- ============================================================ -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 05</p>
+            <h1>Árvores e Árvores Binárias</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                BST · árvore binária balanceada · três travessias
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — primeira estrutura
+                <span class="destaque">não-linear</span> da disciplina.
+            </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO)               -->
+        <!-- ============================================================ -->
+        <section>
+            <!-- ----- CAMADA 1 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>Introdução</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Pense numa <strong>árvore genealógica</strong>. Lá em cima está um casal
+                    de bisavós; logo abaixo, os filhos; mais abaixo, os netos; e por aí vai.
+                    Cada pessoa aparece uma única vez, está ligada à sua mãe ou pai por uma
+                    linha, e pode ter vários filhos abaixo de si (ou nenhum).
+                </p>
+                <blockquote style="margin-top: 1em;">
+                    Algo que <strong>começa num ponto único, ramifica para baixo
+                    e nunca volta</strong> — essa é a ideia central da estrutura de
+                    dados chamada <span class="destaque">árvore</span>.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 2 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>O que é uma árvore</h3>
+                <p style="text-align: left;">
+                    Uma estrutura <strong>hierárquica</strong>: nós ligados por arestas,
+                    com um nó especial — a <strong>raiz</strong>.
+                </p>
+                <blockquote>
+                    A partir da raiz, qualquer outro nó é alcançado por
+                    <strong>um único caminho</strong>.
+                </blockquote>
+                <p class="nota-rodape" style="text-align: left;">
+                    Tenenbaum, cap. 5; Sedgewick, Parte 3; CLRS, cap. 10.4.
+                </p>
+            </section>
+
+            <section>
+                <h3>A primeira estrutura não-linear</h3>
+                <p style="text-align: left;">
+                    Em listas, pilhas e filas, cada nó tem <strong>um único sucessor</strong>.
+                </p>
+                <p style="text-align: left;">
+                    Na árvore, um nó pode ter <strong>vários filhos</strong> —
+                    é a <span class="destaque">primeira estrutura não-linear</span> da disciplina.
+                </p>
+            </section>
+
+            <section>
+                <h3>Vocabulário — quem é quem</h3>
+                <p style="text-align: left;">Os termos que <strong>nomeiam as partes</strong> da árvore:</p>
+                <ul style="text-align: left; font-size: 0.78em; max-width: 760px; margin: 0 auto;">
+                    <li><strong>Raiz</strong> — o único nó sem pai.</li>
+                    <li><strong>Filho</strong> e <strong>pai</strong> — quem aponta é o pai.</li>
+                    <li><strong>Folha</strong> — nó sem filhos.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Vocabulário — como medir distâncias</h3>
+                <ul style="text-align: left; font-size: 0.78em; max-width: 760px; margin: 0 auto;">
+                    <li><strong>Subárvore</strong> — qualquer nó + tudo abaixo dele <em>também é</em> árvore.</li>
+                    <li><strong>Altura</strong> — caminho mais longo da raiz até uma folha (em arestas).</li>
+                    <li><strong>Profundidade</strong> de um nó — arestas da raiz até ele.</li>
+                </ul>
+                <p class="nota-rodape">A subárvore ser árvore é a base da elegância recursiva do código.</p>
+            </section>
+
+            <section>
+                <h3>Árvore binária</h3>
+                <p style="text-align: left;">
+                    Cada nó tem <strong>no máximo dois filhos</strong> — esquerdo e direito.
+                </p>
+                <blockquote>
+                    Simples de codificar (dois ponteiros fixos) e
+                    <strong>rica o bastante</strong> para buscas e decisões.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>BST — Binary Search Tree</h3>
+                <p style="text-align: left;">
+                    Sobre a árvore binária construímos a <span class="destaque">BST</span> —
+                    a versão <strong>realmente útil</strong> em prática.
+                </p>
+                <p style="text-align: left;">
+                    É o foco do resto desta aula.
+                </p>
+            </section>
+
+            <!-- ----- EDDY: citação inline da bibliografia ----- -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, segundo Tenenbaum, a árvore é o primeiro grande salto
+                            depois das estruturas lineares — ela troca a sequencialidade
+                            por <strong>ramificação hierárquica</strong>. É exatamente
+                            essa troca que abre caminho para buscas em tempo logarítmico,
+                            como veremos na Camada 5.
+                            <cite>Tenenbaum, cap. 5 — Árvores</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 3 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>O nó da Aula 02, agora com dois ponteiros</h3>
+                <p style="text-align: left;">
+                    Reaproveitamos o mesmo nó — só que com <strong>dois</strong> ponteiros
+                    de ligação: <code>esq</code> e <code>dir</code>.
+                </p>
+                <blockquote>
+                    Estado externo: <strong>um único</strong> <code>raiz</code>.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Quando a árvore está vazia</h3>
+                <p style="text-align: left;">
+                    Convenção: <code>raiz == NULL</code> ⇔ árvore vazia.
+                </p>
+                <p style="text-align: left;">
+                    Caso contrário, descendo por <code>esq</code> e <code>dir</code>
+                    a partir da <code>raiz</code>, <strong>qualquer nó</strong> é
+                    alcançado em um único caminho.
+                </p>
+            </section>
+
+            <section>
+                <h3>A propriedade da BST</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    A árvore binária por si só ainda não tem utilidade prática para busca.
+                    O salto vem ao impor uma <strong>regra de ordenação</strong> entre
+                    cada nó e suas duas subárvores — é essa regra, abaixo, que define a BST
+                    (<em>Binary Search Tree</em>).
+                </p>
+                <blockquote>
+                    Para <strong>todo</strong> nó <em>x</em>, <strong>todos</strong> os
+                    valores na subárvore esquerda de <em>x</em> são <strong>menores</strong>
+                    que o valor de <em>x</em>, e <strong>todos</strong> os valores na
+                    subárvore direita são <strong>maiores</strong> que o valor de <em>x</em>.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.75em; margin-top: 1em;">
+                    Essa regra é <strong>recursiva</strong> — vale para a raiz, e para a
+                    raiz de cada subárvore, até as folhas. Consequência operacional:
+                    <strong>cada comparação descarta metade da árvore</strong>. É a
+                    fonte do tempo <strong>logarítmico</strong>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Esta aula assume que <strong>não há chaves duplicadas</strong> —
+                    convenção mais comum em textos didáticos. Tenenbaum, cap. 5;
+                    CLRS, cap. 12.
+                </p>
+            </section>
+
+            <section>
+                <h3>As operações</h3>
+                <p style="text-align: left;">
+                    Quatro famílias — repare que três dependem da
+                    <strong>altura <em>h</em></strong> e só a travessia depende do total <em>n</em>.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em; max-width: 760px; margin: 0 auto;">
+                    <li><strong>inserir</strong> — desce e aloca no primeiro <code>NULL</code>. <span class="destaque">O(h)</span></li>
+                    <li><strong>buscar</strong> — mesma descida, sem alocar. <span class="destaque">O(h)</span></li>
+                    <li><strong>remover</strong> — três casos (aula futura). <span class="destaque">O(h)</span></li>
+                    <li><strong>travessias</strong> — visitam todos os nós. <span class="destaque">O(n)</span></li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>As três travessias clássicas</h3>
+                <p style="text-align: left;">
+                    Diferem só em <strong>quando o nó é visitado</strong> em relação aos filhos:
+                </p>
+                <ul style="text-align: left; font-size: 0.78em; max-width: 760px; margin: 0 auto;">
+                    <li><strong>Pré-ordem</strong>: nó · esq · dir — útil para serialização.</li>
+                    <li><strong>In-ordem</strong>: esq · nó · dir — em BST, sai <span class="destaque">ordenado</span>.</li>
+                    <li><strong>Pós-ordem</strong>: esq · dir · nó — folhas antes do pai, ideal para liberar memória.</li>
+                </ul>
+                <p class="nota-rodape" style="text-align: left;">
+                    Existe ainda a travessia <em>em nível</em> (BFS) — volta em grafos.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 4 — TAD ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>TAD — Árvore Binária de Busca de Inteiros</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Vamos agora <strong>formalizar</strong> a BST como Tipo Abstrato de Dados
+                    — listando, sem revelar implementação, todos os tipos envolvidos e todas
+                    as operações disponíveis com suas assinaturas. É o "contrato" que qualquer
+                    código C que use a BST pode invocar.
+                </p>
+                <pre><code class="language-c" data-trim>
+TAD Arvore Binaria de Busca de Inteiros
+
+  Tipos:
+    Arvore
+    Inteiro
+    Booleano
+
+  Operacoes:
+    criar()                          -&gt; Arvore
+    vazia(Arvore)                    -&gt; Booleano
+    inserir(Arvore, Inteiro)         -&gt; Arvore
+    buscar(Arvore, Inteiro)          -&gt; Booleano
+    pre_ordem(Arvore)                -&gt; sequencia de Inteiros
+    in_ordem(Arvore)                 -&gt; sequencia de Inteiros
+    pos_ordem(Arvore)                -&gt; sequencia de Inteiros
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Axiomas</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Os axiomas <strong>fixam o significado</strong> das operações combinando-as
+                    entre si — sem dizer <em>como</em> elas são implementadas. Leia cada linha
+                    como "tal combinação tem este resultado". Repare em
+                    <strong>A4 e A7</strong>, que sintetizam, respectivamente, o coração da
+                    busca e a ordenação implícita da BST.
+                </p>
+                <ul style="text-align: left; font-size: 0.65em; max-width: 820px; margin: 0 auto;">
+                    <li><strong>A1.</strong> <code>vazia(criar()) = verdadeiro</code></li>
+                    <li><strong>A2.</strong> <code>vazia(inserir(A, x)) = falso</code></li>
+                    <li><strong>A3.</strong> <code>buscar(criar(), x) = falso</code></li>
+                    <li><span class="destaque">A4.</span> <code>buscar(inserir(A, x), x) = verdadeiro</code>
+                        — <strong>coração da BST</strong>: o que insiro, posso encontrar.</li>
+                    <li><strong>A5.</strong> <code>buscar(inserir(A, x), y) = buscar(A, y)</code> se <code>x ≠ y</code>
+                        — inserir <em>x</em> não muda o status de busca de outros valores.</li>
+                    <li><strong>A6.</strong> <code>in_ordem(criar()) = sequência vazia</code></li>
+                    <li><span class="destaque">A7.</span> <code>in_ordem(inserir(A, x))</code>
+                        contém todos os elementos de <code>in_ordem(A)</code> mais <em>x</em>,
+                        <strong>em ordem crescente</strong> — a famosa "ordenação implícita".</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Representação interna como tupla</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Agora <strong>formalizamos</strong> a árvore como uma <strong>tupla
+                    matemática</strong> — uma forma compacta de listar tudo que a define:
+                    o conjunto de nós, as funções que ligam cada nó ao seu valor e aos
+                    seus filhos, e o ponteiro externo de entrada. Cada componente é
+                    detalhado logo abaixo.
+                </p>
+                <p style="text-align: center; font-size: 0.9em; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;">
+                    A = (N, valor, esq, dir, raiz)
+                </p>
+                <ul style="text-align: left; font-size: 0.65em; max-width: 760px; margin: 0 auto;">
+                    <li><strong>N</strong> — conjunto dos nós da árvore.</li>
+                    <li><strong>valor: N → ℤ</strong> — associa cada nó a um inteiro.</li>
+                    <li><strong>esq: N → N ∪ {NULL}</strong> — filho esquerdo, ou NULL.</li>
+                    <li><strong>dir: N → N ∪ {NULL}</strong> — filho direito, ou NULL.</li>
+                    <li><strong>raiz ∈ N ∪ {NULL}</strong> — ponteiro externo para o topo.</li>
+                </ul>
+                <p class="nota-rodape" style="text-align: center;">
+                    Invariante: <code>vazia ⇔ raiz = NULL</code>.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 5 — análise ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>Análise — tudo depende da altura <em>h</em></h3>
+                <p style="text-align: left;">
+                    Toda operação percorre da <strong>raiz até uma folha</strong> —
+                    o custo é <em>h</em>, que varia muito entre equilibrada e degenerada.
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operação</th>
+                            <th>BST equilibrada<br><span style="font-weight: 400;">h ≈ log₂ n</span></th>
+                            <th>BST degenerada<br><span style="font-weight: 400;">h = n − 1</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>buscar</code></td><td><strong>O(log n)</strong></td><td>O(n)</td></tr>
+                        <tr><td><code>inserir</code></td><td><strong>O(log n)</strong></td><td>O(n)</td></tr>
+                        <tr><td><code>remover</code></td><td><strong>O(log n)</strong></td><td>O(n)</td></tr>
+                        <tr><td>travessias</td><td><strong>O(n)</strong></td><td>O(n)</td></tr>
+                        <tr><td>espaço</td><td>O(n)</td><td>O(n)</td></tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape" style="text-align: center;">
+                    Travessia é sempre O(n): cada nó é visitado uma vez.
+                </p>
+            </section>
+
+            <section>
+                <h3>E se inserirmos em ordem?</h3>
+                <p style="text-align: left;">
+                    Insira <code>1, 2, 3, 4, 5</code> numa BST vazia.
+                    <strong>Cada novo vai à direita</strong> do anterior — a árvore
+                    vira uma fila vertical.
+                </p>
+                <blockquote>
+                    Altura = <em>n</em>. Busca volta a <strong>O(<em>n</em>)</strong>.
+                    Perdemos tudo.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A correção: rotações</h3>
+                <p style="text-align: left;">
+                    Árvores <span class="destaque">balanceadas</span> fazem pequenas
+                    <strong>rotações</strong> depois de cada inserção para manter a altura
+                    próxima de log <em>n</em> — <strong>sempre</strong>, não só na média.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Implementação fica para a aula dedicada à AVL.
+                </p>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, as duas árvores balanceadas mais famosas são a
+                            <strong>AVL</strong>, proposta em 1962, e a
+                            <strong>rubro-negra</strong>, dos anos 1970. Quase toda
+                            estrutura de busca rápida que vocês usam — <em>std::map</em>
+                            do C++, <em>TreeMap</em> do Java, índices de bancos — está
+                            apoiada em alguma variante dessas duas ideias.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 6 — variantes ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Variantes da família das árvores</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    A BST é só o começo. A mesma <strong>ideia central</strong> — nós ligados
+                    em hierarquia, busca descendo da raiz — se desdobra em uma <strong>família
+                    inteira</strong> de variantes, cada uma com uma restrição extra para
+                    resolver problemas diferentes do mundo real.
+                </p>
+                <ul style="text-align: left; font-size: 0.62em; max-width: 820px; margin: 0 auto;">
+                    <li><strong>BST</strong> — esta aula. Base para tudo que vem.</li>
+                    <li><strong>AVL</strong> — BST balanceada por fator de altura. Tenenbaum, cap. 5.</li>
+                    <li><strong>Rubro-negra</strong> — balanceada por regras de cor. Usada em
+                        <code>std::map</code> (C++) e <code>TreeMap</code> (Java). CLRS, cap. 13.</li>
+                    <li><strong>B-tree</strong> — muitos filhos por nó. Índices de bancos
+                        (PostgreSQL, MySQL) e sistemas de arquivos (ext4, APFS). CLRS, cap. 18.</li>
+                    <li><strong>Trie</strong> (<em>prefix tree</em>) — para strings. Autocomplete,
+                        correção ortográfica, roteamento de IP.</li>
+                    <li><strong>Heap binária</strong> — prioridade em vez de ordenação. Fila de
+                        prioridade, heapsort. Tenenbaum, cap. 7.</li>
+                    <li><strong>Segment tree</strong>, <strong>Fenwick tree</strong> — consultas
+                        de intervalos sobre arrays.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O que muda entre as variantes</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Apesar da família ser grande, todas as variantes acima diferem ao longo
+                    de apenas <strong>três eixos</strong>: quantos filhos cada nó pode ter,
+                    qual restrição os valores precisam respeitar, e como (ou se) a árvore
+                    se mantém balanceada.
+                </p>
+                <div class="duas-colunas" style="font-size: 0.7em;">
+                    <div>
+                        <strong>Fator de ramificação</strong>
+                        <p>2 (binária), 3+ (B-tree), 26 (Trie alfabética).</p>
+                    </div>
+                    <div>
+                        <strong>Restrição sobre valores</strong>
+                        <p>ordenação (BST), prioridade (heap), prefixo (Trie).</p>
+                    </div>
+                    <div>
+                        <strong>Balanceamento</strong>
+                        <p>nenhum (BST), fator de altura (AVL), cores (RB), <em>fan-out</em> grande (B-tree).</p>
+                    </div>
+                </div>
+                <p class="nota-rodape" style="text-align: center; margin-top: 1.5em;">
+                    Mesma ideia central · variações em três eixos.
+                </p>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA                                -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.75em; color: #666; margin-top: 1em;">
+                    Primeiro, <strong>tipos de árvore</strong> — onde a BST se encaixa.<br>
+                    Depois, <strong>ciclo de vida</strong> de uma BST passo a passo.
+                </p>
+            </section>
+
+            <!-- ===== PARTE A — TIPOS DE ÁRVORE ===== -->
+            <section>
+                <p class="titulo-bloco">Parte A</p>
+                <h3>Tipos de árvore — do mais geral ao mais especializado</h3>
+                <ol style="text-align: left; font-size: 0.72em; max-width: 620px; margin: 1em auto 0;">
+                    <li><strong>Árvore geral</strong> — qualquer fator de ramificação.</li>
+                    <li><strong>Árvore binária</strong> — no máximo 2 filhos, sem ordenação.</li>
+                    <li><strong>Árvore binária de busca</strong> — binária + regra de ordenação.</li>
+                    <li><strong>Árvore rubro-negra</strong> — BST + cores que garantem balanceamento.</li>
+                </ol>
+                <p class="nota-rodape" style="text-align: center;">
+                    cada tipo <strong>acrescenta</strong> uma restrição ao anterior.
+                </p>
+            </section>
+
+            <section>
+                <h3>Tipo 1 — Árvore geral</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Cada nó pode ter <strong>quantos filhos forem necessários</strong> —
+                    1, 2, 3, 4 ou mais. Exemplo natural: o sumário de um livro, ou um
+                    sistema de arquivos com pastas e subpastas.
+                </p>
+                <img class="diagrama" src="img/00a_tipo_geral.svg" alt="Árvore geral com nós A, B, C, D, E, F, G, H; A tem 4 filhos, B tem 2, D tem 1">
+            </section>
+
+            <section>
+                <h3>Tipo 2 — Árvore binária</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Restrição: <strong>no máximo 2 filhos</strong> por nó, distinguidos como
+                    <em>esquerdo</em> e <em>direito</em>. Note: <strong>ainda não é BST</strong>
+                    — os valores estão em qualquer ordem (5 está à direita de 7; 9 está à
+                    esquerda de 3).
+                </p>
+                <img class="diagrama" src="img/00b_tipo_binaria.svg" alt="Árvore binária com valores 7, 3, 5, 9, 1, 8; ainda não é BST porque 5 está à direita de 7 e 9 está à esquerda de 3">
+            </section>
+
+            <section>
+                <h3>Tipo 3 — Árvore binária de busca (BST)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Acrescenta a regra: <strong>todos os valores à esquerda são menores;
+                    todos à direita são maiores</strong> — e essa regra vale
+                    <em>recursivamente</em>, em cada subárvore. É o que permite busca em
+                    <span class="destaque">O(log n)</span> quando a árvore está balanceada.
+                </p>
+                <img class="diagrama" src="img/00c_tipo_bst.svg" alt="BST com raiz 50; subárvore esquerda (30, 20, 40) destacada como menor que 50; subárvore direita (70) destacada como maior que 50">
+            </section>
+
+            <section>
+                <h3>Tipo 4 — Árvore rubro-negra</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    BST + uma <strong>cor</strong> (vermelho ou preto) em cada nó, com
+                    regras que <strong>garantem</strong> altura O(log n) mesmo após
+                    inserções adversárias. É a variante usada em
+                    <code>std::map</code> (C++) e <code>TreeMap</code> (Java).
+                </p>
+                <img class="diagrama" src="img/00d_tipo_rb.svg" alt="Árvore rubro-negra com nós 50, 30, 70 pretos e 20, 40 vermelhos; legenda explica as regras de cor">
+                <p class="nota-rodape" style="text-align: center;">
+                    <strong>foco desta aula</strong>: Tipo 3 (BST). Rotações da rubro-negra
+                    e da AVL ficam para aula futura.
+                </p>
+            </section>
+
+            <!-- ===== PARTE B — CICLO DE VIDA DE UMA BST ===== -->
+            <section>
+                <p class="titulo-bloco">Parte B</p>
+                <h3>Ciclo de vida de uma BST — passo a passo</h3>
+                <p style="font-size: 0.78em; color: #666; margin-top: 1em;">
+                    criação · 5 inserções · 1 busca · as 3 travessias.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1 — arvore_criar()</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Estado inicial: a árvore existe, mas está <strong>vazia</strong> — o
+                    ponteiro <code>raiz</code> aponta para <code>NULL</code>.
+                </p>
+                <img class="diagrama" src="img/01_criar.svg" alt="Árvore vazia: ponteiro raiz apontando para NULL">
+            </section>
+
+            <section>
+                <h3>Passo 2 — inserir(50)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Primeira inserção em árvore vazia: o nó <strong>50 vira a raiz</strong>,
+                    com <code>esq</code> e <code>dir</code> ambos <code>NULL</code>.
+                </p>
+                <img class="diagrama" src="img/02_inserir_50.svg" alt="Árvore com um único nó (50); esq e dir do nó são NULL">
+            </section>
+
+            <section>
+                <h3>Passo 3 — inserir(30)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    30 &lt; 50 → desce à <strong>esquerda</strong>. Como o ponteiro
+                    <code>esq</code> da raiz era <code>NULL</code>, o novo nó é alocado
+                    ali mesmo.
+                </p>
+                <img class="diagrama" src="img/03_inserir_30.svg" alt="Árvore com dois nós: 50 na raiz, 30 como filho esquerdo de 50">
+            </section>
+
+            <section>
+                <h3>Passo 4 — inserir(70)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    70 &gt; 50 → desce à <strong>direita</strong>. Mesma lógica do passo
+                    anterior, agora do outro lado da raiz.
+                </p>
+                <img class="diagrama" src="img/04_inserir_70.svg" alt="Árvore com três nós: 30 à esquerda de 50, 70 à direita de 50">
+            </section>
+
+            <section>
+                <h3>Passo 5 — inserir(20)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Agora a descida tem <strong>dois passos</strong>: 20 &lt; 50 (vai para
+                    esq), depois 20 &lt; 30 (vai de novo para esq). Aloca como filho
+                    esquerdo do 30.
+                </p>
+                <img class="diagrama" src="img/05_inserir_20.svg" alt="Árvore com quatro nós: 20 como filho esquerdo de 30">
+            </section>
+
+            <section>
+                <h3>Passo 6 — inserir(40)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    40 &lt; 50 (esq), depois 40 &gt; 30 (dir). O nó 40 vira filho
+                    <strong>direito</strong> do 30.
+                </p>
+                <img class="diagrama" src="img/06_inserir_40.svg" alt="Árvore com cinco nós: 40 como filho direito de 30">
+            </section>
+
+            <section>
+                <h3>Passo 7 — buscar(40)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Buscar percorre o <strong>mesmo caminho</strong> de quando o nó foi
+                    inserido. Note as comparações: 40 &lt; 50, 40 &gt; 30, achou.
+                    <strong>Três comparações</strong> em 5 nós.
+                </p>
+                <img class="diagrama" src="img/07_buscar_40.svg" alt="Árvore com o caminho 50 → 30 → 40 destacado; nó 40 marcado como encontrado">
+            </section>
+
+            <section>
+                <h3>Passo 8 — pre_ordem()</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Em pré-ordem (<strong>nó · esq · dir</strong>), a raiz vem primeiro e
+                    cada subárvore é toda explorada antes de saltar para a próxima.
+                </p>
+                <img class="diagrama" src="img/08_pre_ordem.svg" alt="Árvore com numeração 1..5 indicando ordem de visita em pré-ordem: 50, 30, 20, 40, 70">
+            </section>
+
+            <section>
+                <h3>Passo 9 — in_ordem()</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Em in-ordem (<strong>esq · nó · dir</strong>), a saída vem
+                    <span class="destaque">em ordem crescente</span> — sem ordenação
+                    explícita. É a "ordenação implícita" prometida pelo axioma A7.
+                </p>
+                <img class="diagrama" src="img/09_in_ordem.svg" alt="Árvore com numeração 1..5 em in-ordem: 20, 30, 40, 50, 70 (ordem crescente)">
+            </section>
+
+            <section>
+                <h3>Passo 10 — pos_ordem()</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Em pós-ordem (<strong>esq · dir · nó</strong>), <strong>folhas
+                    primeiro, raiz por último</strong>. É exatamente a ordem que
+                    <code>destruir</code> precisa: nunca libera um nó cujos filhos ainda
+                    estão lá.
+                </p>
+                <img class="diagrama" src="img/10_pos_ordem.svg" alt="Árvore com numeração 1..5 em pós-ordem: 20, 40, 30, 70, 50">
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR                                  -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que árvores existem?</h2>
+            </section>
+
+            <section>
+                <h3>Como o autocomplete do Google funciona?</h3>
+                <blockquote>
+                    Você digita "alg" e em milissegundos aparecem
+                    "algoritmo", "algoritmos", "algoritmos de ordenação"...
+                </blockquote>
+                <p style="text-align: left; font-size: 0.75em; margin-top: 0.8em;">
+                    A estrutura precisa responder com extrema rapidez:
+                </p>
+                <ul style="text-align: left; font-size: 0.72em;">
+                    <li>"Existem palavras que começam com este prefixo?"</li>
+                    <li>"Quais são as mais relevantes?"</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.72em; margin-top: 0.6em;">
+                    Uma <strong>lista</strong> que percorre tudo a cada nova letra seria
+                    <strong>lenta demais</strong>. A solução envolve árvores.
+                </p>
+            </section>
+
+            <section>
+                <h3>Como uma BST ajuda</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Mantenha o dicionário em uma <strong>BST</strong> de palavras.
+                    Para checar se uma palavra está lá, desça da raiz comparando:
+                    se vem antes do nó atual, à esquerda; se vem depois, à direita.
+                </p>
+                <blockquote>
+                    Em uma BST <strong>balanceada com 1 milhão de palavras</strong>,
+                    a busca termina em <span class="destaque">~20 passos</span>
+                    (log₂ 1.000.000 ≈ 20). Em uma lista, percorreria
+                    <strong>500.000 itens em média</strong>.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.7em; margin-top: 0.6em;">
+                    A versão real do Google usa uma variante (<strong>Trie</strong>)
+                    porque busca por <strong>prefixo</strong>, não por palavra exata.
+                    Mas <em>Trie é uma árvore</em>.
+                </p>
+            </section>
+
+            <!-- ----- EDDY: exemplo de aplicação real ----- -->
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, praticamente toda busca rápida sobre dados ordenados
+                            em sistemas reais é, por baixo do capô, <strong>alguma
+                            variante de árvore</strong>: <em>B-trees</em> indexam tabelas
+                            de bancos (PostgreSQL, MySQL, SQLite), <em>rubro-negras</em>
+                            ordenam contatos no celular, <em>Tries</em> alimentam
+                            autocomplete e correção ortográfica. Entender a BST é
+                            entender o tijolo fundamental.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 4 — ANALOGIAS                                           -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>1. Árvore genealógica</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Toda família tem um casal de bisavós no topo; eles tiveram filhos;
+                    os filhos tiveram netos; os netos tiveram bisnetos. Cada pessoa aparece
+                    uma única vez, tem <strong>um pai</strong> e pode ter
+                    <strong>vários filhos</strong>. Para encontrar alguém, você
+                    <strong>desce da raiz</strong> seguindo ramos, sem nunca voltar.
+                </p>
+                <blockquote>
+                    A árvore de dados é exatamente isso — com a restrição extra de
+                    <strong>no máximo dois filhos</strong>, "filho esquerdo" e "filho direito".
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>2. Sumário de um livro técnico</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Capa lista os capítulos: 1, 2, 3, 4. Cada capítulo se divide em seções
+                    1.1, 1.2, 1.3. Cada seção em sub-seções 1.1.1, 1.1.2. <strong>Hierarquia
+                    é uma árvore</strong> — não binária, porque um capítulo pode ter mais
+                    de duas seções, mas a ideia é a mesma.
+                </p>
+                <p style="text-align: left; font-size: 0.78em; margin-top: 0.6em;">
+                    Para chegar à seção 1.1.2, você desce: livro → cap. 1 → seção 1.1 →
+                    sub-seção 1.1.2. <strong>Nunca precisa folhear o cap. 3</strong> para
+                    chegar à 1.1.2.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Organização hierárquica = acesso eficiente. É o que a BST faz com
+                    números em vez de seções.
+                </p>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 5 — CÓDIGO EM C                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Código em C</h2>
+                <p style="font-size: 0.75em; color: #666; margin-top: 1em;">
+                    BST com <code>inserir</code>, <code>buscar</code>, as três travessias
+                    e <code>destruir</code> — todas <strong>recursivas</strong>.
+                </p>
+            </section>
+
+            <section>
+                <h3>Um único arquivo: <code>arvore.c</code></h3>
+                <blockquote>
+                    Tudo num só arquivo: <code>#include</code>s · structs · funções da TAD
+                    · <code>main()</code> demonstrativa. Separação em <code>.h</code> + <code>.c</code>
+                    é tema da aula futura sobre <strong>organização de projetos em C</strong>.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Includes + structs + criar</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Começamos pelo <strong>esqueleto</strong>: os dois <code>typedef
+                    struct</code> que materializam o "nó" (com seus dois ponteiros
+                    <code>esq</code> e <code>dir</code>) e a "árvore" (só com o ponteiro
+                    <code>raiz</code>), mais a função que cria uma árvore vazia.
+                </p>
+                <pre><code class="language-c" data-trim>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct No {
+    int valor;
+    struct No* esq;
+    struct No* dir;
+} No;
+
+typedef struct Arvore {
+    No* raiz;
+} Arvore;
+
+Arvore* arvore_criar(void) {
+    Arvore* a = malloc(sizeof(Arvore));
+    if (a == NULL) { printf("erro: memoria insuficiente\n"); exit(1); }
+    a-&gt;raiz = NULL;
+    return a;
+}
+
+int arvore_vazia(Arvore* a) {
+    return a-&gt;raiz == NULL;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>inserir — recursão clássica</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Esta é a forma <strong>recursiva canônica</strong> de inserir em uma BST.
+                    Acompanhe a estrutura: <strong>caso base</strong> quando a subárvore é
+                    vazia (aloca e devolve o novo nó), e <strong>caso recursivo</strong>
+                    que desce à esquerda ou à direita conforme a propriedade da BST.
+                </p>
+                <pre><code class="language-c" data-trim>
+static No* inserir_no(No* raiz, int valor) {
+    // caso base: subarvore vazia → aloca aqui
+    if (raiz == NULL) {
+        No* novo = malloc(sizeof(No));
+        if (novo == NULL) { printf("erro: memoria insuficiente\n"); exit(1); }
+        novo-&gt;valor = valor;
+        novo-&gt;esq = NULL;
+        novo-&gt;dir = NULL;
+        return novo;
+    }
+    if (valor == raiz-&gt;valor) return raiz;  // duplicata ignorada
+    // propriedade da BST: menor à esquerda, maior à direita
+    if (valor &lt; raiz-&gt;valor)
+        raiz-&gt;esq = inserir_no(raiz-&gt;esq, valor);
+    else
+        raiz-&gt;dir = inserir_no(raiz-&gt;dir, valor);
+    return raiz;
+}
+
+void arvore_inserir(Arvore* a, int valor) {
+    a-&gt;raiz = inserir_no(a-&gt;raiz, valor);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>buscar — mesma descida, sem alocar</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Buscar tem o <strong>mesmo formato</strong> de inserir — desce comparando
+                    pela propriedade da BST — só que <strong>sem alocar nada</strong>: ou acha
+                    o valor pelo caminho (retorna 1), ou bate em <code>NULL</code> e responde
+                    que não existe (retorna 0).
+                </p>
+                <pre><code class="language-c" data-trim>
+static int buscar_no(No* raiz, int valor) {
+    if (raiz == NULL) return 0;            // chegou em NULL → nao encontrou
+    if (valor == raiz-&gt;valor) return 1;    // achou
+    // cada comparacao descarta metade da arvore
+    if (valor &lt; raiz-&gt;valor) return buscar_no(raiz-&gt;esq, valor);
+    else                     return buscar_no(raiz-&gt;dir, valor);
+}
+
+int arvore_buscar(Arvore* a, int valor) {
+    return buscar_no(a-&gt;raiz, valor);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>As três travessias — mesmo esqueleto</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Repare como as três funções abaixo têm <strong>exatamente o mesmo
+                    esqueleto</strong>: caso base em <code>NULL</code>, depois três linhas
+                    — visitar o nó, descer à esquerda, descer à direita. A <strong>única
+                    diferença</strong> é a <strong>ordem</strong> dessas três linhas, e é
+                    isso que dá nome a cada travessia.
+                </p>
+                <pre><code class="language-c" data-trim>
+// PRE-ORDEM: no, esquerda, direita
+static void pre_ordem_no(No* raiz) {
+    if (raiz == NULL) return;
+    printf("%d ", raiz-&gt;valor);
+    pre_ordem_no(raiz-&gt;esq);
+    pre_ordem_no(raiz-&gt;dir);
+}
+
+// IN-ORDEM: esquerda, no, direita  →  ordem crescente em BST
+static void in_ordem_no(No* raiz) {
+    if (raiz == NULL) return;
+    in_ordem_no(raiz-&gt;esq);
+    printf("%d ", raiz-&gt;valor);
+    in_ordem_no(raiz-&gt;dir);
+}
+
+// POS-ORDEM: esquerda, direita, no  →  ordem natural para liberar memoria
+static void pos_ordem_no(No* raiz) {
+    if (raiz == NULL) return;
+    pos_ordem_no(raiz-&gt;esq);
+    pos_ordem_no(raiz-&gt;dir);
+    printf("%d ", raiz-&gt;valor);
+}
+                </code></pre>
+            </section>
+
+            <!-- ----- EDDY: armadilha do destruir ----- -->
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, atenção ao <code>destruir</code>: ele <strong>tem
+                            que ser em pós-ordem</strong>. Se a gente chamar
+                            <code>free(raiz)</code> antes de liberar os filhos,
+                            <strong>perdemos os ponteiros</strong> <code>esq</code> e
+                            <code>dir</code> — eles vivem dentro do nó que acabou de
+                            ser liberado — e a subárvore inteira vira <em>memory leak</em>.
+                            Filhos primeiro, pai depois. Sempre.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>destruir + main</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Para fechar: <code>destruir</code> em <strong>pós-ordem</strong> (filhos
+                    primeiro, pai depois — sem isso, perdemos os ponteiros) e uma
+                    <code>main</code> demonstrativa que insere 5 valores, busca dois e
+                    imprime as três travessias.
+                </p>
+                <pre><code class="language-c" data-trim>
+static void destruir_no(No* raiz) {
+    if (raiz == NULL) return;
+    destruir_no(raiz-&gt;esq);    // filhos primeiro (POS-ORDEM)
+    destruir_no(raiz-&gt;dir);
+    free(raiz);                 // pai por ultimo
+}
+void arvore_destruir(Arvore* a) { destruir_no(a-&gt;raiz); free(a); }
+
+int main(void) {
+    Arvore* a = arvore_criar();
+    arvore_inserir(a, 50);
+    arvore_inserir(a, 30);
+    arvore_inserir(a, 70);
+    arvore_inserir(a, 20);
+    arvore_inserir(a, 40);
+
+    printf("Buscar 40: %s\n", arvore_buscar(a, 40) ? "encontrado" : "nao encontrado");
+    printf("Buscar 99: %s\n", arvore_buscar(a, 99) ? "encontrado" : "nao encontrado");
+
+    printf("Pre-ordem: "); arvore_pre_ordem(a);
+    printf("In-ordem:  "); arvore_in_ordem(a);
+    printf("Pos-ordem: "); arvore_pos_ordem(a);
+
+    arvore_destruir(a);
+    return 0;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Compilando e rodando</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Como é tudo um único arquivo, a compilação fica em <strong>uma linha</strong> —
+                    e a saída esperada confirma a busca e as três travessias funcionando.
+                </p>
+                <pre><code class="language-sh" data-trim>
+gcc -Wall -Wextra -o arvore_demo arvore.c
+./arvore_demo
+                </code></pre>
+                <p style="text-align: left; font-size: 0.7em; margin-top: 0.6em;">Saída esperada:</p>
+                <pre><code data-trim>
+Buscar 40: encontrado
+Buscar 99: nao encontrado
+Pre-ordem: 50 30 20 40 70
+In-ordem:  20 30 40 50 70
+Pos-ordem: 20 40 30 70 50
+                </code></pre>
+                <p class="nota-rodape" style="text-align: left;">
+                    <code>In-ordem: 20 30 40 50 70</code> = a prova empírica da
+                    <strong>ordenação implícita</strong> da BST (axioma A7).
+                </p>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 6 — EXERCÍCIOS                                          -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 6</p>
+                <h2>Exercícios práticos</h2>
+                <p style="font-size: 0.72em; color: #666;">
+                    Respostas aparecem com um clique — tentem antes.
+                </p>
+            </section>
+
+            <section>
+                <h3>Exercício 1 — Construa a árvore na mão</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Insira em uma BST vazia, nesta ordem: <code>8, 3, 10, 1, 6, 14, 4, 7</code>.
+                    Desenhe a árvore resultante e escreva a saída esperada das três travessias.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <pre style="margin-top: 0.4em;"><code data-trim>
+         8
+       /   \
+      3    10
+     / \     \
+    1   6    14
+       / \
+      4   7
+                    </code></pre>
+                    <ul>
+                        <li>Pré-ordem: <code>8 3 1 6 4 7 10 14</code></li>
+                        <li>In-ordem:  <code>1 3 4 6 7 8 10 14</code> ← ordem crescente</li>
+                        <li>Pós-ordem: <code>1 4 7 6 3 14 10 8</code></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 2 — <code>arvore_contar</code></h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Adicione ao <code>arvore.c</code> uma função
+                    <code>int arvore_contar(Arvore* a)</code> que devolve o número total
+                    de nós. Use uma auxiliar recursiva no estilo das travessias.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c" data-trim>
+static int contar_no(No* raiz) {
+    if (raiz == NULL) return 0;
+    return 1 + contar_no(raiz-&gt;esq) + contar_no(raiz-&gt;dir);
+}
+int arvore_contar(Arvore* a) { return contar_no(a-&gt;raiz); }
+</code></pre>
+                    Mesmo esqueleto recursivo das travessias: caso base em
+                    <code>NULL</code> retorna 0; caso geral combina 1 (o próprio nó)
+                    com os dois lados.
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 3 — Altura da árvore</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    Implemente <code>int arvore_altura(Arvore* a)</code>. Convenções:
+                    árvore vazia tem altura <code>-1</code>; árvore com só a raiz, <code>0</code>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Dica: <code>altura(no) = 1 + max(altura(esq), altura(dir))</code>.
+                    Caso base: <code>NULL</code> → <code>-1</code>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c" data-trim>
+static int max_int(int a, int b) { return a &gt; b ? a : b; }
+static int altura_no(No* raiz) {
+    if (raiz == NULL) return -1;
+    return 1 + max_int(altura_no(raiz-&gt;esq), altura_no(raiz-&gt;dir));
+}
+int arvore_altura(Arvore* a) { return altura_no(a-&gt;raiz); }
+</code></pre>
+                    <code>altura(NULL) = -1</code> faz uma folha ter
+                    <code>1 + max(-1, -1) = 0</code> — como esperado.
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 4 — Demonstrando a degeneração</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    Crie uma segunda demonstração na <code>main()</code>: insira
+                    <code>1, 2, 3, 4, 5, 6, 7</code> em ordem crescente. Imprima as
+                    três travessias e a altura (use <code>arvore_altura</code> do
+                    Exercício 3). Critério: altura deve ser <code>6</code>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c" data-trim>
+Arvore* b = arvore_criar();
+for (int x = 1; x &lt;= 7; x++) arvore_inserir(b, x);
+printf("Altura (degenerada): %d\n", arvore_altura(b));  // 6
+printf("Pre-ordem: "); arvore_pre_ordem(b);  // 1 2 3 4 5 6 7
+printf("In-ordem:  "); arvore_in_ordem(b);   // 1 2 3 4 5 6 7
+printf("Pos-ordem: "); arvore_pos_ordem(b);  // 7 6 5 4 3 2 1
+arvore_destruir(b);
+</code></pre>
+                    A degeneração ilustra por que árvores <strong>balanceadas</strong>
+                    (AVL, rubro-negra) existem: dados em ordem viram cadeia linear pelos
+                    ponteiros direitos, e a busca volta a ser O(n).
+                </div>
+            </section>
+
+            <!-- ----- EDDY: provocação antes do desafio ----- -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, antes de olhar a resposta do próximo: a abordagem
+                            ingênua — "para cada nó, comparar com <code>esq-&gt;valor</code>
+                            e <code>dir-&gt;valor</code>" — <strong>está errada</strong>.
+                            Por que? Pensem num nó <code>5</code> que está na subárvore
+                            <em>direita</em> de um nó <code>6</code>...
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 5 — Verificador da propriedade da BST</h3>
+                <p style="text-align: left; font-size: 0.7em;">
+                    Implemente <code>int arvore_eh_bst(Arvore* a)</code> que retorna
+                    <code>1</code> se a árvore satisfaz a propriedade da BST, <code>0</code>
+                    caso contrário. Deve funcionar mesmo se alguém tiver mexido nos ponteiros
+                    manualmente.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Dica: passe um intervalo válido <code>[min, max]</code> e restrinja-o
+                    conforme desce.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c" data-trim>
+#include &lt;limits.h&gt;
+static int eh_bst_no(No* raiz, int min, int max) {
+    if (raiz == NULL) return 1;
+    if (raiz-&gt;valor &lt;= min || raiz-&gt;valor &gt;= max) return 0;
+    return eh_bst_no(raiz-&gt;esq, min, raiz-&gt;valor)
+        &amp;&amp; eh_bst_no(raiz-&gt;dir, raiz-&gt;valor, max);
+}
+int arvore_eh_bst(Arvore* a) {
+    return eh_bst_no(a-&gt;raiz, INT_MIN, INT_MAX);
+}
+</code></pre>
+                    A propriedade é <strong>global</strong>, não local: um <code>5</code>
+                    com filho esquerdo <code>4</code> parece ok, mas se esse <code>5</code>
+                    estiver na subárvore <em>direita</em> de um <code>6</code>, o <code>4</code>
+                    viola. O intervalo propagado captura essa restrição.
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 7 — REFERÊNCIAS                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.7em; max-width: 820px; margin: 0 auto;">
+                <li><strong>Tenenbaum, Langsam &amp; Augenstein</strong> —
+                    <em>Estruturas de Dados Usando C</em>, cap. 5, <em>Árvores</em>.
+                    Capítulo de cabeceira desta aula.</li>
+                <li><strong>Sedgewick, R.</strong> — <em>Algoritmos em C</em>, Partes 3 e 4.
+                    Travessias e análise probabilística da altura média.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.65em; color: #666; max-width: 820px; margin: 0 auto;">
+                <li><strong>CLRS</strong> — cap. 12 (BSTs), cap. 13 (rubro-negras), cap. 18 (B-trees).</li>
+                <li><strong>Ziviani, N.</strong> — <em>Projeto de Algoritmos</em>, cap. de árvores (PT-BR).</li>
+                <li><strong>Knuth, D.</strong> — <em>TAOCP</em>, vol. 1, §2.3 — <em>Trees</em>.</li>
+                <li><strong>Adelson-Velsky &amp; Landis (1962)</strong> — artigo original da árvore AVL.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Aula 05</h1>
+            <h2>Próxima aula: AVL e rotações</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Já vimos como a árvore degenera com inserções em ordem.
+                A AVL conserta isso com <strong>rotações</strong> — e mantém a altura
+                em O(log n) garantida.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>
