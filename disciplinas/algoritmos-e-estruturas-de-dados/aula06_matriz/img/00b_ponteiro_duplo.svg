@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 280"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="380" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Ponteiro duplo — aponta para um ponteiro, que aponta para o numero
+  </text>
+
+  <!-- ===== pp (int**) ===== -->
+  <text x="105" y="92" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    pp (tipo int**)
+  </text>
+  <rect x="35" y="105" width="140" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="105" y="142" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    endereco de p
+  </text>
+  <circle cx="175" cy="135" r="4" fill="#2c5d8a"/>
+
+  <!-- Seta de pp para p -->
+  <path d="M 175 135 L 287 135" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="280,130 293,135 280,140" fill="#2c5d8a"/>
+
+  <!-- ===== p (int*) ===== -->
+  <text x="365" y="92" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    p (tipo int*)
+  </text>
+  <rect x="295" y="105" width="140" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="365" y="142" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    endereco de x
+  </text>
+  <circle cx="435" cy="135" r="4" fill="#2c5d8a"/>
+
+  <!-- Seta de p para x -->
+  <path d="M 435 135 L 547 135" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="540,130 553,135 540,140" fill="#2c5d8a"/>
+
+  <!-- ===== x (int) ===== -->
+  <text x="625" y="92" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    x (tipo int)
+  </text>
+  <rect x="555" y="105" width="140" height="60" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="625" y="146" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">42</text>
+
+  <!-- Labels: 1 salto, 2 saltos -->
+  <text x="222" y="200" text-anchor="middle" font-size="13" fill="#5a7a9a">
+    1o salto
+  </text>
+  <text x="482" y="200" text-anchor="middle" font-size="13" fill="#5a7a9a">
+    2o salto
+  </text>
+
+  <!-- Nota -->
+  <line x1="80" y1="235" x2="680" y2="235" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="380" y="258" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Para chegar no 42 atraves de pp: dois saltos. **pp = 42.
+  </text>
+</svg>
