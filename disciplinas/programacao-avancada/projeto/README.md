@@ -12,6 +12,16 @@ Projeto da disciplina Programação Avançada: um rastreador de leituras constru
 
 Abra http://127.0.0.1:8000
 
+## Endpoints
+
+| Método | Rota | O que faz |
+| ------ | ---- | --------- |
+| GET | /health | Verifica se a API está no ar |
+| GET | /greetings/{name} | Saudação usando path param |
+| GET | /progress/{current_page} | Porcentagem de leitura; query param opcional total_pages (padrão 100) |
+
+A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
+
 ## Tabela de Dependências
 
 | Nome | Utilidade | Versão |
