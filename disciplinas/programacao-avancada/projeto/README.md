@@ -17,8 +17,6 @@ Abra http://127.0.0.1:8000
 | Método | Rota | O que faz |
 | ------ | ---- | --------- |
 | GET | /health | Verifica se a API está no ar |
-| GET | /greetings/{name} | Saudação usando path param |
-| GET | /progress/{current_page} | Porcentagem de leitura; query param opcional total_pages (padrão 100) |
 | GET | /api/books | Lista os livros; query param opcional name busca pelo nome |
 | GET | /api/books/{book_id} | Um livro pelo id (404 se não existir) |
 | POST | /api/books | Cria um livro na lista em memória |
