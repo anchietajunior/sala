@@ -3,6 +3,6 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/health")
 def read_root():
-    return {"message": "Welcome to the Reading Tracker API"}
+    return {"status": "Ok"}
