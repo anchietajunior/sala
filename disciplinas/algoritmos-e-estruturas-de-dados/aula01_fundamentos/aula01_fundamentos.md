@@ -40,16 +40,16 @@ Repare que a máquina de café da Camada 1 testava exatamente isso: quando a ins
 
 #### O mesmo problema, vários algoritmos
 
-Um mesmo problema quase sempre admite **mais de um** algoritmo, e a diferença entre eles pode ser brutal. Considere procurar um nome numa lista com 1.000.000 de entradas:
+Um mesmo problema quase sempre admite **mais de um** algoritmo. Considere um problema simples: decidir se uma palavra é um **palíndromo** (*palindrome*) — uma palavra que se lê igual da esquerda para a direita e da direita para a esquerda, como *arara*, *radar* e *ovo*. Dois algoritmos diferentes resolvem:
 
-- **Busca sequencial**: examinar a lista do início ao fim, um nome por vez. No pior caso, 1.000.000 de comparações.
-- **Busca binária** (exige a lista **ordenada**): olhar o nome do meio; se o procurado vem antes, descartar a metade de trás; se vem depois, descartar a metade da frente; repetir. Cada passo elimina metade do que resta — bastam cerca de **20 comparações** para 1.000.000 de nomes.
+- **Algoritmo da cópia invertida**: construir uma segunda palavra com as letras na ordem inversa e, ao final, comparar as duas, letra por letra. Percorre a palavra duas vezes e precisa de memória para guardar a cópia inteira.
+- **Algoritmo das duas pontas**: comparar a primeira letra com a última; se forem iguais, avançar uma posição de cada lado e repetir, caminhando das pontas para o centro. Se chegar ao meio sem encontrar diferença, é palíndromo. Faz metade das comparações e não guarda cópia nenhuma — apenas duas posições.
 
-Mesmo problema, mesma entrada, mesma resposta — e uma diferença de 50.000 vezes no trabalho realizado. Essa diferença não vem de um computador mais rápido: vem de uma **ideia melhor**.
+Mesma pergunta, mesma entrada, mesma resposta — custos diferentes. E repare: nenhum dos dois é "o certo" em absoluto. O das duas pontas ganha em memória e em comparações; o da cópia é mais fácil de escrever e de conferir. Escolher algoritmo é **comparar custos** — e é exatamente para isso que serve a análise de complexidade que vem adiante.
 
 #### Dois lados da mesma moeda
 
-O exemplo acima esconde uma dependência importante: a busca binária **só é possível porque a lista está ordenada**. A estrutura de dados escolhida determina quais algoritmos são viáveis — e a que custo. Guardar os dados sem ordem torna a inserção barata e a busca cara; mantê-los ordenados encarece a inserção e barateia a busca. **Não existe organização perfeita: existe a organização certa para o padrão de uso.** Essa troca (*trade-off*) é o fio condutor da disciplina inteira: cada estrutura que estudaremos — lista, pilha, fila, árvore, tabela hash — é uma resposta diferente à pergunta "o que você quer que seja barato?".
+O algoritmo das duas pontas esconde uma dependência importante: ele **só funciona porque a palavra está guardada numa estrutura que dá acesso direto à última posição** (um vetor de caracteres). Se as letras chegassem uma a uma, como numa transmissão, não haveria "última letra" para consultar — seria preciso armazenar tudo antes de começar. A estrutura de dados escolhida determina quais algoritmos são viáveis — e a que custo. **Não existe organização perfeita: existe a organização certa para o padrão de uso.** Essa troca (*trade-off*) é o fio condutor da disciplina inteira: cada estrutura que estudaremos — lista, pilha, fila, árvore, tabela hash — é uma resposta diferente à pergunta "o que você quer que seja barato?".
 
 #### Propriedades que sempre valem
 
@@ -95,18 +95,18 @@ Um algoritmo pode ser rápido e gastar muita memória, ou econômico em memória
 
 As classes de crescimento mais comuns, ordenadas da mais lenta para a mais explosiva — com o número aproximado de passos para uma entrada de $n = 1.000$:
 
-| Classe       | Nome usual    | Passos para n = 1.000 | Exemplo típico                          |
-|--------------|---------------|------------------------|------------------------------------------|
-| O(1)         | constante     | 1                      | acessar uma posição de um vetor          |
-| O(log n)     | logarítmica   | ~10                    | busca binária em lista ordenada          |
-| O(n)         | linear        | 1.000                  | busca sequencial                         |
-| O(n log n)   | linearítmica  | ~10.000                | bons algoritmos de ordenação             |
-| O(n²)        | quadrática    | 1.000.000              | comparar todos os pares; laços aninhados |
-| O(2ⁿ)        | exponencial   | ~10³⁰¹                 | testar todos os subconjuntos             |
+| Classe       | Nome usual    | Passos para n = 1.000 | Exemplo típico                            |
+|--------------|---------------|------------------------|--------------------------------------------|
+| O(1)         | constante     | 1                      | acessar uma posição de um vetor            |
+| O(log n)     | logarítmica   | ~10                    | descartar metade dos candidatos a cada passo |
+| O(n)         | linear        | 1.000                  | verificar um palíndromo; percorrer uma lista |
+| O(n log n)   | linearítmica  | ~10.000                | bons algoritmos de ordenação               |
+| O(n²)        | quadrática    | 1.000.000              | comparar todos os pares; laços aninhados   |
+| O(2ⁿ)        | exponencial   | ~10³⁰¹                 | testar todos os subconjuntos               |
 
 A tabela explica por que a análise assintótica importa mais do que a velocidade do computador. Suponha uma máquina que executa 100 milhões de passos por segundo e uma entrada de $n = 1.000.000$: um algoritmo $O(n \log n)$ termina em cerca de **0,2 segundo**; um $O(n^2)$, na mesma máquina, leva cerca de **10.000 segundos — quase 3 horas**. Nenhum hardware compra de volta essa diferença: contra um crescimento quadrático, um computador 10 vezes mais rápido apenas adia o problema para uma entrada 3 vezes maior.
 
-O espaço segue o mesmo raciocínio. Para inverter um vetor de $n$ elementos, um algoritmo pode criar uma cópia invertida — custo $O(n)$ de memória adicional — ou trocar os elementos das pontas em direção ao centro, usando apenas uma variável auxiliar — custo $O(1)$. Ambos são $O(n)$ em tempo; a diferença aparece só na segunda medida, e é ela que decide qual cabe na memória quando $n$ é grande.
+O espaço segue o mesmo raciocínio — e o palíndromo da Camada 3 já mostrou o contraste: o algoritmo da cópia invertida gasta $O(n)$ de memória adicional (a cópia inteira); o das duas pontas gasta $O(1)$ (duas posições, qualquer que seja o tamanho da palavra). Ambos são $O(n)$ em tempo; a diferença aparece só na segunda medida, e é ela que decide qual algoritmo cabe na memória quando a entrada é grande.
 
 ### Camada 6 — Conexões e variantes
 
@@ -114,7 +114,8 @@ Este vocabulário — algoritmo, estrutura, custo — reaparece em **todas** as 
 
 - **Listas encadeadas**: inserir no início custa O(1); buscar custa O(n).
 - **Pilhas e filas**: estruturas onde todas as operações principais custam O(1) — a restrição de acesso é o preço da velocidade.
-- **Árvores de busca**: reduzem a busca a O(log n) — a busca binária transformada em estrutura permanente.
+- **Algoritmos de busca** (linear e binária): tema de capítulo próprio adiante — lá o "descartar metade a cada passo" da tabela ganha nome e código.
+- **Árvores de busca**: encontram um valor descartando metade dos candidatos a cada passo — O(log n).
 - **Tabelas hash**: buscam em O(1) no caso médio, apostando em espalhamento.
 - **Ordenação**: o caminho de O(n²) para O(n log n) é uma das histórias mais bonitas da área.
 - **Inteligência artificial**: uma IA como as atuais **não é um algoritmo — é uma composição de muitos**. Gerar uma única palavra de resposta encadeia algoritmos de tokenização (fatiar o texto), bilhões de multiplicações de matrizes, algoritmos de atenção (decidir que trechos do texto pesam mais) e de amostragem (escolher a próxima palavra). E a complexidade governa até o produto: os algoritmos de atenção originais custam tempo quadrático no tamanho do texto — eis por que as primeiras versões dessas IAs só conseguiam "ler" textos curtos de uma vez. A fronteira da computação em 2026 continua sendo, no fundo, o assunto desta aula: fazer o mesmo trabalho com menos passos.
@@ -141,9 +142,9 @@ Um programa é a soma das duas metades da disciplina: a receita (algoritmo) e a 
 
 ### Passo 3: Dois algoritmos, um problema
 
-![Busca sequencial percorrendo tudo contra busca binária descartando metades](img/03_busca_sequencial_vs_binaria.svg)
+![Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas](img/03_palindromo_dois_algoritmos.svg)
 
-O mesmo vetor ordenado, o mesmo alvo: a busca sequencial visita elemento por elemento; a binária descarta metade do que resta a cada comparação. Contar os passos de cada lado é ver a complexidade a olho nu.
+A mesma palavra, dois caminhos: a cópia invertida percorre tudo duas vezes e guarda uma palavra inteira a mais; as duas pontas caminham para o centro sem guardar nada. Contar comparações e memória de cada lado é ver a complexidade a olho nu.
 
 ### Passo 4: As curvas de crescimento
 
@@ -194,19 +195,20 @@ Para cada descrição abaixo, diga se ela é um algoritmo. Quando **não** for, 
 > | 3 | Não | Viola a **definitude** (e a efetividade): "mais bonita" não tem interpretação única nem teste mecânico. |
 > | 4 | Sim | "Devolva qualquer um dos dois" ainda é preciso: ambas as escolhas satisfazem a especificação (o maior valor). |
 
-**Exercício 2 — Busca binária na mão.**
-Considere o vetor ordenado `[3, 8, 12, 17, 25, 31, 40]` (posições 0 a 6). Execute a busca binária procurando o valor **31**, passo a passo. Em cada passo, anote: os limites `inicio` e `fim`, a posição do meio (`meio = (inicio + fim) / 2`, descartando fração), o valor examinado e a decisão tomada. Ao final, compare: quantas comparações a busca binária fez, e quantas a busca sequencial faria para o mesmo alvo?
+**Exercício 2 — Palíndromo na mão.**
+Considere a palavra `RADAR` (posições 0 a 4). Execute o algoritmo das duas pontas passo a passo: em cada passo, anote a posição da esquerda (`i`), a posição da direita (`j`), as letras comparadas e a decisão tomada. Ao final, responda: quantas comparações o algoritmo fez? E quantas faria, no máximo, para uma palavra de 1.000 letras?
 
-*Critério de aceitação*: tabela com os limites, o meio e a decisão de cada passo; contagem final das comparações dos dois algoritmos.
+*Critério de aceitação*: tabela com as posições, as letras e a decisão de cada passo; as duas contagens finais.
 
 > **Resposta mínima aceitável**
 >
-> | Passo | inicio | fim | meio | valor examinado | Decisão |
-> |-------|--------|-----|------|------------------|---------|
-> | 1     | 0      | 6   | 3    | 17               | 17 < 31 → descarta metade esquerda; `inicio = 4` |
-> | 2     | 4      | 6   | 5    | 31               | **encontrado** na posição 5 |
+> | Passo | i | j | Letras | Decisão |
+> |-------|---|---|--------|---------|
+> | 1     | 0 | 4 | R = R  | iguais → avança: `i = 1`, `j = 3` |
+> | 2     | 1 | 3 | A = A  | iguais → avança: `i = 2`, `j = 2` |
+> | —     | 2 | 2 | —      | `i` e `j` se encontraram no meio → **é palíndromo** |
 >
-> Busca binária: **2 comparações**. Busca sequencial: **6 comparações** (o 31 é o 6º elemento). Cada passo da binária eliminou metade dos candidatos restantes.
+> Foram **2 comparações** (metade de 5, descartando a letra do meio, que não precisa de par). Para 1.000 letras: no máximo **500 comparações** — sempre metade do tamanho, e o ritmo continua O(n).
 
 **Exercício 3 — Classificando um trecho.**
 O trecho de pseudocódigo abaixo verifica se uma lista de $n$ números contém algum valor repetido:

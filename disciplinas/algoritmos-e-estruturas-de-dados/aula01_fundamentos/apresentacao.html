@@ -344,22 +344,25 @@
             <section>
                 <h3>O mesmo problema, vários algoritmos</h3>
                 <p style="text-align: left;">
-                    Procurar um nome entre <strong>1.000.000</strong> de entradas:
+                    <strong>RADAR</strong> se lê igual de trás para a frente — é um
+                    <strong>palíndromo</strong>. Como um computador decide isso?
+                    Dois jeitos:
                 </p>
                 <ul style="font-size: 0.85em;">
-                    <li><strong>Busca sequencial</strong> — um por um: até <strong>1.000.000</strong> de comparações</li>
-                    <li><strong>Busca binária</strong> (lista ordenada) — descarta metade por passo: <strong>~20</strong> comparações</li>
+                    <li><strong>Cópia invertida</strong> — inverte a palavra e compara as duas: gasta uma cópia inteira</li>
+                    <li><strong>Duas pontas</strong> — compara primeira × última e caminha para o centro: não gasta nada</li>
                 </ul>
                 <blockquote style="font-size: 0.8em;">
-                    50.000× menos trabalho. Não é um computador melhor — é uma <span class="destaque">ideia melhor</span>.
+                    Mesma resposta, custos diferentes — <span class="destaque">a ideia determina o custo</span>.
                 </blockquote>
             </section>
 
             <section>
                 <h3>Dois lados da mesma moeda</h3>
                 <p style="text-align: left;">
-                    A busca binária <strong>só existe</strong> porque a lista está ordenada.
-                    A estrutura escolhida determina quais algoritmos são viáveis — e a que custo.
+                    As duas pontas <strong>só funcionam</strong> porque o vetor dá acesso
+                    direto à última letra. Se as letras chegassem uma a uma, seria preciso
+                    guardar tudo antes.
                 </p>
                 <blockquote style="font-size: 0.8em;">
                     Não existe organização perfeita — existe a certa para a pergunta:
@@ -450,8 +453,8 @@
                     </thead>
                     <tbody>
                         <tr><td>O(1)</td><td>constante</td><td>1</td><td>acessar posição de vetor</td></tr>
-                        <tr><td>O(log n)</td><td>logarítmica</td><td>~10</td><td>busca binária</td></tr>
-                        <tr><td>O(n)</td><td>linear</td><td>1.000</td><td>busca sequencial</td></tr>
+                        <tr><td>O(log n)</td><td>logarítmica</td><td>~10</td><td>descartar metade a cada passo</td></tr>
+                        <tr><td>O(n)</td><td>linear</td><td>1.000</td><td>verificar um palíndromo</td></tr>
                         <tr><td>O(n log n)</td><td>linearítmica</td><td>~10.000</td><td>boas ordenações</td></tr>
                         <tr><td>O(n²)</td><td>quadrática</td><td>1.000.000</td><td>laços aninhados</td></tr>
                         <tr><td>O(2ⁿ)</td><td>exponencial</td><td>~10³⁰¹</td><td>testar subconjuntos</td></tr>
@@ -476,14 +479,14 @@
             <section>
                 <h3>Espaço: o mesmo raciocínio</h3>
                 <p style="text-align: left;">
-                    Inverter um vetor de n elementos — dois caminhos, ambos O(n) em tempo:
+                    O palíndromo já mostrou — dois caminhos, ambos O(n) em tempo:
                 </p>
                 <ul style="font-size: 0.85em;">
-                    <li>criar uma <strong>cópia</strong> invertida → memória adicional <strong>O(n)</strong></li>
-                    <li>trocar as pontas <strong>no lugar</strong> → memória adicional <strong>O(1)</strong></li>
+                    <li><strong>cópia invertida</strong> → memória adicional <strong>O(n)</strong></li>
+                    <li><strong>duas pontas</strong> → memória adicional <strong>O(1)</strong></li>
                 </ul>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Quando n é grande, é o <strong>espaço</strong> que decide qual cabe na memória.
+                    Quando a entrada é grande, é o <strong>espaço</strong> que decide qual cabe na memória.
                 </p>
             </section>
 
@@ -495,10 +498,13 @@
                 <ul style="font-size: 0.78em;">
                     <li><strong>Listas encadeadas</strong> — inserir no início O(1); buscar O(n)</li>
                     <li><strong>Pilhas e filas</strong> — tudo O(1); a restrição é o preço</li>
-                    <li><strong>Árvores de busca</strong> — busca O(log n) permanente</li>
+                    <li><strong>Árvores de busca</strong> — descartam metade dos candidatos a cada passo</li>
                     <li><strong>Tabelas hash</strong> — O(1) no caso médio</li>
                     <li><strong>Ordenação</strong> — a jornada de O(n²) até O(n log n)</li>
                 </ul>
+                <p class="nota-rodape" style="text-align: left;">
+                    Algoritmos de busca (linear e binária) ganham capítulo próprio adiante.
+                </p>
             </section>
 
             <section>
@@ -551,11 +557,11 @@
             <section>
                 <h3>Dois algoritmos, um problema</h3>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Mesmo vetor, mesmo alvo (31): conte os passos de cada lado —
-                    a complexidade a olho nu.
+                    A mesma palavra, dois caminhos: a cópia gasta memória;
+                    as duas pontas caminham para o centro sem gastar nada.
                 </p>
-                <img class="diagrama" src="img/03_busca_sequencial_vs_binaria.svg"
-                     alt="Busca sequencial percorrendo tudo contra busca binária descartando metades">
+                <img class="diagrama" src="img/03_palindromo_dois_algoritmos.svg"
+                     alt="Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas">
             </section>
 
             <section>
@@ -746,32 +752,34 @@
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
                             Turma, antes de resolver o próximo exercício, façam um palpite:
-                            quantas comparações a busca binária precisa para achar o 31 entre
-                            sete números? Anotem o chute, executem o passo a passo e confiram
-                            quem acertou.
+                            quantas comparações as duas pontas precisam para decidir que
+                            RADAR é palíndromo? E para uma palavra de 1.000 letras?
+                            Anotem o chute, executem o passo a passo e confiram quem acertou.
                         </p>
                     </div>
                 </div>
             </section>
 
             <section>
-                <h3>Exercício 2 — Busca binária na mão</h3>
+                <h3>Exercício 2 — Palíndromo na mão</h3>
                 <p style="text-align: left; font-size: 0.7em;">
-                    Vetor ordenado <code>[3, 8, 12, 17, 25, 31, 40]</code> (posições 0–6).
-                    Execute a busca binária procurando <strong>31</strong>: anote
-                    <code>inicio</code>, <code>fim</code>, <code>meio</code> e a decisão de cada passo.
-                    Compare com a busca sequencial.
+                    Palavra <code>RADAR</code> (posições 0–4). Execute as duas pontas:
+                    anote as posições <code>i</code> e <code>j</code>, as letras e a decisão
+                    de cada passo. Quantas comparações foram? E no máximo, para uma palavra
+                    de 1.000 letras?
                 </p>
                 <div class="resposta fragment fade-in">
                     <strong>Resposta:</strong>
                     <table>
-                        <thead><tr><th>Passo</th><th>inicio</th><th>fim</th><th>meio</th><th>valor</th><th>Decisão</th></tr></thead>
+                        <thead><tr><th>Passo</th><th>i</th><th>j</th><th>Letras</th><th>Decisão</th></tr></thead>
                         <tbody>
-                            <tr><td>1</td><td>0</td><td>6</td><td>3</td><td>17</td><td>17 &lt; 31 → inicio = 4</td></tr>
-                            <tr><td>2</td><td>4</td><td>6</td><td>5</td><td>31</td><td><strong>encontrado</strong></td></tr>
+                            <tr><td>1</td><td>0</td><td>4</td><td>R = R</td><td>iguais → avança</td></tr>
+                            <tr><td>2</td><td>1</td><td>3</td><td>A = A</td><td>iguais → avança</td></tr>
+                            <tr><td>—</td><td>2</td><td>2</td><td>—</td><td>encontro no meio → <strong>é palíndromo</strong></td></tr>
                         </tbody>
                     </table>
-                    Binária: <strong>2 comparações</strong>. Sequencial: <strong>6</strong>.
+                    <strong>2 comparações</strong> (a letra do meio não precisa de par).
+                    Para 1.000 letras: no máximo <strong>500</strong> — metade do tamanho.
                 </div>
             </section>
 
