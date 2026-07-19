@@ -1,0 +1,275 @@
+# Aula NN — <Tema> (<Tradução em inglês>)
+
+> **Tipo desta aula**: implementação. <Frase curta justificando a escolha da representação interna escolhida — mencionar a ligação com aulas anteriores quando houver (ex.: "construída sobre o nó da Aula 02").>
+
+---
+
+## 1. Conceito — Aprofundamento Progressivo
+
+### Camada 1 — Introdução
+
+<Parágrafo curto, totalmente coloquial, com analogia concreta. Termina apontando a propriedade essencial em prosa, ainda sem nomeá-la tecnicamente.>
+
+### Camada 2 — Definição informal com vocabulário básico
+
+Uma **<Tema>** (em inglês, *<traducao>*) é uma estrutura linear de elementos com a seguinte restrição de acesso: <descrição em uma frase>. Essa política de acesso recebe o nome **<LIFO/FIFO/etc.>** (*<expansão da sigla>*) — <explicação curta da política> (Tenenbaum, cap. X — *<nome do capítulo>*; Sedgewick, *Algoritmos em C*, Parte Y, cap. Z — seção sobre *<nome em inglês>*).
+
+Para que essa restrição seja útil em prática, a <Tema> oferece um conjunto pequeno de operações:
+
+- **<operacao1>** (*<traducao>*) — <descrição curta>.
+- **<operacao2>** (*<traducao>*) — <descrição curta>.
+- **<operacao3>** — <descrição curta>.
+- **vazia** — informa se há ou não elementos na estrutura.
+
+Note o que a <Tema> **não** oferece: <2–3 coisas que a estrutura proíbe>. <Frase de fechamento ressaltando que a restrição é a feature>.
+
+### Camada 3 — Propriedades e comportamento
+
+> A representação interna desta aula é construída sobre o **nó** apresentado na sub-seção *"O nó — unidade de construção das estruturas encadeadas"* da Aula 02. <Continue conforme couber: o nó da <Tema> é exatamente o nó da lista simplesmente encadeada; o que muda é a política de acesso e o estado externo.>
+
+#### <Sub-seção sobre estado externo>
+
+<Justificar o estado externo mínimo (1 ou 2 ponteiros). Explicar por que ele é assim, **sem invocar conceitos de SO/arquitetura proibidos**.>
+
+#### As operações em detalhe
+
+- **Inserção (`<operacao_inserir>`)**. <Passo a passo, em prosa>. Custo: **O(1)**.
+- **Remoção (`<operacao_remover>`)**. <Passo a passo>. <Armadilha conhecida em frase completa, ex.: ordem do free para evitar dangling pointer>. Custo: **O(1)**.
+- **Consulta (`<operacao_consultar>`)**. <Descrição>. Custo: **O(1)**.
+- **Vazia**. <Descrição>. Custo: **O(1)**.
+
+#### Invariantes (propriedades que devem sempre valer)
+
+<Lista em prosa, sem rótulos I1/I2/I3 — frases completas.>
+
+- **Quando a <tema> está vazia**, <propriedade>.
+- **Quando a <tema> tem ao menos um elemento**, <propriedade>.
+
+### Camada 4 — Definição formal e notação
+
+Um **TAD** (Tipo Abstrato de Dados) define uma estrutura pelo seu **contrato observável** — os valores que armazena, as operações que oferece e os axiomas que essas operações satisfazem — sem comprometer-se com nenhuma representação interna específica. Para a <Tema>, o TAD é (Tenenbaum, cap. X):
+
+```
+TAD <Tema> de Inteiros
+
+  Tipos:
+    <Tema>
+    Inteiro
+    Booleano
+
+  Operações:
+    criar()                       -> <Tema>
+    <op_inserir>(<Tema>, Inteiro) -> <Tema>
+    <op_remover>(<Tema>)          -> <Tema>     [erro se vazia]
+    <op_consultar>(<Tema>)        -> Inteiro    [erro se vazia]
+    vazia(<Tema>)                 -> Booleano
+
+  Axiomas (para qualquer <tema> T, inteiro x):
+    A1. vazia(criar())                          = verdadeiro
+    A2. vazia(<op_inserir>(T, x))               = falso
+    A3. <op_consultar>(<op_inserir>(T, x))      = x
+    A4. <op_remover>(<op_inserir>(T, x))        = T          (LIFO) OU enfileirar(desenfileirar(T), x) quando vazia(T) = falso (FIFO)
+    A5. <op_consultar>(criar())                 = erro
+    A6. <op_remover>(criar())                   = erro
+```
+
+O **axioma <coração>** é o **coração do <política>**: <explicação em prosa>. <Comparar com axioma análogo de aula anterior, se houver.>
+
+#### A representação interna como tupla
+
+Para a versão <representação escolhida>, a <Tema> pode ser descrita pela tupla:
+
+`T = (N, valor, proximo, <ponteiros_externos>)`
+
+onde:
+
+- **N** é o conjunto (possivelmente vazio) dos nós da <tema>.
+- **valor: N → V** associa cada nó a um inteiro.
+- **proximo: N → N ∪ {NULL}** associa cada nó ao seguinte (<significado físico>), ou `NULL` se for <caso de fundo>.
+- **<ponteiros_externos> ∈ N ∪ {NULL}** é o ponteiro externo para <papel>.
+
+A invariante "<vazia ⇔ ponteiro_externo = NULL>" liga formalmente o estado lógico da <tema> ao estado físico do ponteiro.
+
+### Camada 5 — Análise de complexidade
+
+A análise se faz em termos de **n**, o número de elementos da <tema>. Comparando as duas representações canônicas (<citação CLRS / Tenenbaum>):
+
+| Operação        | Vetor com índice | Lista encadeada com <ponteiro> |
+|-----------------|------------------|---------------------------------|
+| `<op_inserir>`  | O(1)*            | **O(1)**                        |
+| `<op_remover>`  | O(1)             | **O(1)**                        |
+| `<op_consultar>`| O(1)             | **O(1)**                        |
+| `vazia`         | O(1)             | **O(1)**                        |
+
+\* <Nota explicativa sobre o asterisco, se houver — ex.: realloc amortizado O(1).>
+
+<1–2 parágrafos comparando as duas alternativas em termos que dependem **apenas** do que já foi ensinado (número de mallocs, bytes de overhead, deslocamento de elementos em vetor, capacidade fixa). Encerrar dizendo qual a aula implementa e por quê.>
+
+### Camada 6 — Conexões e variantes
+
+A <Tema> aparece em <descrição da abrangência>:
+
+- **<Aplicação 1>** — <descrição em 1 linha>.
+- **<Aplicação 2>** — <descrição em 1 linha>.
+- **<Aplicação 3>** — <descrição em 1 linha>.
+- **<Aplicação 4>** — <descrição em 1 linha>.
+
+A própria implementação admite variantes: <2–3 variantes apenas sinalizadas, não desenvolvidas — vetor × lista, dupla × simples, circular × linear, etc.>. <Frase final apontando para aulas futuras se houver.>
+
+---
+
+## 2. Visualização Gráfica
+
+<Frase curta descrevendo o ciclo a ilustrar.>
+
+### Passo 1: <operacao>_criar()
+
+![<alt descritivo>](img/01_criar.svg)
+
+<1–2 frases sobre o estado inicial.>
+
+### Passo 2: <operacao>(<valor>)
+
+![<alt descritivo>](img/02_<descritor>.svg)
+
+<1–2 frases sobre o que mudou.>
+
+### Passo 3: <operacao>(<valor>)
+
+![<alt descritivo>](img/03_<descritor>.svg)
+
+<1–2 frases sobre o que mudou.>
+
+### Passo 4: <operacao>(<valor>)
+
+![<alt descritivo>](img/04_<descritor>.svg)
+
+<1–2 frases sobre o que mudou.>
+
+### Passo 5: <operacao_de_leitura>()
+
+![<alt descritivo>](img/05_<descritor>.svg)
+
+<1–2 frases destacando que a operação NÃO altera a estrutura.>
+
+### Passo 6: <operacao_remover>()
+
+![<alt descritivo>](img/06_<descritor>.svg)
+
+<1–2 frases sobre a remoção.>
+
+### Passo 7: <operacao_remover>()
+
+![<alt descritivo>](img/07_<descritor>.svg)
+
+<1–2 frases sobre o caso de "remover quando resta um só" — destacar caso especial, se houver, ou destacar a ausência dele.>
+
+---
+
+## 3. Problema Motivador
+
+> *"<Pergunta concreta no formato 'Como o X faz Y?'>"*
+
+<2 a 4 parágrafos explicando como a estrutura/algoritmo da aula resolve esse problema. Em pelo menos um dos parágrafos, descrever em prosa o ciclo "insere → consulta → remove" no contexto do problema.>
+
+<Parágrafo final opcional com **um segundo exemplo** reforçando o primeiro.>
+
+---
+
+## 4. Analogias
+
+**1. <Título curto da primeira analogia>.**
+<Parágrafo descrevendo a analogia em detalhe, espelhando elementos da estrutura/algoritmo.>
+
+**2. <Título curto da segunda analogia>.**
+<Parágrafo descrevendo a segunda analogia, com ângulo diferente da primeira.>
+
+---
+
+## 5. Código em C
+
+<Frase introdutória curta sobre características do código — ex.: "Note como o código é mais curto que o da Fila — menos casos especiais, menos invariantes, mesma legibilidade.">
+
+> **Sobre a organização do arquivo.** Tudo o que vem a seguir vive em **um único arquivo** chamado `<tema>.c`: `#include`s, structs, funções da TAD e a `main()` demonstrativa. A separação em arquivo de cabeçalho (`<tema>.h`) e arquivo de implementação (`<tema>.c`) é assunto da aula futura sobre **organização de projetos em C**. Por enquanto, manter tudo num lugar só facilita ler de cima a baixo.
+
+### `<tema>.c` — arquivo único
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+// (cole aqui o conteudo completo de <tema>.c, identico ao arquivo .c
+//  produzido em paralelo na pasta da aula)
+```
+
+### Compilando e rodando
+
+Como tudo está em um só arquivo, a linha de compilação é direta:
+
+```sh
+gcc -Wall -Wextra -o <tema>_demo <tema>.c
+./<tema>_demo
+```
+
+Saída esperada:
+
+```
+<saída exata produzida pela main demonstrativa>
+```
+
+<1–2 parágrafos comentando a saída — em particular, observando como ela é a **prova empírica** da política da estrutura.>
+
+---
+
+## 6. Exercícios Práticos
+
+**Exercício 1 — Trace na mão.**
+<Sequência de operações sobre estado inicial. Pedir o estado e o retorno a cada passo.>
+
+*Critério de aceitação*: <N estados + retornos. Estado final esperado: <X>.>
+
+> **Resposta mínima aceitável**
+>
+> | Operação | Estado | Retorno |
+> |----------|--------|---------|
+> | ...      | ...    | ...     |
+
+**Exercício 2 — <Título>.**
+<Adicionar uma função simples ao `<tema>.c`.>
+
+*Critério de aceitação*: <onde a função fica, como é chamada, saída esperada>.
+
+> **Resposta mínima aceitável**
+>
+> ```c
+> // codigo enxuto da funcao
+> ```
+
+**Exercício 3 — <Título>.** (opcional)
+
+<...>
+
+**Exercício 4 — <Título>.** (opcional)
+
+<...>
+
+**Exercício 5 — Desafio: <Título>.**
+<Extensão ampla — combinar com aula anterior/futura, ou raciocínio mais profundo.>
+
+*Critério de aceitação*: <condição>.
+
+> **Resposta mínima aceitável**
+>
+> <esboço da resposta — não é única, mas é o gabarito mínimo>.
+
+---
+
+## 7. Referências
+
+- **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo X, *"<Nome do capítulo>"*, <descrição da relevância em uma frase>.
+- **Sedgewick, R.** — *Algoritmos em C*, Parte Y, capítulo Z, *"<Nome do capítulo>"*. <Descrição em uma frase>.
+
+**Leituras complementares**:
+- **CLRS** — *Algoritmos: Teoria e Prática*. Capítulo X, seção Y — *"<Nome>"*. <Quando é útil.>
+- **Ziviani, N.** — *Projeto de Algoritmos com Implementações em Pascal e C*. Capítulo de <tema> — útil para contraste em PT-BR.
+- **Knuth, D.** — *The Art of Computer Programming*, vol. X, seção Y — referência histórica sobre <tema>.

@@ -21,5 +21,7 @@ a.out
 *.log
 *.tmp
 
-# Claude Code (não versionar)
-.claude/
+# Claude Code (versionar apenas as skills)
+.claude/*
+!.claude/skills/
+aula06_matriz/.claude/

@@ -1,0 +1,109 @@
+# Aula NN — <Tema Conceitual>
+
+> **Tipo desta aula**: conceitual. <Frase curta situando o conceito no mapa da disciplina — ex.: "Análise de complexidade é o vocabulário que usaremos para comparar implementações nas próximas aulas". Aulas conceituais têm 6 blocos (sem bloco de Código em C); a notação formal necessária aos exercícios é inlinerada no próprio enunciado.>
+
+---
+
+## 1. Conceito — Aprofundamento Progressivo
+
+### Camada 1 — Introdução
+
+<Parágrafo curto, completamente coloquial.>
+
+### Camada 2 — Definição informal com vocabulário básico
+
+<2–4 parágrafos. Define os termos técnicos canônicos pelo nome no primeiro uso. Cita Tenenbaum/Sedgewick inline.>
+
+### Camada 3 — Propriedades e comportamento
+
+<Vários parágrafos, com sub-headings `####` se ajudar. Lista propriedades e comportamentos esperados. Em prosa, sem formalismo simbólico pesado.>
+
+### Camada 4 — Definição formal e notação
+
+<Parágrafos + bloco de definição. Para aulas conceituais sobre TAD genérico ou notação assintótica, isto é onde o rigor formal entra. Sempre acompanhado de exemplo concreto inline.>
+
+### Camada 5 — Análise
+
+<Quando o conceito tiver análise quantitativa (notações Big-O), tabela e parágrafos comparativos. Quando não tiver, esta camada pode ser substituída por uma análise qualitativa — quando o conceito se aplica, quando não se aplica.>
+
+### Camada 6 — Conexões e variantes
+
+<Onde o conceito aparece em outras estruturas/algoritmos da disciplina, como apoio para aulas futuras.>
+
+---
+
+## 2. Visualização Gráfica
+
+<Diagrama(s) ilustrando o conceito. Mesmo em aula conceitual, há SVGs — diagramas de relacionamento (camadas, sequências, hierarquias).>
+
+### Passo 1: <Título do diagrama>
+
+![<alt descritivo>](img/01_<descritor>.svg)
+
+<1–2 frases sobre o que o diagrama mostra.>
+
+<Repetir para cada diagrama. Em aulas conceituais costumam ser 3–5 figuras, não 7 como em aulas de implementação.>
+
+---
+
+## 3. Problema Motivador
+
+> *"<Pergunta concreta no formato 'Como o X faz Y?'>"*
+
+<2–4 parágrafos explicando por que esse conceito existe e o que ele resolve.>
+
+---
+
+## 4. Analogias
+
+**1. <Título da primeira analogia>.**
+<Parágrafo.>
+
+**2. <Título da segunda analogia>.** (opcional)
+<Parágrafo.>
+
+---
+
+## 5. Exercícios Práticos
+
+<3–5 exercícios em ordem crescente de dificuldade. **Não rotular** com "fácil/médio/difícil". Apenas 1 desafio, sempre o último.>
+
+**Exercício 1 — <Título>.**
+<Enunciado. Tipicamente identificar o conceito no cotidiano, ou aplicar uma definição.>
+
+*Critério de aceitação*: <condição>.
+
+> **Resposta mínima aceitável**
+>
+> <Resposta direta + axioma/critério aplicado em uma linha.>
+
+**Exercício 2 — <Título>.**
+<Enunciado.>
+
+*Critério de aceitação*: <condição>.
+
+> **Resposta mínima aceitável**
+>
+> <Resposta enxuta.>
+
+<...>
+
+**Exercício 5 — Desafio: <Título>.**
+<Extensão ampla — provar por axiomas, escrever um TAD curto, comparar dois conceitos.>
+
+*Critério de aceitação*: <condição>.
+
+> **Resposta mínima aceitável**
+>
+> <Esboço da resposta-gabarito.>
+
+---
+
+## 6. Referências
+
+- **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo X, *"<Nome>"*, <relevância>.
+- **Sedgewick, R.** — *Algoritmos em C*, Parte Y, capítulo Z, *"<Nome>"*. <Relevância>.
+
+**Leituras complementares**:
+- **CLRS** — *Algoritmos: Teoria e Prática*. Capítulo X. <Quando é útil.>
+- **Ziviani, N.** — *Projeto de Algoritmos*. Capítulo X. <Quando é útil.>

@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/*
+ * Template do .c didatico da disciplina.
+ *
+ * Regras (ver references/codigo-c-regras.md):
+ *   - um unico arquivo .c, sem .h separado
+ *   - sem <stdbool.h>, sem const, sem fprintf(stderr)
+ *   - tratar erro de malloc com printf + exit(1)
+ *   - comentarios autoexplicativos (NAO usar rotulos I1/I2 do .md)
+ *   - main() exercita o ciclo completo demonstrativo
+ *   - compila limpo com: gcc -Wall -Wextra -o demo arquivo.c
+ */
+
+// Cada elemento da estrutura vira um No com o valor e um
+// ponteiro para o proximo No.
+typedef struct No {
+    int valor;
+    struct No* proximo;
+} No;
+
+// A estrutura guarda apenas o(s) ponteiro(s) externo(s) minimo(s).
+typedef struct Tema {
+    No* ancora;  // ajustar conforme: topo / inicio+fim / raiz / etc.
+} Tema;
+
+// Cria uma estrutura vazia.
+Tema* tema_criar(void) {
+    Tema* t = malloc(sizeof(Tema));
+    if (t == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    t->ancora = NULL;
+    return t;
+}
+
+// Verdadeiro (1) se a estrutura nao tem nenhum elemento.
+int tema_vazia(Tema* t) {
+    return t->ancora == NULL;
+}
+
+// Insere um valor (semantica conforme a estrutura: topo para pilha,
+// fim para fila, ordenado para BST, etc.).
+void tema_inserir(Tema* t, int valor) {
+    No* novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo->valor = valor;
+    novo->proximo = NULL;
+
+    // ... ajustar a religacao conforme a estrutura ...
+    novo->proximo = t->ancora;
+    t->ancora = novo;
+}
+
+// Remove e devolve um valor (semantica conforme a estrutura).
+// Pre-requisito: a estrutura nao pode estar vazia.
+int tema_remover(Tema* t) {
+    if (tema_vazia(t)) {
+        printf("erro: estrutura vazia\n");
+        exit(1);
+    }
+    No* removido = t->ancora;
+    int valor = removido->valor;
+
+    // Avanca a ancora ANTES de chamar free para nao deixar
+    // ponteiro suspenso (dangling pointer).
+    t->ancora = removido->proximo;
+    free(removido);
+    return valor;
+}
+
+// Devolve o valor da posicao "ancora" sem remover.
+int tema_consultar(Tema* t) {
+    if (tema_vazia(t)) {
+        printf("erro: estrutura vazia\n");
+        exit(1);
+    }
+    return t->ancora->valor;
+}
+
+// Libera toda a memoria usada pela estrutura.
+void tema_destruir(Tema* t) {
+    No* atual = t->ancora;
+    while (atual != NULL) {
+        No* prox = atual->proximo;
+        free(atual);
+        atual = prox;
+    }
+    free(t);
+}
+
+// Programa demonstrativo — exercita o ciclo completo da estrutura.
+int main(void) {
+    Tema* t = tema_criar();
+
+    tema_inserir(t, 10);
+    tema_inserir(t, 20);
+    tema_inserir(t, 30);
+    printf("Topo/frente: %d\n", tema_consultar(t));
+
+    printf("Removendo: ");
+    while (!tema_vazia(t)) {
+        printf("%d ", tema_remover(t));
+    }
+    printf("\n");
+
+    tema_destruir(t);
+    return 0;
+}
