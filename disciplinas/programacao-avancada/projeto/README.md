@@ -19,7 +19,9 @@ Abra http://127.0.0.1:8000
 | GET | /health | Verifica se a API está no ar |
 | GET | /api/books | Lista os livros; query param opcional name busca pelo nome |
 | GET | /api/books/{book_id} | Um livro pelo id (404 se não existir) |
-| POST | /api/books | Cria um livro na lista em memória |
+| POST | /api/books | Cria um livro; corpo validado pelo schema BookCreate |
+| PUT | /api/books/{book_id} | Atualiza o nome de um livro (404 se não existir) |
+| DELETE | /api/books/{book_id} | Remove um livro; responde 204 sem corpo (404 se não existir) |
 
 A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
 
