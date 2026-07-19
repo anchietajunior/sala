@@ -50,6 +50,6 @@ Valem para todo material, inclusive pedidos parciais ("só os exercícios", "só
 - **Vocabulário canônico**, sem coloquialismos para conceitos técnicos (nada de "tripa", "espiar", "cuspir"). Analogias narrativas são livres; sem siglas ou jargão local.
 - **Citar a bibliografia inline** já nas camadas iniciais do bloco 1 — não só no bloco de Referências.
 - **Não pular blocos nem camadas**, mesmo em temas simples.
-- **Exercícios**: 3–5, progressão **implícita** (sem rótulo fácil/médio/difícil), **1 desafio** (o último), cada um com **"Resposta mínima aceitável"** explícita.
+- **Exercícios**: 3–5, progressão **implícita** (sem rótulo fácil/médio/difícil), **1 desafio** (o último), cada um com **"Resposta mínima aceitável"** explícita. **Toda aula tem ao menos 1 algoritmo para o aluno praticar**: em aula de implementação, implementar ou modificar uma função; em aula conceitual, executar um algoritmo passo a passo na mão (trace).
 - **Código C didático**: o mais simples possível (o aluno vê C pela primeira vez) — sem `<stdbool.h>`, sem `const` em parâmetro, sem `fprintf(stderr)` (usar `printf` + `exit(1)`); nomes descritivos em PT; comentários explicam o **porquê** (autoexplicativos, sem rótulos como "I1"); liberar memória e tratar falha de `malloc`; compilar limpo com `gcc -Wall -Wextra`.
 - **Slides**: uma ideia por slide, voz que conversa; linha-ponte de contexto logo após o título; Eddy sempre em `<section>` dedicada; **SVG é o único diagrama**, vendor **local** (sem CDN); sem slide de "Roteiro".

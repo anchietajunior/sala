@@ -83,4 +83,5 @@ Exemplo:
 
 - **Mínimo 3, máximo 5** exercícios por aula. Mais que 5 dilui; menos que 3 deixa o aluno sem prática suficiente.
 - **Apenas 1 desafio**, sempre o último.
+- **Ao menos 1 exercício de prática de algoritmo** por aula, sem exceção: em aula de implementação, implementar ou modificar uma função no `.c`; em aula conceitual, executar um algoritmo passo a passo na mão (trace com valores concretos).
 - Em aulas conceituais, exercícios são **conceituais** — não pedem código C. Quando um exercício precisar de notação formal/axiomas para funcionar, **inlinear** o conteúdo no próprio enunciado (não remeter de volta ao bloco 1).
