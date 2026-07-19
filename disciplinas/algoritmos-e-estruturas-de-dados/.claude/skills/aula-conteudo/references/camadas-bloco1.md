@@ -39,7 +39,7 @@ A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas an
 - [ ] Lista as **operações principais** com nome canônico em português + tradução em inglês entre parênteses:
   - `empilhar (push)`, `desempilhar (pop)`
   - `enfileirar (enqueue)`, `desenfileirar (dequeue)`
-- [ ] Cita inline a bibliografia base (`Tenenbaum, cap. X`; `Sedgewick, Parte Y, cap. Z`).
+- [ ] Cita inline a bibliografia base (`Backes, cap. X`; `Veloso & Pereira, cap. Y`).
 - [ ] Encerra com a frase canônica `Note o que a <Estrutura> **não** oferece: ...` listando 2–3 operações que a estrutura **proíbe** — destacando que a restrição é a feature.
 
 ---

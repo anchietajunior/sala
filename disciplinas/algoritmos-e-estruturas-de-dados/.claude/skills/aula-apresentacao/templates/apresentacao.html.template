@@ -207,8 +207,8 @@
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, segundo Tenenbaum, ...
-                            <cite>Tenenbaum, cap. X — Tema</cite>
+                            Turma, segundo Backes, ...
+                            <cite>Backes, cap. X — Tema</cite>
                         </p>
                     </div>
                 </div>
@@ -353,13 +353,13 @@
         <section>
             <h2>Referências</h2>
             <ul style="text-align: left; font-size: 0.75em;">
-                <li><strong>Tenenbaum, Langsam &amp; Augenstein</strong> — ...</li>
-                <li><strong>Sedgewick, R.</strong> — ...</li>
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em Linguagem C</em> — ...</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C</em> — ...</li>
             </ul>
             <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
             <ul style="text-align: left; font-size: 0.7em; color: #666;">
-                <li>CLRS — ...</li>
-                <li>Knuth — ...</li>
+                <li>Wirth — <em>Algoritmos e Estruturas de Dados</em> — ...</li>
+                <li>Schildt — <em>C Completo e Total</em> — ...</li>
             </ul>
         </section>
 

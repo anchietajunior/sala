@@ -12,7 +12,7 @@ Eddy é o mascote-assistente da disciplina. Aparece em **slides dedicados** traz
 
 | Bloco                    | Usar Eddy? | O quê                                                |
 |--------------------------|------------|------------------------------------------------------|
-| Bloco 1, Camada 2 ou 4   | **Sim**    | Citação inline da bibliografia (Tenenbaum, Sedgewick) |
+| Bloco 1, Camada 2 ou 4   | **Sim**    | Citação inline da bibliografia (Backes, Veloso & Pereira) |
 | Bloco 1, Camada 6        | Opcional   | Aponta para aula futura                              |
 | Bloco 3                  | **Sim**    | Exemplo de aplicação real ou curiosidade histórica   |
 | Bloco 4 (analogias)      | Opcional   | Curiosidade relacionada à analogia                   |
@@ -48,7 +48,7 @@ Para falas mais longas (citação com vários autores, lista de aplicações), t
 
 - **Sempre começa com "Turma,"**.
 - **Até 3–4 frases**. Slide é uma pausa, não uma palestra.
-- **Cita fonte quando houver**. Formato `<cite>Tenenbaum, cap. X — Nome</cite>` ou `<cite>Sedgewick, Parte Y, cap. Z</cite>`.
+- **Cita fonte quando houver**. Formato `<cite>Backes, cap. X — Nome</cite>` ou `<cite>Veloso & Pereira, cap. Y</cite>`. Bibliografia da ementa no `CLAUDE.md`.
 - **Não inventar fatos históricos**. Se não houver certeza sobre data/autor, omitir o detalhe ou dizer apenas "proposto na década de X". Datas como "1959", "Dijkstra em Amsterdã" são bem-vindas **só se forem corretas e verificáveis**.
 - **Mesmas regras de linguagem** da disciplina: PT-BR com acentuação correta, sem coloquialismos para conceitos técnicos, sem siglas locais (RU, DCE).
 - **No bloco 6 (exercícios), nunca dar a resposta** — apenas **provocar** ("Turma, antes de ver a solução, tente identificar quem é o caso base...").
@@ -59,11 +59,11 @@ Para falas mais longas (citação com vários autores, lista de aplicações), t
 
 ```html
 <p class="eddy-fala">
-    Turma, segundo Tenenbaum, é justamente o axioma
+    Turma, segundo Veloso e Pereira, é justamente o axioma
     <code>desempilhar(empilhar(P, x)) = P</code> que define
     o comportamento LIFO de forma puramente algébrica,
     sem precisar falar em ponteiros ou memória.
-    <cite>Tenenbaum, cap. 2 — Pilhas</cite>
+    <cite>Veloso &amp; Pereira, capítulo de Pilhas</cite>
 </p>
 ```
 
@@ -71,7 +71,7 @@ Para falas mais longas (citação com vários autores, lista de aplicações), t
 
 ```html
 <p class="eddy-fala">
-    Turma, o termo <em>pushdown stack</em> que vocês veem no Sedgewick
+    Turma, o termo <em>pushdown stack</em>, comum na literatura clássica,
     vem dos anos 1950, da mesma época em que se começou a estudar
     formalmente compiladores — não é coincidência que a pilha apareça
     em todo lugar nessa área.

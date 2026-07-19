@@ -12,7 +12,7 @@
 
 ### Camada 2 — Definição informal com vocabulário básico
 
-<2–4 parágrafos. Define os termos técnicos canônicos pelo nome no primeiro uso. Cita Tenenbaum/Sedgewick inline.>
+<2–4 parágrafos. Define os termos técnicos canônicos pelo nome no primeiro uso. Cita a bibliografia básica (Backes; Veloso & Pereira) inline.>
 
 ### Camada 3 — Propriedades e comportamento
 
@@ -101,9 +101,10 @@
 
 ## 6. Referências
 
-- **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo X, *"<Nome>"*, <relevância>.
-- **Sedgewick, R.** — *Algoritmos em C*, Parte Y, capítulo Z, *"<Nome>"*. <Relevância>.
+- **Backes, A. R.** — *Algoritmos e Estruturas de Dados em Linguagem C*. Rio de Janeiro: LTC, 2023. Capítulo X, *"<Nome>"*, <relevância>.
+- **Veloso, P.; Pereira, S. do L.** — *Estruturas de Dados em C — Uma Abordagem Didática*. São Paulo: Saraiva, 2016. Capítulo Y, *"<Nome>"*. <Relevância>.
+- **Toscani, L. V.; Veloso, P. A. S.** — *Complexidade de Algoritmos*. Porto Alegre: Bookman, 2012. <Quando a aula envolver análise de complexidade.>
 
 **Leituras complementares**:
-- **CLRS** — *Algoritmos: Teoria e Prática*. Capítulo X. <Quando é útil.>
-- **Ziviani, N.** — *Projeto de Algoritmos*. Capítulo X. <Quando é útil.>
+- **Wirth, N.** — *Algoritmos e Estruturas de Dados*. Rio de Janeiro: LTC, 1999. <Quando é útil.>
+- **Schildt, H.** — *C Completo e Total*. São Paulo: Makron Books, 1997. <Quando é útil.>

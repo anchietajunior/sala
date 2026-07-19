@@ -178,13 +178,13 @@ Aqui o Eddy é opcional — pode aparecer se tiver curiosidade histórica relaci
 <section>
     <h2>Referências</h2>
     <ul style="text-align: left; font-size: 0.75em;">
-        <li><strong>Tenenbaum, ...</strong> ...</li>
-        <li><strong>Sedgewick, R.</strong> ...</li>
+        <li><strong>Backes, A. R.</strong> ...</li>
+        <li><strong>Veloso &amp; Pereira</strong> ...</li>
     </ul>
     <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
     <ul style="text-align: left; font-size: 0.7em; color: #666;">
-        <li>CLRS — ...</li>
-        <li>Knuth — ...</li>
+        <li>Wirth — ...</li>
+        <li>Schildt — ...</li>
     </ul>
 </section>
 ```

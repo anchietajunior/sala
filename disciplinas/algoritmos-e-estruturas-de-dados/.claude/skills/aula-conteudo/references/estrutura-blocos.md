@@ -45,7 +45,7 @@ Nomes canônicos das camadas:
 5. Análise de complexidade
 6. Conexões e variantes
 
-**Citações inline** da bibliografia já a partir da camada 2 (Tenenbaum cap. X; Sedgewick parte Y).
+**Citações inline** da bibliografia já a partir da camada 2 (Backes cap. X; Veloso & Pereira cap. Y).
 
 ---
 
@@ -171,15 +171,19 @@ Detalhes da progressão em `exercicios.md`.
 
 Cabeçalho: `## 7. Referências` (ou `## 6.`).
 
-Sempre na ordem:
+Sempre na ordem (bibliografia básica da ementa — citar as que forem pertinentes ao tema):
 
-1. **Tenenbaum** — *Estruturas de Dados Usando C*. Capítulo X (nome do capítulo) — descrição da relevância (1 linha).
-2. **Sedgewick** — *Algoritmos em C*. Parte Y, capítulo Z (nome) — descrição (1 linha).
+1. **Backes** — *Algoritmos e Estruturas de Dados em Linguagem C*. Capítulo X (nome do capítulo) — descrição da relevância (1 linha).
+2. **Veloso & Pereira** — *Estruturas de Dados em C — Uma Abordagem Didática*. Capítulo Y (nome) — descrição (1 linha).
+3. **Toscani & Veloso** — *Complexidade de Algoritmos* — quando a aula envolver análise de complexidade.
+4. **Schildt** — *C Completo e Total* — quando a aula apoiar-se em recursos da linguagem C (ponteiros, structs, alocação).
 
-Em seguida, um separador `**Leituras complementares**:` e lista com:
+Em seguida, um separador `**Leituras complementares**:` e lista com as que agregarem (bibliografia complementar da ementa):
 
-- **CLRS** — quando útil para rigor formal ou análise.
-- **Ziviani** — quando útil para contraste em PT-BR.
-- **Knuth** — quando útil como referência histórica.
+- **Wirth** — *Algoritmos e Estruturas de Dados* — visão clássica do tema.
+- **Damas** — *Linguagem C* — aprofundamento na linguagem.
+- **Azevedo** — *Tabelas: organização e pesquisa* — quando o tema for hash/pesquisa em tabelas.
+- **Forouzan & Gilbert** / **Ford & Topp** — contraste em pseudocódigo/C++ quando útil.
+- **Jamsa & Klander** — *Programando em C/C++: a bíblia* — referência adicional de C.
 
-**Nunca inventar página/capítulo.** Em caso de dúvida, citar genericamente ("ver capítulo de pilhas em Tenenbaum").
+**Nunca inventar página/capítulo.** Em caso de dúvida, citar genericamente ("ver capítulo de pilhas em Backes").

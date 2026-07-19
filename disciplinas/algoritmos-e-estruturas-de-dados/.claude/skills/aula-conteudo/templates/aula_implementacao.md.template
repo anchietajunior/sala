@@ -12,7 +12,7 @@
 
 ### Camada 2 — Definição informal com vocabulário básico
 
-Uma **<Tema>** (em inglês, *<traducao>*) é uma estrutura linear de elementos com a seguinte restrição de acesso: <descrição em uma frase>. Essa política de acesso recebe o nome **<LIFO/FIFO/etc.>** (*<expansão da sigla>*) — <explicação curta da política> (Tenenbaum, cap. X — *<nome do capítulo>*; Sedgewick, *Algoritmos em C*, Parte Y, cap. Z — seção sobre *<nome em inglês>*).
+Uma **<Tema>** (em inglês, *<traducao>*) é uma estrutura linear de elementos com a seguinte restrição de acesso: <descrição em uma frase>. Essa política de acesso recebe o nome **<LIFO/FIFO/etc.>** (*<expansão da sigla>*) — <explicação curta da política> (Backes, cap. X — *<nome do capítulo>*; Veloso & Pereira, *Estruturas de Dados em C*, cap. Y — *<nome do capítulo>*).
 
 Para que essa restrição seja útil em prática, a <Tema> oferece um conjunto pequeno de operações:
 
@@ -47,7 +47,7 @@ Note o que a <Tema> **não** oferece: <2–3 coisas que a estrutura proíbe>. <F
 
 ### Camada 4 — Definição formal e notação
 
-Um **TAD** (Tipo Abstrato de Dados) define uma estrutura pelo seu **contrato observável** — os valores que armazena, as operações que oferece e os axiomas que essas operações satisfazem — sem comprometer-se com nenhuma representação interna específica. Para a <Tema>, o TAD é (Tenenbaum, cap. X):
+Um **TAD** (Tipo Abstrato de Dados) define uma estrutura pelo seu **contrato observável** — os valores que armazena, as operações que oferece e os axiomas que essas operações satisfazem — sem comprometer-se com nenhuma representação interna específica. Para a <Tema>, o TAD é (Veloso & Pereira, cap. X):
 
 ```
 TAD <Tema> de Inteiros
@@ -92,7 +92,7 @@ A invariante "<vazia ⇔ ponteiro_externo = NULL>" liga formalmente o estado ló
 
 ### Camada 5 — Análise de complexidade
 
-A análise se faz em termos de **n**, o número de elementos da <tema>. Comparando as duas representações canônicas (<citação CLRS / Tenenbaum>):
+A análise se faz em termos de **n**, o número de elementos da <tema>. Comparando as duas representações canônicas (<citação Backes / Toscani & Veloso>):
 
 | Operação        | Vetor com índice | Lista encadeada com <ponteiro> |
 |-----------------|------------------|---------------------------------|
@@ -266,10 +266,12 @@ Saída esperada:
 
 ## 7. Referências
 
-- **Tenenbaum, A. M.; Langsam, Y.; Augenstein, M. J.** — *Estruturas de Dados Usando C*. Capítulo X, *"<Nome do capítulo>"*, <descrição da relevância em uma frase>.
-- **Sedgewick, R.** — *Algoritmos em C*, Parte Y, capítulo Z, *"<Nome do capítulo>"*. <Descrição em uma frase>.
+- **Backes, A. R.** — *Algoritmos e Estruturas de Dados em Linguagem C*. Rio de Janeiro: LTC, 2023. Capítulo X, *"<Nome do capítulo>"*, <descrição da relevância em uma frase>.
+- **Veloso, P.; Pereira, S. do L.** — *Estruturas de Dados em C — Uma Abordagem Didática*. São Paulo: Saraiva, 2016. Capítulo Y, *"<Nome do capítulo>"*. <Descrição em uma frase>.
+- **Toscani, L. V.; Veloso, P. A. S.** — *Complexidade de Algoritmos*. Porto Alegre: Bookman, 2012. <Quando a aula analisar custo das operações.>
+- **Schildt, H.** — *C Completo e Total*. São Paulo: Makron Books, 1997. <Quando o código usar recursos de C que merecem aprofundamento.>
 
 **Leituras complementares**:
-- **CLRS** — *Algoritmos: Teoria e Prática*. Capítulo X, seção Y — *"<Nome>"*. <Quando é útil.>
-- **Ziviani, N.** — *Projeto de Algoritmos com Implementações em Pascal e C*. Capítulo de <tema> — útil para contraste em PT-BR.
-- **Knuth, D.** — *The Art of Computer Programming*, vol. X, seção Y — referência histórica sobre <tema>.
+- **Wirth, N.** — *Algoritmos e Estruturas de Dados*. Rio de Janeiro: LTC, 1999. Capítulo de <tema> — visão clássica.
+- **Damas, L.** — *Linguagem C*. 10ª ed. Rio de Janeiro: LTC, 2023. <Quando é útil para a linguagem.>
+- **Azevedo, P. A. de** — *Tabelas: organização e pesquisa*. Porto Alegre: Sagra-Luzzatto, 2003. <Quando o tema for hash/pesquisa.>

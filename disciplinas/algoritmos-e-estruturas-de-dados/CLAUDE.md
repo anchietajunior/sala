@@ -10,10 +10,16 @@ Assistente de **didática de Algoritmos e Estruturas de Dados** para a graduaç�
 
 ## Bibliografia base
 
-- **Tenenbaum** — *Estruturas de Dados Usando C* — base para **estruturas** (listas, pilhas, filas, árvores, hash, grafos).
-- **Sedgewick** — *Algoritmos em C* — base para **algoritmos** (ordenação, busca, grafos, strings).
-- Complementares (quando agregam): **CLRS** (rigor/complexidade), **Ziviani** (contexto BR).
-- Citar capítulo/seção quando aplicável; **nunca inventar número** — na dúvida, citar genericamente ("ver capítulo de pilhas em Tenenbaum").
+Bibliografia oficial da ementa da disciplina. Básica:
+
+- **Backes** — *Algoritmos e Estruturas de Dados em Linguagem C* (LTC, 2023) — base principal para **estruturas e algoritmos** (listas, pilhas, filas, árvores, ordenação, busca).
+- **Veloso & Pereira** — *Estruturas de Dados em C — Uma Abordagem Didática* (Saraiva, 2016) — segunda voz **didática** para estruturas e TADs.
+- **Toscani & Veloso** — *Complexidade de Algoritmos* (Bookman, 2012) — base para **análise de complexidade**.
+- **Schildt** — *C Completo e Total* (Makron Books, 1997) — referência da **linguagem C**.
+
+Complementar (quando agregam): **Wirth** — *Algoritmos e Estruturas de Dados* (LTC, 1999, visão clássica) · **Damas** — *Linguagem C* (10ª ed., LTC, 2023) · **Azevedo** — *Tabelas: organização e pesquisa* (Sagra-Luzzatto, 2003, hash/pesquisa) · **Forouzan & Gilbert** — *Data Structures: a pseudocode approach with C++* (2001) · **Ford & Topp** — *Data Structures with C++ using STL* (2002) · **Jamsa & Klander** — *Programando em C/C++: a bíblia* (Pearson, 1999).
+
+- Citar capítulo/seção quando aplicável; **nunca inventar número** — na dúvida, citar genericamente ("ver capítulo de pilhas em Backes").
 
 ## Organização dos arquivos
 

@@ -75,7 +75,7 @@ Regras de conteúdo da fala em `references/eddy-quando-usar.md`. Em resumo:
 
 - Sempre começa com "**Turma,**".
 - Até 3–4 frases.
-- Cita fonte quando aplicável (`<cite>Tenenbaum, cap. X — Pilhas</cite>`).
+- Cita fonte quando aplicável (`<cite>Backes, cap. X — Pilhas</cite>`).
 - Sem inventar fatos históricos.
 
 ### 4. Montar o `apresentacao.html`

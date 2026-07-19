@@ -9,7 +9,7 @@ Cada aula vive em sua própria pasta (`aulaNN_tema/`) e contém:
 - Diagramas em SVG (`img/`) — visualizações reaproveitadas tanto no `.md` quanto nos slides.
 - Em aulas de implementação: arquivos `.h`, `.c` e `main.c` executáveis ao lado do `.md`.
 
-A bibliografia base é **Tenenbaum — Estruturas de Dados Usando C** e **Sedgewick — Algoritmos em C**, com **CLRS** e **Ziviani** como leitura complementar.
+A bibliografia segue a ementa oficial da disciplina: **Backes — Algoritmos e Estruturas de Dados em Linguagem C**, **Veloso & Pereira — Estruturas de Dados em C: Uma Abordagem Didática**, **Toscani & Veloso — Complexidade de Algoritmos** e **Schildt — C Completo e Total** como básica; **Wirth**, **Damas**, **Azevedo**, **Forouzan & Gilbert**, **Ford & Topp** e **Jamsa & Klander** como complementar.
 
 ## Aulas
 

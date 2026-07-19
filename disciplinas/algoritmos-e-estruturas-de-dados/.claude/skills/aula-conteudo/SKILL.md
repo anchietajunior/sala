@@ -87,12 +87,12 @@ Estas são extraídas do `CLAUDE.md` e existem para garantir consistência entre
 - **PT-BR com acentuação correta** em todo texto. Identificadores em código podem ser ASCII (`proximo` no lugar de `próximo`).
 - **Não pular blocos nem camadas** — todos os 6/7 blocos vêm, em ordem; todas as 6 camadas do bloco 1 vêm, em ordem.
 - **Citações inline** da bibliografia base já a partir da camada 2 do bloco 1, **não** apenas no bloco de Referências.
-- **Não cunhar coloquialismos** para conceitos técnicos (sem "tripa", "miolo", "espiar", "cuspir" etc.); use a terminologia canônica de Tenenbaum/Sedgewick/CLRS.
+- **Não cunhar coloquialismos** para conceitos técnicos (sem "tripa", "miolo", "espiar", "cuspir" etc.); use a terminologia canônica de Backes/Veloso & Pereira/Toscani & Veloso.
 - **Não supor conhecimento prévio** — cada termo técnico definido no primeiro uso. Conceitos avançados de SO/arquitetura (cache, paginação, branch prediction, MMU…) ficam fora salvo se forem o tema da aula.
 - **Um único `.c` por aula**, sem `.h` separado. Cabeçalhos são tema de aula futura sobre organização de projetos.
 - **Comentários no `.c` autoexplicativos** — não usar rótulos abreviados (I1, I2…) que só fazem sentido com a tabela do `.md` aberta ao lado.
 - **Exercícios sem rótulos de dificuldade** (não escreva "fácil/médio/difícil") — a progressão fica implícita na ordem. Apenas 1 desafio por aula, sempre o último. Cada exercício acompanha **"Resposta mínima aceitável"** explicitamente rotulada.
-- **Bibliografia base**: Tenenbaum + Sedgewick. CLRS, Ziviani e Knuth como complementares. Nunca inventar página/capítulo — se não souber, citar genericamente ("ver capítulo de pilhas em Tenenbaum").
+- **Bibliografia** (ementa oficial — lista completa no `CLAUDE.md`): básica = Backes, Veloso & Pereira, Toscani & Veloso (complexidade), Schildt (linguagem C); complementar = Wirth, Damas, Azevedo, Forouzan & Gilbert, Ford & Topp, Jamsa & Klander. Nunca inventar página/capítulo — se não souber, citar genericamente ("ver capítulo de pilhas em Backes").
 
 ## Sobre os SVGs do bloco 2
 
