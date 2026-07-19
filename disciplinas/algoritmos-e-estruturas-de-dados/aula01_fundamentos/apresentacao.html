@@ -380,46 +380,48 @@
             <!-- ----- CAMADA 4 — DEFINIÇÃO FORMAL E NOTAÇÃO ----- -->
             <section>
                 <p class="titulo-bloco">Camada 4</p>
-                <h3>O algoritmo como objeto matemático</h3>
+                <h3>Uma garantia poderosa</h3>
                 <p style="text-align: left;">
-                    Formalmente, um algoritmo computa uma <strong>função</strong>:
-                    para cada entrada válida <code>x</code>, produz em tempo finito
-                    a saída <code>f(x)</code> especificada.
+                    Turing provou que <strong>a máquina não importa</strong> — o que conta
+                    é a sequência de passos.
                 </p>
-                <p class="nota-rodape" style="text-align: left;">
-                    Máquinas de Turing, funções recursivas e cálculo lambda computam a mesma classe
-                    de funções — a Tese de Church-Turing. Consequência prática: podemos contar passos
-                    sem nos preocupar com a máquina.
+                <p style="text-align: left; font-size: 0.85em;">
+                    Consequência prática: para medir um algoritmo, basta
+                    <span class="destaque">contar passos</span>. Em qualquer computador,
+                    a contagem é a mesma.
                 </p>
             </section>
 
             <section>
                 <h3>A notação Big O</h3>
                 <p style="text-align: left;">
-                    Contar passos exatos é frágil. O Big O captura só o
-                    <strong>ritmo de crescimento</strong> do custo:
+                    Não contamos passos exatos — respondemos só uma pergunta:
+                    <strong>quando a entrada cresce, o trabalho cresce em que ritmo?</strong>
                 </p>
                 <p style="text-align: center;">
-                    <span class="formula">f(n) = O(g(n))  ⇔  ∃ c &gt; 0, n₀ ≥ 1 :  f(n) ≤ c·g(n)  ∀ n ≥ n₀</span>
+                    <span class="formula">O(n)</span>
                 </p>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Leitura: a partir de certo tamanho (<code>n₀</code>), <code>f</code> nunca
-                    cresce mais rápido que <code>g</code>, a menos de uma constante (<code>c</code>).
+                    Lê-se: <em>"cresce no ritmo de n"</em> — dobrou a entrada, dobrou o trabalho.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    A definição matemática completa está no material escrito da aula.
                 </p>
             </section>
 
             <section>
-                <h3>Um exemplo concreto</h3>
+                <h3>Como classificar: um exemplo</h3>
                 <p style="text-align: left;">
-                    Um algoritmo executa <code>f(n) = 3n + 5</code> passos. Ele é O(n)?
+                    Um algoritmo faz <span class="formula">3n + 5</span> passos
+                    para uma entrada de tamanho n. Qual é o ritmo?
                 </p>
-                <p style="text-align: center;">
-                    <span class="formula">escolha c = 4 e n₀ = 5:   3n + 5 ≤ 4n  para todo n ≥ 5  ✓</span>
-                </p>
-                <p style="text-align: left; font-size: 0.8em;">
-                    Constantes e termos menores somem <strong>de propósito</strong>.
-                    Big O responde só: <span class="destaque">"como o custo escala?"</span>
-                </p>
+                <ul style="font-size: 0.85em;">
+                    <li>o <strong>+ 5</strong> vira detalhe quando n cresce</li>
+                    <li>o <strong>3×</strong> muda a velocidade, não o ritmo</li>
+                </ul>
+                <blockquote style="font-size: 0.8em;">
+                    Sobra o essencial: cresce no ritmo de n → <span class="destaque">O(n)</span>.
+                </blockquote>
             </section>
 
             <section>
@@ -814,19 +816,22 @@
             </section>
 
             <section>
-                <h3>Exercício 5 — Desafio: provando com a definição</h3>
+                <h3>Exercício 5 — Desafio: o ritmo por trás dos números</h3>
                 <p style="text-align: left; font-size: 0.7em;">
-                    Com a definição formal (achar c &gt; 0 e n₀ com f(n) ≤ c·g(n) para n ≥ n₀):
-                    <strong>(1)</strong> prove que 5n + 20 é O(n);
-                    <strong>(2)</strong> argumente por que n² <em>não</em> é O(n) —
-                    para qualquer escolha de c.
+                    <strong>(1)</strong> Convença um colega de que 5n + 20 passos crescem
+                    no ritmo de n: encontre um multiplicador que, aplicado a n, cubra
+                    5n + 20 de certo tamanho em diante.
+                    <strong>(2)</strong> Explique por que nenhum multiplicador consegue
+                    fazer n² caber no ritmo de n.
                 </p>
                 <div class="resposta fragment fade-in">
                     <strong>Resposta:</strong>
                     <ol>
-                        <li>c = 6, n₀ = 20: para n ≥ 20, 5n + 20 ≤ 5n + n = 6n. ✓</li>
-                        <li>Se n² ≤ c·n para todo n ≥ n₀, dividindo por n: n ≤ c sempre —
-                            impossível, pois n cresce sem limite e c é fixo.</li>
+                        <li>O multiplicador 6 funciona: a partir de n = 20, vale 5n + 20 ≤ 6n.
+                            Logo 5n + 20 cresce no ritmo de n → O(n). ✓</li>
+                        <li>Para n² caber no ritmo de n, precisaríamos de n ≤ multiplicador
+                            <em>para sempre</em> — impossível: n cresce sem limite e o
+                            multiplicador é um número fixo.</li>
                     </ol>
                 </div>
             </section>

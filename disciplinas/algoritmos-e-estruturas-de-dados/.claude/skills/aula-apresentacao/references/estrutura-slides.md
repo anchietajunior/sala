@@ -76,7 +76,7 @@ Texto **literal** desta forma em todas as aulas.
    - **Camada 1** — 1 slide. Texto coloquial + blockquote com a frase essencial.
    - **Camada 2** — 1–2 slides. Definição + operações em bullet.
    - **Camada 3** — 2–4 slides. Sub-divida em "ponteiros / estado externo", "operações em detalhe", "invariantes".
-   - **Camada 4** — 2–3 slides. Um para o TAD (com `<pre><code class="language-c">...</code></pre>`), um para axiomas em bullet, um para a tupla.
+   - **Camada 4** — 2–3 slides. Um para o TAD (com `<pre><code class="language-c">...</code></pre>`), um para axiomas em bullet, um para a tupla. Quando a camada 4 do `.md` for matemática (definição formal, notação assintótica), **não transplantar a definição para o slide** — ver seção *Matemática nos slides* adiante.
    - **Camada 5** — 1–2 slides. Um para a tabela de complexidade, outro para a comparação em prosa (use `.duas-colunas`).
    - **Camada 6** — 1–2 slides. Lista de aplicações + lista de variantes.
 
@@ -304,6 +304,43 @@ O título "Representação interna como tupla" colado na fórmula. O aluno vê a
 - **Slide do Eddy** (`<section class="eddy-slide">`): a fala dentro do balão **já é** o contexto autocontido.
 - **Slides puramente narrativos** (uma `<section>` com só `<h3>` + parágrafos de prosa contínua, sem nenhum bloco técnico): já são contexto puro, não precisam de moldura adicional.
 - **Slides-capa de bloco** (quando existirem) e o **slide-título da aula**: função puramente de transição.
+
+---
+
+## Matemática nos slides — dose mínima, sempre contextualizada
+
+**Não estamos ensinando matemática — estamos ensinando algoritmos a uma turma sem conhecimento prévio.** Fórmula em notação simbólica projetada na parede afugenta o aluno do conteúdo que queremos passar. A camada formal existe e é importante — mas ela vive no `.md` (camada 4), que o aluno lê no próprio ritmo, com o texto em volta. O slide é outra mídia: 5–10 segundos de olhar, em sala.
+
+### Regras
+
+1. **Notação simbólica pesada não entra em slide**: quantificadores (∀, ∃), conectivos lógicos (⇔, ⇒), definições com constantes (c, n₀), provas formais. Nem no corpo, nem em `.formula`.
+2. **Matemática entra como referência e contagem concreta**: "Euclides, ~300 a.C.", "1.000.000 de comparações contra ~20", tabelas com números reais. Números concretos convencem sem assustar.
+3. **Fórmula só quando indispensável, e então**:
+   - **Pequena** — uma expressão curta: `3n + 5 → O(n)`, `meio = (inicio + fim) / 2`.
+   - **Depois da ideia em português** — o slide diz a ideia em prosa primeiro; a fórmula aparece como resumo, nunca como apresentação.
+   - **Com leitura em linguagem natural ao lado** — "lê-se: cresce no ritmo de n".
+4. **A definição formal completa é remetida ao material escrito** — use `<p class="nota-rodape">A definição matemática completa está no material escrito da aula.</p>`.
+5. **Exercícios formais do `.md`** viram enunciado em linguagem de gente no slide ("encontre um multiplicador que cubra...", "explique por que nenhum multiplicador basta..."); a resposta pode conter a expressão curta.
+
+### Exemplo ruim — definição transplantada do `.md`
+
+```html
+<p><span class="formula">f(n) = O(g(n)) ⇔ ∃ c &gt; 0, n₀ ≥ 1 : f(n) ≤ c·g(n) ∀ n ≥ n₀</span></p>
+```
+
+O aluno de primeiro período vê ∃ e ∀ pela primeira vez na vida, no meio de uma aula que não é de lógica. Custo alto, ganho zero — a definição está no `.md`.
+
+### Exemplo bom — mesma ideia, em português com fórmula mínima
+
+```html
+<p style="text-align: left;">
+    Não contamos passos exatos — respondemos só uma pergunta:
+    <strong>quando a entrada cresce, o trabalho cresce em que ritmo?</strong>
+</p>
+<p><span class="formula">3n + 5 passos → O(n)</span></p>
+<p style="text-align: left; font-size: 0.8em;">Lê-se: "cresce no ritmo de n".</p>
+<p class="nota-rodape">A definição matemática completa está no material escrito da aula.</p>
+```
 
 ---
 
