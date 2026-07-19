@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 280"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">A equação de Wirth</text>
+
+  <!-- Algoritmos -->
+  <rect x="40" y="110" width="185" height="70"
+        fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="132" y="152" text-anchor="middle" font-size="17" font-weight="600" fill="#222">Algoritmos</text>
+  <text x="132" y="207" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">a receita: os passos</text>
+
+  <text x="248" y="155" text-anchor="middle" font-size="28" font-weight="600" fill="#2c5d8a">+</text>
+
+  <!-- Estruturas de Dados -->
+  <rect x="272" y="110" width="200" height="70"
+        fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="372" y="145" text-anchor="middle" font-size="17" font-weight="600" fill="#222">Estruturas</text>
+  <text x="372" y="167" text-anchor="middle" font-size="17" font-weight="600" fill="#222">de Dados</text>
+  <text x="372" y="207" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">a despensa: a organização</text>
+
+  <text x="496" y="155" text-anchor="middle" font-size="28" font-weight="600" fill="#2c5d8a">=</text>
+
+  <!-- Programas -->
+  <rect x="520" y="110" width="150" height="70"
+        fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="595" y="152" text-anchor="middle" font-size="17" font-weight="600" fill="#2c5d8a">Programas</text>
+  <text x="595" y="207" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">o software que funciona</text>
+
+  <line x1="100" y1="235" x2="600" y2="235" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="262" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">
+    Niklaus Wirth batizou seu livro clássico com esta equação — ele está na bibliografia da disciplina
+  </text>
+</svg>

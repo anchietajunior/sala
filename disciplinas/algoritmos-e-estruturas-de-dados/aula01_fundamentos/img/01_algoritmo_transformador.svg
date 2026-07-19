@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 300"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">O algoritmo como transformador</text>
+
+  <!-- caixa de entrada -->
+  <rect x="40" y="110" width="135" height="70"
+        fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="4"/>
+  <text x="107" y="140" text-anchor="middle" font-size="16" fill="#222">entradas</text>
+  <text x="107" y="162" text-anchor="middle" font-size="14" fill="#888">dados do problema</text>
+
+  <!-- seta entrada -> algoritmo -->
+  <path d="M 180 145 L 212 145" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="208,140 221,145 208,150" fill="#2c5d8a"/>
+
+  <!-- caixa do algoritmo -->
+  <rect x="225" y="85" width="250" height="120"
+        fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="350" y="110" text-anchor="middle"
+        font-size="16" font-weight="600" fill="#2c5d8a">ALGORITMO</text>
+
+  <!-- passos internos -->
+  <rect x="243" y="125" width="62" height="34" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="1.5" rx="3"/>
+  <text x="274" y="147" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">passo 1</text>
+
+  <path d="M 307 142 L 315 142" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="313,138 321,142 313,146" fill="#5a7a9a"/>
+
+  <rect x="323" y="125" width="62" height="34" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="1.5" rx="3"/>
+  <text x="354" y="147" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">passo 2</text>
+
+  <path d="M 387 142 L 395 142" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="393,138 401,142 393,146" fill="#5a7a9a"/>
+
+  <rect x="403" y="125" width="62" height="34" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="1.5" rx="3"/>
+  <text x="434" y="147" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">passo 3</text>
+
+  <text x="350" y="190" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    finito · ordenado · sem ambiguidade
+  </text>
+
+  <!-- seta algoritmo -> saída -->
+  <path d="M 480 145 L 512 145" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="508,140 521,145 508,150" fill="#2c5d8a"/>
+
+  <!-- caixa de saída -->
+  <rect x="525" y="110" width="135" height="70"
+        fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="4"/>
+  <text x="592" y="140" text-anchor="middle" font-size="16" fill="#222">saídas</text>
+  <text x="592" y="162" text-anchor="middle" font-size="14" fill="#888">resultado definido</text>
+
+  <line x1="100" y1="245" x2="600" y2="245" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="272" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">
+    a inteligência está na instrução, não no executor
+  </text>
+</svg>

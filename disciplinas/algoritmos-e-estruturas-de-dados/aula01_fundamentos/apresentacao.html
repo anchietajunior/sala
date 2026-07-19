@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 01 — Algoritmos, Estruturas de Dados e Complexidade | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+        .reveal .resposta table {
+            font-size: 0.95em;
+            margin: 0.4em auto 0.2em auto;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+
+        .reveal .formula {
+            font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.9em;
+            color: #222;
+            background: #f7f9fc;
+            border: 1px solid #cfd6dd;
+            border-radius: 6px;
+            padding: 14px 22px;
+            display: inline-block;
+            margin: 0.4em 0;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- 1. CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- 2. TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 01</p>
+            <h1>Algoritmos, Estruturas de Dados e Complexidade</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                Algoritmo · Estrutura de Dados · Big O
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>conceitual</strong> — o vocabulário que usaremos em toda a disciplina.
+            </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO, 6 CAMADAS)   -->
+        <!-- ============================================================ -->
+        <section>
+            <!-- ----- CAMADA 1 — INTRODUÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>Introdução</h3>
+                <p style="text-align: left;">
+                    Ensine alguém a preparar um café — mas alguém que segue instruções
+                    <strong>ao pé da letra</strong> e não improvisa nada.
+                    "Água quente"? Quente quanto? Quanta água?
+                </p>
+                <blockquote>
+                    A inteligência está na <span class="destaque">instrução</span>,
+                    não no executor.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A humanidade sempre fez isso</h3>
+                <p style="text-align: left;">
+                    Instruções precisas que qualquer executor reproduz existem há milênios:
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li>receitas de cozinha</li>
+                    <li>partituras musicais</li>
+                    <li>manuais de montagem</li>
+                    <li>moldes de costura</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.85em;">
+                    O computador é só o executor mais literal de todos.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 2 — DEFINIÇÃO INFORMAL ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>Isso tem nome: algoritmo</h3>
+                <p style="text-align: left;">
+                    <strong>Algoritmo</strong> (<em>algorithm</em>): sequência
+                    <span class="destaque">finita</span> de passos
+                    <span class="destaque">não ambíguos</span> que transforma
+                    <span class="destaque">entradas</span> em
+                    <span class="destaque">saídas</span>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    A palavra vem de al-Khwarizmi, matemático persa do século IX —
+                    de outra obra dele herdamos também "álgebra".
+                </p>
+            </section>
+
+            <section>
+                <h3>Mais antigo que o computador</h3>
+                <p style="text-align: left;">
+                    A ideia não nasceu com a eletrônica:
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li><strong>~300 a.C.</strong> — Euclides descreve o algoritmo do MDC nos <em>Elementos</em></li>
+                    <li><strong>1843</strong> — Ada Lovelace publica o primeiro algoritmo para uma máquina</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.85em;">
+                    O de Euclides funciona até hoje, <strong>inalterado</strong>.
+                </p>
+            </section>
+
+            <section>
+                <h3>1936 — Turing define o que é computar</h3>
+                <p style="text-align: left;">
+                    Alan Turing imaginou uma máquina radicalmente simples — fita, cabeçote,
+                    tabela de regras — e provou: tudo que é calculável por procedimento
+                    mecânico, <strong>essa máquina calcula</strong>.
+                </p>
+                <blockquote>
+                    Computar <strong>é</strong> executar um algoritmo.
+                </blockquote>
+                <p class="nota-rodape">Artigo <em>On Computable Numbers</em>, 1936 — todo computador é uma encarnação dessa máquina.</p>
+            </section>
+
+            <!-- Slide do Eddy — Alan Kay -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, Alan Kay — criador do Smalltalk e Prêmio Turing de 2003 —
+                            dizia que "a melhor maneira de prever o futuro é inventá-lo".
+                            Para ele, o computador não é uma calculadora grande: é um
+                            <em>meio de expressão</em>, como o papel e o cinema.
+                            O que se escreve nesse meio são algoritmos — e é isso que
+                            vocês vão aprender a escrever aqui.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>A segunda metade: estrutura de dados</h3>
+                <p style="text-align: left;">
+                    Todo algoritmo opera sobre dados — e dados precisam estar
+                    <strong>organizados</strong>.
+                </p>
+                <p style="text-align: left;">
+                    <strong>Estrutura de dados</strong> (<em>data structure</em>):
+                    o arranjo dos dados na memória + as operações permitidas,
+                    projetado para tornar certos acessos <span class="destaque">baratos</span>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Ver o capítulo introdutório de Backes; Veloso &amp; Pereira, capítulo de abertura.
+                </p>
+            </section>
+
+            <section>
+                <h3>E como comparar algoritmos?</h3>
+                <p style="text-align: left;">
+                    <strong>Análise de complexidade</strong>: medir quanto um algoritmo
+                    consome à medida que a entrada cresce.
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li><strong>Tempo</strong> — número de passos executados</li>
+                    <li><strong>Espaço</strong> — memória adicional usada</li>
+                </ul>
+                <p class="nota-rodape" style="text-align: left;">Toscani &amp; Veloso, capítulos iniciais.</p>
+            </section>
+
+            <section>
+                <h3>O que um algoritmo <em>não</em> é</h3>
+                <p style="text-align: left;">Três confusões comuns para evitar desde já:</p>
+                <ul style="font-size: 0.82em;">
+                    <li><strong>Não é código-fonte</strong> — o de Euclides tem 2.300 anos; C tem ~50</li>
+                    <li><strong>Não aceita ambiguidade</strong> — "tempere a gosto" não é passo de algoritmo</li>
+                    <li><strong>Não roda para sempre</strong> — sem terminar, não é algoritmo</li>
+                </ul>
+            </section>
+
+            <!-- ----- CAMADA 3 — PROPRIEDADES E COMPORTAMENTO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>As cinco propriedades</h3>
+                <p style="text-align: left;">
+                    Para merecer o nome de algoritmo, uma sequência de passos precisa de:
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Finitude</strong> — termina, para toda entrada válida</li>
+                    <li><strong>Definitude</strong> — cada passo tem uma só interpretação</li>
+                    <li><strong>Entradas</strong> — zero ou mais valores fornecidos</li>
+                    <li><strong>Saídas</strong> — um ou mais resultados definidos</li>
+                    <li><strong>Efetividade</strong> — passos executáveis mecanicamente</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O mesmo problema, vários algoritmos</h3>
+                <p style="text-align: left;">
+                    Procurar um nome entre <strong>1.000.000</strong> de entradas:
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li><strong>Busca sequencial</strong> — um por um: até <strong>1.000.000</strong> de comparações</li>
+                    <li><strong>Busca binária</strong> (lista ordenada) — descarta metade por passo: <strong>~20</strong> comparações</li>
+                </ul>
+                <blockquote style="font-size: 0.8em;">
+                    50.000× menos trabalho. Não é um computador melhor — é uma <span class="destaque">ideia melhor</span>.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Dois lados da mesma moeda</h3>
+                <p style="text-align: left;">
+                    A busca binária <strong>só existe</strong> porque a lista está ordenada.
+                    A estrutura escolhida determina quais algoritmos são viáveis — e a que custo.
+                </p>
+                <blockquote style="font-size: 0.8em;">
+                    Não existe organização perfeita — existe a certa para a pergunta:
+                    <span class="destaque">"o que você quer que seja barato?"</span>
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Propriedades que sempre valem</h3>
+                <p style="text-align: left;">Três verdades que acompanham a disciplina inteira:</p>
+                <ul style="font-size: 0.8em;">
+                    <li>✅ Algoritmo correto funciona para <strong>toda</strong> entrada válida — não só as fáceis</li>
+                    <li>✅ O custo é do <strong>algoritmo</strong>, não da máquina — trocar de computador não muda os passos</li>
+                    <li>✅ A estrutura de dados <strong>precede</strong> o algoritmo — dados desorganizados limitam tudo</li>
+                </ul>
+            </section>
+
+            <!-- ----- CAMADA 4 — DEFINIÇÃO FORMAL E NOTAÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>O algoritmo como objeto matemático</h3>
+                <p style="text-align: left;">
+                    Formalmente, um algoritmo computa uma <strong>função</strong>:
+                    para cada entrada válida <code>x</code>, produz em tempo finito
+                    a saída <code>f(x)</code> especificada.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Máquinas de Turing, funções recursivas e cálculo lambda computam a mesma classe
+                    de funções — a Tese de Church-Turing. Consequência prática: podemos contar passos
+                    sem nos preocupar com a máquina.
+                </p>
+            </section>
+
+            <section>
+                <h3>A notação Big O</h3>
+                <p style="text-align: left;">
+                    Contar passos exatos é frágil. O Big O captura só o
+                    <strong>ritmo de crescimento</strong> do custo:
+                </p>
+                <p style="text-align: center;">
+                    <span class="formula">f(n) = O(g(n))  ⇔  ∃ c &gt; 0, n₀ ≥ 1 :  f(n) ≤ c·g(n)  ∀ n ≥ n₀</span>
+                </p>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Leitura: a partir de certo tamanho (<code>n₀</code>), <code>f</code> nunca
+                    cresce mais rápido que <code>g</code>, a menos de uma constante (<code>c</code>).
+                </p>
+            </section>
+
+            <section>
+                <h3>Um exemplo concreto</h3>
+                <p style="text-align: left;">
+                    Um algoritmo executa <code>f(n) = 3n + 5</code> passos. Ele é O(n)?
+                </p>
+                <p style="text-align: center;">
+                    <span class="formula">escolha c = 4 e n₀ = 5:   3n + 5 ≤ 4n  para todo n ≥ 5  ✓</span>
+                </p>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Constantes e termos menores somem <strong>de propósito</strong>.
+                    Big O responde só: <span class="destaque">"como o custo escala?"</span>
+                </p>
+            </section>
+
+            <section>
+                <h3>Tempo × espaço</h3>
+                <p style="text-align: left;">A mesma notação mede duas grandezas independentes:</p>
+                <ul style="font-size: 0.85em;">
+                    <li><strong>Tempo</strong> — quantos passos, em função de n</li>
+                    <li><strong>Espaço</strong> — quanta memória <em>adicional</em>, em função de n</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Rápido e guloso em memória, ou econômico e lento —
+                    mais um <em>trade-off</em>.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 5 — ANÁLISE DE COMPLEXIDADE ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>As classes de crescimento</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Da mais lenta para a mais explosiva — passos aproximados para n = 1.000:
+                </p>
+                <table>
+                    <thead>
+                        <tr><th>Classe</th><th>Nome</th><th>n = 1.000</th><th>Exemplo</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>O(1)</td><td>constante</td><td>1</td><td>acessar posição de vetor</td></tr>
+                        <tr><td>O(log n)</td><td>logarítmica</td><td>~10</td><td>busca binária</td></tr>
+                        <tr><td>O(n)</td><td>linear</td><td>1.000</td><td>busca sequencial</td></tr>
+                        <tr><td>O(n log n)</td><td>linearítmica</td><td>~10.000</td><td>boas ordenações</td></tr>
+                        <tr><td>O(n²)</td><td>quadrática</td><td>1.000.000</td><td>laços aninhados</td></tr>
+                        <tr><td>O(2ⁿ)</td><td>exponencial</td><td>~10³⁰¹</td><td>testar subconjuntos</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h3>O hardware não salva</h3>
+                <p style="text-align: left;">
+                    Máquina de 100 milhões de passos/segundo, entrada de n = 1.000.000:
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li>algoritmo O(n log n) → <strong>0,2 segundo</strong></li>
+                    <li>algoritmo O(n²) → <strong>~10.000 segundos ≈ 3 horas</strong></li>
+                </ul>
+                <blockquote style="font-size: 0.8em;">
+                    Um computador 10× mais rápido só <em>adia</em> o problema quadrático.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Espaço: o mesmo raciocínio</h3>
+                <p style="text-align: left;">
+                    Inverter um vetor de n elementos — dois caminhos, ambos O(n) em tempo:
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li>criar uma <strong>cópia</strong> invertida → memória adicional <strong>O(n)</strong></li>
+                    <li>trocar as pontas <strong>no lugar</strong> → memória adicional <strong>O(1)</strong></li>
+                </ul>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Quando n é grande, é o <strong>espaço</strong> que decide qual cabe na memória.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 6 — CONEXÕES E VARIANTES ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Este vocabulário volta em toda aula</h3>
+                <p style="text-align: left; font-size: 0.85em;">Cada estrutura da disciplina é uma resposta de custo diferente:</p>
+                <ul style="font-size: 0.78em;">
+                    <li><strong>Listas encadeadas</strong> — inserir no início O(1); buscar O(n)</li>
+                    <li><strong>Pilhas e filas</strong> — tudo O(1); a restrição é o preço</li>
+                    <li><strong>Árvores de busca</strong> — busca O(log n) permanente</li>
+                    <li><strong>Tabelas hash</strong> — O(1) no caso médio</li>
+                    <li><strong>Ordenação</strong> — a jornada de O(n²) até O(n log n)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Variantes da análise</h3>
+                <p style="text-align: left;">
+                    Nesta disciplina analisamos o <strong>pior caso</strong>. Há mais:
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li>caso <strong>médio</strong> e <strong>melhor</strong> caso</li>
+                    <li>notações Ω (piso) e Θ (ritmo exato)</li>
+                </ul>
+                <p class="nota-rodape" style="text-align: left;">
+                    Toscani &amp; Veloso desenvolvem com rigor — voltamos a elas na aula de ordenação.
+                </p>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA                                -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Quatro diagramas: o transformador, a equação, dois algoritmos em disputa
+                    e as curvas de custo.
+                </p>
+            </section>
+
+            <section>
+                <h3>O algoritmo como transformador</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A imagem mental mínima — vale para Euclides e para uma IA:
+                    entradas, passos finitos e ordenados, saídas.
+                </p>
+                <img class="diagrama" src="img/01_algoritmo_transformador.svg"
+                     alt="Algoritmo como caixa que transforma entradas em saídas por passos finitos">
+            </section>
+
+            <section>
+                <h3>A equação de Wirth</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Um programa é a soma das duas metades da disciplina — nenhuma funciona sozinha.
+                </p>
+                <img class="diagrama" src="img/02_equacao_wirth.svg"
+                     alt="Algoritmos mais estruturas de dados igual a programas">
+            </section>
+
+            <section>
+                <h3>Dois algoritmos, um problema</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Mesmo vetor, mesmo alvo (31): conte os passos de cada lado —
+                    a complexidade a olho nu.
+                </p>
+                <img class="diagrama" src="img/03_busca_sequencial_vs_binaria.svg"
+                     alt="Busca sequencial percorrendo tudo contra busca binária descartando metades">
+            </section>
+
+            <section>
+                <h3>As curvas de crescimento</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    As classes da tabela desenhadas juntas: no começo andam próximas —
+                    depois a quadrática dispara.
+                </p>
+                <img class="diagrama" src="img/04_curvas_crescimento.svg"
+                     alt="Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)">
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR                                  -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que isso existe?</h2>
+                <blockquote style="font-size: 0.75em;">
+                    "Como uma IA como o ChatGPT gera cada palavra em fração de segundo,
+                    se precisa executar <strong>bilhões</strong> de operações?"
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Não há mágica — há uma corrente de algoritmos</h3>
+                <p style="text-align: left; font-size: 0.85em;">Para <strong>cada palavra</strong> da resposta:</p>
+                <ul style="font-size: 0.78em;">
+                    <li><strong>tokenização</strong> — fatiar o texto em pedaços</li>
+                    <li><strong>álgebra linear</strong> — bilhões de multiplicações otimizadas</li>
+                    <li><strong>atenção</strong> — decidir que trechos da conversa pesam mais</li>
+                    <li><strong>amostragem</strong> — escolher a próxima palavra</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Um elo com custo descontrolado e a resposta <strong>não chega nunca</strong>.
+                </p>
+            </section>
+
+            <section>
+                <h3>A complexidade moldou o produto</h3>
+                <p style="text-align: left;">
+                    Os algoritmos de atenção originais custam tempo <strong>quadrático</strong>
+                    no tamanho do texto — dobrar a conversa quadruplica o trabalho.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Por isso as primeiras IAs tinham memória curta. Alargar esse limite
+                    exigiu <strong>algoritmos melhores</strong>, não só máquinas maiores.
+                </p>
+                <blockquote style="font-size: 0.75em;">
+                    Quem entende o custo dos algoritmos entende por que a tecnologia
+                    tem a forma que tem.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>O mesmo vale para o que você já usa</h3>
+                <ul style="font-size: 0.82em;">
+                    <li><strong>Buscador</strong> — não procura: consulta índices prontos, trocando espaço por tempo</li>
+                    <li><strong>GPS</strong> — caminho mínimo que descarta quase todas as rotas <em>sem examiná-las</em></li>
+                </ul>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Décimos de segundo em vez de horas — sempre a mesma razão:
+                    <span class="destaque">uma ideia melhor</span>.
+                </p>
+            </section>
+
+            <!-- Slide do Eddy — Euclides na criptografia -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, o algoritmo de Euclides tem mais de 2.300 anos e continua
+                            em serviço: ele roda dentro dos sistemas de criptografia que
+                            protegem suas conversas hoje. O hardware passa, a ideia fica —
+                            um bom algoritmo não envelhece.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 4 — ANALOGIAS                                           -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>A receita e a despensa</h3>
+                <p style="text-align: left;">
+                    A <strong>receita</strong> é o algoritmo; a <strong>despensa</strong>,
+                    a estrutura de dados.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    A mesma receita numa despensa organizada sai em metade do tempo.
+                    A receita não mudou — <span class="destaque">a organização dos dados
+                    mudou o custo</span>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    E a despensa ideal do restaurante não é a do estoque de mercado —
+                    cada padrão de uso pede uma organização.
+                </p>
+            </section>
+
+            <section>
+                <h3>A partitura e a orquestra</h3>
+                <p style="text-align: left;">
+                    Qualquer orquestra do mundo, seguindo a mesma partitura fielmente,
+                    produz a mesma sinfonia.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    A inteligência está na <strong>escrita</strong>, não na execução —
+                    exatamente a máquina de Turing. E as instruções precisam ser
+                    <strong>efetivas</strong>: "toque algo emocionante" não é instrução.
+                </p>
+            </section>
+
+            <!-- Slide do Eddy — Beethoven -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, Beethoven compôs parte de suas últimas obras já profundamente
+                            surdo — escreveu partituras que nunca ouviu executadas. Quem descreve
+                            o procedimento não precisa executá-lo: essa é exatamente a separação
+                            que Turing formalizou em 1936.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 5 — EXERCÍCIOS                                          -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Exercícios práticos</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Cinco exercícios — tentem antes de ver cada resposta.
+                </p>
+            </section>
+
+            <section>
+                <h3>Exercício 1 — Algoritmo ou não?</h3>
+                <p style="text-align: left; font-size: 0.7em;">
+                    Quais descrições são algoritmos? Quando não forem, aponte a propriedade violada
+                    (finitude, definitude, entradas, saídas, efetividade):
+                </p>
+                <ol style="text-align: left; font-size: 0.62em;">
+                    <li>"Receba um inteiro positivo; enquanto for diferente de 1, some 1 a ele."</li>
+                    <li>"Percorra a lista somando cada elemento a um total iniciado em zero; informe o total."</li>
+                    <li>"Escolha o filtro que deixar a foto mais bonita; aplique-o."</li>
+                    <li>"Receba dois números; devolva o maior; se iguais, devolva qualquer um."</li>
+                </ol>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ol>
+                        <li><strong>Não</strong> — viola a finitude: nunca alcança 1.</li>
+                        <li><strong>Sim</strong>.</li>
+                        <li><strong>Não</strong> — "mais bonita" viola a definitude.</li>
+                        <li><strong>Sim</strong> — as duas escolhas satisfazem a especificação.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Slide do Eddy — provocação antes do trace -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, antes de resolver o próximo exercício, façam um palpite:
+                            quantas comparações a busca binária precisa para achar o 31 entre
+                            sete números? Anotem o chute, executem o passo a passo e confiram
+                            quem acertou.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 2 — Busca binária na mão</h3>
+                <p style="text-align: left; font-size: 0.7em;">
+                    Vetor ordenado <code>[3, 8, 12, 17, 25, 31, 40]</code> (posições 0–6).
+                    Execute a busca binária procurando <strong>31</strong>: anote
+                    <code>inicio</code>, <code>fim</code>, <code>meio</code> e a decisão de cada passo.
+                    Compare com a busca sequencial.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <table>
+                        <thead><tr><th>Passo</th><th>inicio</th><th>fim</th><th>meio</th><th>valor</th><th>Decisão</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>0</td><td>6</td><td>3</td><td>17</td><td>17 &lt; 31 → inicio = 4</td></tr>
+                            <tr><td>2</td><td>4</td><td>6</td><td>5</td><td>31</td><td><strong>encontrado</strong></td></tr>
+                        </tbody>
+                    </table>
+                    Binária: <strong>2 comparações</strong>. Sequencial: <strong>6</strong>.
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 3 — Classificando um trecho</h3>
+                <p style="text-align: left; font-size: 0.7em;">
+                    O trecho verifica se uma lista de n números tem valor repetido,
+                    comparando cada par com dois laços aninhados
+                    (<code>i</code> de 0 a n−1; <code>j</code> de i+1 a n−1).
+                    Dê a complexidade de <strong>tempo</strong> no pior caso e de
+                    <strong>espaço adicional</strong>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ul>
+                        <li><strong>Tempo O(n²)</strong> — todos os pares: n·(n−1)/2 comparações.</li>
+                        <li><strong>Espaço O(1)</strong> — só as variáveis <code>i</code> e <code>j</code>.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 4 — O computador mais rápido perde</h3>
+                <p style="text-align: left; font-size: 0.7em;">
+                    Algoritmo A custa n² passos; B custa 100·n·log₂ n.
+                    Preencha para n = 100, 1.000 e 1.000.000 e diga quando B vale a pena.
+                    (Use log₂ 1.000 ≈ 10; log₂ 1.000.000 ≈ 20.)
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <table>
+                        <thead><tr><th>n</th><th>A: n²</th><th>B: 100·n·log₂ n</th></tr></thead>
+                        <tbody>
+                            <tr><td>100</td><td>10.000</td><td>~70.000</td></tr>
+                            <tr><td>1.000</td><td>1.000.000</td><td>~1.000.000</td></tr>
+                            <tr><td>1.000.000</td><td>10¹²</td><td>~2 × 10⁹</td></tr>
+                        </tbody>
+                    </table>
+                    Empate por volta de n = 1.000; depois B dispara (500× mais rápido em n = 10⁶).
+                    Constantes decidem no pequeno; a <strong>classe</strong> decide no grande.
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 5 — Desafio: provando com a definição</h3>
+                <p style="text-align: left; font-size: 0.7em;">
+                    Com a definição formal (achar c &gt; 0 e n₀ com f(n) ≤ c·g(n) para n ≥ n₀):
+                    <strong>(1)</strong> prove que 5n + 20 é O(n);
+                    <strong>(2)</strong> argumente por que n² <em>não</em> é O(n) —
+                    para qualquer escolha de c.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ol>
+                        <li>c = 6, n₀ = 20: para n ≥ 20, 5n + 20 ≤ 5n + n = 6n. ✓</li>
+                        <li>Se n² ≤ c·n para todo n ≥ n₀, dividindo por n: n ≤ c sempre —
+                            impossível, pois n cresce sem limite e c é fixo.</li>
+                    </ol>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 6 — REFERÊNCIAS                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.75em;">
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em Linguagem C</em> — capítulo introdutório.</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C</em> — capítulo de abertura.</li>
+                <li><strong>Toscani, L. V.; Veloso, P. A. S.</strong> — <em>Complexidade de Algoritmos</em> — capítulos iniciais (Big O, Ω, Θ).</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.7em; color: #666;">
+                <li>Wirth — <em>Algoritmos e Estruturas de Dados</em> — o livro da equação.</li>
+                <li>Schildt — <em>C Completo e Total</em> — preparação para as aulas com código.</li>
+                <li>Turing — <em>On Computable Numbers</em> (1936) — leitura histórica.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Aula 01</h1>
+            <h2>Próxima aula em breve</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Vocês já têm o vocabulário: algoritmo, estrutura de dados e Big O.
+                Nas próximas aulas, ele ganha corpo em C — começando pelas estruturas lineares.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>
