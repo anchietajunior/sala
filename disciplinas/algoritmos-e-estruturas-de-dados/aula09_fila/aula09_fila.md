@@ -1,4 +1,4 @@
-# Aula 03 — Fila (Queue)
+# Aula 09 — Fila (Queue)
 
 > **Tipo desta aula**: implementação. A Fila é a primeira estrutura concreta da disciplina. Apresentamos **três representações encadeadas** lado a lado — simplesmente encadeada (canônica), duplamente encadeada e circular — todas implementadas em C, todas com as mesmas operações observáveis. O TAD não muda; só muda como os ponteiros são organizados internamente.
 

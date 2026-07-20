@@ -1,4 +1,4 @@
-# Aula 05 — Árvores e Árvores Binárias
+# Aula 11 — Árvores e Árvores Binárias
 
 > **Tipo desta aula**: implementação. Esta é a aula introdutória sobre **árvores** — a primeira estrutura **não-linear** da disciplina. Fazemos uma visão panorâmica das variantes mais usadas (BST, AVL, rubro-negra, B-tree, Trie, Heap) e nos aprofundamos em **árvore binária de busca**, em **árvore binária balanceada** (sem implementar rebalanceamento, mas explicando por que ele importa) e nas **três travessias clássicas** (pré-ordem, in-ordem, pós-ordem). A representação escolhida é a **encadeada por ponteiros**, com cada nó guardando dois ponteiros — `esq` e `dir`.
 

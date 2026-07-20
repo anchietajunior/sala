@@ -1,4 +1,4 @@
-# Aula 02 — Listas Encadeadas, FIFO e LIFO, Duplamente Encadeadas e Circulares
+# Aula 08 — Listas Encadeadas, FIFO e LIFO, Duplamente Encadeadas e Circulares
 
 > **Tipo desta aula**: conceitual / meta. Apresentamos a **família** das listas encadeadas e os **padrões de acesso** (FIFO, LIFO) que serão usados pelas estruturas concretas das próximas aulas. Implementação em C começa na Aula 03 (Fila) e segue na Aula 04 (Pilha).
 

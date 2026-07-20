@@ -1,4 +1,4 @@
-# Aula 04 — Pilha (Stack)
+# Aula 10 — Pilha (Stack)
 
 > **Tipo desta aula**: implementação. A Pilha é o gêmeo conceitual da Fila — mesma família (estrutura linear), política de acesso oposta (LIFO em vez de FIFO). A representação interna escolhida aqui é **lista simplesmente encadeada com um único ponteiro `topo`** — ainda mais simples que a da Fila.
 
