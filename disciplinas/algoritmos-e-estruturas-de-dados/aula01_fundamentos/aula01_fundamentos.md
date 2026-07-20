@@ -1,6 +1,6 @@
 # Aula 01 — Conceitos de Algoritmos, Estruturas de Dados e Complexidade
 
-> **Tipo desta aula**: conceitual. Esta é a aula de abertura da disciplina: ela apresenta as três ideias — algoritmo, estrutura de dados e complexidade — que servirão de vocabulário para **todas** as aulas seguintes. Não há código C aqui; a notação necessária aos exercícios é apresentada na própria aula.
+> **Tipo desta aula**: conceitual. Esta é a aula de abertura da disciplina: ela apresenta as três ideias — algoritmo, estrutura de dados e complexidade — que servirão de vocabulário para **todas** as aulas seguintes, e as duas bases práticas sobre as quais tudo será construído: a **linguagem C** e a **lista sequencial (vetor)**. Não há programa completo em C aqui — apenas trechos curtos; a notação necessária aos exercícios é apresentada na própria aula.
 
 ---
 
@@ -16,7 +16,7 @@ Essa ideia milenar tem nome: **algoritmo** (*algorithm*) — uma sequência **fi
 
 O salto filosófico decisivo veio em 1936, quando **Alan Turing** publicou o artigo *On Computable Numbers*. Turing propôs uma máquina imaginária de uma simplicidade radical — uma fita, um cabeçote de leitura e escrita, e uma tabela de regras — e mostrou que **tudo o que pode ser calculado por um procedimento mecânico pode ser calculado por essa máquina**. Com isso, "computar" deixou de ser uma noção vaga e ganhou definição matemática precisa: computar é executar um algoritmo. Todo computador que você já usou — do celular ao supercomputador — é, em essência, uma encarnação física dessa máquina de Turing. Décadas depois, **Alan Kay** — criador do Smalltalk, pioneiro da programação orientada a objetos e das interfaces gráficas modernas, Prêmio Turing de 2003 — resumiu o espírito dessa área com a frase que lhe é atribuída: *"a melhor maneira de prever o futuro é inventá-lo"*. Para Kay, o computador não é uma calculadora grande: é um **meio de expressão**, como o papel ou o filme — e o algoritmo é a linguagem desse meio.
 
-Falta a segunda metade da história. Um algoritmo opera sobre dados, e dados precisam estar **organizados** de alguma forma: essa organização é a **estrutura de dados** (*data structure*) — um arranjo dos dados na memória, junto com as operações permitidas sobre eles, projetado para tornar certos acessos e modificações baratos (ver o capítulo introdutório de Backes; Veloso & Pereira desenvolvem a mesma ideia no capítulo de abertura). A relação entre as duas coisas é tão íntima que **Niklaus Wirth** — criador da linguagem Pascal — batizou seu livro clássico, presente na bibliografia desta disciplina, com uma equação: ***Algoritmos + Estruturas de Dados = Programas***. Por fim, para comparar algoritmos entre si usamos a **análise de complexidade** (*complexity analysis*): a medida de quanto **tempo** (número de passos) e quanto **espaço** (memória adicional) um algoritmo consome à medida que a entrada cresce (Toscani & Veloso, capítulos iniciais).
+Falta a segunda metade da história. Um algoritmo opera sobre dados, e dados precisam estar **organizados** de alguma forma: essa organização é a **estrutura de dados** (*data structure*) — um arranjo dos dados na memória, junto com as operações permitidas sobre eles, projetado para tornar certos acessos e modificações baratos (ver o capítulo introdutório de Backes; Veloso & Pereira desenvolvem a mesma ideia no capítulo de abertura). A relação entre as duas coisas é tão íntima que **Niklaus Wirth** — criador da linguagem Pascal — batizou seu livro clássico, presente na bibliografia desta disciplina, com uma equação: ***Algoritmos + Estruturas de Dados = Programas***. Por fim, para comparar algoritmos entre si usamos a **análise de complexidade** (*complexity analysis*): a medida de quanto **tempo** (número de passos) e quanto **espaço** (memória adicional) um algoritmo consome à medida que a entrada cresce (Toscani & Veloso, capítulos iniciais). A ferramenta que dará corpo a tudo isso será a **linguagem C**, apresentada logo adiante nesta mesma aula.
 
 Note o que um algoritmo **não** é:
 
@@ -38,9 +38,74 @@ A literatura clássica enumera cinco propriedades que uma sequência de passos p
 
 Repare que a máquina de café da Camada 1 testava exatamente isso: quando a instrução falha em definitude ("água quente" — quente quanto?), o executor literal trava. É por isso que programar é, antes de tudo, um exercício de **precisão de pensamento** — o computador não completa lacunas.
 
+#### A ferramenta da disciplina: a linguagem C
+
+Para escrever algoritmos que um computador execute, precisamos de uma linguagem. A desta disciplina é a **linguagem C**, criada por **Dennis Ritchie** nos Laboratórios Bell, no início dos anos 1970, para escrever o sistema operacional **UNIX**. Meio século depois, C continua em toda parte: o núcleo do Linux, o interpretador do Python e boa parte da infraestrutura que roda o mundo são escritos em C. É uma linguagem pequena e explícita — cada passo aparece no código, sem atalhos escondidos —, o que a torna ideal para **enxergar o custo** dos algoritmos (Schildt, *C Completo e Total*; Damas, *Linguagem C*).
+
+Quatro peças bastam para começar. A primeira: **tipos básicos** — em C, todo dado tem um tipo declarado, que diz o que ele guarda:
+
+```c
+int    idade  = 20;      /* numero inteiro                */
+float  altura = 1.75;    /* numero com casas decimais     */
+double preco  = 19.90;   /* decimal com mais precisao     */
+char   letra  = 'A';     /* um unico caractere            */
+```
+
+A segunda: **funções** (*functions*) — blocos nomeados que recebem entradas e devolvem uma saída. Repare: é exatamente a cara de um algoritmo.
+
+```c
+int soma(int a, int b) {
+    return a + b;
+}
+```
+
+Lê-se: `soma` recebe dois inteiros, `a` e `b`, e devolve (`return`) um resultado; o tipo à esquerda do nome (`int`) é o tipo da resposta.
+
+A terceira: **condicionais** — escolher entre caminhos conforme uma condição. (`printf` é a função que escreve na tela.)
+
+```c
+if (idade >= 18) {
+    printf("maior de idade");
+} else {
+    printf("menor de idade");
+}
+```
+
+A quarta: **laços de repetição** — repetir passos enquanto uma condição valer. O `while` repete enquanto a condição for verdadeira; o `for` empacota início, condição e avanço em uma única linha:
+
+```c
+int i = 0;
+while (i < 5) {           /* repete com i = 0, 1, 2, 3, 4 */
+    printf("%d ", i);
+    i = i + 1;
+}
+
+for (int i = 0; i < 5; i = i + 1) {   /* o mesmo, em uma linha */
+    printf("%d ", i);
+}
+```
+
+É deliberadamente só o essencial — cada recurso será aprofundado nas aulas de implementação, quando os algoritmos ganharem código completo.
+
+#### A primeira estrutura de dados: a lista sequencial (vetor)
+
+Nosso primeiro jeito de organizar dados é o mais direto que existe: a **lista sequencial**, que em C toma a forma do **vetor** (*array*) — uma fileira de elementos **do mesmo tipo**, guardados **lado a lado** na memória, cada um com um número de posição chamado **índice** (*index*). Em Backes, ver o capítulo de vetores; Veloso & Pereira tratam a mesma ideia como lista sequencial.
+
+```c
+int notas[5];       /* lista sequencial com 5 posicoes          */
+notas[0] = 80;      /* primeira posicao — indices comecam em 0! */
+notas[4] = 95;      /* ultima posicao valida (0 a 4)            */
+
+char palavra[] = "radar";   /* uma palavra e um vetor de caracteres */
+```
+
+Pense numa rua de casas numeradas: sabendo o número, você vai direto à casa certa, sem bater de porta em porta. No vetor é igual — acessar `notas[3]` custa o mesmo com 5 posições ou com 5 milhões, porque a posição é **calculada** a partir do índice, não procurada. Esse **acesso direto** é o superpoder da lista sequencial, e o motivo de ela ser a estrutura dos nossos primeiros algoritmos.
+
+Há um preço. O tamanho é **fixo**, definido na criação; todos os elementos são do mesmo tipo; e inserir um elemento no meio obriga a empurrar todos os seguintes uma posição para o lado — a fileira não tem espaços vazios. Guardem essa limitação: é ela que motivará as **listas encadeadas**, algumas aulas adiante.
+
 #### O mesmo problema, vários algoritmos
 
-Um mesmo problema quase sempre admite **mais de um** algoritmo. Considere um problema simples: decidir se uma palavra é um **palíndromo** (*palindrome*) — uma palavra que se lê igual da esquerda para a direita e da direita para a esquerda, como *arara*, *radar* e *ovo*. Dois algoritmos diferentes resolvem:
+Com a linguagem e a primeira estrutura na mão, considere um problema simples: decidir se uma palavra — guardada num vetor de caracteres — é um **palíndromo** (*palindrome*): uma palavra que se lê igual da esquerda para a direita e da direita para a esquerda, como *arara*, *radar* e *ovo*. Dois algoritmos diferentes resolvem:
 
 - **Algoritmo da cópia invertida**: construir uma segunda palavra com as letras na ordem inversa e, ao final, comparar as duas, letra por letra. Percorre a palavra duas vezes e precisa de memória para guardar a cópia inteira.
 - **Algoritmo das duas pontas**: comparar a primeira letra com a última; se forem iguais, avançar uma posição de cada lado e repetir, caminhando das pontas para o centro. Se chegar ao meio sem encontrar diferença, é palíndromo. Faz metade das comparações e não guarda cópia nenhuma — apenas duas posições.
@@ -126,7 +191,7 @@ Há variantes da própria análise que apenas sinalizamos aqui: além do **pior 
 
 ## 2. Visualização Gráfica
 
-Quatro diagramas constroem o mapa conceitual da aula: o algoritmo como transformador, a equação de Wirth, dois algoritmos para o mesmo problema e as curvas de crescimento.
+Cinco diagramas constroem o mapa conceitual da aula: o algoritmo como transformador, a equação de Wirth, a lista sequencial, dois algoritmos para o mesmo problema e as curvas de crescimento.
 
 ### Passo 1: O algoritmo como transformador
 
@@ -140,15 +205,21 @@ Entradas à esquerda, saídas à direita, e no meio uma sequência finita e orde
 
 Um programa é a soma das duas metades da disciplina: a receita (algoritmo) e a organização dos ingredientes (estrutura de dados). Nenhuma das metades funciona sozinha.
 
-### Passo 3: Dois algoritmos, um problema
+### Passo 3: A lista sequencial
 
-![Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas](img/03_palindromo_dois_algoritmos.svg)
+![Vetor de cinco posições com índices e acesso direto pela posição](img/03_lista_sequencial.svg)
+
+A rua de casas numeradas: elementos do mesmo tipo, lado a lado, cada um com seu índice. A seta mostra o acesso direto — `notas[3]` chega à casa certa sem passar pelas anteriores.
+
+### Passo 4: Dois algoritmos, um problema
+
+![Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas](img/04_palindromo_dois_algoritmos.svg)
 
 A mesma palavra, dois caminhos: a cópia invertida percorre tudo duas vezes e guarda uma palavra inteira a mais; as duas pontas caminham para o centro sem guardar nada. Contar comparações e memória de cada lado é ver a complexidade a olho nu.
 
-### Passo 4: As curvas de crescimento
+### Passo 5: As curvas de crescimento
 
-![Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)](img/04_curvas_crescimento.svg)
+![Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)](img/05_curvas_crescimento.svg)
 
 As classes da tabela da Camada 5 desenhadas no mesmo plano: para n pequeno as curvas andam juntas; conforme n cresce, elas se separam — e a quadrática dispara. O eixo horizontal é o tamanho da entrada; o vertical, o número de passos.
 
@@ -211,14 +282,18 @@ Considere a palavra `RADAR` (posições 0 a 4). Execute o algoritmo das duas pon
 > Foram **2 comparações** (metade de 5, descartando a letra do meio, que não precisa de par). Para 1.000 letras: no máximo **500 comparações** — sempre metade do tamanho, e o ritmo continua O(n).
 
 **Exercício 3 — Classificando um trecho.**
-O trecho de pseudocódigo abaixo verifica se uma lista de $n$ números contém algum valor repetido:
+O trecho em C abaixo verifica se um vetor `lista` com $n$ números contém algum valor repetido:
 
-```
-para i de 0 até n-1:
-    para j de i+1 até n-1:
-        se lista[i] = lista[j]:
-            responda "tem repetido" e pare
-responda "não tem repetido"
+```c
+for (int i = 0; i < n; i = i + 1) {
+    for (int j = i + 1; j < n; j = j + 1) {
+        if (lista[i] == lista[j]) {
+            printf("tem repetido");
+            return 1;
+        }
+    }
+}
+printf("nao tem repetido");
 ```
 
 Determine a complexidade de **tempo** no pior caso e a complexidade de **espaço adicional**, justificando cada uma em uma frase.
@@ -272,9 +347,10 @@ Usando a definição formal de Big O (encontrar constantes $c > 0$ e $n_0 \ge 1$
 - **Backes, A. R.** — *Algoritmos e Estruturas de Dados em Linguagem C*. Rio de Janeiro: LTC, 2023. Capítulo introdutório — apresenta algoritmos e estruturas de dados no contexto da linguagem C que usaremos em todas as aulas de implementação.
 - **Veloso, P.; Pereira, S. do L.** — *Estruturas de Dados em C — Uma Abordagem Didática*. São Paulo: Saraiva, 2016. Capítulo de abertura — a relação entre algoritmos, estruturas de dados e abstração, no mesmo espírito didático desta aula.
 - **Toscani, L. V.; Veloso, P. A. S.** — *Complexidade de Algoritmos*. Porto Alegre: Bookman, 2012. Capítulos iniciais — a fonte de rigor para a notação assintótica (Big O, Ω, Θ) apresentada nas Camadas 4 e 5.
+- **Schildt, H.** — *C Completo e Total*. São Paulo: Makron Books, 1997. Capítulos iniciais — tipos, funções, condicionais, laços e vetores da linguagem C apresentados nesta aula.
 
 **Leituras complementares**:
 
 - **Wirth, N.** — *Algoritmos e Estruturas de Dados*. Rio de Janeiro: LTC, 1999. O livro cuja equação-título — *Algoritmos + Estruturas de Dados = Programas* — resume esta aula.
-- **Schildt, H.** — *C Completo e Total*. São Paulo: Makron Books, 1997. Preparação para as próximas aulas, quando os algoritmos daqui ganharão corpo em C.
+- **Damas, L.** — *Linguagem C*. 10ª ed. Rio de Janeiro: LTC, 2023. Aprofundamento na linguagem C, no mesmo espírito introdutório.
 - **Turing, A. M.** — *On Computable Numbers, with an Application to the Entscheidungsproblem* (1936). O artigo que deu à computação sua definição matemática — leitura histórica para os curiosos.

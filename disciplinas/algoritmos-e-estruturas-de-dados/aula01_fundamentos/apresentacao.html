@@ -180,7 +180,7 @@
             <p class="titulo-bloco">Aula 01</p>
             <h1>Algoritmos, Estruturas de Dados e Complexidade</h1>
             <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
-                Algoritmo · Estrutura de Dados · Big O
+                Algoritmos · Linguagem C · Listas Sequenciais · Big O
             </p>
             <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
                 Aula <strong>conceitual</strong> — o vocabulário que usaremos em toda a disciplina.
@@ -342,11 +342,128 @@
             </section>
 
             <section>
+                <h3>A ferramenta: a linguagem C</h3>
+                <p style="text-align: left;">
+                    Para escrever algoritmos de verdade, precisamos de uma linguagem.
+                    A nossa é o <strong>C</strong> — criado por <strong>Dennis Ritchie</strong>,
+                    nos Laboratórios Bell, no início dos anos 1970, para escrever o
+                    <strong>UNIX</strong>.
+                </p>
+                <blockquote style="font-size: 0.8em;">
+                    Pequena e explícita: cada passo aparece no código —
+                    ideal para <span class="destaque">enxergar o custo</span>.
+                </blockquote>
+                <p class="nota-rodape" style="text-align: left;">
+                    Meio século depois, C segue em toda parte: o núcleo do Linux e o
+                    interpretador do Python são escritos em C.
+                </p>
+            </section>
+
+            <section>
+                <h3>Tipos básicos</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Em C, todo dado declara seu <strong>tipo</strong> — o que ele guarda:
+                </p>
+                <pre><code class="language-c">int    idade  = 20;      /* numero inteiro            */
+float  altura = 1.75;    /* numero com casas decimais */
+double preco  = 19.90;   /* decimal com mais precisao */
+char   letra  = 'A';     /* um unico caractere        */</code></pre>
+            </section>
+
+            <section>
+                <h3>Funções: a cara de um algoritmo</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Um bloco nomeado que recebe <strong>entradas</strong> e devolve uma
+                    <strong>saída</strong> — soa familiar?
+                </p>
+                <pre><code class="language-c">int soma(int a, int b) {
+    return a + b;
+}</code></pre>
+                <p style="text-align: left; font-size: 0.8em;">
+                    <code>soma</code> recebe dois inteiros e <code>return</code> devolve a
+                    resposta — o <code>int</code> à esquerda é o tipo dela.
+                </p>
+            </section>
+
+            <section>
+                <h3>Decidindo: <code>if</code> e <code>else</code></h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Escolher entre caminhos conforme uma condição:
+                </p>
+                <pre><code class="language-c">if (idade &gt;= 18) {
+    printf("maior de idade");
+} else {
+    printf("menor de idade");
+}</code></pre>
+                <p class="nota-rodape" style="text-align: left;">
+                    <code>printf</code> é a função que escreve na tela.
+                </p>
+            </section>
+
+            <section>
+                <h3>Repetindo: <code>while</code> e <code>for</code></h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Repetir enquanto uma condição valer — o coração de quase todo algoritmo:
+                </p>
+                <div class="duas-colunas">
+                    <div>
+                        <pre><code class="language-c">int i = 0;
+while (i &lt; 5) {
+    printf("%d ", i);
+    i = i + 1;
+}</code></pre>
+                    </div>
+                    <div>
+                        <pre><code class="language-c">for (int i = 0; i &lt; 5; i = i + 1) {
+    printf("%d ", i);
+}
+
+/* o mesmo, em uma linha */</code></pre>
+                    </div>
+                </div>
+                <p class="nota-rodape" style="text-align: left;">
+                    Ambos imprimem 0 1 2 3 4 — o <code>for</code> empacota início, condição e avanço.
+                </p>
+            </section>
+
+            <section>
+                <h3>A primeira estrutura: lista sequencial</h3>
+                <p style="text-align: left;">
+                    Nosso primeiro jeito de organizar dados: uma fileira de elementos
+                    <strong>do mesmo tipo</strong>, lado a lado, cada um com um número —
+                    o <strong>índice</strong>.
+                </p>
+                <blockquote style="font-size: 0.8em;">
+                    Uma rua de casas numeradas: sabendo o número, você vai
+                    <span class="destaque">direto</span> — sem bater de porta em porta.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>O vetor em C</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Em C, a lista sequencial é o <strong>vetor</strong> (<em>array</em>):
+                </p>
+                <pre><code class="language-c">int notas[5];       /* 5 posicoes                     */
+notas[0] = 80;      /* indices comecam em 0!          */
+notas[4] = 95;      /* ultima posicao valida (0 a 4)  */
+
+char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Acesso direto: <code>notas[3]</code> custa o mesmo com 5 ou 5 milhões de posições.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    O preço: tamanho fixo, e inserir no meio empurra todos os seguintes —
+                    limitação que motivará as listas encadeadas, aulas adiante.
+                </p>
+            </section>
+
+            <section>
                 <h3>O mesmo problema, vários algoritmos</h3>
                 <p style="text-align: left;">
-                    <strong>RADAR</strong> se lê igual de trás para a frente — é um
-                    <strong>palíndromo</strong>. Como um computador decide isso?
-                    Dois jeitos:
+                    <strong>RADAR</strong>, num vetor de caracteres, se lê igual de trás
+                    para a frente — é um <strong>palíndromo</strong>. Como um computador
+                    decide isso? Dois jeitos:
                 </p>
                 <ul style="font-size: 0.85em;">
                     <li><strong>Cópia invertida</strong> — inverte a palavra e compara as duas: gasta uma cópia inteira</li>
@@ -530,8 +647,8 @@
                 <p class="titulo-bloco">Bloco 2</p>
                 <h2>Visualização gráfica</h2>
                 <p style="font-size: 0.8em; color: #666;">
-                    Quatro diagramas: o transformador, a equação, dois algoritmos em disputa
-                    e as curvas de custo.
+                    Cinco diagramas: o transformador, a equação, a lista sequencial,
+                    dois algoritmos em disputa e as curvas de custo.
                 </p>
             </section>
 
@@ -555,12 +672,22 @@
             </section>
 
             <section>
+                <h3>A lista sequencial</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A rua de casas numeradas: mesmo tipo, lado a lado, e a seta do
+                    acesso direto — <code>notas[3]</code> chega sem passar pelas anteriores.
+                </p>
+                <img class="diagrama" src="img/03_lista_sequencial.svg"
+                     alt="Vetor de cinco posições com índices e acesso direto pela posição">
+            </section>
+
+            <section>
                 <h3>Dois algoritmos, um problema</h3>
                 <p style="text-align: left; font-size: 0.8em;">
                     A mesma palavra, dois caminhos: a cópia gasta memória;
                     as duas pontas caminham para o centro sem gastar nada.
                 </p>
-                <img class="diagrama" src="img/03_palindromo_dois_algoritmos.svg"
+                <img class="diagrama" src="img/04_palindromo_dois_algoritmos.svg"
                      alt="Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas">
             </section>
 
@@ -570,7 +697,7 @@
                     As classes da tabela desenhadas juntas: no começo andam próximas —
                     depois a quadrática dispara.
                 </p>
-                <img class="diagrama" src="img/04_curvas_crescimento.svg"
+                <img class="diagrama" src="img/05_curvas_crescimento.svg"
                      alt="Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)">
             </section>
         </section>
@@ -786,12 +913,18 @@
             <section>
                 <h3>Exercício 3 — Classificando um trecho</h3>
                 <p style="text-align: left; font-size: 0.7em;">
-                    O trecho verifica se uma lista de n números tem valor repetido,
-                    comparando cada par com dois laços aninhados
-                    (<code>i</code> de 0 a n−1; <code>j</code> de i+1 a n−1).
+                    O trecho em C verifica se um vetor de n números tem valor repetido.
                     Dê a complexidade de <strong>tempo</strong> no pior caso e de
-                    <strong>espaço adicional</strong>.
+                    <strong>espaço adicional</strong>:
                 </p>
+                <pre><code class="language-c">for (int i = 0; i &lt; n; i = i + 1) {
+    for (int j = i + 1; j &lt; n; j = j + 1) {
+        if (lista[i] == lista[j]) {
+            printf("tem repetido");
+            return 1;
+        }
+    }
+}</code></pre>
                 <div class="resposta fragment fade-in">
                     <strong>Resposta:</strong>
                     <ul>
@@ -868,8 +1001,9 @@
             <h1>Fim — Aula 01</h1>
             <h2>Próxima aula em breve</h2>
             <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
-                Vocês já têm o vocabulário: algoritmo, estrutura de dados e Big O.
-                Nas próximas aulas, ele ganha corpo em C — começando pelas estruturas lineares.
+                Vocês já têm o vocabulário — algoritmo, estrutura de dados, Big O —
+                e as primeiras ferramentas: a linguagem C e o vetor.
+                Nas próximas aulas, os algoritmos ganham código completo.
             </p>
         </section>
 
