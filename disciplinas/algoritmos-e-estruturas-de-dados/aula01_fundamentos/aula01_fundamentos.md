@@ -103,6 +103,36 @@ Pense numa rua de casas numeradas: sabendo o número, você vai direto à casa c
 
 Há um preço. O tamanho é **fixo**, definido na criação; todos os elementos são do mesmo tipo; e inserir um elemento no meio obriga a empurrar todos os seguintes uma posição para o lado — a fileira não tem espaços vazios. Guardem essa limitação: é ela que motivará as **listas encadeadas**, algumas aulas adiante.
 
+#### Definição formal e o que separa o array de C
+
+Podemos agora dizer com precisão o que é um vetor. Um **array** de tamanho `n` é uma coleção de `n` elementos **do mesmo tipo**, numerados de `0` a `n − 1`, guardados em posições **consecutivas** da memória. As três exigências não são decoração — cada uma tem uma função: **mesmo tipo** garante que toda posição ocupe exatamente o mesmo espaço; posições **consecutivas** garantem que não haja buracos entre um elemento e o seguinte; e a **numeração a partir de 0** é o que amarra cada índice a uma posição (a próxima seção mostra por que começa em zero).
+
+É aqui que o array de C se separa do que linguagens como **Python** e **JavaScript** também chamam de "array" ou "lista". Nelas, você pode misturar tipos numa mesma coleção (`[1, "dois", 3.0]`), crescer e encolher a qualquer momento, e o interpretador cuida de tudo por baixo dos panos. Essa comodidade tem custo: por dentro, essas estruturas guardam informação extra de controle e, com frequência, uma fileira de **referências** — endereços que apontam para os valores espalhados pela memória — em vez dos valores realmente lado a lado.
+
+O array de C é o osso nu por baixo dessa comodidade: **tamanho fixo**, **um único tipo**, valores **de fato consecutivos** na memória e **sem rede de proteção** — se você pedir `notas[7]` num vetor de 5 posições, C não reclama; simplesmente lê o que estiver naquele endereço. É justamente essa crueza que faz o array de C mapear direto na memória do computador, e é por isso que ele é o ponto de partida ideal para enxergar o custo real das operações. As estruturas "espertas" de Python e JavaScript são construídas **em cima** de arrays simples como este.
+
+#### Do índice ao endereço: a conta que o computador faz
+
+Prometemos que acessar `notas[3]` custa o mesmo que acessar `notas[0]`, por maior que seja o vetor. Agora dá para ver por quê. Pense na memória RAM como uma **tabela gigante de gavetas numeradas**: cada gaveta tem um **endereço** (o seu número) e guarda uma quantidade **fixa** de bytes — o *byte* é a unidade básica em que a memória é medida. Um `int`, por exemplo, ocupa tipicamente 4 bytes; um `char`, 1 byte.
+
+Quando você declara `int notas[5]`, o computador reserva 5 blocos consecutivos e guarda **um** valor de referência: o **endereço-base**, onde o vetor começa. Digamos que seja o endereço 1000. Como cada `int` ocupa 4 bytes, os elementos caem assim:
+
+| Elemento   | Conta          | Endereço |
+|------------|----------------|----------|
+| `notas[0]` | 1000 + 0 × 4   | 1000     |
+| `notas[1]` | 1000 + 1 × 4   | 1004     |
+| `notas[2]` | 1000 + 2 × 4   | 1008     |
+| `notas[3]` | 1000 + 3 × 4   | 1012     |
+| `notas[4]` | 1000 + 4 × 4   | 1016     |
+
+A regra é uma fórmula só:
+
+```
+endereço de notas[i]  =  endereço-base  +  i × tamanho do tipo
+```
+
+Para chegar em `notas[3]`, o computador **não** percorre `notas[0]`, `notas[1]`, `notas[2]` — ele faz **uma** multiplicação e **uma** soma e vai direto à gaveta 1012. Essa conta tem o mesmo custo para `i = 3` ou `i = 3.000.000`: sempre uma multiplicação e uma soma. Eis, enfim, a origem do **O(1)** que a lista sequencial oferece — e também a razão de os índices começarem em **0**: o primeiro elemento fica exatamente no endereço-base, sem deslocamento (`base + 0 × tamanho`).
+
 #### O mesmo problema, vários algoritmos
 
 Com a linguagem e a primeira estrutura na mão, considere um problema simples: decidir se uma palavra — guardada num vetor de caracteres — é um **palíndromo** (*palindrome*): uma palavra que se lê igual da esquerda para a direita e da direita para a esquerda, como *arara*, *radar* e *ovo*. Dois algoritmos diferentes resolvem:
@@ -191,7 +221,7 @@ Há variantes da própria análise que apenas sinalizamos aqui: além do **pior 
 
 ## 2. Visualização Gráfica
 
-Cinco diagramas constroem o mapa conceitual da aula: o algoritmo como transformador, a equação de Wirth, a lista sequencial, dois algoritmos para o mesmo problema e as curvas de crescimento.
+Seis diagramas constroem o mapa conceitual da aula: o algoritmo como transformador, a equação de Wirth, a lista sequencial, o índice virando endereço na memória, dois algoritmos para o mesmo problema e as curvas de crescimento.
 
 ### Passo 1: O algoritmo como transformador
 
@@ -211,15 +241,21 @@ Um programa é a soma das duas metades da disciplina: a receita (algoritmo) e a 
 
 A rua de casas numeradas: elementos do mesmo tipo, lado a lado, cada um com seu índice. A seta mostra o acesso direto — `notas[3]` chega à casa certa sem passar pelas anteriores.
 
-### Passo 4: Dois algoritmos, um problema
+### Passo 4: Do índice ao endereço
 
-![Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas](img/04_palindromo_dois_algoritmos.svg)
+![Memória RAM como gavetas numeradas, com o cálculo do endereço de notas[3]](img/04_indice_para_endereco.svg)
+
+A memória vista como gavetas de endereço fixo, cada `int` ocupando 4 bytes. A conta `endereço-base + i × tamanho` leva direto à gaveta certa — a origem concreta do O(1) do acesso por índice.
+
+### Passo 5: Dois algoritmos, um problema
+
+![Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas](img/05_palindromo_dois_algoritmos.svg)
 
 A mesma palavra, dois caminhos: a cópia invertida percorre tudo duas vezes e guarda uma palavra inteira a mais; as duas pontas caminham para o centro sem guardar nada. Contar comparações e memória de cada lado é ver a complexidade a olho nu.
 
-### Passo 5: As curvas de crescimento
+### Passo 6: As curvas de crescimento
 
-![Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)](img/05_curvas_crescimento.svg)
+![Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)](img/06_curvas_crescimento.svg)
 
 As classes da tabela da Camada 5 desenhadas no mesmo plano: para n pequeno as curvas andam juntas; conforme n cresce, elas se separam — e a quadrática dispara. O eixo horizontal é o tamanho da entrada; o vertical, o número de passos.
 

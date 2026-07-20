@@ -459,6 +459,67 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             </section>
 
             <section>
+                <h3>O que é um array, com precisão</h3>
+                <p style="text-align: left;">
+                    Um <strong>array</strong> de tamanho <code>n</code>: <code>n</code> elementos
+                    <strong>do mesmo tipo</strong>, numerados de <code>0</code> a <code>n − 1</code>,
+                    em posições <strong>consecutivas</strong> da memória.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>mesmo tipo</strong> → toda posição ocupa o mesmo espaço</li>
+                    <li><strong>consecutivas</strong> → sem buracos entre os elementos</li>
+                    <li><strong>índice a partir de 0</strong> → amarra cada número a uma posição</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O array de C não é o array de Python</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Em <strong>Python</strong> e <strong>JavaScript</strong>, um "array" mistura
+                    tipos (<code>[1, "dois", 3.0]</code>), cresce e encolhe sozinho — comodidade
+                    que guarda controle extra e, por dentro, <strong>referências</strong> a valores
+                    espalhados.
+                </p>
+                <blockquote style="font-size: 0.8em;">
+                    O array de C é o osso nu: <span class="destaque">tamanho fixo, um tipo,
+                    valores de fato lado a lado</span> — e sem rede de proteção.
+                </blockquote>
+                <p class="nota-rodape" style="text-align: left;">
+                    As estruturas "espertas" de Python e JS são construídas em cima de arrays simples como este.
+                </p>
+            </section>
+
+            <section>
+                <h3>A memória como gavetas numeradas</h3>
+                <p style="text-align: left;">
+                    Pense na RAM como uma tabela de <strong>gavetas</strong>: cada uma tem um
+                    <strong>endereço</strong> (seu número) e guarda um número fixo de
+                    <strong>bytes</strong>. Um <code>int</code> ocupa tipicamente 4.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    <code>int notas[5]</code> reserva 5 blocos seguidos e guarda um só valor:
+                    o <strong>endereço-base</strong> onde o vetor começa.
+                </p>
+            </section>
+
+            <section>
+                <h3>Do índice ao endereço: a conta</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Com base em 1000 e <code>int</code> de 4 bytes, o índice vira endereço por
+                    uma conta só:
+                </p>
+                <p><span class="formula">endereço de notas[i] = base + i × tamanho</span></p>
+                <blockquote style="font-size: 0.8em;">
+                    <code>notas[3]</code> = 1000 + 3 × 4 = <span class="destaque">1012</span> —
+                    uma multiplicação e uma soma, seja <code>i</code> = 3 ou 3 milhões.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Aqui nasce o <strong>O(1)</strong> do acesso por índice — e o motivo de o
+                    índice começar em <strong>0</strong>: o primeiro fica no próprio endereço-base.
+                </p>
+            </section>
+
+            <section>
                 <h3>O mesmo problema, vários algoritmos</h3>
                 <p style="text-align: left;">
                     <strong>RADAR</strong>, num vetor de caracteres, se lê igual de trás
@@ -647,8 +708,8 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <p class="titulo-bloco">Bloco 2</p>
                 <h2>Visualização gráfica</h2>
                 <p style="font-size: 0.8em; color: #666;">
-                    Cinco diagramas: o transformador, a equação, a lista sequencial,
-                    dois algoritmos em disputa e as curvas de custo.
+                    Seis diagramas: o transformador, a equação, a lista sequencial,
+                    o índice virando endereço, dois algoritmos em disputa e as curvas de custo.
                 </p>
             </section>
 
@@ -682,12 +743,22 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             </section>
 
             <section>
+                <h3>Do índice ao endereço</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A RAM como gavetas de endereço fixo, cada <code>int</code> em 4 bytes.
+                    A conta <code>base + i × tamanho</code> vai direto à gaveta — a origem do O(1).
+                </p>
+                <img class="diagrama" src="img/04_indice_para_endereco.svg"
+                     alt="Memória RAM como gavetas numeradas, com o cálculo do endereço de notas[3]">
+            </section>
+
+            <section>
                 <h3>Dois algoritmos, um problema</h3>
                 <p style="text-align: left; font-size: 0.8em;">
                     A mesma palavra, dois caminhos: a cópia gasta memória;
                     as duas pontas caminham para o centro sem gastar nada.
                 </p>
-                <img class="diagrama" src="img/04_palindromo_dois_algoritmos.svg"
+                <img class="diagrama" src="img/05_palindromo_dois_algoritmos.svg"
                      alt="Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas">
             </section>
 
@@ -697,7 +768,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     As classes da tabela desenhadas juntas: no começo andam próximas —
                     depois a quadrática dispara.
                 </p>
-                <img class="diagrama" src="img/05_curvas_crescimento.svg"
+                <img class="diagrama" src="img/06_curvas_crescimento.svg"
                      alt="Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)">
             </section>
         </section>
