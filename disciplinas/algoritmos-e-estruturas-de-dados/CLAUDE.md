@@ -41,6 +41,7 @@ A mecânica completa (estrutura de cada bloco e suas camadas, regras de código 
 
 - **`aula-conteudo`** — monta o `.md` (e o `.c` em aulas de implementação).
 - **`aula-apresentacao`** — monta o `apresentacao.html` (Reveal.js) e os SVGs do bloco 2.
+- **`aula-revisao`** — revisa o conteúdo pronto (`.md` + `apresentacao.html`) removendo ambiguidades, itens sem explicação clara, contexto excessivo e tópicos sem conexão lógica. Última etapa do fluxo.
 
 ## Regras inegociáveis
 
