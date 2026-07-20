@@ -842,31 +842,8 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <p class="titulo-bloco">Bloco 5</p>
                 <h2>Exercícios práticos</h2>
                 <p style="font-size: 0.8em; color: #666;">
-                    Cinco exercícios — tentem antes de ver cada resposta.
+                    Dois exercícios com vetores — tentem antes de ver cada resposta.
                 </p>
-            </section>
-
-            <section>
-                <h3>Exercício 1 — Algoritmo ou não?</h3>
-                <p style="text-align: left; font-size: 0.7em;">
-                    Quais descrições são algoritmos? Quando não forem, aponte a propriedade violada
-                    (finitude, definitude, entradas, saídas, efetividade):
-                </p>
-                <ol style="text-align: left; font-size: 0.62em;">
-                    <li>"Receba um inteiro positivo; enquanto for diferente de 1, some 1 a ele."</li>
-                    <li>"Percorra a lista somando cada elemento a um total iniciado em zero; informe o total."</li>
-                    <li>"Escolha o filtro que deixar a foto mais bonita; aplique-o."</li>
-                    <li>"Receba dois números; devolva o maior; se iguais, devolva qualquer um."</li>
-                </ol>
-                <div class="resposta fragment fade-in">
-                    <strong>Resposta:</strong>
-                    <ol>
-                        <li><strong>Não</strong> — viola a finitude: nunca alcança 1.</li>
-                        <li><strong>Sim</strong>.</li>
-                        <li><strong>Não</strong> — "mais bonita" viola a definitude.</li>
-                        <li><strong>Sim</strong> — as duas escolhas satisfazem a especificação.</li>
-                    </ol>
-                </div>
             </section>
 
             <!-- Slide do Eddy — provocação antes do trace -->
@@ -888,7 +865,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             </section>
 
             <section>
-                <h3>Exercício 2 — Palíndromo na mão</h3>
+                <h3>Exercício 1 — Palíndromo na mão</h3>
                 <p style="text-align: left; font-size: 0.7em;">
                     Palavra <code>RADAR</code> (posições 0–4). Execute as duas pontas:
                     anote as posições <code>i</code> e <code>j</code>, as letras e a decisão
@@ -911,69 +888,33 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             </section>
 
             <section>
-                <h3>Exercício 3 — Classificando um trecho</h3>
+                <h3>Exercício 2 — Desafio: Two Sum</h3>
                 <p style="text-align: left; font-size: 0.7em;">
-                    O trecho em C verifica se um vetor de n números tem valor repetido.
-                    Dê a complexidade de <strong>tempo</strong> no pior caso e de
-                    <strong>espaço adicional</strong>:
+                    Dado um vetor e um <strong>alvo</strong>, achar <strong>duas posições</strong>
+                    cujos valores somam o alvo. Testando todos os pares com laços aninhados:
                 </p>
-                <pre><code class="language-c">for (int i = 0; i &lt; n; i = i + 1) {
-    for (int j = i + 1; j &lt; n; j = j + 1) {
-        if (lista[i] == lista[j]) {
-            printf("tem repetido");
-            return 1;
-        }
-    }
-}</code></pre>
-                <div class="resposta fragment fade-in">
-                    <strong>Resposta:</strong>
-                    <ul>
-                        <li><strong>Tempo O(n²)</strong> — todos os pares: n·(n−1)/2 comparações.</li>
-                        <li><strong>Espaço O(1)</strong> — só as variáveis <code>i</code> e <code>j</code>.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section>
-                <h3>Exercício 4 — O computador mais rápido perde</h3>
-                <p style="text-align: left; font-size: 0.7em;">
-                    Algoritmo A custa n² passos; B custa 100·n·log₂ n.
-                    Preencha para n = 100, 1.000 e 1.000.000 e diga quando B vale a pena.
-                    (Use log₂ 1.000 ≈ 10; log₂ 1.000.000 ≈ 20.)
+                <pre><code class="language-c">for (int i = 0; i &lt; n; i = i + 1)
+    for (int j = i + 1; j &lt; n; j = j + 1)
+        if (lista[i] + lista[j] == alvo)
+            printf("posicoes %d e %d", i, j);</code></pre>
+                <p style="text-align: left; font-size: 0.68em;">
+                    Para <code>[4, 2, 7, 5]</code> e <code>alvo = 9</code>: liste os pares testados.
+                    Qual o <strong>tempo</strong> no pior caso? Por que as duas pontas não servem aqui?
                 </p>
                 <div class="resposta fragment fade-in">
                     <strong>Resposta:</strong>
                     <table>
-                        <thead><tr><th>n</th><th>A: n²</th><th>B: 100·n·log₂ n</th></tr></thead>
+                        <thead><tr><th>Par</th><th>Soma</th><th>Decisão</th></tr></thead>
                         <tbody>
-                            <tr><td>100</td><td>10.000</td><td>~70.000</td></tr>
-                            <tr><td>1.000</td><td>1.000.000</td><td>~1.000.000</td></tr>
-                            <tr><td>1.000.000</td><td>10¹²</td><td>~2 × 10⁹</td></tr>
+                            <tr><td>4 + 2</td><td>6</td><td>≠ 9</td></tr>
+                            <tr><td>4 + 7</td><td>11</td><td>≠ 9</td></tr>
+                            <tr><td>4 + 5</td><td>9</td><td><strong>posições 0 e 3</strong></td></tr>
                         </tbody>
                     </table>
-                    Empate por volta de n = 1.000; depois B dispara (500× mais rápido em n = 10⁶).
-                    Constantes decidem no pequeno; a <strong>classe</strong> decide no grande.
-                </div>
-            </section>
-
-            <section>
-                <h3>Exercício 5 — Desafio: o ritmo por trás dos números</h3>
-                <p style="text-align: left; font-size: 0.7em;">
-                    <strong>(1)</strong> Convença um colega de que 5n + 20 passos crescem
-                    no ritmo de n: encontre um multiplicador que, aplicado a n, cubra
-                    5n + 20 de certo tamanho em diante.
-                    <strong>(2)</strong> Explique por que nenhum multiplicador consegue
-                    fazer n² caber no ritmo de n.
-                </p>
-                <div class="resposta fragment fade-in">
-                    <strong>Resposta:</strong>
-                    <ol>
-                        <li>O multiplicador 6 funciona: a partir de n = 20, vale 5n + 20 ≤ 6n.
-                            Logo 5n + 20 cresce no ritmo de n → O(n). ✓</li>
-                        <li>Para n² caber no ritmo de n, precisaríamos de n ≤ multiplicador
-                            <em>para sempre</em> — impossível: n cresce sem limite e o
-                            multiplicador é um número fixo.</li>
-                    </ol>
+                    <strong>Tempo O(n²)</strong> — todos os pares no pior caso.
+                    As duas pontas <strong>não servem</strong>: o vetor não está ordenado, então a
+                    soma das pontas não diz qual lado mover — o palíndromo comparava por
+                    <em>posição</em>, não por <em>valor</em>.
                 </div>
             </section>
         </section>

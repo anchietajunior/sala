@@ -247,26 +247,7 @@ O mesmo raciocínio explica tecnologias mais antigas e igualmente cotidianas: um
 
 ## 5. Exercícios Práticos
 
-**Exercício 1 — Algoritmo ou não?**
-Para cada descrição abaixo, diga se ela é um algoritmo. Quando **não** for, aponte **qual das cinco propriedades** (finitude, definitude, entradas, saídas, efetividade) foi violada.
-
-1. "Receba um número; enquanto ele for diferente de 1, some 1 a ele." *(entrada: um inteiro positivo)*
-2. "Receba uma lista de números; percorra-a somando cada elemento a um total iniciado em zero; ao final, informe o total."
-3. "Receba uma foto; escolha o filtro que deixar a foto mais bonita; aplique-o."
-4. "Receba dois números; devolva o maior deles; se forem iguais, devolva qualquer um dos dois."
-
-*Critério de aceitação*: classificação correta das quatro descrições, com a propriedade violada nomeada nos casos negativos.
-
-> **Resposta mínima aceitável**
->
-> | # | É algoritmo? | Justificativa |
-> |---|--------------|---------------|
-> | 1 | Não | Viola a **finitude**: somar 1 a um positivo nunca alcança 1 — o laço não termina. |
-> | 2 | Sim | Passos finitos, precisos e executáveis; entrada e saída definidas. |
-> | 3 | Não | Viola a **definitude** (e a efetividade): "mais bonita" não tem interpretação única nem teste mecânico. |
-> | 4 | Sim | "Devolva qualquer um dos dois" ainda é preciso: ambas as escolhas satisfazem a especificação (o maior valor). |
-
-**Exercício 2 — Palíndromo na mão.**
+**Exercício 1 — Palíndromo na mão.**
 Considere a palavra `RADAR` (posições 0 a 4). Execute o algoritmo das duas pontas passo a passo: em cada passo, anote a posição da esquerda (`i`), a posição da direita (`j`), as letras comparadas e a decisão tomada. Ao final, responda: quantas comparações o algoritmo fez? E quantas faria, no máximo, para uma palavra de 1.000 letras?
 
 *Critério de aceitação*: tabela com as posições, as letras e a decisão de cada passo; as duas contagens finais.
@@ -281,64 +262,34 @@ Considere a palavra `RADAR` (posições 0 a 4). Execute o algoritmo das duas pon
 >
 > Foram **2 comparações** (metade de 5, descartando a letra do meio, que não precisa de par). Para 1.000 letras: no máximo **500 comparações** — sempre metade do tamanho, e o ritmo continua O(n).
 
-**Exercício 3 — Classificando um trecho.**
-O trecho em C abaixo verifica se um vetor `lista` com $n$ números contém algum valor repetido:
+**Exercício 2 — Desafio: Two Sum (a soma de dois).**
+Um problema clássico da computação: dado um vetor de números e um valor **alvo**, encontrar **duas posições** cujos valores, somados, dão o alvo. O algoritmo mais direto testa todos os pares com os dois laços aninhados que você acabou de conhecer:
 
 ```c
 for (int i = 0; i < n; i = i + 1) {
     for (int j = i + 1; j < n; j = j + 1) {
-        if (lista[i] == lista[j]) {
-            printf("tem repetido");
-            return 1;
+        if (lista[i] + lista[j] == alvo) {
+            printf("posicoes %d e %d", i, j);
+            return 0;
         }
     }
 }
-printf("nao tem repetido");
 ```
 
-Determine a complexidade de **tempo** no pior caso e a complexidade de **espaço adicional**, justificando cada uma em uma frase.
+Para o vetor `[4, 2, 7, 5]` e `alvo = 9`, execute o algoritmo na mão: liste os pares testados, na ordem, até encontrar a resposta. Depois responda: qual é a complexidade de **tempo** no pior caso? E por que **não** dá para usar o truque das duas pontas do palíndromo aqui?
 
-*Critério de aceitação*: as duas classes corretas em notação Big O, cada uma com justificativa.
-
-> **Resposta mínima aceitável**
->
-> **Tempo: O(n²)** — no pior caso (nenhum repetido), os laços aninhados comparam todos os pares: n·(n−1)/2 comparações, e n²/2 = O(n²).
-> **Espaço adicional: O(1)** — o algoritmo usa apenas as variáveis `i` e `j`, independentemente do tamanho da lista.
-
-**Exercício 4 — O computador mais rápido do mundo perde.**
-Uma equipe tem dois algoritmos para o mesmo problema: o algoritmo A custa $n^2$ passos e o algoritmo B custa $100 \cdot n \cdot \log_2 n$ passos. Preencha a tabela de passos para os três tamanhos de entrada e responda: a partir de qual ordem de grandeza B passa a valer a pena? (Use $\log_2 1.000 \approx 10$, $\log_2 1.000.000 \approx 20$.)
-
-| n         | A: n² | B: 100·n·log₂ n |
-|-----------|-------|------------------|
-| 100       |       |                  |
-| 1.000     |       |                  |
-| 1.000.000 |       |                  |
-
-*Critério de aceitação*: tabela preenchida e conclusão correta sobre o ponto de virada.
+*Critério de aceitação*: a lista ordenada dos pares testados até a resposta; a classe Big O do tempo; e a justificativa sobre as duas pontas.
 
 > **Resposta mínima aceitável**
 >
-> | n         | A: n²           | B: 100·n·log₂ n   |
-> |-----------|-----------------|--------------------|
-> | 100       | 10.000          | ~70.000            |
-> | 1.000     | 1.000.000       | ~1.000.000         |
-> | 1.000.000 | 10¹²            | ~2 × 10⁹           |
+> | Par testado                    | Soma | Decisão                          |
+> |--------------------------------|------|-----------------------------------|
+> | `lista[0] + lista[1]` = 4 + 2  | 6    | ≠ 9                               |
+> | `lista[0] + lista[2]` = 4 + 7  | 11   | ≠ 9                               |
+> | `lista[0] + lista[3]` = 4 + 5  | 9    | **= 9 → posições 0 e 3**          |
 >
-> Para n pequeno, A vence (constante 100 pesa contra B). O empate ocorre por volta de n = 1.000; a partir daí B dispara na frente — em n = 1.000.000 é cerca de **500 vezes mais rápido**. Moral: constantes decidem para entradas pequenas, mas a **classe de crescimento** decide para entradas grandes.
-
-**Exercício 5 — Desafio: provando com a definição.**
-Usando a definição formal de Big O (encontrar constantes $c > 0$ e $n_0 \ge 1$ tais que $f(n) \le c \cdot g(n)$ para todo $n \ge n_0$):
-
-1. Prove que $f(n) = 5n + 20$ é $O(n)$, exibindo um par $(c, n_0)$ válido e verificando a desigualdade.
-2. Argumente por que $f(n) = n^2$ **não** é $O(n)$ — mostre que nenhum par $(c, n_0)$ pode funcionar.
-
-*Critério de aceitação*: item 1 com constantes explícitas e verificação; item 2 com argumento que vale para **qualquer** escolha de $c$.
-
-> **Resposta mínima aceitável**
->
-> **1.** Escolha $c = 6$ e $n_0 = 20$. Para todo $n \ge 20$: $5n + 20 \le 5n + n = 6n$. Logo $5n + 20 \le 6 \cdot n$, e $f(n) = O(n)$. ✓
->
-> **2.** Suponha que existissem $c$ e $n_0$ com $n^2 \le c \cdot n$ para todo $n \ge n_0$. Dividindo por $n$ (positivo): $n \le c$ para todo $n \ge n_0$ — impossível, pois $n$ cresce sem limite e $c$ é uma constante fixa. Qualquer $c$ escolhido é ultrapassado quando $n > c$; logo $n^2 \ne O(n)$.
+> **Tempo: O(n²)** — no pior caso, os dois laços aninhados testam todos os pares (n·(n−1)/2).
+> As **duas pontas não servem** aqui porque o vetor **não está ordenado**: se a soma das pontas dá diferente do alvo, não há como saber qual ponta mover para chegar mais perto. O truque do palíndromo funcionava por **posição** (comparar letras espelhadas), não por **valor**.
 
 ---
 
