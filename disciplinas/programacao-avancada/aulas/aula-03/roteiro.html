@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 03 — APIs REST e URIs</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 820px; margin: 3rem auto; padding: 0 1.5rem; color: #222; line-height: 1.65; }
+  h1 { font-size: 1.6rem; border-bottom: 2px solid #222; padding-bottom: .4rem; }
+  h2 { font-size: 1.25rem; margin-top: 2.4rem; }
+  h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+  code, pre { font-family: 'SF Mono', Consolas, monospace; background: #f4f2ee; border-radius: 4px; }
+  code { padding: .1rem .35rem; font-size: .9em; }
+  pre { padding: .9rem 1.1rem; overflow-x: auto; font-size: .88em; line-height: 1.5; }
+  table { border-collapse: collapse; margin: 1rem 0; font-size: .92em; }
+  th, td { border: 1px solid #ccc; padding: .4rem .8rem; text-align: left; }
+  th { background: #f4f2ee; }
+  .meta { background: #f4f2ee; border-radius: 6px; padding: 1rem 1.3rem; }
+  .meta p { margin: .3rem 0; }
+  .tempo { display: inline-block; background: #222; color: #fff; border-radius: 999px; padding: .1rem .7rem; font-size: .8em; font-family: Consolas, monospace; vertical-align: middle; }
+  .teoria { border-left: 4px solid #2e6da4; padding-left: 1rem; margin: 1.4rem 0; }
+  .codigo { border-left: 4px solid #b8860b; padding-left: 1rem; margin: 1.4rem 0; }
+  .pergunta { background: #eef4fa; border: 1px solid #c5d9ec; border-radius: 6px; padding: .7rem 1rem; font-style: italic; margin: .8rem 0; }
+  .os { font-weight: bold; font-size: .85em; color: #555; margin-bottom: -.5rem; display: block; margin-top: .8rem; }
+  .checkpoint { background: #eef7ee; border: 1px solid #bcd9bc; border-radius: 6px; padding: .8rem 1.1rem; margin: 1.4rem 0; }
+  .atencao { background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .8rem 1.1rem; margin: 1rem 0; font-size: .95em; }
+</style>
+</head>
+<body>
+
+<h1>Aula 03 — APIs REST e URIs</h1>
+
+<div class="meta">
+  <p><strong>Duração:</strong> ~2h &nbsp;·&nbsp; <strong>Branch:</strong> <code>aula-03-apis-rest-e-uris</code></p>
+  <p><strong>Temas teóricos:</strong> REST, verbos HTTP e a estrutura de uma URI [T-3]</p>
+  <p><strong>Objetivos — ao final, o aluno consegue:</strong></p>
+  <ul>
+    <li>Nomear as partes de uma URI (esquema, host, porta, caminho, query, fragmento) em qualquer endereço real;</li>
+    <li>Explicar o que são recursos e representações e mapear os verbos HTTP nas operações CRUD;</li>
+    <li>Desenhar as URIs REST de um recurso novo, escolhendo verbo e status code adequados;</li>
+    <li>Validar entrada e saída de rotas FastAPI com schemas Pydantic e <code>response_model</code>, explicando por que o 422 substitui o 500;</li>
+    <li>Completar um CRUD em memória com PUT e DELETE, incluindo geração de ids que sobrevive a remoções.</li>
+  </ul>
+</div>
+
+<h2><span class="tempo">5 min</span> Ponte — onde paramos</h2>
+
+<p>Retome o estado do projeto na branch <code>aula-02-ciclo-de-vida-de-uma-requisicao</code>: o recurso Books vive numa lista em memória, com quatro rotas — <code>GET /health</code>, <code>GET /api/books</code> (com filtro <code>?name=</code>), <code>GET /api/books/{book_id}</code> (404 se não existir) e <code>POST /api/books</code> recebendo um <strong>dict cru</strong>.</p>
+
+<p>Relembre as <strong>duas limitações deixadas em aberto</strong> deliberadamente:</p>
+<ul>
+  <li>Um POST <em>sem</em> o campo <code>name</code> derruba a rota com <strong>500</strong> — culpa nossa, e o cliente pediu errado. Hoje o Pydantic fecha esse buraco;</li>
+  <li>A pergunta que ficou no quadro: <em>"se um dia removermos um livro, o que quebra no <code>len(books) + 1</code>?"</em> — hoje esse dia chega, porque o DELETE entra em cena.</li>
+</ul>
+
+<p>Apresente o objetivo da aula: até aqui as rotas foram criadas sem um critério arquitetural. Hoje estudamos o estilo que organiza a web — REST — e o aplicamos para desenhar os recursos do Reading Tracker antes de implementar.</p>
+
+<h2><span class="tempo">15 min</span> Teoria [T-3] — anatomia de uma URI</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong> na aula 02 prometemos a anatomia completa. Comece pela definição da RFC 3986: <em>"uma URI (Uniform Resource Identifier) é uma sequência compacta de caracteres que identifica um recurso abstrato ou físico"</em>. O conceito foi proposto por Tim Berners-Lee no projeto original da web; a sintaxe genérica atual foi formalizada na RFC 3986 (Berners-Lee, Fielding e Masinter, 2005). O propósito é dar à rede uma forma <strong>uniforme</strong> de identificar qualquer recurso, independente de protocolo ou formato. Disseque no quadro uma URL nossa:</p>
+
+<pre>http://127.0.0.1:8000/api/books?name=hobbit
+└─┬─┘  └───┬───┘ └┬─┘└────┬────┘└────┬─────┘
+esquema   host  porta   caminho    query</pre>
+
+<p>E uma completa, com fragmento:</p>
+
+<pre>https://developer.mozilla.org:443/pt-BR/docs/Web/HTTP#recursos
+└─┬──┘  └────────┬─────────┘└┬─┘└─────────┬────────┘└───┬───┘
+esquema         host       porta       caminho      fragmento</pre>
+
+<ul>
+  <li><strong>Esquema</strong> — o "idioma" da conversa: <code>http</code>, <code>https</code> (HTTP sobre conexão cifrada), mas também <code>mailto</code>, <code>ftp</code>. Define como falar com o servidor;</li>
+  <li><strong>Host</strong> — o nome (ou IP) da máquina; é o que o DNS da aula 02 traduz;</li>
+  <li><strong>Porta</strong> — o programa dentro da máquina. Cada esquema tem porta padrão (80 para http, 443 para https) — por isso ela quase nunca aparece; a nossa <code>:8000</code> aparece porque não é a padrão;</li>
+  <li><strong>Caminho (path)</strong> — hierárquico, como pastas: identifica <em>o recurso</em> dentro do servidor;</li>
+  <li><strong>Query</strong> — os pares <code>chave=valor</code> da aula 02: ajustam o pedido;</li>
+  <li><strong>Fragmento</strong> — a âncora depois do <code>#</code>: aponta para uma parte <em>dentro</em> do documento. Detalhe importante: <strong>o navegador nunca envia o fragmento ao servidor</strong> — é uso local.</li>
+</ul>
+
+<p><strong>URI vs URL:</strong> URL é a URI que, além de identificar, diz <em>onde e como buscar</em> o recurso. Toda URL é uma URI; na prática da web, os termos quase se confundem — o importante é saber ler as partes.</p>
+
+<p><strong>Analogia sugerida:</strong> um endereço de encomenda completo — o esquema é o serviço de entrega (Sedex, transportadora), host + porta são o prédio e o apartamento (a dupla máquina + programa da aula 02), o caminho é o destinatário dentro do apartamento, a query são as instruções extras no pacote ("deixar na portaria"), e o fragmento é um post-it que só o destinatário lê — o correio nem fica sabendo.</p>
+
+<div class="pergunta">Para a turma: "Abram a aba Network e acessem uma URL com <code>#alguma-coisa</code>. Cadê o fragmento na requisição?" (não está — nunca é enviado)</div>
+<div class="pergunta">Para a turma: "Por que <code>https://google.com</code> funciona sem porta e o nosso servidor exige o <code>:8000</code>?"</div>
+</div>
+
+<h2><span class="tempo">20 min</span> Teoria [T-3] — REST: o estilo que organiza a web</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong></p>
+<ul>
+  <li><strong>Origem:</strong> REST (REpresentational State Transfer) foi definido por <strong>Roy T. Fielding</strong> no capítulo 5 de sua tese de doutorado (UC Irvine, 2000). Fielding foi coautor da especificação do HTTP/1.1 e cofundador do projeto Apache — a tese identifica os princípios arquiteturais que permitiram à web escalar;</li>
+  <li><strong>Definição (Fielding):</strong> REST é um <strong>estilo arquitetural</strong> para sistemas de hipermídia distribuídos. Não é biblioteca nem framework: é um conjunto de <em>restrições</em> (constraints) que, respeitadas, conferem ao sistema as propriedades da web — escalabilidade e evolução independente das partes;</li>
+  <li><strong>As seis restrições:</strong> cliente–servidor (aula 01), <strong>stateless</strong>, cache, <strong>interface uniforme</strong>, sistema em camadas e código sob demanda (opcional). O curso aprofunda as duas em destaque; as demais ficam na menção;</li>
+  <li><strong>Recurso</strong> — na formulação de Fielding, <em>"qualquer informação que possa ser nomeada"</em>: <em>um</em> livro, <em>a coleção</em> de livros, um usuário. Cada recurso é identificado por uma URI (por isso a anatomia veio primeiro);</li>
+  <li><strong>Representação</strong> — o que viaja na resposta não é o recurso, é uma <em>representação</em> dele num formato: para nossa API, JSON. O mesmo recurso poderia viajar como HTML, XML, PDF;</li>
+  <li><strong>Interface uniforme (verbos)</strong> — em vez de inventar um nome de operação para cada caso (<code>/getBooks</code>, <code>/criarLivro</code>, <code>/apagar_livro.php</code>), REST usa <strong>poucos verbos padronizados</strong> do HTTP sobre <strong>muitos substantivos</strong> (as URIs);</li>
+  <li><strong>Stateless</strong> — cada requisição contém toda a informação necessária para ser atendida; o servidor não guarda estado de sessão entre requisições. Fielding aponta os ganhos: visibilidade, confiabilidade e escalabilidade — e é por isso que, na aula de JWT, o token de autenticação precisará viajar <em>em cada requisição</em>;</li>
+  <li>Honestidade intelectual: a tese de Fielding vai além (hipermídia, HATEOAS); o que o mercado chama de "API REST" é o núcleo recursos + verbos + status codes — e é o que usaremos.</li>
+</ul>
+
+<p><strong>Os verbos e o CRUD</strong> — a tabela para deixar no quadro a aula inteira:</p>
+
+<table>
+  <tr><th>Operação (CRUD)</th><th>Verbo HTTP</th><th>Na coleção <code>/api/books</code></th><th>No item <code>/api/books/{book_id}</code></th><th>Status típico</th></tr>
+  <tr><td><strong>C</strong>reate</td><td>POST</td><td>cria um livro novo</td><td>—</td><td>201 Created</td></tr>
+  <tr><td><strong>R</strong>ead</td><td>GET</td><td>lista os livros</td><td>um livro específico</td><td>200 OK</td></tr>
+  <tr><td><strong>U</strong>pdate</td><td>PUT</td><td>—</td><td>substitui os dados do livro</td><td>200 OK</td></tr>
+  <tr><td><strong>D</strong>elete</td><td>DELETE</td><td>—</td><td>remove o livro</td><td>204 No Content</td></tr>
+</table>
+
+<p>Introduza o vocabulário formal da RFC 9110: um método é <strong>seguro</strong> quando não modifica o recurso (GET) e <strong>idempotente</strong> quando repeti-lo produz o mesmo efeito que executá-lo uma vez (GET, PUT e DELETE são idempotentes; POST não).</p>
+
+<p>Mencione o <strong>PATCH</strong> (atualização parcial) sem usar: nosso PUT com schema pequeno já resolve; PATCH volta como menção quando o recurso tiver mais campos.</p>
+
+<p><strong>Boas práticas de URI</strong> (as que o projeto segue, registradas no ADR-0002):</p>
+<ul>
+  <li>URIs têm <strong>substantivos, não verbos</strong> — o verbo já vai no método HTTP. <code>GET /api/books</code>, nunca <code>GET /api/getBooks</code>;</li>
+  <li>Coleção no <strong>plural</strong> (<code>/books</code>), item = coleção + id (<code>/books/3</code>);</li>
+  <li>O mesmo parâmetro de path usa <strong>o mesmo nome em todas as rotas</strong> — sempre <code>book_id</code>, nunca <code>id</code> numa rota e <code>book_id</code> noutra;</li>
+  <li>Verbo certo para o efeito certo: <strong>GET nunca modifica nada</strong>. Navegadores e robôs assumem que GET é seguro para repetir.</li>
+</ul>
+
+<p><strong>Analogia sugerida:</strong> continuando o restaurante das aulas 01 e 02 — o cardápio é cheio de <em>pratos</em> (substantivos, recursos), mas os <em>gestos</em> do salão são poucos e padronizados: pedir, consultar, trocar, cancelar (verbos). Qualquer prato novo entra no cardápio sem inventar gesto novo — é a interface uniforme.</p>
+
+<div class="pergunta">Para a turma: "Por que <code>GET /api/books/delete/3</code> seria uma péssima ideia?" (verbo na URI; e um GET que apaga — um robô de indexação ou o preload do navegador poderia apagar livros "sem querer")</div>
+<div class="pergunta">Para a turma: "Chamar o mesmo PUT duas vezes seguidas dá no mesmo? E o mesmo POST duas vezes?" (PUT é idempotente — substituir duas vezes pelo mesmo valor não muda nada; POST cria dois livros)</div>
+</div>
+
+<h2><span class="tempo">15 min</span> Prática guiada — desenhando os recursos do Reading Tracker</h2>
+
+<div class="teoria">
+<p>Antes de implementar, <strong>desenhe com a turma</strong> os recursos do projeto no quadro — peça as URIs antes de mostrar. O glossário do projeto dá os substantivos: <strong>User</strong> e <strong>Book</strong> (e, mais adiante, Reading Update, Cover, Reading Report).</p>
+
+<p>O mapa que deve emergir (e ficar registrado — é o plano de rotas da disciplina):</p>
+
+<table>
+  <tr><th>Verbo + URI</th><th>O que faz</th><th>Quando</th></tr>
+  <tr><td><code>GET /api/books</code></td><td>lista os Books</td><td>existe (aula 02)</td></tr>
+  <tr><td><code>GET /api/books/{book_id}</code></td><td>um Book pelo id</td><td>existe (aula 02)</td></tr>
+  <tr><td><code>POST /api/books</code></td><td>cria um Book</td><td>existe (aula 02)</td></tr>
+  <tr><td><code>PUT /api/books/{book_id}</code></td><td>atualiza um Book</td><td><strong>hoje</strong></td></tr>
+  <tr><td><code>DELETE /api/books/{book_id}</code></td><td>remove um Book</td><td><strong>hoje</strong></td></tr>
+  <tr><td><code>POST /signup</code></td><td>cadastra um User</td><td>aula 04</td></tr>
+  <tr><td><code>GET /users/{user_id}/books</code></td><td>os Books de um User</td><td>aula 05</td></tr>
+  <tr><td><code>POST /books/{book_id}/progress</code></td><td>registra um Reading Update</td><td>aula 06</td></tr>
+</table>
+
+<p>Pontos para provocar durante o desenho:</p>
+<ul>
+  <li><code>/signup</code> quebra a regra do substantivo — é uma <em>ação</em>. Exceção pragmática consagrada: cadastro e login são operações, não recursos; quase toda API real nomeia esses dois assim;</li>
+  <li><code>/users/{user_id}/books</code> mostra <strong>hierarquia</strong>: os livros <em>daquele</em> usuário. A URI conta a relação entre os recursos;</li>
+  <li>Um aluno atento vai notar: <em>"qualquer um vai poder passar qualquer <code>user_id</code>?"</em> — sim, por enquanto. É deliberado (ADR-0001): a falha vira a demonstração de abertura da aula de autenticação.</li>
+</ul>
+
+<div class="pergunta">Para a turma: "Que URI vocês desenhariam para 'a capa do livro 3'? E para 'o histórico de progresso do livro 3'?" (<code>/api/books/3/cover</code>, <code>/api/books/3/progress</code> — hierarquia de novo)</div>
+</div>
+
+<h2><span class="tempo">40 min</span> Live-coding — Pydantic e o CRUD completo</h2>
+
+<div class="codigo">
+<p>Todos na branch da aula com o servidor rodando:</p>
+
+<span class="os">Mac e Windows (iguais, com o venv ativo, dentro de <code>projeto/backend</code>)</span>
+<pre>uvicorn main:app --reload</pre>
+
+<h3>Passo 1 — reproduzir o problema: o 500 do dict cru</h3>
+<p><em>Por quê:</em> ver o problema antes da solução. É o gancho que ficou armado na aula 02.</p>
+<p>No Swagger (<code>/docs</code>), <code>POST /api/books</code> → Try it out → corpo <code>{}</code> → Execute: <strong>500 Internal Server Error</strong>. O cliente mandou dados errados, mas quem quebrou fomos <em>nós</em> (<code>book["name"]</code> explodiu com <code>KeyError</code>). Pela tabela da aula 02, 5xx é culpa do servidor — e o cliente nem fica sabendo <em>o que</em> mandou errado.</p>
+
+<h3>Passo 2 — o primeiro schema: validação na borda</h3>
+<p><em>Por quê:</em> declarar <em>a forma</em> dos dados que aceitamos e deixar o framework validar antes de a nossa função rodar — como já acontece com <code>book_id: int</code>, agora para o corpo.</p>
+<p>Apresente a biblioteca: o <strong>Pydantic</strong> (criado por Samuel Colvin, 2017) é uma biblioteca de validação de dados que usa as <strong>anotações de tipo</strong> do Python como fonte das regras — é dela que o FastAPI tira toda a validação que vimos até aqui. Já está instalado: veio como dependência do FastAPI (confira na Tabela de Dependências do README). Troque a primeira linha do <code>main.py</code> e adicione o schema logo depois de <code>app = FastAPI()</code>:</p>
+<pre>from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+app = FastAPI()
+
+
+class BookCreate(BaseModel):
+    name: str</pre>
+<p>Um <strong>schema</strong> é uma classe que declara os campos e seus tipos. <code>BookCreate</code> diz: "para criar um livro, exijo um <code>name</code> do tipo string". Agora use-o no POST, no lugar do dict:</p>
+<pre>@app.post("/api/books", status_code=201)
+def create_book(book: BookCreate):
+    new_book = {"id": len(books) + 1, "name": book.name}
+    books.append(new_book)
+    return new_book</pre>
+<p>Duas mudanças: o parâmetro é <code>BookCreate</code> (o FastAPI valida o corpo contra o schema <em>antes</em> de chamar a função) e o acesso vira <code>book.name</code> — atributo de objeto, não chave de dicionário.</p>
+<p>Repita o POST com corpo <code>{}</code>: agora <strong>422</strong>, com a resposta apontando o campo que falta (<code>"Field required"</code> em <code>body → name</code>). O erro mudou de família — 4xx, culpa do cliente, com diagnóstico de graça. Teste também <code>{"name": 123}</code> e <code>{"name": "O Senhor dos Anéis"}</code>.</p>
+
+<h3>Passo 3 — schema de saída: response_model</h3>
+<p><em>Por quê:</em> a entrada agora tem forma declarada; a <strong>saída</strong> ainda é promessa. Declarar o formato da resposta valida o que devolvemos e documenta a API de verdade (decisão do ADR-0002).</p>
+<p>Adicione o schema do livro completo — o que <em>sai</em> tem <code>id</code>; o que <em>entra</em> não (quem escolhe o id é o servidor, e é por isso que são dois schemas):</p>
+<pre>class Book(BaseModel):
+    id: int
+    name: str</pre>
+<p>E declare o <code>response_model</code> nas três rotas de books:</p>
+<pre>@app.get("/api/books", response_model=list[Book])
+def list_books(name: str = ""):
+    ...
+
+@app.get("/api/books/{book_id}", response_model=Book)
+def read_book(book_id: int):
+    ...
+
+@app.post("/api/books", response_model=Book, status_code=201)
+def create_book(book: BookCreate):
+    ...</pre>
+<p>(Os corpos das funções não mudam — só a linha do decorator.) Abra o <code>/docs</code>: cada rota agora exibe o <strong>formato exato da resposta</strong>, com exemplo; os schemas <code>Book</code> e <code>BookCreate</code> aparecem na seção Schemas no fim da página. A rota <code>/health</code> fica como está — resposta fixa de uma chave não precisa de schema.</p>
+
+<h3>Passo 4 — Update: PUT /api/books/{book_id}</h3>
+<p><em>Por quê:</em> a linha U da tabela CRUD. O id viaja no <em>caminho</em> (identifica o recurso); os dados novos viajam no <em>corpo</em> (a nova representação) — os dois lugares da teoria, juntos na mesma rota.</p>
+<pre>@app.put("/api/books/{book_id}", response_model=Book)
+def update_book(book_id: int, book: BookCreate):
+    for stored_book in books:
+        if stored_book["id"] == book_id:
+            stored_book["name"] = book.name
+            return stored_book
+    raise HTTPException(status_code=404, detail="Book not found")</pre>
+<p>Repare: o corpo reusa <code>BookCreate</code> — atualizar pede os mesmos campos que criar (o id nunca vem no corpo). Teste no Swagger: renomeie o livro 1 para <code>{"name": "Dom Casmurro (relido)"}</code> → 200 com o livro novo; PUT no id 99 → 404. Execute o mesmo PUT duas vezes: a segunda não muda nada — a idempotência da teoria, ao vivo.</p>
+
+<h3>Passo 5 — Delete: DELETE /api/books/{book_id}</h3>
+<p><em>Por quê:</em> a última linha da tabela. E um status novo: <strong>204 No Content</strong> — deu certo e não há o que devolver (o livro não existe mais).</p>
+<pre>@app.delete("/api/books/{book_id}", status_code=204)
+def delete_book(book_id: int):
+    for book in books:
+        if book["id"] == book_id:
+            books.remove(book)
+            return
+    raise HTTPException(status_code=404, detail="Book not found")</pre>
+<p>Sem <code>response_model</code> e com <code>return</code> vazio: resposta 204 não carrega corpo. Teste: DELETE no 2 → 204; <code>GET /api/books</code> → O Hobbit sumiu; DELETE no 2 de novo → <strong>404</strong> (já não existe — apagar duas vezes não é erro do servidor, é pedido por algo que não está lá).</p>
+
+<h3>Passo 6 — a resposta da aula 02: o bug do len(books) + 1</h3>
+<p><em>Por quê:</em> com DELETE no ar, a pergunta que ficou aberta finalmente quebra de verdade — e em sala.</p>
+<p>Salve o <code>main.py</code> (o <code>--reload</code> reinicia e a lista volta aos três livros — memória morre com o processo, lição da aula 02). Agora a sequência que provoca a colisão, pelo Swagger:</p>
+<ol>
+  <li><code>DELETE /api/books/1</code> → 204. Restaram os ids 2 e 3, e <code>len(books)</code> agora é <strong>2</strong>;</li>
+  <li><code>POST /api/books</code> com <code>{"name": "Duna"}</code> → o novo id é <code>len(books) + 1 = 3</code>... <strong>que já existe</strong>;</li>
+  <li><code>GET /api/books</code>: dois livros com id 3. <code>GET /api/books/3</code> devolve só o primeiro que encontrar — Duna virou inalcançável.</li>
+</ol>
+<p>A correção: o próximo id não pode depender do <em>tamanho</em> da lista, e sim de um <strong>contador monotônico</strong> — que só cresce. Logo depois da lista <code>books</code>, crie:</p>
+<pre>next_book_id = 4</pre>
+<p>E ajuste o POST:</p>
+<pre>@app.post("/api/books", response_model=Book, status_code=201)
+def create_book(book: BookCreate):
+    global next_book_id
+    new_book = {"id": next_book_id, "name": book.name}
+    next_book_id += 1
+    books.append(new_book)
+    return new_book</pre>
+<p>O <code>global</code> avisa ao Python que a função quer <em>reatribuir</em> a variável do módulo (sem ele, <code>next_book_id += 1</code> criaria uma variável local e falharia). Repita a sequência: agora Duna nasce com id <strong>4</strong> — id de livro removido nunca é reaproveitado.</p>
+<div class="atencao">Gancho para a aula 04: esse contador é a versão artesanal do <strong>auto-increment</strong>, que o banco de dados fará por nós — junto com resolver o problema maior: os dados continuam morrendo a cada restart.</div>
+
+<h3>Passo 7 — registrar as rotas novas no README</h3>
+<p><em>Por quê:</em> o README conta o estado do projeto; o CRUD completou e a tabela de endpoints precisa acompanhar.</p>
+<p>Em <code>projeto/README.md</code>, atualize a seção Endpoints:</p>
+<pre>## Endpoints
+
+| Método | Rota | O que faz |
+| ------ | ---- | --------- |
+| GET | /health | Verifica se a API está no ar |
+| GET | /api/books | Lista os livros; query param opcional name busca pelo nome |
+| GET | /api/books/{book_id} | Um livro pelo id (404 se não existir) |
+| POST | /api/books | Cria um livro; corpo validado pelo schema BookCreate |
+| PUT | /api/books/{book_id} | Atualiza o nome de um livro (404 se não existir) |
+| DELETE | /api/books/{book_id} | Remove um livro; responde 204 sem corpo (404 se não existir) |
+
+A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs</pre>
+</div>
+
+<div class="checkpoint">
+<strong>Checkpoint — como saber que funcionou:</strong>
+<ul>
+  <li>POST com corpo <code>{}</code> devolve <strong>422</strong> apontando o campo <code>name</code> — o 500 da aula 02 não existe mais;</li>
+  <li><code>/docs</code> mostra o formato de resposta das rotas de books e os schemas <code>Book</code> e <code>BookCreate</code> na seção Schemas;</li>
+  <li>PUT renomeia um livro (200) e devolve 404 para id inexistente; o mesmo PUT duas vezes dá o mesmo resultado;</li>
+  <li>DELETE devolve 204 sem corpo, o livro some do GET seguinte, e o segundo DELETE no mesmo id dá 404;</li>
+  <li>Depois de apagar um livro, criar outro <strong>não colide ids</strong> — o contador só cresce;</li>
+  <li>A turma sabe apontar, em qualquer rota do quadro, o recurso (URI), o verbo e o status code esperado.</li>
+</ul>
+</div>
+
+<h2><span class="tempo">15 min</span> Exercício em sala</h2>
+
+<p>Individual, com o que acabou de ser visto — o recurso Books vai ganhar um campo novo:</p>
+
+<ol>
+  <li>Adicione o campo <code>author</code> (string, opcional, padrão <code>""</code>) aos <strong>dois</strong> schemas;</li>
+  <li>Ajuste <code>create_book</code> e <code>update_book</code> para gravar o novo campo;</li>
+  <li>Teste no Swagger: um POST com author, um POST sem author (o padrão assume), e o GET da lista — os três livros iniciais devem aparecer com <code>author</code> vazio, sem mexer na lista (quem preenche é o <code>response_model</code>, pelo valor padrão do schema).</li>
+</ol>
+
+<p><strong>Gabarito (para o professor):</strong></p>
+<pre>class BookCreate(BaseModel):
+    name: str
+    author: str = ""
+
+
+class Book(BaseModel):
+    id: int
+    name: str
+    author: str = ""</pre>
+<p>No <code>create_book</code>, o dicionário novo ganha a chave: <code>{"id": next_book_id, "name": book.name, "author": book.author}</code>; no <code>update_book</code>, uma linha a mais: <code>stored_book["author"] = book.author</code>.</p>
+<p>Circule pela sala: os erros clássicos serão adicionar o campo só num dos schemas (o POST aceita mas a resposta não mostra — ou vice-versa) e esquecer de copiar <code>book.author</code> no create (o campo entra, valida e é descartado em silêncio).</p>
+
+<div class="atencao">O exercício é descartável: a branch da disciplina segue <strong>sem</strong> o campo <code>author</code> — quem quiser guardar a solução, guarde fora do projeto. A aula 04 parte do código sem ele.</div>
+
+<h2><span class="tempo">5 min</span> Fechamento</h2>
+
+<ul>
+  <li><strong>Síntese:</strong> uma URI tem esquema, host, porta, caminho, query e fragmento — e identifica um <em>recurso</em>; REST usa poucos verbos padronizados (GET, POST, PUT, DELETE) sobre muitos substantivos, casando com o CRUD; o servidor não guarda memória entre requisições (stateless); Pydantic valida na borda — entrada com schema no parâmetro, saída com <code>response_model</code> — e transformou nosso 500 em 422; e o CRUD de Books está completo, com ids que sobrevivem a remoções.</li>
+  <li><strong>Gancho para a aula 04:</strong> "O CRUD está completo, mas os dados continuam voláteis: a cada reinício do servidor, tudo se perde — e o contador de id é uma solução artesanal. Na próxima aula os dados ganham persistência: banco de dados MySQL, o ORM SQLAlchemy no papel de tradutor entre Python e SQL, e o primeiro recurso persistente do mapa que desenhamos hoje — o User, com a rota de signup."</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 330" style="width:100%;max-width:740px">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <!-- coleção aninhada -->
+  <rect x="30" y="25" width="720" height="110" rx="8" fill="#eef4fa" stroke="#c5d9ec" stroke-width="1.5"/>
+  <text x="50" y="52" font-size="15" font-weight="bold" fill="#2e6da4">Coleção aninhada — o dono está na URI</text>
+  <g font-family="monospace" font-size="14.5">
+    <text x="70" y="82" fill="#333"><tspan font-weight="bold" fill="#2e6da4">GET</tspan>  /users/{user_id}/books</text>
+    <text x="70" y="108" fill="#333"><tspan font-weight="bold" fill="#2e6da4">POST</tspan> /users/{user_id}/books</text>
+  </g>
+  <text x="450" y="82" font-size="13" fill="#777">lista os Books daquele User</text>
+  <text x="450" y="108" font-size="13" fill="#777">cria um Book já com dono</text>
+
+  <!-- item plano -->
+  <rect x="30" y="155" width="720" height="132" rx="8" fill="#eef7ee" stroke="#bcd9bc" stroke-width="1.5"/>
+  <text x="50" y="182" font-size="15" font-weight="bold" fill="#3a7a3a">Item plano — o id identifica o Book sozinho</text>
+  <g font-family="monospace" font-size="14.5">
+    <text x="70" y="212" fill="#333"><tspan font-weight="bold" fill="#3a7a3a">GET</tspan>    /books/{book_id}</text>
+    <text x="70" y="238" fill="#333"><tspan font-weight="bold" fill="#3a7a3a">PUT</tspan>    /books/{book_id}</text>
+    <text x="70" y="264" fill="#333"><tspan font-weight="bold" fill="#3a7a3a">DELETE</tspan> /books/{book_id}</text>
+  </g>
+  <text x="450" y="212" font-size="13" fill="#777">um Book pelo id</text>
+  <text x="450" y="238" font-size="13" fill="#777">atualiza title e pages</text>
+  <text x="450" y="264" font-size="13" fill="#777">remove; responde 204</text>
+
+  <!-- rodapé -->
+  <text x="390" y="315" text-anchor="middle" font-size="13" fill="#8a6508" font-weight="bold">quem chama escolhe o user_id — sem autenticação, deliberadamente (ADR-0001) · aula 06 pendura aqui o /books/{book_id}/progress</text>
+</svg>

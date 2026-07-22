@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 310" style="width:100%;max-width:740px">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <text x="30" y="30" font-size="16" font-weight="bold" fill="#8a6508" font-family="monospace">tabela user</text>
+
+  <!-- callouts topo -->
+  <text x="60" y="62" font-size="13" fill="#2e6da4" font-weight="bold">chave primária (auto-increment)</text>
+  <line x1="62" y1="68" x2="62" y2="92" stroke="#444" stroke-width="1.5" marker-end="url(#seta)"/>
+  <text x="357" y="62" text-anchor="middle" font-size="13" fill="#2e6da4" font-weight="bold">constraint UNIQUE</text>
+  <line x1="357" y1="68" x2="357" y2="92" stroke="#444" stroke-width="1.5" marker-end="url(#seta)"/>
+
+  <!-- cabeçalho -->
+  <g font-family="monospace" font-size="14">
+    <rect x="30" y="95" width="60" height="36" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <rect x="90" y="95" width="165" height="36" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <rect x="255" y="95" width="205" height="36" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <rect x="460" y="95" width="120" height="36" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <rect x="580" y="95" width="170" height="36" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <text x="60" y="118" text-anchor="middle" font-weight="bold" fill="#8a6508">id</text>
+    <text x="172" y="118" text-anchor="middle" font-weight="bold" fill="#8a6508">name</text>
+    <text x="357" y="118" text-anchor="middle" font-weight="bold" fill="#8a6508">email</text>
+    <text x="520" y="118" text-anchor="middle" font-weight="bold" fill="#8a6508">password</text>
+    <text x="665" y="118" text-anchor="middle" font-weight="bold" fill="#8a6508">created_at</text>
+  </g>
+
+  <!-- linhas de dados -->
+  <g font-family="monospace" font-size="12.5">
+    <rect x="30" y="131" width="60" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="90" y="131" width="165" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="255" y="131" width="205" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="460" y="131" width="120" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="580" y="131" width="170" height="34" fill="#fff" stroke="#ccc"/>
+    <text x="60" y="152" text-anchor="middle" fill="#333">1</text>
+    <text x="172" y="152" text-anchor="middle" fill="#333">Machado de Assis</text>
+    <text x="357" y="152" text-anchor="middle" fill="#333">machado@exemplo.com</text>
+    <text x="520" y="152" text-anchor="middle" fill="#333">segredo123</text>
+    <text x="665" y="152" text-anchor="middle" fill="#333">2026-07-18 19:02</text>
+
+    <rect x="30" y="165" width="60" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="90" y="165" width="165" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="255" y="165" width="205" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="460" y="165" width="120" height="34" fill="#fff" stroke="#ccc"/>
+    <rect x="580" y="165" width="170" height="34" fill="#fff" stroke="#ccc"/>
+    <text x="60" y="186" text-anchor="middle" fill="#333">2</text>
+    <text x="172" y="186" text-anchor="middle" fill="#333">Clarice Lispector</text>
+    <text x="357" y="186" text-anchor="middle" fill="#333">clarice@exemplo.com</text>
+    <text x="520" y="186" text-anchor="middle" fill="#333">abc</text>
+    <text x="665" y="186" text-anchor="middle" fill="#333">2026-07-18 19:15</text>
+  </g>
+
+  <!-- callout linha -->
+  <text x="30" y="232" font-size="13" fill="#2e6da4" font-weight="bold">linha = um registro (um User)</text>
+  <line x1="55" y1="222" x2="55" y2="202" stroke="#444" stroke-width="1.5" marker-end="url(#seta)"/>
+
+  <!-- callout coluna -->
+  <text x="470" y="262" text-anchor="middle" font-size="13" fill="#2e6da4" font-weight="bold">coluna = atributo com tipo declarado — email VARCHAR(255)</text>
+  <line x1="440" y1="248" x2="400" y2="207" stroke="#444" stroke-width="1.5" marker-end="url(#seta)"/>
+
+  <text x="390" y="296" text-anchor="middle" font-size="13" fill="#777">O banco defende as regras sozinho: recusa e-mail repetido, recusa nome vazio.</text>
+</svg>

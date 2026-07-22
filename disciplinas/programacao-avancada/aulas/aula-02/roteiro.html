@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 02 — Ciclo de vida de uma requisição</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 820px; margin: 3rem auto; padding: 0 1.5rem; color: #222; line-height: 1.65; }
+  h1 { font-size: 1.6rem; border-bottom: 2px solid #222; padding-bottom: .4rem; }
+  h2 { font-size: 1.25rem; margin-top: 2.4rem; }
+  h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+  code, pre { font-family: 'SF Mono', Consolas, monospace; background: #f4f2ee; border-radius: 4px; }
+  code { padding: .1rem .35rem; font-size: .9em; }
+  pre { padding: .9rem 1.1rem; overflow-x: auto; font-size: .88em; line-height: 1.5; }
+  .meta { background: #f4f2ee; border-radius: 6px; padding: 1rem 1.3rem; }
+  .meta p { margin: .3rem 0; }
+  .tempo { display: inline-block; background: #222; color: #fff; border-radius: 999px; padding: .1rem .7rem; font-size: .8em; font-family: Consolas, monospace; vertical-align: middle; }
+  .teoria { border-left: 4px solid #2e6da4; padding-left: 1rem; margin: 1.4rem 0; }
+  .codigo { border-left: 4px solid #b8860b; padding-left: 1rem; margin: 1.4rem 0; }
+  .pergunta { background: #eef4fa; border: 1px solid #c5d9ec; border-radius: 6px; padding: .7rem 1rem; font-style: italic; margin: .8rem 0; }
+  .os { font-weight: bold; font-size: .85em; color: #555; margin-bottom: -.5rem; display: block; margin-top: .8rem; }
+  .checkpoint { background: #eef7ee; border: 1px solid #bcd9bc; border-radius: 6px; padding: .8rem 1.1rem; margin: 1.4rem 0; }
+  .atencao { background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .8rem 1.1rem; margin: 1rem 0; font-size: .95em; }
+</style>
+</head>
+<body>
+
+<h1>Aula 02 — Ciclo de vida de uma requisição</h1>
+
+<div class="meta">
+  <p><strong>Duração:</strong> ~2h &nbsp;·&nbsp; <strong>Branch:</strong> <code>aula-02-ciclo-de-vida-de-uma-requisicao</code></p>
+  <p><strong>Temas teóricos:</strong> DNS, HTTP e o caminho navegador→servidor→resposta [T-4] · servidores web e o papel do uvicorn [T-5]</p>
+  <p><strong>Objetivos — ao final, o aluno consegue:</strong></p>
+  <ul>
+    <li>Descrever o caminho completo de uma requisição, do endereço digitado à resposta na tela, incluindo o papel do DNS;</li>
+    <li>Ler uma requisição e uma resposta HTTP cruas, identificando método, caminho, headers, status code e corpo;</li>
+    <li>Classificar status codes pelas famílias 2xx/3xx/4xx/5xx e dizer de quem é a "culpa" (cliente ou servidor);</li>
+    <li>Distinguir path params de query params, criar rotas FastAPI que os recebem e explicar a validação automática de tipos;</li>
+    <li>Implementar as primeiras rotas do recurso Books em memória — listar, buscar por nome, obter por id e criar via POST — testando tudo pelo Swagger UI (<code>/docs</code>).</li>
+  </ul>
+</div>
+
+<h2><span class="tempo">5 min</span> Ponte — onde paramos</h2>
+
+<p>Retome o estado do projeto: um backend FastAPI com <strong>uma rota</strong>, servida pelo uvicorn. O <code>main.py</code> de partida (branch <code>aula-01-inicio-do-projeto-e-frameworks</code>) é:</p>
+
+<pre>from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/health")
+def read_root():
+    return {"status": "Ok"}</pre>
+
+<div class="atencao">Se o <code>main.py</code> de algum aluno ainda tiver a rota <code>/</code> da aula passada, peça para trocar pela versão acima antes de começar — <code>/health</code> é a rota de "o servidor está vivo?" que o projeto vai manter até o fim do curso.</div>
+
+<p>Pergunta de aquecimento: na aula passada digitamos <code>http://127.0.0.1:8000/health</code> e apareceu um JSON. <strong>Hoje dissecamos tudo o que acontece entre uma coisa e outra</strong> — e no fim a turma vai enxergar essa viagem em qualquer site que abrir.</p>
+
+<h2><span class="tempo">10 min</span> Teoria [T-4] — DNS: como o navegador acha o servidor</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong></p>
+<ul>
+  <li><code>unirios.com.br</code> é um <strong>nome</strong>; a rede só entende <strong>números</strong> (endereços IP). Antes de qualquer pedido, o navegador precisa traduzir nome → IP.</li>
+  <li>Essa tradução é o <strong>DNS</strong> — a "agenda de contatos da internet". Ninguém decora o número do amigo; procura pelo nome.</li>
+  <li>A consulta em etapas (simplificada): cache do navegador/sistema → resolvedor do provedor → servidores raiz → servidores do <code>.br</code> → servidor autoritativo do domínio → IP.</li>
+  <li>Com o IP na mão, o navegador abre uma conexão com o servidor <strong>numa porta</strong>: a dupla IP + porta identifica <em>a máquina</em> e <em>o programa</em> dentro dela.</li>
+  <li>Por isso nosso endereço tem <code>:8000</code> — é a porta onde o uvicorn está escutando. Várias aplicações servidoras convivem na mesma máquina, cada uma na sua porta.</li>
+  <li><code>127.0.0.1</code> <strong>já é um IP</strong> — não há consulta DNS nenhuma. É o endereço de <em>loopback</em>: "esta própria máquina". A requisição nem sai do computador.</li>
+</ul>
+<p><strong>Analogia sugerida:</strong> a agenda do celular — você toca no nome "Mãe", o telefone descobre o número e só então liga. O DNS faz isso com nomes de sites; <code>127.0.0.1</code> é já digitar o número direto.</p>
+<div class="pergunta">Para a turma: "Por que <code>127.0.0.1:8000</code> funcionou na aula passada mesmo para quem estava sem internet?"</div>
+<div class="pergunta">Para a turma: "O que acontece se dois programas na mesma máquina tentarem escutar a porta 8000?" (deixe alguém tentar depois: subir dois uvicorn — o segundo falha com "address already in use")</div>
+</div>
+
+<h2><span class="tempo">20 min</span> Teoria [T-4] — anatomia do HTTP</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong> encontrado o servidor, cliente e servidor trocam <strong>mensagens de texto com formato fixo</strong>. Mostre as duas mensagens do nosso <code>/health</code> cruas, no quadro ou slide:</p>
+
+<p>A <strong>requisição</strong> que o navegador envia:</p>
+<pre>GET /health HTTP/1.1
+Host: 127.0.0.1:8000
+User-Agent: Mozilla/5.0 (Macintosh; ...)
+Accept: */*</pre>
+<ul>
+  <li><strong>Linha de pedido:</strong> método (<code>GET</code> — "me dê"), caminho (<code>/health</code>) e versão do protocolo;</li>
+  <li><strong>Headers:</strong> pares chave–valor com metadados do pedido (quem pede, o que aceita);</li>
+  <li><strong>Corpo:</strong> um GET normalmente não tem — corpo entra quando <em>enviamos</em> dados (veremos com POST).</li>
+</ul>
+
+<p>A <strong>resposta</strong> que o servidor devolve:</p>
+<pre>HTTP/1.1 200 OK
+server: uvicorn
+content-type: application/json
+content-length: 15
+
+{"status":"Ok"}</pre>
+<ul>
+  <li><strong>Linha de status:</strong> versão + <strong>status code</strong> (<code>200 OK</code>);</li>
+  <li><strong>Headers:</strong> metadados da resposta — <code>content-type</code> avisa "o corpo é JSON", e é por isso que o navegador o exibe formatado;</li>
+  <li><strong>Corpo:</strong> o JSON que vimos na tela. A "tela bonita" é só o corpo; o resto viaja escondido.</li>
+</ul>
+
+<p><strong>Status codes — o código diz de quem é a culpa:</strong></p>
+<ul>
+  <li><strong>2xx</strong> — deu certo (<code>200 OK</code>, <code>201 Created</code>);</li>
+  <li><strong>3xx</strong> — vá para outro lugar (redirecionamento);</li>
+  <li><strong>4xx</strong> — o <em>cliente</em> pediu errado (<code>404 Not Found</code>, <code>422</code> dados inválidos);</li>
+  <li><strong>5xx</strong> — o <em>servidor</em> quebrou (<code>500 Internal Server Error</code>).</li>
+</ul>
+<p><strong>Analogia sugerida:</strong> no restaurante da aula 01 — 404: pediu um prato que não está no cardápio (culpa da mesa); 500: a cozinha pegou fogo (culpa da cozinha).</p>
+<div class="pergunta">Para a turma: "Quem escolhe o status code de cada resposta — o navegador ou o nosso código?"</div>
+<div class="pergunta">Para a turma: "Vocês já viram um 404 hoje? E um 500? Onde?" (todo mundo já viu; deixe contarem)</div>
+<p>Feche o bloco desenhando a viagem completa no quadro: <em>digitou o endereço → DNS traduz nome em IP → conexão com IP:porta → requisição HTTP viaja → servidor processa → resposta HTTP volta → navegador mostra o corpo</em>. É o ciclo de vida que dá nome à aula.</p>
+</div>
+
+<h2><span class="tempo">15 min</span> Live-coding — espiando a conversa</h2>
+
+<div class="codigo">
+<p>Nada de código novo ainda: vamos <strong>ver</strong> o que a teoria descreveu. Todos com o servidor rodando:</p>
+
+<span class="os">Mac e Windows (iguais, com o venv ativo, dentro de <code>projeto/backend</code>)</span>
+<pre>uvicorn main:app --reload</pre>
+
+<h3>Passo 1 — DevTools do navegador</h3>
+<p><em>Por quê:</em> o navegador registra cada requisição que faz — é a ferramenta de inspeção que a turma vai usar o semestre inteiro.</p>
+<ol>
+  <li>Abra <code>http://127.0.0.1:8000/health</code>;</li>
+  <li>F12 (ou clique direito → Inspecionar) → aba <strong>Network</strong> → recarregue a página;</li>
+  <li>Clique na requisição <code>health</code>: mostre <strong>Status</strong> (200), <strong>Request Headers</strong> e <strong>Response Headers</strong> — apontando cada parte vista na teoria (repare no <code>server: uvicorn</code> e no <code>content-type: application/json</code>).</li>
+</ol>
+
+<h3>Passo 2 — a resposta crua no terminal com curl</h3>
+<p><em>Por quê:</em> sem a interface do navegador, sobra só o protocolo — dá para ver que é texto mesmo.</p>
+
+<span class="os">Mac (num segundo terminal)</span>
+<pre>curl -i http://127.0.0.1:8000/health</pre>
+
+<span class="os">Windows (PowerShell, num segundo terminal)</span>
+<pre>curl.exe -i http://127.0.0.1:8000/health</pre>
+
+<div class="atencao">No PowerShell, <code>curl</code> sem <code>.exe</code> é um apelido para outro comando (<code>Invoke-WebRequest</code>) — o <code>.exe</code> garante o curl de verdade, que já vem no Windows 10+.</div>
+
+<p>O <code>-i</code> mostra a linha de status e os headers antes do corpo. Depois troque por <code>-v</code>:</p>
+
+<span class="os">Mac</span>
+<pre>curl -v http://127.0.0.1:8000/health</pre>
+
+<span class="os">Windows (PowerShell)</span>
+<pre>curl.exe -v http://127.0.0.1:8000/health</pre>
+
+<p>Com <code>-v</code> aparecem <strong>as duas direções</strong>: as linhas com <code>&gt;</code> são a requisição enviada, as com <code>&lt;</code> são a resposta — a conversa completa da teoria, ao vivo.</p>
+
+<h3>Passo 3 — provocando um 404</h3>
+<p><em>Por quê:</em> ver a família 4xx acontecer.</p>
+<p>No navegador (com a aba Network aberta), acesse <code>http://127.0.0.1:8000/nada</code>: status <strong>404</strong>, corpo <code>{"detail":"Not Found"}</code>. Quem respondeu isso? O FastAPI — não existe rota para <code>/nada</code>, e ele avisa educadamente que <em>o pedido</em> está errado.</p>
+</div>
+
+<h2><span class="tempo">15 min</span> Teoria [T-5] — servidores web e o papel do uvicorn</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong></p>
+<ul>
+  <li>Um <strong>servidor web</strong> é um programa que fica escutando uma porta e fala HTTP: recebe bytes da rede, interpreta, responde.</li>
+  <li>No nosso projeto são <strong>dois programas cooperando</strong>: o <strong>uvicorn</strong> (servidor) cuida da rede — sockets, bytes, o protocolo HTTP; o <strong>FastAPI</strong> (framework) cuida da aplicação — decidir qual função responde e montar o JSON.</li>
+  <li>O uvicorn traduz: bytes que chegam viram objetos Python entregues ao FastAPI; o retorno do FastAPI vira bytes de novo. O contrato entre os dois tem nome: <strong>ASGI</strong> — qualquer servidor ASGI roda nossa <code>app</code> (é padrão, não casamento).</li>
+  <li>Reveja a linha <code>server: uvicorn</code> nos headers de resposta do live-coding: é ele se identificando.</li>
+  <li>O <code>--reload</code> é serviço do uvicorn: ele vigia os arquivos e reinicia a aplicação — o FastAPI nem fica sabendo.</li>
+  <li>Em produção costuma haver ainda outra camada na frente (um nginx da vida) — só mencionar; não é tema do curso.</li>
+</ul>
+<p><strong>Analogia sugerida:</strong> continuando o restaurante — o uvicorn é o <strong>recepcionista bilíngue</strong>: atende o telefone (rede/HTTP), traduz o pedido para a língua da cozinha (Python) e traduz o prato de volta. A cozinha (FastAPI + nossas funções) nunca fala com a rua diretamente.</p>
+<div class="pergunta">Para a turma: "Quando rodamos <code>uvicorn main:app</code>, quem está no comando do programa: o nosso código ou o deles?" (gancho com a inversão de controle da aula 01 — nosso código só é chamado quando chega requisição)</div>
+</div>
+
+<h2><span class="tempo">10 min</span> Teoria — parâmetros: dados que viajam na URL</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong> nossas rotas até aqui respondem sempre a mesma coisa. Sistemas de verdade recebem <strong>entrada de dados</strong> — e, na web, o primeiro lugar onde dados viajam é a própria URL. Há dois lugares para eles:</p>
+<ul>
+  <li><strong>Path parameters</strong> — um pedaço variável <em>do caminho</em>. Identificam <strong>qual</strong> coisa queremos. São obrigatórios: sem eles, o caminho nem existe;</li>
+  <li><strong>Query parameters</strong> — pares <code>chave=valor</code> depois do <code>?</code>, separados por <code>&amp;</code>. Ajustam, filtram ou configuram o pedido. Costumam ser opcionais, com um padrão sensato.</li>
+</ul>
+<p>Mostre exemplos que a turma usa todo dia (abra no navegador, se quiser):</p>
+<pre>https://github.com/torvalds/linux
+        └─ path: identifica o usuário e o repositório
+
+https://www.google.com/search?q=fastapi
+        └─ query: q é o termo buscado
+
+https://www.youtube.com/watch?v=9bZkp7q19f0&amp;t=42
+        └─ dois query params: o vídeo (v) e o segundo em que começa (t)</pre>
+<p><strong>Regra de bolso:</strong> path <em>identifica</em> o recurso; query <em>ajusta</em> o pedido. (A anatomia completa de uma URI — esquema, host, porta — é assunto da aula 03.)</p>
+<div class="pergunta">Para a turma: "Na URL de uma busca do Google, o que é caminho e o que é query? Por que o termo buscado não vai no caminho?"</div>
+<div class="pergunta">Para a turma: "No YouTube, por que o <code>t=42</code> (começar aos 42 segundos) faz sentido como query param, e não como parte do caminho?"</div>
+</div>
+
+<h2><span class="tempo">30 min</span> Live-coding — o primeiro recurso: Books</h2>
+
+<div class="codigo">
+<p>Teoria vista; agora os parâmetros entram no código — direto no que interessa: o primeiro <strong>recurso</strong> do Reading Tracker, os <strong>Books</strong>. Ainda sem banco de dados: uma lista Python em memória faz as vezes dele por enquanto.</p>
+
+<h3>Passo 1 — o nome da função não é a rota</h3>
+<p><em>Por quê:</em> desfazer uma confusão comum antes de criar rotas novas — e limpar uma sobra da aula 01.</p>
+<p>Em <code>main.py</code>, renomeie <code>read_root</code> para <code>read_health</code>:</p>
+<pre>@app.get("/health")
+def read_health():
+    return {"status": "Ok"}</pre>
+<p>Salve e recarregue <code>/health</code>: <strong>nada mudou</strong>. A rota vem do decorator (<code>@app.get("/health")</code>), não do nome da função — o nome é para humanos lerem.</p>
+
+<h3>Passo 2 — a lista de livros e o prefixo /api</h3>
+<p><em>Por quê:</em> precisamos de dados para servir. E as rotas do sistema ganham o prefixo <code>/api</code>: quando o frontend React chegar, ficará óbvio o que é API e o que é tela.</p>
+<p>Logo depois de <code>app = FastAPI()</code>, crie a lista:</p>
+<pre>books = [
+    {"id": 1, "name": "Dom Casmurro"},
+    {"id": 2, "name": "O Hobbit"},
+    {"id": 3, "name": "Clean Code"},
+]</pre>
+<p>Uma lista de dicionários, cada livro com <code>id</code> e <code>name</code> — o nosso "banco" provisório.</p>
+
+<h3>Passo 3 — listar a coleção: GET /api/books</h3>
+<p><em>Por quê:</em> a rota mais simples do recurso: devolver todos os livros.</p>
+<pre>@app.get("/api/books")
+def list_books():
+    return books</pre>
+<p>Teste no navegador: <code>/api/books</code> devolve os três livros — a lista de dicionários vira JSON sozinha, trabalho do framework.</p>
+
+<h3>Passo 4 — um livro pelo id: path param em ação</h3>
+<p><em>Por quê:</em> o path param <em>identifica</em> qual livro queremos — a teoria virando código. E, pela primeira vez, somos nós que escolhemos o status code da resposta.</p>
+<p>Troque a primeira linha do <code>main.py</code> para importar também o <code>HTTPException</code>:</p>
+<pre>from fastapi import FastAPI, HTTPException</pre>
+<p>E crie a rota:</p>
+<pre>@app.get("/api/books/{book_id}")
+def read_book(book_id: int):
+    for book in books:
+        if book["id"] == book_id:
+            return book
+    raise HTTPException(status_code=404, detail="Book not found")</pre>
+<p>Explique as novidades:</p>
+<ul>
+  <li>O <code>{book_id}</code> do caminho vira automaticamente o argumento <code>book_id</code> da função — mesmo nome, obrigatório;</li>
+  <li><code>book_id: int</code> — o path param tem <strong>tipo</strong>: o FastAPI converte o texto da URL para inteiro e valida (validação na borda, de graça);</li>
+  <li>Se o laço não encontra o livro, <em>nós</em> escolhemos a resposta: <code>HTTPException</code> com <strong>404</strong> e mensagem nossa.</li>
+</ul>
+<p>Teste, com a aba Network aberta, anotando os status codes no quadro: <code>/api/books/1</code> → <strong>200</strong>; <code>/api/books/99</code> → <strong>404</strong>; <code>/api/books/abc</code> → <strong>422</strong> — o FastAPI recusou sozinho ("abc" não é inteiro) e nossa função nem chegou a rodar. Família 4xx nos dois casos: o <em>pedido</em> está errado.</p>
+
+<h3>Passo 5 — buscar pelo nome: query param em ação</h3>
+<p><em>Por quê:</em> a query <em>ajusta</em> o pedido — a mesma rota de listagem, agora com filtro opcional.</p>
+<p>Evolua a rota de listagem:</p>
+<pre>@app.get("/api/books")
+def list_books(name: str = ""):
+    if name == "":
+        return books
+    return [book for book in books if name.lower() in book["name"].lower()]</pre>
+<p><code>name</code> não está no caminho — então vira <strong>query param</strong>: viaja depois do <code>?</code> na URL. Tem default, logo é opcional: sem ele, a rota lista tudo como antes.</p>
+<p>Teste: <code>/api/books?name=hobbit</code> devolve só O Hobbit — o <code>.lower()</code> dos dois lados torna a busca indiferente a maiúsculas (<code>?name=HOBBIT</code> também funciona).</p>
+
+<p>Deixe no quadro uma referência de consulta rápida: a <strong>FastAPI Cheat Sheet</strong> do DevSheets (<code>devsheets.io/sheets/fastapi</code>) — as seções <em>Path Parameters</em> e <em>Query Parameters</em> resumem exatamente o que acabamos de fazer (e mostram validações extras, como <code>Path()</code> e <code>Query()</code>, que não usaremos por enquanto). Vale como material de apoio no exercício e em casa.</p>
+
+<h3>Passo 6 — Swagger: a API documentada de graça</h3>
+<p><em>Por quê:</em> na aula 01 espiamos o <code>/docs</code> por 30 segundos; agora ele tem o que mostrar — e o próximo passo vai precisar dele.</p>
+<p>Abra <code>http://127.0.0.1:8000/docs</code>:</p>
+<ul>
+  <li>As três rotas listadas, <strong>sem escrevermos uma linha de documentação</strong> — o framework leu nossos decorators, tipos e defaults;</li>
+  <li>Expanda <code>GET /api/books/{book_id}</code>: parâmetro com tipo e obrigatoriedade; em <code>GET /api/books</code>, o <code>name</code> aparece como opcional — tudo veio da assinatura das funções;</li>
+  <li><strong>Try it out</strong>: execute uma chamada pela interface e mostre que ela exibe o comando curl equivalente, o status e o corpo — o Swagger é um cliente HTTP, como o navegador e o curl;</li>
+  <li>Repare no <code>422</code> já documentado como resposta possível.</li>
+</ul>
+<p>Mencione: em produção muitas equipes restringem o <code>/docs</code>; no nosso projeto ele fica sempre aberto — aqui é ferramenta de ensino (decisão registrada no ADR-0002).</p>
+
+<h3>Passo 7 — criar um livro: POST /api/books</h3>
+<p><em>Por quê:</em> até aqui só lemos (GET). Criar algo é outro verbo — <strong>POST</strong> — com os dados viajando no <em>corpo</em> da requisição, aquele corpo que o GET não usa.</p>
+<pre>@app.post("/api/books", status_code=201)
+def create_book(book: dict):
+    new_book = {"id": len(books) + 1, "name": book["name"]}
+    books.append(new_book)
+    return new_book</pre>
+<ul>
+  <li><code>book: dict</code> — o FastAPI entrega o JSON do corpo como dicionário. <em>Cru, sem validação</em> — na aula 03 o Pydantic assume esse posto;</li>
+  <li><code>status_code=201</code> — "Created": a resposta certa para criação, direto da tabela de status codes de hoje;</li>
+  <li>O id novo é <code>len(books) + 1</code> — funciona porque ainda não removemos livros.</li>
+</ul>
+<p>A barra de endereço do navegador só faz GET — para o POST, use o Swagger: <code>/docs</code> → <code>POST /api/books</code> → Try it out → corpo <code>{"name": "O Senhor dos Anéis"}</code> → Execute. Resposta <strong>201</strong> com o livro criado; confira com <code>GET /api/books</code>.</p>
+<div class="atencao">Dois ganchos para deixar armados: (1) envie um POST <em>sem</em> o campo <code>name</code> — <strong>500</strong>! O dict cru não valida nada; é este buraco que o Pydantic fecha na aula 03. (2) Salve qualquer arquivo (o <code>--reload</code> reinicia o servidor) e liste os livros de novo: o livro criado <strong>sumiu</strong> — dados em memória morrem com o processo; é este buraco que o banco de dados fecha na aula 04.</div>
+<div class="pergunta">Para a turma: "Se um dia removermos um livro, o que quebra no <code>len(books) + 1</code>?" (deixe a resposta em aberto — volta na aula 03)</div>
+
+<h3>Passo 8 — registrar os endpoints no README</h3>
+<p><em>Por quê:</em> o README conta o estado do projeto; agora ele tem rotas demais para ficarem sem índice.</p>
+<p>Adicione ao <code>projeto/README.md</code>, depois da seção "Backend — como rodar":</p>
+<pre>## Endpoints
+
+| Método | Rota | O que faz |
+| ------ | ---- | --------- |
+| GET | /health | Verifica se a API está no ar |
+| GET | /api/books | Lista os livros; query param opcional name busca pelo nome |
+| GET | /api/books/{book_id} | Um livro pelo id (404 se não existir) |
+| POST | /api/books | Cria um livro na lista em memória |
+
+A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs</pre>
+</div>
+
+<div class="checkpoint">
+<strong>Checkpoint — como saber que funcionou:</strong>
+<ul>
+  <li><code>/api/books</code> lista os três livros e <code>/api/books?name=hobbit</code> filtra;</li>
+  <li><code>/api/books/99</code> devolve o <em>nosso</em> 404 e <code>/api/books/abc</code> devolve 422;</li>
+  <li>Um POST pelo Swagger cria o livro com 201 — e ele aparece no GET seguinte; um POST sem <code>name</code> devolve 500 — e a turma sabe explicar <em>por que o 422 é culpa do cliente e o 500 é culpa nossa</em>;</li>
+  <li><code>/docs</code> lista as quatro rotas e executa chamadas pelo "Try it out".</li>
+</ul>
+</div>
+
+<h2><span class="tempo">10 min</span> Exercício em sala</h2>
+
+<p>Individual, com o que acabou de ser visto:</p>
+
+<ol>
+  <li>Criar uma rota <code>GET /repeat/{word}</code> que recebe uma palavra no caminho e um query param <code>times</code> (inteiro, padrão 2);</li>
+  <li>Responder um JSON com <code>word</code>, <code>times</code> e <code>result</code> — a palavra repetida <code>times</code> vezes (dica: em Python, <code>"la" * 3</code> é <code>"lalala"</code>);</li>
+  <li>Testar pelo Swagger (<code>/docs</code>) — incluindo uma chamada que provoque um <strong>422</strong>.</li>
+</ol>
+
+<p><strong>Gabarito (para o professor):</strong></p>
+<pre>@app.get("/repeat/{word}")
+def read_repeated_word(word: str, times: int = 2):
+    return {"word": word, "times": times, "result": word * times}</pre>
+
+<p>Circule pela sala: os erros clássicos serão esquecer o tipo em <code>times</code> (aí "abc" não dá 422 — bom gancho para reforçar a validação) e tentar pôr <code>times</code> no caminho da rota.</p>
+
+<h2><span class="tempo">5 min</span> Fechamento</h2>
+
+<ul>
+  <li><strong>Síntese:</strong> o DNS traduz nome em IP; a conversa é texto HTTP com formato fixo; o status code diz de quem é a culpa (4xx cliente, 5xx servidor); o uvicorn traduz bytes↔Python e o FastAPI decide quem responde; na URL, path params <em>identificam</em> e query params <em>ajustam</em>; e o recurso Books nasceu em memória — listar, buscar, obter pelo id e criar via POST.</li>
+  <li><strong>Gancho para a aula 03:</strong> "Hoje o recurso Books nasceu, mas fizemos tudo no instinto — dict cru no POST, verbos escolhidos no olho. Semana que vem: REST, o estilo que organiza a web, para desenhar os recursos direito (users, books), completar o CRUD e trocar o dict cru por schemas Pydantic. E os dados que somem a cada restart? Banco de dados, aula 04."</li>
+</ul>
+
+</body>
+</html>

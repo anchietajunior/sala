@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 330" style="width:100%;max-width:740px">
+  <defs>
+    <marker id="setaO" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <!-- mundo dos objetos -->
+  <rect x="20" y="40" width="240" height="200" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="140" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e6da4">Python — objetos</text>
+  <g font-family="monospace" font-size="13.5" fill="#333">
+    <text x="45" y="100">class User(Base):</text>
+    <text x="60" y="124">id</text>
+    <text x="60" y="146">name</text>
+    <text x="60" y="168">email</text>
+    <text x="60" y="190">password</text>
+    <text x="60" y="212">created_at</text>
+  </g>
+
+  <!-- mundo das tabelas -->
+  <rect x="520" y="40" width="240" height="200" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
+  <text x="640" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a6508">MySQL — tabela user</text>
+  <g font-family="monospace" font-size="13.5" fill="#333">
+    <text x="545" y="100">CREATE TABLE user (</text>
+    <text x="560" y="124">id ... PRIMARY KEY</text>
+    <text x="560" y="146">name VARCHAR(100)</text>
+    <text x="560" y="168">email ... UNIQUE</text>
+    <text x="560" y="190">password ...</text>
+    <text x="560" y="212">created_at DATETIME</text>
+  </g>
+
+  <!-- tradutor -->
+  <rect x="300" y="105" width="180" height="70" rx="10" fill="#eef7ee" stroke="#5a9a5a" stroke-width="2"/>
+  <text x="390" y="134" text-anchor="middle" font-size="16" font-weight="bold" fill="#3a7a3a">ORM</text>
+  <text x="390" y="156" text-anchor="middle" font-size="14" fill="#3a7a3a">SQLAlchemy</text>
+
+  <line x1="265" y1="125" x2="295" y2="125" stroke="#444" stroke-width="2" marker-end="url(#setaO)"/>
+  <line x1="485" y1="125" x2="515" y2="125" stroke="#444" stroke-width="2" marker-end="url(#setaO)"/>
+  <line x1="515" y1="155" x2="485" y2="155" stroke="#444" stroke-width="2" marker-end="url(#setaO)"/>
+  <line x1="295" y1="155" x2="265" y2="155" stroke="#444" stroke-width="2" marker-end="url(#setaO)"/>
+
+  <text x="390" y="95" text-anchor="middle" font-size="13" fill="#777">objetos viram INSERT, SELECT...</text>
+  <text x="390" y="196" text-anchor="middle" font-size="13" fill="#777">linhas viram objetos</text>
+
+  <!-- legenda do mapeamento -->
+  <g font-size="14.5" fill="#333">
+    <text x="390" y="278" text-anchor="middle"><tspan font-weight="bold" fill="#2e6da4">classe</tspan> ↔ <tspan font-weight="bold" fill="#8a6508">tabela</tspan>&#160;&#160;&#160;·&#160;&#160;&#160;<tspan font-weight="bold" fill="#2e6da4">atributo</tspan> ↔ <tspan font-weight="bold" fill="#8a6508">coluna</tspan>&#160;&#160;&#160;·&#160;&#160;&#160;<tspan font-weight="bold" fill="#2e6da4">objeto</tspan> ↔ <tspan font-weight="bold" fill="#8a6508">linha</tspan></text>
+  </g>
+  <text x="390" y="312" text-anchor="middle" font-size="13" fill="#777">A tradução pode ser lida: echo=True imprime todo SQL emitido.</text>
+</svg>

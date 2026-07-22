@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 04 — Banco de dados e ORMs</title>
+<link rel="stylesheet" href="../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../assets/reveal/dist/theme/white.css">
+<link rel="stylesheet" href="../assets/reveal/plugin/highlight/monokai.css">
+<style>
+  .reveal { font-size: 34px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+  .reveal h2 { font-size: 1.35em; }
+  .reveal ul { display: block; }
+  .reveal li { margin: .35em 0; }
+  .reveal pre { box-shadow: none; width: 100%; }
+  .reveal pre code { padding: .8em 1em; border-radius: 6px; max-height: 480px; }
+  .cite { font-size: .45em; color: #999; margin-top: 1.6em; }
+  .duas-colunas { display: flex; gap: 1em; align-items: flex-start; text-align: left; }
+  .duas-colunas > div { flex: 1; min-width: 0; }
+  .os-label { font-size: .55em; font-weight: bold; color: #666; margin: 0 0 .2em .1em; }
+  .nota { font-size: .6em; background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .6em .9em; margin-top: .8em; }
+  .destaque { color: #2e6da4; font-weight: bold; }
+  .tema-badge { display: inline-block; background: #2e6da4; color: #fff; border-radius: 999px; padding: .05em .6em; font-size: .5em; vertical-align: middle; }
+  .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
+  .status-tab { font-size: .7em; border-collapse: collapse; margin: 0 auto; }
+  .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ Abertura ============ -->
+
+<section>
+  <h1 style="font-size:1.5em">Banco de dados<br>e ORMs</h1>
+  <p>Programação Avançada — Aula 04</p>
+  <p style="font-size:.55em;color:#888">Universidade Unirios</p>
+</section>
+
+<section>
+  <h2>Revisão — o estado do projeto</h2>
+  <p style="font-size:.7em">O CRUD de Books está <strong>completo</strong> — GET, POST, PUT e DELETE — com schemas Pydantic validando entrada e saída, e ids gerados por um contador monotônico.</p>
+  <p style="font-size:.7em;text-align:left;margin-top:.8em">Duas fraquezas atravessaram as aulas 02 e 03 sem solução:</p>
+  <ul style="font-size:.7em">
+    <li><strong>Os dados morrem com o processo</strong> — todo restart devolve a lista aos três livros de fábrica;</li>
+    <li><strong>O contador de ids é artesanal</strong> — mora na memória do processo e morre com ela.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Objetivos da aula</h2>
+  <ul style="font-size:.75em">
+    <li><span class="tema-badge">T-7</span> Explicar o <strong>modelo relacional</strong>: tabela, linha, coluna, chave primária;</li>
+    <li><span class="tema-badge">T-7</span> Escrever <strong>SQL</strong> básico no cliente do MySQL;</li>
+    <li><span class="tema-badge">T-7</span> Definir <strong>ORM</strong> e comparar SQL cru com ORM;</li>
+    <li>Configurar FastAPI → SQLAlchemy → MySQL e declarar o model <strong>User</strong>;</li>
+    <li>Implementar a primeira rota persistente: <strong><code>POST /signup</code></strong>.</li>
+  </ul>
+</section>
+
+<!-- ============ T-7 Modelo relacional e SQL ============ -->
+
+<section>
+  <h2>O modelo relacional</h2>
+  <p class="definicao">"O modelo relacional fornece um meio de descrever dados apenas por sua estrutura natural — sem sobrepor qualquer estrutura adicional para fins de representação na máquina."</p>
+  <ul style="font-size:.65em;margin-top:.8em">
+    <li><strong>Origem:</strong> proposto por <strong>Edgar F. Codd</strong>, matemático da IBM, no artigo <em>A Relational Model of Data for Large Shared Data Banks</em> (Communications of the ACM, 1970);</li>
+    <li><strong>Propósito:</strong> desacoplar o <em>uso</em> dos dados da forma como são <em>armazenados</em> — o programa muda, o banco fica.</li>
+  </ul>
+  <p class="cite">CODD, E. F. — A Relational Model of Data for Large Shared Data Banks, CACM, 1970</p>
+</section>
+
+<section>
+  <h2>Tabela, linha, coluna, chave</h2>
+  <img src="img/modelo-relacional.png" alt="Diagrama de uma tabela relacional: colunas tipadas, linhas como registros, chave primária e constraint UNIQUE" style="width:100%;max-width:740px">
+  <p class="cite">CODD, E. F. — A Relational Model of Data for Large Shared Data Banks, CACM, 1970</p>
+</section>
+
+<section>
+  <h2>O banco gera a chave primária sozinho</h2>
+  <ul style="font-size:.7em">
+    <li><strong>Auto-increment:</strong> um contador que só cresce, mantido pelo próprio banco;</li>
+    <li>É exatamente o nosso <code>next_book_id</code> da aula 03 — mas <strong>não morre com o processo</strong>;</li>
+    <li>Id de registro removido nunca é reaproveitado — a regra que implementamos à mão, agora garantida pelo banco;</li>
+    <li>O contador artesanal se aposenta hoje.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>SQL — a língua dos bancos relacionais</h2>
+  <ul style="font-size:.65em">
+    <li><strong>Origem:</strong> nasceu como <strong>SEQUEL</strong> (Structured English Query Language), de <strong>Donald Chamberlin e Raymond Boyce</strong> (IBM, 1974), no projeto System R — a primeira implementação do modelo de Codd;</li>
+    <li>Padronizada como <strong>SQL</strong> pela ANSI (1986) e pela ISO (1987) — o padrão até hoje;</li>
+    <li><strong>Declarativa:</strong> descreve <em>o que</em> se quer, não <em>como</em> buscar — quem escolhe o algoritmo é o banco.</li>
+  </ul>
+  <p class="cite">CHAMBERLIN, D.; BOYCE, R. — SEQUEL: A Structured English Query Language, ACM SIGFIDET, 1974</p>
+</section>
+
+<section>
+  <h2>MySQL</h2>
+  <ul style="font-size:.7em">
+    <li>Sistema gerenciador de banco de dados relacional, criado por <strong>Michael Widenius e David Axmark</strong> (1995);</li>
+    <li>Código aberto; hoje mantido pela Oracle;</li>
+    <li>Um dos bancos mais usados da web — e o banco da disciplina;</li>
+    <li>Um servidor MySQL hospeda vários <em>databases</em>; o nosso será o <code>reading_tracker</code>.</li>
+  </ul>
+  <p class="cite">Documentação oficial do MySQL — dev.mysql.com/doc</p>
+</section>
+
+<section>
+  <h2>O SQL de hoje</h2>
+  <pre><code class="language-sql" data-trim>
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO user (name, email, password)
+VALUES ('Machado de Assis', 'machado@exemplo.com', 'segredo123');
+
+SELECT id, name, email FROM user;
+  </code></pre>
+  <p style="font-size:.6em">No fim da aula, ninguém digita este <code>CREATE TABLE</code> — o ORM o escreve por nós.</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — modelo relacional</span></h2>
+  <ul style="font-size:.8em">
+    <li>Dados em tabelas: linhas são registros, colunas são atributos tipados;</li>
+    <li>A chave primária identifica a linha; o auto-increment a gera;</li>
+    <li>Constraints (<code>UNIQUE</code>, <code>NOT NULL</code>) são defendidas pelo banco, sozinho;</li>
+    <li>SQL é declarativa: o quê, não como.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 1: MySQL no ar ============ -->
+
+<section>
+  <h2>Dois programas, de novo cliente-servidor</h2>
+  <p style="font-size:.7em">A partir de hoje o backend são <strong>dois processos</strong>: o uvicorn (porta 8000) e o servidor MySQL (porta 3306) — e <strong>a nossa API é o cliente</strong> do banco.</p>
+  <div class="duas-colunas" style="font-size:.6em">
+    <div>
+      <p class="os-label">Mac</p>
+      <pre><code class="language-bash" data-trim>
+brew install mysql
+brew services start mysql
+mysql -u root
+      </code></pre>
+    </div>
+    <div>
+      <p class="os-label">Windows</p>
+      <p style="font-size:.95em">MySQL Installer (<em>Server only</em>) em<br><code>dev.mysql.com/downloads/installer</code><br>Define a senha do <code>root</code> na instalação.<br>Cliente: <strong>MySQL Command Line Client</strong>.</p>
+    </div>
+  </div>
+  <div class="nota">Homebrew: <code>root</code> nasce <strong>sem senha</strong>. Windows: o instalador <strong>obriga</strong> a definir uma — anote-a.</div>
+</section>
+
+<section>
+  <h2>O banco do projeto e o SQL na mão</h2>
+  <pre><code class="language-sql" data-trim>
+CREATE DATABASE reading_tracker;
+USE reading_tracker;
+
+CREATE TABLE user ( ... );   -- o CREATE do slide anterior
+INSERT INTO user (name, email, password) VALUES (...);
+SELECT id, name, email FROM user;
+DESCRIBE user;
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O <code>id</code> veio <strong>1</strong> sem ninguém pedir; o <code>created_at</code> se preencheu sozinho;</li>
+    <li><code>INSERT</code> repetido → <strong>ERROR 1062: Duplicate entry</strong> — o <code>UNIQUE</code> trabalhando;</li>
+    <li>Ao final, <code>DROP TABLE user;</code> — daqui em diante, quem escreve o <code>CREATE TABLE</code> é o ORM.</li>
+  </ul>
+</section>
+
+<!-- ============ T-7 ORM ============ -->
+
+<section>
+  <h2>Dois mundos que não se encaixam</h2>
+  <ul style="font-size:.7em">
+    <li>O programa pensa em <strong>objetos</strong>: classes, atributos, referências (<code>book.name</code>);</li>
+    <li>O banco pensa em <strong>relações</strong>: tabelas, linhas, chaves;</li>
+    <li>A fricção entre os dois modelos tem nome: <strong>descompasso objeto-relacional</strong> (<em>object-relational impedance mismatch</em>);</li>
+    <li>Sem ajuda, todo acesso vira tradução manual: montar strings SQL, executar, converter linha em objeto — em cada rota.</li>
+  </ul>
+  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002</p>
+</section>
+
+<section>
+  <h2>ORM — Object-Relational Mapping</h2>
+  <p class="definicao">Técnica que traduz automaticamente entre o mundo dos objetos e o mundo das relações: o programa manipula objetos; o ORM emite o SQL.</p>
+  <ul style="font-size:.7em;margin-top:.8em">
+    <li><strong class="destaque">classe ↔ tabela</strong> &nbsp;·&nbsp; <strong class="destaque">atributo ↔ coluna</strong> &nbsp;·&nbsp; <strong class="destaque">objeto ↔ linha</strong></li>
+  </ul>
+  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002</p>
+</section>
+
+<section>
+  <h2>O ORM é um tradutor</h2>
+  <img src="img/orm-tradutor.png" alt="Diagrama do ORM traduzindo entre a classe User em Python e a tabela user no MySQL" style="width:100%;max-width:740px">
+  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · docs.sqlalchemy.org</p>
+</section>
+
+<section>
+  <h2>SQLAlchemy</h2>
+  <ul style="font-size:.65em">
+    <li>O ORM da disciplina, criado por <strong>Michael Bayer</strong> (2006) — o mais maduro do ecossistema Python;</li>
+    <li>Os padrões que o estruturam foram catalogados por <strong>Martin Fowler</strong> (PoEAA, 2002):
+      <ul style="font-size:.9em">
+        <li><em>Active Record</em> — o objeto sabe se salvar (<code>user.save()</code>);</li>
+        <li><em>Data Mapper</em> — uma camada separada move os dados; o objeto nem sabe que banco existe;</li>
+        <li><em>Unit of Work</em> — acumular mudanças e gravá-las juntas, numa transação;</li>
+      </ul>
+    </li>
+    <li>O SQLAlchemy implementa <strong>Data Mapper</strong> e <strong>Unit of Work</strong>: nossos objetos não têm <code>.save()</code> — quem grava é a <strong>Session</strong>.</li>
+  </ul>
+  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · docs.sqlalchemy.org</p>
+</section>
+
+<section>
+  <h2>SQL cru × ORM</h2>
+  <table class="status-tab">
+    <tr><th></th><th>SQL cru (driver direto)</th><th>ORM (SQLAlchemy)</th></tr>
+    <tr><td>Consulta</td><td>string SQL montada à mão</td><td><code>select(User).where(...)</code></td></tr>
+    <tr><td>Resultado</td><td>tuplas cruas, conversão manual</td><td>objetos <code>User</code> prontos</td></tr>
+    <tr><td>Schema</td><td><code>CREATE TABLE</code> à mão</td><td>gerado dos models (<code>create_all</code>)</td></tr>
+    <tr><td>Erro de digitação</td><td>explode em runtime</td><td>falha no Python, na hora</td></tr>
+    <tr><td>Trocar de banco</td><td>reescrever dialetos</td><td>trocar a string de conexão</td></tr>
+    <tr><td>Controle fino do SQL</td><td>total</td><td>parcial</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>O ORM não elimina o SQL — ele o gera</h2>
+  <ul style="font-size:.7em">
+    <li>Quem não lê SQL não sabe o que o próprio programa faz;</li>
+    <li>Por isso a aula começou com SQL na mão;</li>
+    <li>E por isso ligaremos o <code>echo=True</code>: cada operação imprime no terminal o SQL emitido;</li>
+    <li>SQL cru continua tendo vez: consultas analíticas complexas, ajuste fino de performance;</li>
+    <li>Para o CRUD de uma aplicação, o ORM é o padrão da indústria.</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — ORM</span></h2>
+  <ul style="font-size:.8em">
+    <li>Objetos e relações não se encaixam: descompasso objeto-relacional;</li>
+    <li>ORM traduz: classe ↔ tabela, atributo ↔ coluna, objeto ↔ linha;</li>
+    <li>SQLAlchemy (Bayer, 2006): <em>Data Mapper</em> + <em>Unit of Work</em> — a Session grava, o objeto não;</li>
+    <li>A tradução pode (e deve) ser lida: <code>echo=True</code>.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 2: SQLAlchemy ============ -->
+
+<section>
+  <h2>Três dependências novas, uma por camada</h2>
+  <pre><code class="language-bash" data-trim>
+pip install sqlalchemy pymysql cryptography
+pip freeze &gt; requirements.txt
+  </code></pre>
+  <ul style="font-size:.65em">
+    <li><strong>sqlalchemy</strong> — o ORM;</li>
+    <li><strong>pymysql</strong> — o driver: fala o protocolo do MySQL na porta 3306;</li>
+    <li><strong>cryptography</strong> — exigida pelo PyMySQL para a autenticação do MySQL 8+;</li>
+    <li>O FastAPI não sabe que banco existe; o SQLAlchemy traduz; o PyMySQL transporta.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>database.py — a conexão</h2>
+  <pre><code class="language-python" data-trim>
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
+
+DATABASE_URL = "mysql+pymysql://root@127.0.0.1:3306/reading_tracker"
+
+engine = create_engine(DATABASE_URL, echo=True)
+SessionLocal = sessionmaker(bind=engine)
+
+
+class Base(DeclarativeBase):
+    pass
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><strong>engine</strong> — ponto único de conexão (<code>echo=True</code>: didático e deliberado);</li>
+    <li><strong>SessionLocal</strong> — fábrica de sessões: cada requisição abre a sua;</li>
+    <li><strong>Base</strong> — a classe-mãe dos models.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>A DATABASE_URL é uma URI</h2>
+  <pre><code class="language-text" data-trim>
+mysql+pymysql://root@127.0.0.1:3306/reading_tracker
+└─────┬──────┘  └┬─┘ └───┬───┘ └┬─┘ └──────┬──────┘
+ dialeto+driver user    host  porta   banco (caminho)
+  </code></pre>
+  <ul style="font-size:.65em">
+    <li>A anatomia da aula 03 lê a string inteira — o esquema virou <em>dialeto+driver</em>;</li>
+    <li>Root com senha (Windows): <code>root:minhasenha@...</code> — credenciais antes do <code>@</code>.</li>
+  </ul>
+  <p class="cite">RFC 3986 — Uniform Resource Identifier (URI): Generic Syntax, IETF, 2005</p>
+</section>
+
+<section>
+  <h2>models.py — o model User</h2>
+  <pre><code class="language-python" data-trim>
+from datetime import datetime
+
+from sqlalchemy import String, func
+from sqlalchemy.orm import Mapped, mapped_column
+
+from database import Base
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(255), unique=True)
+    password: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+  </code></pre>
+</section>
+
+<section>
+  <h2>O model, linha a linha</h2>
+  <ul style="font-size:.62em">
+    <li><code>Mapped[int]</code>, <code>Mapped[str]</code> — anotações de tipo como fonte de verdade (a ideia do Pydantic, agora na fronteira com o banco);</li>
+    <li><code>primary_key=True</code> num inteiro → <code>PRIMARY KEY</code> <strong>e</strong> <code>AUTO_INCREMENT</code>;</li>
+    <li><code>String(100)</code> — o MySQL exige tamanho para <code>VARCHAR</code>;</li>
+    <li><code>unique=True</code> — a constraint mora <strong>no banco</strong>, não no Python;</li>
+    <li><code>server_default=func.now()</code> — quem preenche é o banco;</li>
+    <li>Convenções do projeto (ADR-0002): tabela no <strong>singular</strong>, colunas de data/hora com sufixo <strong><code>_at</code></strong>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>create_all — a tabela nasce do model</h2>
+  <pre><code class="language-python" data-trim>
+from fastapi import Depends, FastAPI, HTTPException
+from pydantic import BaseModel, ConfigDict
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+import models
+from database import Base, SessionLocal, engine
+
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O <code>import models</code> vem <strong>antes</strong>: é ele que registra <code>User</code> no metadata da <code>Base</code>;</li>
+    <li>Na subida do uvicorn, o <code>echo</code> mostra o <strong><code>CREATE TABLE user (...)</code></strong> — o SQL do quadro, escrito pelo ORM;</li>
+    <li>Conferir no mysql: <code>SHOW TABLES;</code> e <code>DESCRIBE user;</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>create_all cria — nunca altera</h2>
+  <ul style="font-size:.7em">
+    <li><code>create_all</code> cria o que <strong>não existe</strong>; tabela existente fica intocada;</li>
+    <li>Mudou o model? Na disciplina: <code>DROP TABLE</code> e deixar recriar — dado de aula é descartável;</li>
+    <li>No mundo real, mudanças de schema são versionadas com <strong>migrations</strong> (Alembic, no ecossistema Python) — fica na menção, não é tema do curso.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Schemas: a senha entra, mas nunca sai</h2>
+  <pre><code class="language-python" data-trim>
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+
+
+class UserRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    email: str
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O que entra não tem <code>id</code>; o que sai não tem <code>password</code> — o <code>response_model</code> é o filtro;</li>
+    <li><code>UserRead</code>, não <code>User</code>: este nome já pertence ao model do banco;</li>
+    <li><code>from_attributes=True</code>: o schema lerá <strong>atributos de objeto</strong> (<code>user.email</code>), não chaves de dicionário.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Uma sessão por requisição</h2>
+  <pre><code class="language-python" data-trim>
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+  </code></pre>
+  <ul style="font-size:.65em">
+    <li><strong><code>Depends(get_db)</code></strong> — injeção de dependência: a rota declara o que precisa, o framework entrega pronto e garante o <code>close()</code>, com sucesso ou erro;</li>
+    <li>É a inversão de controle da aula 01, outra vez;</li>
+    <li>A mesma mecânica autenticará usuários na aula 10 — <code>get_db</code> é o ensaio geral.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>POST /signup — a primeira escrita persistente</h2>
+  <pre><code class="language-python" data-trim>
+@app.post("/signup", response_model=UserRead, status_code=201)
+def signup(user: UserCreate, db: Session = Depends(get_db)):
+    new_user = models.User(name=user.name, email=user.email,
+                           password=user.password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><code>add</code> — <strong>anota</strong> a intenção; nada foi ao banco;</li>
+    <li><code>commit</code> — executa o <code>INSERT</code> e confirma a transação;</li>
+    <li><code>refresh</code> — recarrega o que <strong>o banco</strong> gerou: <code>id</code> e <code>created_at</code>;</li>
+    <li>É o <em>Unit of Work</em> da teoria, ao vivo.</li>
+  </ul>
+  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002</p>
+</section>
+
+<section>
+  <h2>A requisição completa</h2>
+  <img src="img/fluxo-signup.png" alt="Fluxo do signup: JSON validado pelo UserCreate, gravado pela Session no MySQL, devolvido pelo UserRead sem a senha" style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <h2>A dívida deliberada: senha em texto puro</h2>
+  <ul style="font-size:.7em">
+    <li><code>SELECT * FROM user;</code> — a senha está lá, <strong>legível</strong>;</li>
+    <li>Qualquer pessoa com acesso ao banco lê a senha de todos os usuários;</li>
+    <li>É um erro grave — e <strong>deliberado</strong> (ADR-0001): fica assim até a aula 09;</li>
+    <li>Esse defeito abrirá a discussão de <strong>hash de senha</strong> na aula de autenticação.</li>
+  </ul>
+  <div class="nota">No quadro, anotar: <strong>"dívida: senha em texto puro"</strong>.</div>
+</section>
+
+<section>
+  <h2>O dado que sobrevive</h2>
+  <ul style="font-size:.7em">
+    <li>Reinicie o uvicorn (<code>Ctrl+C</code> e subir de novo);</li>
+    <li><code>GET /api/books</code> → a lista <strong>voltou aos três livros</strong> (memória, morreu);</li>
+    <li><code>SELECT * FROM user;</code> → o User <strong>continua lá</strong> (banco, sobreviveu);</li>
+    <li>O próximo signup nasce com <code>id = 2</code>: o auto-increment também sobreviveu — ao contrário do finado <code>next_book_id</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>E-mail duplicado: de 500 a 409</h2>
+  <p style="font-size:.65em">Signup repetido → <strong>500</strong> (<code>IntegrityError: Duplicate entry</code>). O banco defendeu a regra, mas 5xx diz "culpa do servidor" — e a culpa é do pedido. O código certo: <strong>409 Conflict</strong>.</p>
+  <pre><code class="language-python" data-trim>
+    existing_user = db.scalar(
+        select(models.User).where(models.User.email == user.email))
+    if existing_user is not None:
+        raise HTTPException(status_code=409,
+                            detail="Email already registered")
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Primeira consulta ORM do projeto — a expressão Python <em>parece</em> SQL;</li>
+    <li>No <code>echo</code>: <code>SELECT ... WHERE user.email = %s</code>, com parâmetro.</li>
+  </ul>
+  <div class="nota">Duas requisições simultâneas com o mesmo e-mail? Ambas passam pelo <code>if</code> — a última defesa é o <code>UNIQUE</code> no banco. É para isso que a constraint existe.</div>
+</section>
+
+<!-- ============ Exercício e fechamento ============ -->
+
+<section>
+  <h2>Exercício em sala</h2>
+  <ol style="font-size:.7em">
+    <li>Adicione ao model o campo <code>age: Mapped[int]</code>;</li>
+    <li>Adicione <code>age: int</code> aos dois schemas e passe-o na criação do <code>models.User(...)</code>;</li>
+    <li>Teste um signup e observe a falha — <em>por que a coluna não existe, se o model tem o campo?</em></li>
+    <li>Corrija: <code>DROP TABLE user;</code>, reinicie o uvicorn e assista ao <code>create_all</code> recriar a tabela — agora com <code>age</code>.</li>
+  </ol>
+  <div class="nota">Exercício descartável: a branch da disciplina segue <strong>sem</strong> o campo <code>age</code> — desfazer, <code>DROP TABLE user;</code> e reiniciar. A aula 05 parte do model original.</div>
+</section>
+
+<section>
+  <h2>Síntese da aula</h2>
+  <ul style="font-size:.65em">
+    <li>Modelo relacional (Codd, 1970): tabelas, linhas, colunas, chaves primárias e constraints que o banco defende sozinho;</li>
+    <li>SQL (Chamberlin &amp; Boyce, 1974): a língua declarativa desse mundo — escrita à mão uma vez, na vida;</li>
+    <li>ORM: classe ↔ tabela, atributo ↔ coluna, objeto ↔ linha; SQLAlchemy é <em>Data Mapper</em> com <em>Unit of Work</em> (<code>add</code>/<code>commit</code>/<code>refresh</code>);</li>
+    <li>O <code>create_all</code> materializou o model <code>User</code> na tabela que antes escrevemos à mão;</li>
+    <li><code>POST /signup</code>: a primeira rota persistente — 201 sem senha na resposta, 409 no e-mail repetido;</li>
+    <li>Dívida anotada no quadro: <strong>senha em texto puro</strong> (ADR-0001 → aula 09).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Próxima aula: relações 1:N</h2>
+  <p style="font-size:.8em">O User mora no banco, mas os Books continuam morrendo a cada restart — e livro não tem dono.</p>
+  <ul style="font-size:.75em">
+    <li>Model <strong>Book</strong> no MySQL, com <strong>chave estrangeira</strong> para o User — a primeira <em>relação</em> do banco relacional;</li>
+    <li>O CRUD da aula 03 refeito sobre o banco;</li>
+    <li>As rotas <code>/users/{user_id}/books</code> do nosso mapa REST.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Referências</h2>
+  <ul style="font-size:.55em">
+    <li>CODD, E. F. <em>A Relational Model of Data for Large Shared Data Banks</em>. Communications of the ACM, 1970. (o artigo que fundou o modelo relacional)</li>
+    <li>CHAMBERLIN, D.; BOYCE, R. <em>SEQUEL: A Structured English Query Language</em>. ACM SIGFIDET, 1974. (a origem do SQL)</li>
+    <li>FOWLER, M. <em>Patterns of Enterprise Application Architecture</em>. Addison-Wesley, 2002. (Active Record, Data Mapper, Unit of Work — a base conceitual do SQLAlchemy)</li>
+    <li>Documentação oficial do SQLAlchemy — docs.sqlalchemy.org.</li>
+    <li>Documentação oficial do MySQL — dev.mysql.com/doc.</li>
+    <li>Documentação oficial do FastAPI — fastapi.tiangolo.com.</li>
+    <li>Documentação oficial do Pydantic — docs.pydantic.dev.</li>
+  </ul>
+</section>
+
+</div>
+</div>
+
+<script src="../assets/reveal/dist/reveal.js"></script>
+<script src="../assets/reveal/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    plugins: [ RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>
