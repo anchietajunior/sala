@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420" font-family="Helvetica, Arial, sans-serif">
+  <rect width="820" height="420" fill="#ffffff"/>
+
+  <text x="410" y="32" font-size="16" fill="#555" text-anchor="middle">Duas linhas escritas por nós; centenas herdadas de quem veio antes.</text>
+
+  <!-- BaseModel -->
+  <rect x="230" y="56" width="360" height="70" rx="8" fill="#f4f2ee" stroke="#2e6da4" stroke-width="2"/>
+  <text x="410" y="84" font-size="18" fill="#222" font-family="Consolas, monospace" text-anchor="middle">BaseModel</text>
+  <text x="410" y="108" font-size="13" fill="#666" text-anchor="middle">Pydantic — validação de tipos, JSON, mensagens de erro</text>
+
+  <line x1="410" y1="180" x2="410" y2="138" stroke="#2e6da4" stroke-width="2"/>
+  <polygon points="410,126 400,144 420,144" fill="#ffffff" stroke="#2e6da4" stroke-width="2"/>
+
+  <!-- SQLModel -->
+  <rect x="230" y="180" width="360" height="70" rx="8" fill="#f4f2ee" stroke="#2e6da4" stroke-width="2"/>
+  <text x="410" y="208" font-size="18" fill="#222" font-family="Consolas, monospace" text-anchor="middle">SQLModel</text>
+  <text x="410" y="232" font-size="13" fill="#666" text-anchor="middle">soma o mapeamento objeto–tabela do SQLAlchemy</text>
+
+  <!-- ramificacao -->
+  <line x1="410" y1="250" x2="410" y2="278" stroke="#2e6da4" stroke-width="2"/>
+  <line x1="180" y1="278" x2="640" y2="278" stroke="#2e6da4" stroke-width="2"/>
+  <line x1="180" y1="278" x2="180" y2="316" stroke="#2e6da4" stroke-width="2"/>
+  <line x1="640" y1="278" x2="640" y2="316" stroke="#2e6da4" stroke-width="2"/>
+  <polygon points="180,304 170,322 190,322" fill="#ffffff" stroke="#2e6da4" stroke-width="2"/>
+  <polygon points="640,304 630,322 650,322" fill="#ffffff" stroke="#2e6da4" stroke-width="2"/>
+
+  <!-- BookCreate -->
+  <rect x="60" y="322" width="240" height="76" rx="8" fill="#ffffff" stroke="#2e6da4" stroke-width="2"/>
+  <text x="180" y="350" font-size="16" fill="#222" font-family="Consolas, monospace" text-anchor="middle">BookCreate(SQLModel)</text>
+  <text x="180" y="374" font-size="13" fill="#666" text-anchor="middle">schema: só valida a entrada</text>
+  <text x="180" y="392" font-size="12" fill="#999" text-anchor="middle">não vira tabela</text>
+
+  <!-- Book table -->
+  <rect x="520" y="322" width="240" height="76" rx="8" fill="#ffffff" stroke="#b8860b" stroke-width="2.5"/>
+  <text x="640" y="346" font-size="15" fill="#222" font-family="Consolas, monospace" text-anchor="middle">Book(SQLModel,</text>
+  <text x="640" y="366" font-size="15" fill="#b8860b" font-family="Consolas, monospace" text-anchor="middle">table=True)</text>
+  <text x="640" y="390" font-size="13" fill="#666" text-anchor="middle">modelo: também vira tabela no banco</text>
+
+  <text x="664" y="304" font-size="12" fill="#b8860b">o interruptor está aqui</text>
+</svg>

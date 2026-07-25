@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="380" viewBox="0 0 820 380" font-family="Helvetica, Arial, sans-serif">
+  <rect width="820" height="380" fill="#ffffff"/>
+
+  <!-- Classe -->
+  <text x="30" y="34" font-size="17" font-weight="bold" fill="#2e6da4">A classe é o molde</text>
+
+  <rect x="30" y="52" width="300" height="240" rx="8" fill="#f4f2ee" stroke="#2e6da4" stroke-width="2"/>
+  <text x="50" y="82" font-size="18" font-weight="bold" fill="#222" font-family="Consolas, monospace">class Book:</text>
+  <line x1="50" y1="96" x2="310" y2="96" stroke="#cfcabd" stroke-width="1"/>
+
+  <text x="50" y="124" font-size="14" fill="#555">estado (atributos)</text>
+  <text x="66" y="150" font-size="15" fill="#222" font-family="Consolas, monospace">title</text>
+  <text x="66" y="172" font-size="15" fill="#222" font-family="Consolas, monospace">pages</text>
+  <text x="66" y="194" font-size="15" fill="#222" font-family="Consolas, monospace">current_page</text>
+
+  <text x="50" y="228" font-size="14" fill="#555">comportamento (métodos)</text>
+  <text x="66" y="254" font-size="15" fill="#222" font-family="Consolas, monospace">progress_percentage()</text>
+
+  <text x="30" y="318" font-size="13" fill="#777">Existe uma só. Descreve o que</text>
+  <text x="30" y="336" font-size="13" fill="#777">todo livro tem e sabe fazer.</text>
+
+  <!-- Seta -->
+  <line x1="344" y1="170" x2="424" y2="170" stroke="#b8860b" stroke-width="2.5"/>
+  <polygon points="424,170 412,164 412,176" fill="#b8860b"/>
+  <text x="330" y="156" font-size="14" fill="#b8860b" font-family="Consolas, monospace">Book(...)</text>
+  <text x="342" y="196" font-size="13" fill="#b8860b">instanciação</text>
+
+  <!-- Objetos -->
+  <text x="440" y="34" font-size="17" font-weight="bold" fill="#2e6da4">Os objetos são as peças</text>
+
+  <rect x="440" y="52" width="350" height="66" rx="8" fill="#ffffff" stroke="#222" stroke-width="1.6"/>
+  <text x="458" y="76" font-size="14" fill="#888" font-family="Consolas, monospace">clean_code</text>
+  <text x="458" y="102" font-size="14" fill="#222" font-family="Consolas, monospace">"Clean Code" · 464 · página 120</text>
+
+  <rect x="440" y="132" width="350" height="66" rx="8" fill="#ffffff" stroke="#222" stroke-width="1.6"/>
+  <text x="458" y="156" font-size="14" fill="#888" font-family="Consolas, monospace">pragmatic</text>
+  <text x="458" y="182" font-size="14" fill="#222" font-family="Consolas, monospace">"The Pragmatic..." · 352 · página 0</text>
+
+  <rect x="440" y="212" width="350" height="66" rx="8" fill="#ffffff" stroke="#222" stroke-width="1.6"/>
+  <text x="458" y="236" font-size="14" fill="#888" font-family="Consolas, monospace">fluent</text>
+  <text x="458" y="262" font-size="14" fill="#222" font-family="Consolas, monospace">"Fluent Python" · 1012 · página 506</text>
+
+  <text x="440" y="318" font-size="13" fill="#777">Muitos. Cada um com estado próprio</text>
+  <text x="440" y="336" font-size="13" fill="#777">e identidade própria.</text>
+</svg>
