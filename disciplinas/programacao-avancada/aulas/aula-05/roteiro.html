@@ -37,7 +37,7 @@
   <ul>
     <li>Explicar o que é uma relação 1:N e justificar em que lado dela mora a chave estrangeira;</li>
     <li>Definir integridade referencial e demonstrar o banco defendendo-a (filho órfão recusado, pai com filhos protegido);</li>
-    <li>Declarar a relação User–Book no SQLAlchemy com <code>ForeignKey</code> e <code>relationship</code>;</li>
+    <li>Declarar a relação User–Book no SQLModel com <code>foreign_key</code> e <code>Relationship</code>;</li>
     <li>Reconstruir o CRUD de Books sobre o MySQL, nas rotas do mapa REST da aula 03 (<code>/users/{user_id}/books</code> e <code>/books/{book_id}</code>);</li>
     <li>Apontar a falha de segurança deliberada do <code>user_id</code> explícito na URL e conectá-la ao ADR-0001.</li>
   </ul>
@@ -89,55 +89,50 @@
 <h3>Passo 1 — models.py: o Book e os dois lados da relação</h3>
 <p><em>Por quê:</em> a tabela do quadro, declarada como classe — e, junto dela, a novidade que o SQL não tem: a relação navegável como objetos Python.</p>
 
-<p>Em <code>backend/models.py</code>, adicione a linha <code>books</code> ao <code>User</code>, a classe <code>Book</code> e os imports novos (<code>ForeignKey</code> e <code>relationship</code>):</p>
+<p>Em <code>backend/models.py</code>, adicione a linha <code>books</code> ao <code>User</code>, a classe <code>Book</code> e o import novo (<code>Relationship</code>):</p>
 
 <pre>from datetime import datetime
 
-from sqlalchemy import ForeignKey, String, func
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from database import Base
+from sqlmodel import Field, Relationship, SQLModel
 
 
-class User(Base):
-    __tablename__ = "user"
+class User(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(max_length=100)
+    email: str = Field(max_length=255, unique=True)
+    password: str = Field(max_length=255)
+    created_at: datetime = Field(default_factory=datetime.now)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100))
-    email: Mapped[str] = mapped_column(String(255), unique=True)
-    password: Mapped[str] = mapped_column(String(255))
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-
-    books: Mapped[list["Book"]] = relationship(back_populates="user")
+    books: list["Book"] = Relationship(back_populates="user")
 
 
-class Book(Base):
-    __tablename__ = "book"
+class Book(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    title: str = Field(max_length=200)
+    pages: int
+    user_id: int = Field(foreign_key="user.id")
+    created_at: datetime = Field(default_factory=datetime.now)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(String(200))
-    pages: Mapped[int]
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-
-    user: Mapped["User"] = relationship(back_populates="books")</pre>
+    user: User | None = Relationship(back_populates="books")</pre>
 
 <p>Linha a linha, contra o <code>CREATE TABLE</code> do quadro:</p>
 <ul>
-  <li><code>pages: Mapped[int]</code> — sem <code>mapped_column()</code>: só o chamamos quando há algo a configurar (o <code>INT</code> não exige tamanho como o <code>VARCHAR</code>); a anotação basta;</li>
-  <li><code>user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))</code> — <strong>a chave estrangeira</strong>. A string é <code>"tabela.coluna"</code> (nomes do banco, não da classe): é a linha <code>FOREIGN KEY (user_id) REFERENCES user(id)</code> do quadro;</li>
-  <li><code>books</code> e <code>user</code> (<code>relationship</code>) — <strong>não viram colunas</strong>. Existem só no mundo Python: são a relação materializada como objetos navegáveis — <code>user.books</code> é uma lista de <code>Book</code>; <code>book.user</code> é o dono. É o ORM da aula 04 cumprindo a promessa de traduzir <em>os dois mundos</em>: a FK é como o banco expressa a relação; o <code>relationship</code>, como o Python a expressa;</li>
-  <li><code>back_populates</code> — declara que <code>User.books</code> e <code>Book.user</code> são <strong>os dois lados da mesma relação</strong>, e o SQLAlchemy os mantém coerentes;</li>
-  <li>Convenções de sempre (ADR-0002): tabela no singular (<code>book</code>), FK <code>&lt;tabela&gt;_id</code>, datetime com sufixo <code>_at</code>.</li>
+  <li><code>pages: int</code> — sem <code>Field(...)</code>: só o chamamos quando há algo a configurar (o <code>INT</code> não exige tamanho como o <code>VARCHAR</code>); a anotação basta;</li>
+  <li><code>user_id: int = Field(foreign_key="user.id")</code> — <strong>a chave estrangeira</strong>. A string é <code>"tabela.coluna"</code> (nomes do <strong>banco</strong>, minúsculos, não os da classe): é a linha <code>FOREIGN KEY (user_id) REFERENCES user(id)</code> do quadro. Repare que ela é uma <em>coluna comum</em> — um inteiro — com uma configuração a mais;</li>
+  <li><code>books</code> e <code>user</code> (<code>Relationship</code>) — <strong>não viram colunas</strong>. Existem só no mundo Python: são a relação materializada como objetos navegáveis — <code>user.books</code> é uma lista de <code>Book</code>; <code>book.user</code> é o dono. É o ORM da aula 04 cumprindo a promessa de traduzir <em>os dois mundos</em>: a FK é como o banco expressa a relação; o <code>Relationship</code>, como o Python a expressa. O <strong>F maiúsculo</strong> de <code>Field</code> e o <strong>R maiúsculo</strong> de <code>Relationship</code> marcam a diferença: um configura coluna, o outro não gera coluna nenhuma;</li>
+  <li><code>list["Book"]</code> com o nome entre aspas — quando o <code>User</code> é lido, a classe <code>Book</code> ainda não existe (está mais abaixo no arquivo). As aspas dizem ao Python "resolva esse nome depois";</li>
+  <li><code>user: User | None</code> — o mesmo "ou nada" do <code>id</code>: um Book recém-criado na memória ainda não teve o dono carregado do banco;</li>
+  <li><code>back_populates</code> — declara que <code>User.books</code> e <code>Book.user</code> são <strong>os dois lados da mesma relação</strong>, e o ORM os mantém coerentes;</li>
+  <li>Convenções de sempre (ADR-0002): tabela no singular (<code>book</code>, do nome da classe), FK <code>&lt;tabela&gt;_id</code>, datetime com sufixo <code>_at</code>.</li>
 </ul>
 
 <h3>Passo 2 — create_all: a tabela book nasce (e a user fica em paz)</h3>
-<p><em>Por quê:</em> nenhuma linha nova no <code>main.py</code> — o <code>create_all</code> da aula 04 já varre o metadata da <code>Base</code>; basta o model existir.</p>
+<p><em>Por quê:</em> nenhuma linha nova no <code>main.py</code> — o <code>create_all</code> da aula 04 já varre o metadata do <code>SQLModel</code>; basta o model existir.</p>
 
 <span class="os">Mac e Windows (iguais, venv ativo, dentro de <code>projeto/backend</code>)</span>
 <pre>uvicorn main:app --reload</pre>
 
-<p>No terminal, o <code>echo=True</code> conta a história: o SQLAlchemy confere as duas tabelas, vê que <code>user</code> <strong>já existe</strong> (e não a toca — a lição da aula 04) e emite o <strong><code>CREATE TABLE book (...)</code></strong> — compare com o quadro, inclusive a <code>FOREIGN KEY</code>. Confirme no cliente mysql:</p>
+<p>No terminal, o <code>echo=True</code> conta a história: o ORM confere as duas tabelas, vê que <code>user</code> <strong>já existe</strong> (e não a toca — a lição da aula 04) e emite o <strong><code>CREATE TABLE book (...)</code></strong> — compare com o quadro, inclusive a <code>FOREIGN KEY</code>. Confirme no cliente mysql:</p>
 
 <span class="os">Mac e Windows (dentro do cliente mysql, com <code>USE reading_tracker;</code>)</span>
 <pre>SHOW TABLES;
@@ -215,21 +210,19 @@ DELETE FROM book;</pre>
   <li>os schemas <code>BookCreate</code> e <code>Book</code> antigos (novos entram já já).</li>
 </ul>
 
-<p>Devem sobrar: imports, <code>create_all</code>, <code>app</code>, os schemas de User, <code>get_db</code>, <code>/health</code> e <code>/signup</code>. O <code>--reload</code> vai reclamar de nomes indefinidos se algo escapar — o traceback é o guia da demolição.</p>
+<p>Devem sobrar: imports, <code>create_all</code>, <code>app</code>, os schemas de User, <code>/health</code> e <code>/signup</code>. O <code>--reload</code> vai reclamar de nomes indefinidos se algo escapar — o traceback é o guia da demolição.</p>
 
 <h3>Passo 5 — os schemas novos de Book</h3>
 <p><em>Por quê:</em> mesma dupla da aula 04 — o que entra não tem <code>id</code>; o que sai vem do banco.</p>
 
 <p>Onde estavam os schemas antigos de Book:</p>
 
-<pre>class BookCreate(BaseModel):
+<pre>class BookCreate(SQLModel):
     title: str
     pages: int
 
 
-class BookRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
+class BookRead(SQLModel):
     id: int
     title: str
     pages: int
@@ -242,17 +235,19 @@ class BookRead(BaseModel):
   <li><code>user_id</code> na saída: <strong>a posse aparece na resposta</strong>. O cliente que criar um book recebe de volta a quem ele pertence.</li>
 </ul>
 
+<div class="pergunta">Para a turma: "Temos <code>Book</code> em <code>models.py</code> e <code>BookRead</code> aqui, os dois herdando de <code>SQLModel</code>. O que impede o <code>BookRead</code> de virar uma segunda tabela de livros?" (o <code>table=True</code>, que só o model tem. E vale perguntar o inverso: por que não usar o <code>models.Book</code> direto como <code>response_model</code>? Porque ele tem <code>password</code>… não, ele tem <code>created_at</code> e a relação <code>user</code> — a resposta da API expõe só o que decidimos expor, como a senha do User ensinou na aula 04)</div>
+
 <h3>Passo 6 — POST /users/{user_id}/books: o 500 anunciado</h3>
 <p><em>Por quê:</em> o padrão da casa — provocar a falha antes de corrigi-la. Primeiro a versão ingênua, sem verificação nenhuma.</p>
 
 <p>Depois de <code>/health</code>:</p>
 
 <pre>@app.post("/users/{user_id}/books", response_model=BookRead, status_code=201)
-def create_book(user_id: int, book: BookCreate, db: Session = Depends(get_db)):
+def create_book(user_id: int, book: BookCreate, session: Session = Depends(get_session)):
     new_book = models.Book(title=book.title, pages=book.pages, user_id=user_id)
-    db.add(new_book)
-    db.commit()
-    db.refresh(new_book)
+    session.add(new_book)
+    session.commit()
+    session.refresh(new_book)
     return new_book</pre>
 
 <p>É o trio <code>add</code>/<code>commit</code>/<code>refresh</code> do signup, sem novidade — exceto o <code>user_id</code>, que vem <em>do path</em> e entra na FK. Teste no Swagger com o user 1:</p>
@@ -264,32 +259,32 @@ def create_book(user_id: int, book: BookCreate, db: Session = Depends(get_db)):
 
 <p>Qual 4xx? O recurso pai da URI — o user 999 — <strong>não existe</strong>: <strong>404</strong>, pela tabela da aula 02. Adicione a verificação no início da função:</p>
 
-<pre>    user = db.get(models.User, user_id)
+<pre>    user = session.get(models.User, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")</pre>
 
-<p>Novidade da aula: <strong><code>db.get(Model, pk)</code></strong> — busca por chave primária, o caminho curto quando se tem o id (o <code>select().where()</code> da aula 04 continua sendo o caminho para buscar por qualquer outra coluna). Reteste o 999: <strong>404 "User not found"</strong>. O banco continua de guarda (defesa em profundidade, como o <code>UNIQUE</code> vs o <code>if</code> do e-mail), mas a API agora responde com a verdade.</p>
+<p>Novidade da aula: <strong><code>session.get(Model, pk)</code></strong> — busca por chave primária, o caminho curto quando se tem o id (o <code>select().where()</code> da aula 04 continua sendo o caminho para buscar por qualquer outra coluna). Reteste o 999: <strong>404 "User not found"</strong>. O banco continua de guarda (defesa em profundidade, como o <code>UNIQUE</code> vs o <code>if</code> do e-mail), mas a API agora responde com a verdade.</p>
 
 <h3>Passo 7 — GET /users/{user_id}/books: o relationship em ação</h3>
 <p><em>Por quê:</em> a primeira leitura pela relação — nenhuma consulta escrita à mão.</p>
 
 <pre>@app.get("/users/{user_id}/books", response_model=list[BookRead])
-def list_books(user_id: int, db: Session = Depends(get_db)):
-    user = db.get(models.User, user_id)
+def list_books(user_id: int, session: Session = Depends(get_session)):
+    user = session.get(models.User, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user.books</pre>
 
-<p><code>user.books</code> — o <code>relationship</code> do passo 1 trabalhando: ao <em>acessar o atributo</em>, o SQLAlchemy emite o SELECT dos books daquele dono (confira no echo: <code>SELECT ... FROM book WHERE %s = book.user_id</code>). O nome da técnica é <strong>lazy loading</strong> — a consulta só acontece quando (e se) a relação é usada.</p>
+<p><code>user.books</code> — o <code>Relationship</code> do passo 1 trabalhando: ao <em>acessar o atributo</em>, o ORM emite o SELECT dos books daquele dono (confira no echo: <code>SELECT ... FROM book WHERE %s = book.user_id</code>). O nome da técnica é <strong>lazy loading</strong> — a consulta só acontece quando (e se) a relação é usada.</p>
 
 <div class="pergunta">Para a turma: "Sem o <code>if user is None</code>, o que <code>GET /users/999/books</code> devolveria?" (200 com <code>[]</code> — uma <em>mentira</em>: o cliente não distingue "user sem livros" de "user inexistente". O 404 aqui não trata erro do banco nenhum; trata a semântica)</div>
 
 <h3>Passo 8 — GET /books/{book_id}</h3>
-<p><em>Por quê:</em> o item plano do mapa — <code>db.get</code> de novo, agora no Book.</p>
+<p><em>Por quê:</em> o item plano do mapa — <code>session.get</code> de novo, agora no Book.</p>
 
 <pre>@app.get("/books/{book_id}", response_model=BookRead)
-def read_book(book_id: int, db: Session = Depends(get_db)):
-    book = db.get(models.Book, book_id)
+def read_book(book_id: int, session: Session = Depends(get_session)):
+    book = session.get(models.Book, book_id)
     if book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     return book</pre>
@@ -298,29 +293,29 @@ def read_book(book_id: int, db: Session = Depends(get_db)):
 <p><em>Por quê:</em> a última peça conceitual do ORM na aula — mutação rastreada.</p>
 
 <pre>@app.put("/books/{book_id}", response_model=BookRead)
-def update_book(book_id: int, book: BookCreate, db: Session = Depends(get_db)):
-    stored_book = db.get(models.Book, book_id)
+def update_book(book_id: int, book: BookCreate, session: Session = Depends(get_session)):
+    stored_book = session.get(models.Book, book_id)
     if stored_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     stored_book.title = book.title
     stored_book.pages = book.pages
-    db.commit()
-    db.refresh(stored_book)
+    session.commit()
+    session.refresh(stored_book)
     return stored_book</pre>
 
-<p>Repare no que <strong>não</strong> existe: nenhum <code>db.update()</code>. O objeto veio da sessão; basta <strong>mudar os atributos</strong> — o <em>Unit of Work</em> da aula 04 rastreia as mudanças e o <code>commit</code> emite o <code>UPDATE</code> sozinho (confira no echo). O corpo reaproveita <code>BookCreate</code>, como na aula 03: atualizar envia os mesmos campos que criar.</p>
+<p>Repare no que <strong>não</strong> existe: nenhum <code>session.update()</code>. O objeto veio da sessão; basta <strong>mudar os atributos</strong> — o <em>Unit of Work</em> da aula 04 rastreia as mudanças e o <code>commit</code> emite o <code>UPDATE</code> sozinho (confira no echo). O corpo reaproveita <code>BookCreate</code>, como na aula 03: atualizar envia os mesmos campos que criar.</p>
 
 <h3>Passo 10 — DELETE /books/{book_id}</h3>
 
 <pre>@app.delete("/books/{book_id}", status_code=204)
-def delete_book(book_id: int, db: Session = Depends(get_db)):
-    book = db.get(models.Book, book_id)
+def delete_book(book_id: int, session: Session = Depends(get_session)):
+    book = session.get(models.Book, book_id)
     if book is None:
         raise HTTPException(status_code=404, detail="Book not found")
-    db.delete(book)
-    db.commit()</pre>
+    session.delete(book)
+    session.commit()</pre>
 
-<p><code>db.delete</code> anota a remoção; o <code>commit</code> a executa. Resposta <strong>204 sem corpo</strong>, como na aula 03 — esse contrato não mudou; só a prateleira.</p>
+<p><code>session.delete</code> anota a remoção; o <code>commit</code> a executa. Resposta <strong>204 sem corpo</strong>, como na aula 03 — esse contrato não mudou; só a prateleira.</p>
 
 <h3>Passo 11 — o dado que sobrevive (agora de verdade)</h3>
 <p><em>Por quê:</em> a fraqueza aberta na aula 02 fecha oficialmente hoje.</p>
@@ -365,27 +360,26 @@ def delete_book(book_id: int, db: Session = Depends(get_db)):
 <ol>
   <li>Adicione à rota de listagem o query param opcional <code>title: str = ""</code> (o padrão da aula 02);</li>
   <li>Se vazio, devolva <code>user.books</code> como antes; senão, consulte com <code>select(models.Book)</code> filtrando <strong>pelo dono e pelo título</strong> — duas condições no mesmo <code>where</code>;</li>
-  <li>Para "contém o trecho", use <code>models.Book.title.contains(title)</code>; para executar e receber a lista, <code>db.scalars(...).all()</code>;</li>
+  <li>Para "contém o trecho", use <code>models.Book.title.contains(title)</code>; para executar e receber a lista, <code>session.exec(...).all()</code>;</li>
   <li>Teste no Swagger (<code>?title=dom</code>) e confira no echo o SQL emitido — que operador SQL apareceu?</li>
 </ol>
 
 <p><strong>Gabarito (para o professor):</strong></p>
 
 <pre>@app.get("/users/{user_id}/books", response_model=list[BookRead])
-def list_books(user_id: int, title: str = "", db: Session = Depends(get_db)):
-    user = db.get(models.User, user_id)
+def list_books(user_id: int, title: str = "", session: Session = Depends(get_session)):
+    user = session.get(models.User, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     if title == "":
         return user.books
-    return db.scalars(
-        select(models.Book).where(
-            models.Book.user_id == user_id,
-            models.Book.title.contains(title),
-        )
-    ).all()</pre>
+    statement = select(models.Book).where(
+        models.Book.user_id == user_id,
+        models.Book.title.contains(title),
+    )
+    return session.exec(statement).all()</pre>
 
-<p>Pontos do gabarito: <code>db.scalars(...).all()</code> é o plural do <code>db.scalar</code> da aula 04 — todos os objetos, não só o primeiro; duas condições no <code>where</code> viram <code>AND</code>; <code>contains</code> vira <strong><code>LIKE '%dom%'</code></strong> no echo. Bônus de observação: <code>?title=dom</code> acha "Dom Casmurro" — a collation padrão do MySQL não distingue maiúsculas, de graça (na aula 02, precisamos do <code>.lower()</code> à mão).</p>
+<p>Pontos do gabarito: <code>.all()</code> é o irmão do <code>.first()</code> da aula 04 — devolve todos os objetos, não só o primeiro; nomear o <code>statement</code> antes de executar mantém a linha legível, como no signup; duas condições no <code>where</code> viram <code>AND</code>; <code>contains</code> vira <strong><code>LIKE '%dom%'</code></strong> no echo. Bônus de observação: <code>?title=dom</code> acha "Dom Casmurro" — a collation padrão do MySQL não distingue maiúsculas, de graça (na aula 02, precisamos do <code>.lower()</code> à mão).</p>
 
 <p>Circule pela sala: o erro clássico é <strong>esquecer a condição do <code>user_id</code> no <code>where</code></strong> — a busca passa a vazar livros de <em>todos</em> os usuários. Vale apontar a ironia: é exatamente a dívida do quadro, só que por acidente.</p>
 
@@ -394,7 +388,7 @@ def list_books(user_id: int, title: str = "", db: Session = Depends(get_db)):
 <h2><span class="tempo">5 min</span> Fechamento</h2>
 
 <ul>
-  <li><strong>Síntese:</strong> uma relação 1:N liga um pai a muitos filhos, e sua materialização é a <strong>chave estrangeira</strong> — que mora sempre no lado N (Chen, 1976; Date, 8ª ed.); a <strong>integridade referencial</strong> é o banco garantindo que a referência nunca quebra (órfão recusado, pai protegido — ERROR 1452 e 1451); no SQLAlchemy, <code>ForeignKey</code> declara a coluna e <code>relationship</code>/<code>back_populates</code> dão à relação a forma de objetos navegáveis (<code>user.books</code>, com lazy loading); o CRUD de Books renasceu sobre o MySQL nas rotas do mapa da aula 03 — coleção aninhada no dono, item plano — com <code>db.get</code> para busca por chave primária e o <em>Unit of Work</em> emitindo o <code>UPDATE</code> sozinho; e o quadro ganhou a segunda dívida: <strong>user_id na URL, sem autenticação</strong>;</li>
+  <li><strong>Síntese:</strong> uma relação 1:N liga um pai a muitos filhos, e sua materialização é a <strong>chave estrangeira</strong> — que mora sempre no lado N (Chen, 1976; Date, 8ª ed.); a <strong>integridade referencial</strong> é o banco garantindo que a referência nunca quebra (órfão recusado, pai protegido — ERROR 1452 e 1451); no SQLModel, <code>Field(foreign_key=...)</code> declara a coluna e <code>Relationship</code>/<code>back_populates</code> dão à relação a forma de objetos navegáveis (<code>user.books</code>, com lazy loading); o CRUD de Books renasceu sobre o MySQL nas rotas do mapa da aula 03 — coleção aninhada no dono, item plano — com <code>session.get</code> para busca por chave primária e o <em>Unit of Work</em> emitindo o <code>UPDATE</code> sozinho; e o quadro ganhou a segunda dívida: <strong>user_id na URL, sem autenticação</strong>;</li>
   <li><strong>Gancho para a aula 06:</strong> "Um Book cadastrado ainda é uma foto parada — 208 páginas, e daí? A pergunta que o projeto existe para responder é <em>'em que página você está?'</em>. Na próxima aula entra o <strong>Reading Update</strong>: a segunda relação 1:N do banco — desta vez o pai é o Book —, a rota <code>POST /books/{book_id}/progress</code> no endereço plano que deixamos pronto hoje, e a <strong>porcentagem de leitura</strong> calculada do update mais recente, sem nenhum campo de status gravado."</li>
 </ul>
 

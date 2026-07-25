@@ -312,7 +312,7 @@ class Book(BaseModel):
 
 <ul>
   <li><strong>Síntese:</strong> uma URI tem esquema, host, porta, caminho, query e fragmento — e identifica um <em>recurso</em>; REST usa poucos verbos padronizados (GET, POST, PUT, DELETE) sobre muitos substantivos, casando com o CRUD; o servidor não guarda memória entre requisições (stateless); Pydantic valida na borda — entrada com schema no parâmetro, saída com <code>response_model</code> — e transformou nosso 500 em 422; e o CRUD de Books está completo, com ids que sobrevivem a remoções.</li>
-  <li><strong>Gancho para a aula 04:</strong> "O CRUD está completo, mas os dados continuam voláteis: a cada reinício do servidor, tudo se perde — e o contador de id é uma solução artesanal. Na próxima aula os dados ganham persistência: banco de dados MySQL, o ORM SQLAlchemy no papel de tradutor entre Python e SQL, e o primeiro recurso persistente do mapa que desenhamos hoje — o User, com a rota de signup."</li>
+  <li><strong>Gancho para a aula 04:</strong> "O CRUD está completo, mas os dados continuam voláteis: a cada reinício do servidor, tudo se perde — e o contador de id é uma solução artesanal. Na próxima aula os dados ganham persistência: banco de dados MySQL, o ORM SQLModel no papel de tradutor entre Python e SQL, e o primeiro recurso persistente do mapa que desenhamos hoje — o User, com a rota de signup."</li>
 </ul>
 
 </body>
