@@ -9,7 +9,7 @@
   <line x1="205" y1="30" x2="205" y2="255" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6,5"/>
   <text x="205" y="20" text-anchor="middle" font-size="12.5" fill="#777">fronteira JSON ↔ objeto (Pydantic)</text>
   <line x1="595" y1="30" x2="595" y2="255" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6,5"/>
-  <text x="595" y="20" text-anchor="middle" font-size="12.5" fill="#777">fronteira objeto ↔ linha (SQLAlchemy)</text>
+  <text x="595" y="20" text-anchor="middle" font-size="12.5" fill="#777">fronteira objeto ↔ linha (SQLModel)</text>
 
   <!-- ida -->
   <rect x="20" y="60" width="160" height="70" rx="10" fill="#f4f2ee" stroke="#888" stroke-width="2"/>
@@ -26,8 +26,8 @@
   <rect x="415" y="60" width="155" height="70" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
   <text x="492" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6da4">Session</text>
   <g font-family="monospace" font-size="12" fill="#2e6da4">
-    <text x="492" y="104" text-anchor="middle">db.add(...)</text>
-    <text x="492" y="120" text-anchor="middle">db.commit()</text>
+    <text x="492" y="104" text-anchor="middle">session.add(...)</text>
+    <text x="492" y="120" text-anchor="middle">session.commit()</text>
   </g>
 
   <rect x="630" y="60" width="150" height="70" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
@@ -42,10 +42,10 @@
   <!-- volta -->
   <rect x="630" y="185" width="150" height="60" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
   <text x="705" y="210" text-anchor="middle" font-size="13" fill="#8a6508">linha gravada</text>
-  <text x="705" y="230" text-anchor="middle" font-size="12" font-family="monospace" fill="#8a6508">id, created_at</text>
+  <text x="705" y="230" text-anchor="middle" font-size="12" font-family="monospace" fill="#8a6508">id gerado</text>
 
   <rect x="415" y="185" width="155" height="60" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
-  <text x="492" y="210" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4" font-family="monospace">db.refresh(...)</text>
+  <text x="492" y="210" text-anchor="middle" font-size="12" font-weight="bold" fill="#2e6da4" font-family="monospace">session.refresh(...)</text>
   <text x="492" y="230" text-anchor="middle" font-size="12" fill="#2e6da4">objeto completo</text>
 
   <rect x="230" y="185" width="150" height="60" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>

@@ -9,7 +9,7 @@
   <rect x="20" y="40" width="240" height="200" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
   <text x="140" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e6da4">Python — objetos</text>
   <g font-family="monospace" font-size="13.5" fill="#333">
-    <text x="45" y="100">class User(Base):</text>
+    <text x="32" y="100" font-size="11">class User(SQLModel, table=True):</text>
     <text x="60" y="124">id</text>
     <text x="60" y="146">name</text>
     <text x="60" y="168">email</text>
@@ -32,7 +32,7 @@
   <!-- tradutor -->
   <rect x="300" y="105" width="180" height="70" rx="10" fill="#eef7ee" stroke="#5a9a5a" stroke-width="2"/>
   <text x="390" y="134" text-anchor="middle" font-size="16" font-weight="bold" fill="#3a7a3a">ORM</text>
-  <text x="390" y="156" text-anchor="middle" font-size="14" fill="#3a7a3a">SQLAlchemy</text>
+  <text x="390" y="156" text-anchor="middle" font-size="14" fill="#3a7a3a">SQLModel</text>
 
   <line x1="265" y1="125" x2="295" y2="125" stroke="#444" stroke-width="2" marker-end="url(#setaO)"/>
   <line x1="485" y1="125" x2="515" y2="125" stroke="#444" stroke-width="2" marker-end="url(#setaO)"/>
