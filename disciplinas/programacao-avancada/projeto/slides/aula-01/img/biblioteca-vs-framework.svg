@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 260" style="width:100%;max-width:720px">
+    <defs>
+      <marker id="seta2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <path d="M0,0 L10,4 L0,8 z" fill="#444"/>
+      </marker>
+    </defs>
+    <text x="190" y="30" text-anchor="middle" font-size="19" font-weight="bold" fill="#333">Biblioteca</text>
+    <rect x="80" y="50" width="220" height="60" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+    <text x="190" y="87" text-anchor="middle" font-size="17" fill="#2e6da4">seu código</text>
+    <line x1="190" y1="115" x2="190" y2="165" stroke="#444" stroke-width="2" marker-end="url(#seta2)"/>
+    <text x="205" y="145" font-size="14" fill="#666">chama</text>
+    <rect x="80" y="170" width="220" height="60" rx="8" fill="#f0f0f0" stroke="#999" stroke-width="2"/>
+    <text x="190" y="207" text-anchor="middle" font-size="17" fill="#555">biblioteca</text>
+    <text x="570" y="30" text-anchor="middle" font-size="19" font-weight="bold" fill="#333">Framework</text>
+    <rect x="460" y="50" width="220" height="60" rx="8" fill="#f0f0f0" stroke="#999" stroke-width="2"/>
+    <text x="570" y="87" text-anchor="middle" font-size="17" fill="#555">framework</text>
+    <line x1="570" y1="115" x2="570" y2="165" stroke="#444" stroke-width="2" marker-end="url(#seta2)"/>
+    <text x="585" y="145" font-size="14" fill="#666">chama</text>
+    <rect x="460" y="170" width="220" height="60" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+    <text x="570" y="207" text-anchor="middle" font-size="17" fill="#2e6da4">seu código (rotas)</text>
+  </svg>
