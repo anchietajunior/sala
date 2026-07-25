@@ -1,57 +1,42 @@
 # Importa o FastAPI, a injeção de dependências (Depends) e a exceção de erros HTTP
 from fastapi import Depends, FastAPI, HTTPException
-# Base dos schemas e configuração para ler objetos do ORM
-from pydantic import BaseModel, ConfigDict
-# select monta consultas SQL; Session é a sessão de banco do ORM
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+# Base dos schemas, a sessão de banco e o construtor de consultas
+from sqlmodel import Session, SQLModel, select
 
 # Modelos (tabelas) e infraestrutura de conexão definidos nos outros módulos
 import models
-from database import Base, SessionLocal, engine
+from database import engine, get_session
 
 # Cria no banco as tabelas dos modelos registrados que ainda não existem
-Base.metadata.create_all(bind=engine)
+SQLModel.metadata.create_all(engine)
 
 # Cria a instância da aplicação, que registra as rotas e atende as requisições
 app = FastAPI()
 
 
 # Schema de entrada: o corpo aceito ao criar/atualizar um livro (só o nome)
-class BookCreate(BaseModel):
+class BookCreate(SQLModel):
     name: str
 
 
 # Schema de saída: o formato do livro devolvido pela API (com id)
-class Book(BaseModel):
+class Book(SQLModel):
     id: int
     name: str
 
 
 # Schema de entrada do cadastro de usuário
-class UserCreate(BaseModel):
+class UserCreate(SQLModel):
     name: str
     email: str
     password: str
 
 
 # Schema de saída do usuário — sem a senha, que nunca volta na resposta
-class UserRead(BaseModel):
-    # from_attributes: permite montar o schema a partir de um objeto do ORM
-    model_config = ConfigDict(from_attributes=True)
-
+class UserRead(SQLModel):
     id: int
     name: str
     email: str
-
-
-# Dependência: abre uma sessão de banco por requisição e fecha ao final
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 # "Banco de dados" em memória dos livros (migra para o MySQL na próxima aula)
@@ -129,18 +114,20 @@ def delete_book(book_id: int):
     raise HTTPException(status_code=404, detail="Book not found")
 
 
-# Cadastra um usuário no banco; Depends(get_db) injeta a sessão na rota
+# Cadastra um usuário no banco; Depends(get_session) injeta a sessão na rota
 @app.post("/signup", response_model=UserRead, status_code=201)
-def signup(user: UserCreate, db: Session = Depends(get_db)):
-    # Consulta se já existe usuário com este email; 409 = conflito
-    existing_user = db.scalar(select(models.User).where(models.User.email == user.email))
+def signup(user: UserCreate, session: Session = Depends(get_session)):
+    # Monta a consulta e executa: existe alguém com este email?
+    statement = select(models.User).where(models.User.email == user.email)
+    existing_user = session.exec(statement).first()
+    # 409 = conflito: o email já está em uso
     if existing_user is not None:
         raise HTTPException(status_code=409, detail="Email already registered")
     # Senha guardada em texto puro de propósito — o hash chega
     # na aula de autenticação (ADR-0001)
     new_user = models.User(name=user.name, email=user.email, password=user.password)
     # add coloca na sessão, commit grava no banco, refresh traz o id gerado
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    session.add(new_user)
+    session.commit()
+    session.refresh(new_user)
     return new_user

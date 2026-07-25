@@ -56,10 +56,11 @@ A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
 | pydantic | Validação e conversão de dados | 2.13.4 |
 | pydantic_core | Núcleo compilado do pydantic | 2.46.4 |
 | PyMySQL | Driver MySQL em Python puro: fala o protocolo do banco na porta 3306 | 1.2.0 |
-| SQLAlchemy | ORM: mapeia classes Python em tabelas do banco | 2.0.51 |
+| SQLAlchemy | Motor do ORM sobre o qual o SQLModel é construído | 2.0.51 |
+| sqlmodel | ORM: mapeia classes Python em tabelas do banco | 0.0.39 |
 | starlette | Base do FastAPI: HTTP, rotas e middlewares | 1.3.1 |
 | typing-inspection | Inspeção de anotações de tipo (usada pelo pydantic) | 0.4.2 |
 | typing_extensions | Recursos novos de tipagem para versões antigas do Python | 4.16.0 |
 | uvicorn | Servidor web que executa a aplicação | 0.51.0 |
 
-Instalamos diretamente apenas **fastapi**, **uvicorn**, **sqlalchemy**, **pymysql** e **cryptography**; as demais vieram como dependências delas.
+Instalamos diretamente apenas **fastapi**, **uvicorn**, **sqlmodel**, **pymysql** e **cryptography**; as demais vieram como dependências delas — inclusive o **SQLAlchemy**, que o sqlmodel usa por baixo.
