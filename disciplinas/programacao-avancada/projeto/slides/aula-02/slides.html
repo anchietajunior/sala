@@ -247,14 +247,38 @@ HTTP/1.1 404 Not Found
 
 <section>
   <h2>Dois programas, um contrato: ASGI</h2>
+  <ul style="font-size:.65em">
+    <li><span class="destaque">ASGI</span> = <em>Asynchronous Server Gateway Interface</em>. Proposto por Andrew Godwin em 2016, no projeto Django Channels;</li>
+    <li><strong>Para que serve:</strong> substituir o WSGI (PEP 3333, 2010), que atendia uma requisição de cada vez e não previa conexões longas — WebSocket, HTTP/2, streaming;</li>
+    <li><strong>Definição da especificação:</strong> "uma interface padrão entre servidores web, frameworks e aplicações Python capazes de operar de forma assíncrona";</li>
+    <li>É <strong>padrão, não casamento</strong>: qualquer servidor ASGI (uvicorn, hypercorn, daphne) roda a mesma <code>app</code>, sem tocar no nosso código.</li>
+  </ul>
+  <p class="cite">GODWIN, A. <em>ASGI (Asynchronous Server Gateway Interface) Specification</em>. Django Software Foundation — asgi.readthedocs.io</p>
+</section>
+
+<section>
+  <h2>O contrato é uma função</h2>
+  <pre><code class="language-python" data-trim>
+async def app(scope, receive, send):
+    ...
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li><code>scope</code> — dicionário com os dados da conexão: tipo, método, caminho, headers;</li>
+    <li><code>receive</code> — o servidor entrega os eventos que chegam (ex.: o corpo da requisição);</li>
+    <li><code>send</code> — a aplicação devolve os eventos de resposta (status, headers, corpo).</li>
+  </ul>
+  <p style="font-size:.62em;margin-top:.7em">O <code>app = FastAPI()</code> do nosso <code>main.py</code> <strong>é</strong> esse callable: o framework já implementa o contrato por nós — nunca escrevemos essa função.</p>
+  <p class="cite">Especificação ASGI — asgi.readthedocs.io</p>
+</section>
+
+<section>
+  <h2>O que o uvicorn faz por nós</h2>
   <ul style="font-size:.75em">
-    <li>O <span class="destaque">ASGI</span> define como servidor e framework conversam — é padrão, não casamento: outro servidor ASGI rodaria a mesma <code>app</code>;</li>
     <li>O <code>server: uvicorn</code> nos headers é ele se identificando;</li>
     <li>O <code>--reload</code> é serviço do uvicorn: ele vigia os arquivos e reinicia a aplicação;</li>
     <li>Em produção há mais camadas na frente (ex.: nginx) — fica a menção.</li>
   </ul>
   <p style="font-size:.7em;margin-top:.8em"><em>Quem está no comando quando rodamos <code>uvicorn main:app</code>? Eles. Nosso código só roda quando chega requisição — a inversão de controle da aula 01.</em></p>
-  <p class="cite">Especificação ASGI — asgi.readthedocs.io</p>
 </section>
 
 <section>
@@ -474,7 +498,8 @@ def create_book(book: dict):
     <li>KUROSE, J.; ROSS, K. <em>Computer Networking: A Top-Down Approach</em>. 8ª ed., Pearson, 2021. (seções de HTTP e DNS)</li>
     <li>RFC 1034 / RFC 1035 — <em>Domain Names</em>. IETF, 1987.</li>
     <li>RFC 9110 — <em>HTTP Semantics</em>. IETF, 2022.</li>
-    <li>Especificação ASGI — asgi.readthedocs.io (o contrato entre uvicorn e FastAPI).</li>
+    <li>GODWIN, A. <em>ASGI (Asynchronous Server Gateway Interface) Specification</em>. Django Software Foundation — asgi.readthedocs.io (o contrato entre uvicorn e FastAPI).</li>
+    <li>PEP 3333 — <em>Python Web Server Gateway Interface v1.0.1</em>. Python Software Foundation, 2010. (o padrão anterior, síncrono)</li>
     <li>Documentação oficial do FastAPI — fastapi.tiangolo.com.</li>
     <li>DevSheets. <em>FastAPI Cheat Sheet</em> — devsheets.io/sheets/fastapi (Path Parameters e Query Parameters).</li>
     <li>MDN Web Docs — developer.mozilla.org (HTTP e ferramentas do navegador).</li>

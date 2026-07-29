@@ -246,7 +246,38 @@ class Book:
     def __init__(self, title, pages):
         self.title = title     # um por objeto
   </code></pre>
-  <div class="nota">Armadilha: atributo de classe <strong>mutável</strong> é compartilhado por todos os objetos. É por isso que, na aula 04, o modelo usa <code>Field(default_factory=datetime.now)</code> e não <code>default=datetime.now()</code> — a segunda forma daria a mesma data a todos os livros.</div>
+  <p style="font-size:.65em;margin-top:.6em">O compartilhado vira armadilha quando é <strong>mutável</strong>.</p>
+</section>
+
+<section>
+  <h2>Uma lista no corpo da classe é a <em>mesma</em> lista</h2>
+  <pre><code class="language-python" data-trim>
+class Book:
+    tags = []                  # mutável e compartilhado
+
+    def __init__(self, title):
+        self.title = title
+
+
+clean_code = Book("Clean Code")
+pragmatic = Book("The Pragmatic Programmer")
+
+clean_code.tags.append("favorito")
+
+print(pragmatic.tags)                      # ['favorito'] — mudou junto!
+print(clean_code.tags is pragmatic.tags)   # True
+  </code></pre>
+</section>
+
+<section>
+  <h2>Valor que precisa ser novo a cada objeto nasce no <code>__init__</code></h2>
+  <pre><code class="language-python" data-trim>
+class Book:
+    def __init__(self, title):
+        self.title = title
+        self.tags = []         # uma lista nova a cada objeto
+  </code></pre>
+  <div class="nota">Guardem a armadilha: ela reaparece na aula 04, quando um campo precisar da data e hora do momento em que <strong>cada</strong> registro é criado.</div>
 </section>
 
 <section>
@@ -478,11 +509,12 @@ print_progress(Magazine("Superinteressante", 90))  # funciona também
 </section>
 
 <section>
-  <h2>O projeto já usa polimorfismo</h2>
+  <h2>Na aula 02 vocês vão escrever esta linha</h2>
   <pre><code class="language-python" data-trim>
 raise HTTPException(status_code=404, detail="Book not found")
   </code></pre>
-  <p style="font-size:.68em"><code>HTTPException</code> <strong>é-uma</strong> <code>Exception</code>. É por ser subtipo que o <code>raise</code> funciona e que o FastAPI consegue capturá-la junto com qualquer outra exceção.</p>
+  <p style="font-size:.68em"><code>HTTPException</code> <strong>herda de</strong> <code>Exception</code>. É por ser subtipo que o <code>raise</code> a aceita e que o FastAPI consegue capturá-la junto com qualquer outra exceção.</p>
+  <p style="font-size:.6em;color:#888">Quando a linha aparecer, ela já estará explicada.</p>
 </section>
 
 <section>
