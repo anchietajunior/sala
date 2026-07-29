@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 490" style="width:100%;max-width:740px" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <!-- Requisicao HTTP -->
+  <rect x="175" y="18" width="150" height="42" rx="8" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
+  <text x="250" y="44" text-anchor="middle" font-size="14" fill="#555">Requisição HTTP</text>
+  <line x1="250" y1="60" x2="250" y2="118" stroke="#444" stroke-width="2" marker-end="url(#seta)"/>
+
+  <!-- Container: event loop (uvicorn) -->
+  <rect x="30" y="80" width="440" height="290" rx="14" fill="#fafafa" stroke="#999" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="45" y="102" font-size="13" fill="#666">uvicorn &#183; event loop (1 thread)</text>
+
+  <!-- losango de decisao: unico destaque azul -->
+  <polygon points="250,121 345,165 250,209 155,165" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="250" y="161" text-anchor="middle" font-size="12" font-weight="bold" fill="#2e6da4">a função espera</text>
+  <text x="250" y="178" text-anchor="middle" font-size="12" font-weight="bold" fill="#2e6da4">por quê?</text>
+
+  <!-- Caminho A: async def, dentro do loop -->
+  <line x1="155" y1="165" x2="150" y2="235" stroke="#444" stroke-width="2" marker-end="url(#seta)"/>
+  <rect x="118" y="192" width="64" height="17" fill="#fafafa"/>
+  <text x="150" y="205" text-anchor="middle" font-size="11" fill="#555" font-family="monospace">async def</text>
+  <rect x="45" y="235" width="210" height="110" rx="8" fill="#f7f7f7" stroke="#999" stroke-width="1.5"/>
+  <text x="150" y="262" text-anchor="middle" font-size="15" font-weight="bold" fill="#333" font-family="monospace">async def</text>
+  <text x="150" y="286" text-anchor="middle" font-size="11" fill="#555">só faz await de I/O assíncrono,</text>
+  <text x="150" y="302" text-anchor="middle" font-size="11" fill="#555">ou não faz I/O nenhum</text>
+  <text x="150" y="323" text-anchor="middle" font-size="10" fill="#888">ex.: rota que só devolve JSON;</text>
+  <text x="150" y="337" text-anchor="middle" font-size="10" fill="#888">chamada HTTP com await</text>
+
+  <!-- Caminho B: def, sai para o threadpool -->
+  <line x1="345" y1="165" x2="515" y2="250" stroke="#444" stroke-width="2" marker-end="url(#seta)"/>
+  <rect x="406" y="192" width="42" height="17" fill="#fafafa"/>
+  <text x="427" y="205" text-anchor="middle" font-size="11" fill="#555" font-family="monospace">def</text>
+  <rect x="515" y="205" width="215" height="115" rx="8" fill="#f7f7f7" stroke="#999" stroke-width="1.5"/>
+  <text x="622" y="232" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">threadpool (AnyIO)</text>
+  <text x="622" y="251" text-anchor="middle" font-size="12" fill="#555">40 threads</text>
+  <text x="622" y="274" text-anchor="middle" font-size="11" fill="#555">chama biblioteca bloqueante</text>
+  <text x="622" y="296" text-anchor="middle" font-size="10" fill="#888">ex.: consulta ao banco (SQLModel);</text>
+  <text x="622" y="310" text-anchor="middle" font-size="10" fill="#888">gerar PDF; escrever em disco</text>
+
+  <!-- Convergencia para a Resposta HTTP -->
+  <line x1="150" y1="345" x2="215" y2="390" stroke="#444" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="515" y1="300" x2="315" y2="390" stroke="#444" stroke-width="2" marker-end="url(#seta)"/>
+  <rect x="175" y="393" width="150" height="42" rx="8" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
+  <text x="250" y="419" text-anchor="middle" font-size="14" fill="#555">Resposta HTTP</text>
+
+  <!-- rodape neutro: a regra unica -->
+  <text x="380" y="465" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">A regra é uma só: nada que bloqueie pode rodar no event loop.</text>
+</svg>
