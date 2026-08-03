@@ -144,29 +144,34 @@ Aqui o Eddy é opcional — pode aparecer se tiver curiosidade histórica relaci
 
 ---
 
-## Bloco 6 — Exercícios Práticos
+## Bloco 6 — Exercício Prático
+
+> **Regra fixa da disciplina: a apresentação traz SEMPRE apenas 1 exercício** — e ele é o **exercício de implementação**: colocar de pé, em C, a estrutura ou o algoritmo que a aula acabou de mostrar. Em aula conceitual, onde não há código, o exercício é executar o algoritmo **na mão** (trace).
+>
+> Os outros exercícios do `.md` (que continua com 3–5, incluindo o desafio) **não viram slide**. O slide é o que a turma faz em sala; o `.md` é o material de estudo.
 
 `<section>` pai com:
 
-1. Slide de abertura.
-2. **Um slide por exercício**, com:
+1. Slide de abertura, anunciando o exercício único.
+2. Opcional: **Slide do Eddy**, **provocando** antes da tentativa ("Turma, antes de escrever qualquer linha, prevejam no papel quantas comparações..."). Nunca dá a resposta.
+3. **O slide do exercício**:
 
    ```html
    <section>
-       <h3>Exercício N — título curto</h3>
+       <h3>Exercício — implemente <o quê></h3>
        <p style="text-align: left; font-size: 0.78em;">
-           <enunciado resumido — não copiar o `.md` inteiro, sintetizar>
+           <enunciado: o que escrever, sobre quais dados, e como testar>
        </p>
        <div class="resposta fragment fade-in">
-           <strong>Resposta:</strong>
-           <conteúdo da resposta mínima — lista, tabela ou bloco de código>
+           <strong>Resposta mínima aceitável:</strong>
+           <critério objetivo de aceitação — saída esperada, contagens, comportamento>
        </div>
    </section>
    ```
 
    A classe `fragment fade-in` faz a resposta aparecer **apenas após clique** — o professor faz a turma tentar primeiro.
 
-3. Opcional: **Slide do Eddy** entre os exercícios, **provocando** ("Turma, antes de ver a solução, tente identificar quem é o caso base..."). Nunca dá a resposta.
+   A "Resposta mínima aceitável" do slide deve ser **verificável**: saída esperada, contagens concretas, ou o comportamento que prova que funcionou. Não é a solução comentada — é o critério pelo qual o aluno sabe que acertou.
 
 ---
 
