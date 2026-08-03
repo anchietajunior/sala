@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 02 — Análise de Complexidade na Prática: Busca Linear e Binária | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+        .reveal .resposta table {
+            font-size: 0.95em;
+            margin: 0.4em auto 0.2em auto;
+        }
+        .reveal .resposta pre {
+            font-size: 0.8em;
+            margin: 0.3em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+
+        .reveal .formula {
+            font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.9em;
+            color: #222;
+            background: #f7f9fc;
+            border: 1px solid #cfd6dd;
+            border-radius: 6px;
+            padding: 14px 22px;
+            display: inline-block;
+            margin: 0.4em 0;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- 1. CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- 2. TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 02</p>
+            <h1>Análise de Complexidade na Prática</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                Busca Linear · Busca Binária · O(n) contra O(log n)
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — a Big O da Aula 01 vira ferramenta de medição.
+            </p>
+        </section>
+
+        <!-- PONTE — UM O(1) CONCRETO, VINDO DA AULA 01 -->
+        <section>
+            <h3>Como é um O(1) na prática</h3>
+            <p style="text-align: left;">
+                Da Aula 01: chegar a <code>vetor[i]</code> é uma conta só —
+                <code>base + i × tamanho</code>. Nenhum elemento anterior é visitado.
+            </p>
+            <pre><code class="language-c">int valor = vetor[3];   /* uma multiplicacao e uma soma — sempre */</code></pre>
+            <table>
+                <thead><tr><th>Tamanho do vetor</th><th>Passos para ler <code>vetor[3]</code></th></tr></thead>
+                <tbody>
+                    <tr><td>8 elementos</td><td>1</td></tr>
+                    <tr><td>1.000.000 de elementos</td><td>1</td></tr>
+                </tbody>
+            </table>
+            <blockquote style="font-size: 0.8em;">
+                Custo que <strong>não muda</strong> quando a entrada cresce: isso é
+                <span class="destaque">O(1)</span> — a régua com que mediremos tudo hoje.
+            </blockquote>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO, 6 CAMADAS)   -->
+        <!-- ============================================================ -->
+        <section>
+            <!-- ----- CAMADA 1 — INTRODUÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>Duas pessoas, um dicionário</h3>
+                <p style="text-align: left;">
+                    Achar a palavra <em>maresia</em>. Uma pessoa vira página por página.
+                    A outra abre no meio, cai no <em>P</em>, e joga fora
+                    <strong>metade do livro de uma vez</strong> — depois repete.
+                </p>
+                <blockquote>
+                    A segunda só funciona porque o dicionário está
+                    <span class="destaque">em ordem alfabética</span>.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 2 — DEFINIÇÃO INFORMAL ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>Isso tem nome: busca</h3>
+                <p style="text-align: left;">
+                    <strong>Busca</strong> (<em>search</em>): dada uma coleção e um valor
+                    procurado — a <span class="destaque">chave de busca</span> —, dizer se
+                    ele está lá e em que posição.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    É a operação mais executada da computação — e por isso a mais estudada.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Backes, capítulo de métodos de pesquisa · Veloso &amp; Pereira, capítulo de pesquisa.
+                </p>
+            </section>
+
+            <section>
+                <h3>Duas estratégias</h3>
+                <p style="text-align: left;">O mesmo problema, dois caminhos:</p>
+                <ul style="font-size: 0.82em;">
+                    <li><strong>Busca linear</strong> (sequencial) — percorre um a um até achar ou acabar</li>
+                    <li><strong>Busca binária</strong> — olha o <strong>meio</strong> e descarta metade a cada comparação</li>
+                </ul>
+                <blockquote style="font-size: 0.8em;">
+                    Resolver um problema reduzindo-o a uma versão menor de si mesmo:
+                    <span class="destaque">divisão e conquista</span>.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A unidade de trabalho: a comparação</h3>
+                <p style="text-align: left;">
+                    Da Aula 01: medimos <strong>tempo</strong> em passos e <strong>espaço</strong>
+                    em memória adicional. Aqui o passo tem nome — cada <strong>comparação</strong>
+                    entre a chave e um elemento.
+                </p>
+                <pre><code class="language-c">if (vetor[i] == procurado)   /* esta linha e o passo que vamos contar */</code></pre>
+                <blockquote style="font-size: 0.8em;">
+                    A comparação é a <span class="destaque">operação básica</span> da busca —
+                    a que se repete tanto que domina o custo.
+                </blockquote>
+                <p class="nota-rodape" style="text-align: left;">Toscani &amp; Veloso, capítulos iniciais.</p>
+            </section>
+
+            <section>
+                <h3>O preço da busca binária</h3>
+                <p style="text-align: left;">
+                    A velocidade da binária <strong>é comprada</strong>. Ela exige:
+                </p>
+                <ul style="font-size: 0.82em;">
+                    <li>elementos <strong>ordenados</strong></li>
+                    <li><strong>acesso direto por posição</strong> — o <code>base + i × tamanho</code> da Aula 01, em O(1)</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.85em;">
+                    A linear não pede nada: funciona em qualquer ordem, sobre qualquer estrutura.
+                </p>
+            </section>
+
+            <!-- Slide do Eddy #1 — citação da bibliografia -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, reparem que a busca binária não é rápida "de graça":
+                            ela cobra a ordenação como pré-condição. Toscani e Veloso
+                            insistem nesse ponto — o custo de um algoritmo só faz sentido
+                            junto das exigências que ele impõe sobre a entrada.
+                            <cite>Toscani &amp; Veloso, capítulo de análise de algoritmos</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 3 — PROPRIEDADES E COMPORTAMENTO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>A mesma estrutura da Aula 01</h3>
+                <p style="text-align: left;">
+                    Tudo aqui roda sobre a <strong>lista sequencial</strong> — o vetor.
+                    A estrutura não muda; o que muda é o <strong>algoritmo</strong> que a percorre.
+                </p>
+                <blockquote style="font-size: 0.8em;">
+                    Mesma estrutura, mesmos dados, mesma resposta — custos que diferem por
+                    <span class="destaque">cinquenta mil vezes</span> em um vetor de um milhão.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Melhor, pior e caso médio</h3>
+                <p style="text-align: left;">
+                    Duas entradas do mesmo tamanho podem custar coisas bem diferentes.
+                    Por isso a análise separa três casos:
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Melhor caso</strong> — a entrada mais favorável; o menor custo</li>
+                    <li><strong>Pior caso</strong> — a mais desfavorável; a única que dá <strong>garantia</strong></li>
+                    <li><strong>Caso médio</strong> — o custo esperado sobre todas as entradas</li>
+                </ul>
+                <p class="nota-rodape" style="text-align: left;">
+                    Esta disciplina analisa o <strong>pior caso</strong>: é o único que garante
+                    que o algoritmo nunca vai custar mais do que aquilo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Os três casos na busca linear</h3>
+                <p style="text-align: left;">
+                    Procurando com sucesso num vetor de <code>n</code> elementos:
+                </p>
+                <table>
+                    <thead><tr><th>Caso</th><th>Onde está a chave</th><th>Comparações</th></tr></thead>
+                    <tbody>
+                        <tr><td>Melhor</td><td>posição 0</td><td>1</td></tr>
+                        <tr><td>Médio</td><td>igual chance em cada posição</td><td>(n + 1) / 2</td></tr>
+                        <tr><td>Pior</td><td>última posição, ou ausente</td><td>n</td></tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape" style="text-align: left;">
+                    O caso médio é a média das contagens 1, 2, … , n — aproximadamente meio vetor.
+                </p>
+            </section>
+
+            <section>
+                <h3>Busca binária: o trecho sob suspeita</h3>
+                <p style="text-align: left;">
+                    <code>inicio</code> e <code>fim</code> cercam o trecho onde a chave ainda
+                    pode estar. A cada volta o <code>meio</code> é comparado, e a metade que —
+                    pela ordenação — não pode contê-la é descartada.
+                </p>
+                <pre><code class="language-c">while (inicio &lt;= fim) {
+    int meio = (inicio + fim) / 2;
+    if (vetor[meio] == procurado) return meio;
+    if (vetor[meio] &lt; procurado)  inicio = meio + 1;
+    else                          fim = meio - 1;
+}</code></pre>
+                <blockquote style="font-size: 0.78em;">
+                    "Se a chave existe, ela está em <code>[inicio, fim]</code>" — a
+                    <span class="destaque">invariante</span> que torna o descarte legítimo.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Armadilha 1 — o <code>meio ± 1</code></h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Num trecho de dois elementos, a divisão inteira devolve sempre o primeiro.
+                    Sem o <code>+ 1</code>, o trecho nunca encolhe — <strong>laço infinito</strong>.
+                </p>
+                <pre><code class="language-c">inicio = meio;      /* ERRADO: [6..7] continua [6..7] para sempre */
+inicio = meio + 1;  /* certo: o meio ja foi comparado, sai do trecho */</code></pre>
+                <img class="diagrama" src="img/08_laco_infinito.svg" style="max-height: 290px;"
+                     alt="Trecho de duas posições em que o meio recai sempre na mesma casa, com seta circular indicando repetição sem fim">
+            </section>
+
+            <section>
+                <h3>Armadilha 2 — a pré-condição</h3>
+                <p style="text-align: left;">
+                    Sobre um vetor <strong>desordenado</strong>, a busca binária não trava
+                    nem dá erro — ela devolve a <strong>resposta errada</strong>, em silêncio.
+                </p>
+                <blockquote style="font-size: 0.78em;">
+                    Ordenação é <span class="destaque">pré-condição</span> da busca binária:
+                    exigência que a função assume e não verifica. Garanti-la é responsabilidade
+                    de quem chama.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 4 — DEFINIÇÃO FORMAL E NOTAÇÃO (matemática mínima) ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>A função de custo</h3>
+                <p style="text-align: left;">
+                    O que a análise estuda não é o programa — é uma <strong>função</strong>:
+                    quantas comparações, para uma entrada de tamanho <code>n</code>.
+                </p>
+                <p><span class="formula">T(n) = número de comparações</span></p>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Na busca linear com sucesso: melhor <code>1</code>,
+                    pior <code>n</code>, médio <code>(n+1)/2</code>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">A definição formal completa está no material escrito da aula.</p>
+            </section>
+
+            <section>
+                <h3>Três notações, três perguntas</h3>
+                <p style="text-align: left;">
+                    A mesma função de custo, olhada de três ângulos:
+                </p>
+                <ul style="font-size: 0.82em;">
+                    <li><strong>O</strong> — teto: "cresce no <em>máximo</em> tão rápido quanto"</li>
+                    <li><strong>Ω</strong> — piso: "cresce no <em>mínimo</em> tão rápido quanto"</li>
+                    <li><strong>Θ</strong> — teto e piso juntos: "cresce <em>exatamente</em> nesse ritmo"</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.8em;">
+                    O pior caso da linear é <code>n</code> — é O(n), é Ω(n), logo <strong>Θ(n)</strong>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    Na prática, dizer que um algoritmo "é O(n)" quase sempre se refere ao
+                    <strong>pior caso</strong> — é ele que dá a garantia.
+                </p>
+            </section>
+
+            <section>
+                <h3>Quantas vezes dá para dividir por 2?</h3>
+                <p style="text-align: left;">
+                    Cada comparação da binária corta o trecho ao meio.
+                    A pergunta "quantas comparações?" vira:
+                </p>
+                <p><span class="formula">n → n/2 → n/4 → ... → 1</span></p>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Quantas divisões por 2 até chegar a 1? Isso é o
+                    <strong>logaritmo de n na base 2</strong> → custo <span class="destaque">Θ(log n)</span>.
+                </p>
+                <blockquote style="font-size: 0.78em;">
+                    Para o vetor de 8 desta aula: <code>log₂ 8 + 1 = 4</code> comparações no pior caso.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Espaço: nenhuma das duas gasta memória extra</h3>
+                <p style="text-align: left;">
+                    Espaço mede a memória <strong>adicional</strong>, sem contar o vetor de entrada.
+                </p>
+                <ul style="font-size: 0.82em;">
+                    <li>Linear — o índice e o contador</li>
+                    <li>Binária — <code>inicio</code>, <code>fim</code>, <code>meio</code></li>
+                </ul>
+                <blockquote style="font-size: 0.78em;">
+                    O número de variáveis não depende de <code>n</code> → espaço
+                    <span class="destaque">O(1)</span>. Algoritmo que trabalha sobre a entrada
+                    sem construir cópia chama-se <span class="destaque">in-place</span>.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 5 — ANÁLISE DE COMPLEXIDADE ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>O quadro dos três algoritmos</h3>
+                <p style="text-align: left;">
+                    <code>n</code> = elementos do vetor · <code>M</code> = maior valor possível.
+                    Repare na troca entre as colunas de tempo e a de espaço.
+                </p>
+                <table>
+                    <thead><tr><th>Algoritmo</th><th>Pior caso</th><th>Espaço</th><th>Pré-condição</th></tr></thead>
+                    <tbody>
+                        <tr><td>Busca linear</td><td>O(n)</td><td>O(1)</td><td>nenhuma</td></tr>
+                        <tr><td>Busca binária</td><td>O(log n)</td><td>O(1)</td><td>vetor ordenado</td></tr>
+                        <tr><td>Tabela de presença</td><td>O(1)</td><td>O(M)</td><td>valores de 0 a M</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h3>O que isso é em números</h3>
+                <p style="text-align: left;">
+                    Comparações no pior caso, para tamanhos concretos de vetor:
+                </p>
+                <table>
+                    <thead><tr><th>n</th><th>Busca linear</th><th>Busca binária</th></tr></thead>
+                    <tbody>
+                        <tr><td>8</td><td>8</td><td>4</td></tr>
+                        <tr><td>1.000</td><td>1.000</td><td>10</td></tr>
+                        <tr><td>1.000.000</td><td>1.000.000</td><td>20</td></tr>
+                        <tr><td>1.000.000.000</td><td>1.000.000.000</td><td>30</td></tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape" style="text-align: left;">
+                    Não é diferença de velocidade: são <strong>classes de complexidade</strong>
+                    distintas — O(n) contra O(log n). Trocar de máquina muda a velocidade, nunca a classe.
+                </p>
+            </section>
+
+            <section>
+                <h3>Ordenar sempre compensa?</h3>
+                <p style="text-align: left; font-size: 0.9em;">
+                    Não. Ordenar custa cerca de <code>n log n</code> comparações, pagas
+                    <strong>uma vez</strong>. Só compensa a partir do <strong>ponto de
+                    equilíbrio</strong> — perto de <code>log₂ n</code> consultas.
+                </p>
+                <img class="diagrama" src="img/09_ponto_equilibrio.svg"
+                     alt="Custo acumulado de k buscas lineares contra ordenar uma vez mais k buscas binárias, cruzando no ponto de equilíbrio">
+                <p class="nota-rodape" style="text-align: left;">
+                    É o dicionário: a ordem alfabética foi paga uma vez, na impressão, e
+                    aproveitada por todos os leitores para sempre.
+                </p>
+            </section>
+
+            <section>
+                <h3>A tabela de presença</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Uma terceira via: gastar memória para responder em <strong>O(1)</strong>.
+                    O valor procurado <strong>é</strong> o índice — nenhuma comparação, uma leitura.
+                </p>
+                <img class="diagrama" src="img/10_tabela_presenca.svg" style="max-height: 290px;"
+                     alt="Vetor de 101 posições em que apenas oito guardam um índice e todas as demais valem menos um">
+                <blockquote style="font-size: 0.75em;">
+                    Paga <strong>O(M)</strong>, e <code>M</code> é o maior <em>valor</em>, não a
+                    quantidade de elementos. É a troca <span class="destaque">espaço por tempo</span>
+                    — origem das tabelas hash.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 6 — CONEXÕES E VARIANTES ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde a busca binária aparece</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    "Descartar metade a cada passo" sustenta boa parte da computação prática:
+                </p>
+                <ul style="font-size: 0.78em;">
+                    <li><strong>git bisect</strong> — acha a versão que quebrou um programa em ~14 testes</li>
+                    <li><strong>Índices de bancos de dados</strong> — chaves mantidas ordenadas</li>
+                    <li><strong>Árvores binárias de busca</strong> — o descarte gravado na estrutura</li>
+                    <li><strong>Bisseção</strong> — achar a raiz de uma função cortando o intervalo</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Variantes — e onde a linear reina</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    A binária admite refinamentos — nomes para reconhecer adiante:
+                </p>
+                <ul style="font-size: 0.78em;">
+                    <li><strong>primeira ocorrência</strong> com valores repetidos (o desafio de hoje)</li>
+                    <li><strong>ponto de inserção</strong> · busca por <strong>interpolação</strong> · <strong>exponencial</strong></li>
+                </ul>
+                <blockquote style="font-size: 0.78em;">
+                    Mas em <span class="destaque">listas encadeadas</span> — aulas adiante —
+                    chegar ao meio já custa O(n), e a vantagem da binária desaparece.
+                    A linear volta a ser a única opção.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA                                -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Sete diagramas sobre o mesmo vetor de oito elementos: a varredura da
+                    linear, o descarte da binária e o confronto das contagens.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1 — o vetor ordenado</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    O cenário comum às duas buscas: oito inteiros em ordem crescente.
+                    A chave procurada é <strong>55</strong>, na posição 6.
+                </p>
+                <img class="diagrama" src="img/01_vetor_ordenado.svg"
+                     alt="Vetor de oito posições com valores 4, 8, 15, 16, 23, 42, 55 e 68 e índices 0 a 7">
+            </section>
+
+            <section>
+                <h3>Passo 2 — linear, primeira comparação</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A varredura começa na posição 0. Compara 4 com 55, não são iguais, avança —
+                    sem descobrir nada sobre as outras posições.
+                </p>
+                <img class="diagrama" src="img/02_linear_primeira.svg"
+                     alt="Marcação na posição 0 do vetor comparando o valor 4 com a chave 55">
+            </section>
+
+            <section>
+                <h3>Passo 3 — linear, varredura até o encontro</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Posições 0 a 6 examinadas, uma a uma, até a igualdade: <strong>7 comparações</strong>.
+                    Um valor ausente custaria 8 — o pior caso.
+                </p>
+                <img class="diagrama" src="img/03_linear_varredura.svg"
+                     alt="Sete posições do vetor marcadas em sequência até encontrar 55 na posição 6">
+            </section>
+
+            <section>
+                <h3>Passo 4 — binária, o primeiro meio</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A binária não começa pela ponta: começa pelo meio.
+                    Com <code>inicio = 0</code> e <code>fim = 7</code>, o meio é 3 (<code>vetor[3] = 16</code>).
+                </p>
+                <img class="diagrama" src="img/04_binaria_meio.svg"
+                     alt="Trecho de 0 a 7 com o elemento do meio na posição 3 destacado">
+            </section>
+
+            <section>
+                <h3>Passo 5 — binária, descarte da metade</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Como 16 &lt; 55 e o vetor está ordenado, nada entre 0 e 3 pode ser a chave.
+                    Metade sai com <strong>uma única comparação</strong>.
+                </p>
+                <img class="diagrama" src="img/05_binaria_descarte.svg"
+                     alt="Metade esquerda do vetor riscada, restando apenas o trecho de 4 a 7">
+            </section>
+
+            <section>
+                <h3>Passo 6 — binária, o encontro</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    O mesmo movimento se repete: <code>[4..7]</code> → <code>[6..7]</code> → acerto
+                    na posição 6. Total: <strong>3 comparações</strong>.
+                </p>
+                <img class="diagrama" src="img/06_binaria_encontro.svg"
+                     alt="Trecho de 4 a 7 reduzido a 6 a 7 e depois ao acerto na posição 6">
+            </section>
+
+            <section>
+                <h3>Passo 7 — as duas contagens</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Os mesmos números da Camada 5, agora com o formato das curvas: a reta da
+                    linear sobe junto com <code>n</code>; a logarítmica se achata quase na horizontal.
+                </p>
+                <img class="diagrama" src="img/07_curvas_n_logn.svg"
+                     alt="Curvas de crescimento de O(n) e O(log n) com as contagens para n igual a 8, mil e um milhão">
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR                                  -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que isso existe?</h2>
+                <blockquote style="font-size: 0.75em;">
+                    "Como o <code>git bisect</code> descobre, entre 10.000 versões salvas,
+                    exatamente a que introduziu o defeito — testando apenas <strong>14</strong>?"
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>O histórico como um vetor no tempo</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    O <strong>git</strong> guarda cada versão salva de um programa — um
+                    <strong>commit</strong>. O histórico é uma sequência ordenada, da mais
+                    antiga para a mais recente.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Há três meses funcionava; hoje não. Em algum ponto das 10.000 versões
+                    existe <strong>exatamente uma</strong> que quebrou tudo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Testar tudo, ou cortar pela metade</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Cada teste leva minutos — instalar, compilar, executar.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Linear</strong> — testar da mais antiga em diante: até semanas</li>
+                    <li><strong>Binária</strong> — testar a do meio; o defeito está numa das metades, a outra some</li>
+                </ul>
+                <blockquote style="font-size: 0.78em;">
+                    Um teste, metade do histórico eliminada — exatamente a busca binária.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A mesma pré-condição do dicionário</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    A jogada só é legítima porque o histórico está <strong>ordenado no tempo</strong>
+                    e "estar quebrado" muda uma vez só: antes funciona, depois não.
+                </p>
+                <blockquote style="font-size: 0.78em;">
+                    <code>log₂ 10000 + 1 = 14</code> testes — o número que a Camada 4 previu.
+                </blockquote>
+            </section>
+
+            <!-- Slide do Eddy #2 — aplicação real -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, toda vez que um aplicativo de banco encontra sua conta
+                            entre dezenas de milhões em milissegundos, ninguém percorre a lista
+                            de correntistas: consulta-se um <em>índice</em>, mantido ordenado
+                            justamente para descartar metade dos candidatos a cada passo.
+                            A diferença entre O(n) e O(log n) é a diferença entre um sistema
+                            que responde e um que não responde.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 4 — ANALOGIAS                                           -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>O jogo de adivinhar o número</h3>
+                <p style="text-align: left;">
+                    Penso num número de 1 a 100; você só ouve "maior" ou "menor".
+                    Chutar o <strong>meio</strong> a cada vez resolve em no máximo <strong>7</strong> palpites.
+                </p>
+                <blockquote style="font-size: 0.78em;">
+                    De 1 a 1.000.000, os chutes em ordem precisariam de um milhão;
+                    o do meio, <span class="destaque">20</span>. O jogo fica dez mil vezes maior
+                    e a boa estratégia, treze palpites mais cara.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 5 — CÓDIGO EM C                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Código em C</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Três algoritmos, o mesmo problema — e cada comparação impressa na tela,
+                    para conferir a análise com os olhos.
+                </p>
+            </section>
+
+            <section>
+                <h3>Um único arquivo: <code>busca.c</code></h3>
+                <blockquote style="font-size: 0.8em; text-align: left;">
+                    <code>#include</code>s, funções e a <code>main()</code> num arquivo só.
+                    Separar em <code>busca.h</code> é assunto da aula futura sobre organização
+                    de projetos — por ora, lê-se de cima a baixo.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Os <code>printf</code> dentro das buscas são instrumentação didática:
+                    um algoritmo de verdade só devolve a posição.
+                </p>
+            </section>
+
+            <section>
+                <h3>Cabeçalho e a busca linear</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A linear percorre um a um e não exige nada do vetor. Devolve a posição —
+                    ou <code>-1</code>, a marca convencionada para "não encontrado".
+                </p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define LIMITE 100   /* maior valor que a tabela de presenca registra */
+
+int busca_linear(int vetor[], int tamanho, int procurado) {
+    int comparacoes = 0;
+    int i;
+
+    for (i = 0; i &lt; tamanho; i++) {
+        comparacoes++;
+        printf("    comparacao %d: vetor[%d] = %d\n", comparacoes, i, vetor[i]);
+        if (vetor[i] == procurado) {
+            printf("  encontrado na posicao %d com %d comparacoes\n", i, comparacoes);
+            return i;
+        }
+    }
+
+    printf("  nao encontrado; foram %d comparacoes\n", comparacoes);
+    return -1;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>A busca binária</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Exige o vetor ordenado. A cada volta, olha o meio e descarta uma metade.
+                </p>
+                <pre><code class="language-c">int busca_binaria(int vetor[], int tamanho, int procurado) {
+    int inicio = 0;
+    int fim = tamanho - 1;
+    int comparacoes = 0;
+    while (inicio &lt;= fim) {
+        int meio = (inicio + fim) / 2;
+        comparacoes++;
+        if (vetor[meio] == procurado) {
+            printf("  encontrado na posicao %d com %d comparacoes\n", meio, comparacoes);
+            return meio;
+        }
+        if (vetor[meio] &lt; procurado) {
+            inicio = meio + 1;   /* meio + 1 garante que o trecho encolhe */
+        } else {
+            fim = meio - 1;
+        }
+    }
+    printf("  nao encontrado; foram %d comparacoes\n", comparacoes);
+    return -1;
+}</code></pre>
+            </section>
+
+            <!-- Slide do Eddy #3 — armadilha do trecho exibido -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, atenção ao <code>inicio = meio + 1</code>: trocar por
+                            <code>inicio = meio</code> parece inofensivo, mas gera um
+                            <strong>laço infinito</strong>. Num trecho de dois elementos a
+                            divisão inteira devolve sempre o primeiro, e o trecho nunca encolhe.
+                            O <code>+1</code> não é enfeite — é o que faz o algoritmo terminar.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>A tabela de presença</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Paga memória adiantado para que cada busca seguinte custe uma só leitura.
+                </p>
+                <pre><code class="language-c">void montar_tabela(int vetor[], int tamanho, int tabela[]) {
+    int i;
+
+    for (i = 0; i &lt;= LIMITE; i++) {
+        tabela[i] = -1;
+    }
+    for (i = 0; i &lt; tamanho; i++) {
+        tabela[vetor[i]] = i;
+    }
+}
+
+/* Uma unica leitura, sem laco nenhum. Pre-condicao: 0 &lt;= procurado &lt;= LIMITE. */
+int busca_por_tabela(int tabela[], int procurado) {
+    return tabela[procurado];
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>A <code>main()</code> demonstrativa</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    O mesmo vetor, o mesmo alvo, três custos diferentes.
+                </p>
+                <pre><code class="language-c">int main(void) {
+    int vetor[] = {4, 8, 15, 16, 23, 42, 55, 68};
+    int tamanho = 8;
+    int tabela[LIMITE + 1];
+
+    printf("[1] Procurando 55 com busca linear:\n");
+    busca_linear(vetor, tamanho, 55);
+
+    printf("[2] Procurando 55 com busca binaria:\n");
+    busca_binaria(vetor, tamanho, 55);
+
+    /* O valor ausente e o pior caso das duas buscas. */
+    printf("[3] Procurando 50 (nao existe):\n");
+    busca_binaria(vetor, tamanho, 50);
+
+    montar_tabela(vetor, tamanho, tabela);
+    printf("  55 -> posicao %d com 1 leitura\n", busca_por_tabela(tabela, 55));
+
+    return 0;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Compilando e a prova nos números</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A saída confirma a análise: 7 comparações na linear, 3 na binária.
+                </p>
+                <pre><code class="language-sh">gcc -Wall -Wextra -o busca_demo busca.c
+./busca_demo</code></pre>
+                <pre><code class="language-text">[2] Procurando 55 (existe) com busca binaria:
+    comparacao 1: trecho [0..7], meio 3, vetor[3] = 16
+    comparacao 2: trecho [4..7], meio 5, vetor[5] = 42
+    comparacao 3: trecho [6..7], meio 6, vetor[6] = 55
+  encontrado na posicao 6 com 3 comparacoes</code></pre>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 6 — EXERCÍCIOS                                          -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 6</p>
+                <h2>Exercício prático</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Um só, e é de implementação: colocar de pé, em C, as duas buscas desta aula.
+                </p>
+            </section>
+
+            <!-- Slide do Eddy #4 — provocação -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, antes de escrever a primeira linha, prevejam no papel:
+                            procurando o valor 50, que <strong>não</strong> está no vetor,
+                            quantas comparações cada uma das duas buscas vai fazer? Anotem os
+                            dois números. Se o programa de vocês imprimir algo diferente, o
+                            defeito está no código — não na previsão.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício — implemente as duas buscas</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Num único arquivo <code>busca.c</code>, escreva
+                    <code>busca_linear</code> e <code>busca_binaria</code> sobre o vetor
+                    <code>{4, 8, 15, 16, 23, 42, 55, 68}</code>. Cada uma devolve a posição do
+                    valor procurado, ou <code>-1</code> se ele não estiver lá, e imprime quantas
+                    comparações fez. Teste com <strong>55</strong> (existe) e
+                    <strong>50</strong> (não existe).
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta mínima aceitável:</strong> compila com
+                    <code>gcc -Wall -Wextra</code> sem avisos e produz exatamente estas contagens:
+                    <table>
+                        <thead><tr><th>Chave</th><th>Linear</th><th>Binária</th><th>Devolve</th></tr></thead>
+                        <tbody>
+                            <tr><td>55</td><td>7 comparações</td><td>3 comparações</td><td>6</td></tr>
+                            <tr><td>50</td><td>8 comparações</td><td>3 comparações</td><td>−1</td></tr>
+                        </tbody>
+                    </table>
+                    Repare no valor ausente: a linear percorre o vetor inteiro (o pior caso,
+                    <code>n</code>), enquanto a binária gasta o mesmo que para encontrar.
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 7 — REFERÊNCIAS                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.75em;">
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em Linguagem C</em> — capítulo de métodos de pesquisa (busca sequencial e binária).</li>
+                <li><strong>Toscani, L. V.; Veloso, P. A. S.</strong> — <em>Complexidade de Algoritmos</em> — análise de algoritmos, notação assintótica e recorrências.</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C</em> — capítulo de pesquisa e a pré-condição de ordenação.</li>
+                <li><strong>Schildt, H.</strong> — <em>C Completo e Total</em> — vetores, laços e funções.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.7em; color: #666;">
+                <li>Wirth — <em>Algoritmos e Estruturas de Dados</em> — a binária clássica e sua prova por invariante.</li>
+                <li>Azevedo — <em>Tabelas: organização e pesquisa</em> — da tabela de presença às tabelas hash.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Aula 02</h1>
+            <h2>Próxima aula em breve</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Vocês transformaram a Big O em ferramenta: contaram comparações, separaram
+                melhor, médio e pior caso, e viram O(n) contra O(log n) num vetor real.
+                Adiante, as estruturas que gravam o descarte na própria forma — as árvores de busca.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

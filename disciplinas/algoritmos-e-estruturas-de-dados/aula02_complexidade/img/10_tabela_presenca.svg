@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 300"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Tabela de presença — o valor vira o índice</text>
+
+  <text x="350" y="58" text-anchor="middle" font-size="14" fill="#5a7a9a">
+    tabela[55] = 6 · uma leitura, nenhuma comparação
+  </text>
+
+  <!-- fita de 101 posicoes: celulas estreitas, so 8 ocupadas -->
+  <text x="60" y="106" text-anchor="end" font-size="13" fill="#5a7a9a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">tabela</text>
+
+  <!-- fundo da fita inteira -->
+  <rect x="70" y="82" width="576" height="44" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3"/>
+
+  <!-- divisorias tenues sugerindo muitas casas -->
+  <g stroke="#e4e9ef" stroke-width="1">
+    <path d="M 98 82 L 98 126"/>   <path d="M 126 82 L 126 126"/>  <path d="M 154 82 L 154 126"/>
+    <path d="M 182 82 L 182 126"/> <path d="M 210 82 L 210 126"/>  <path d="M 238 82 L 238 126"/>
+    <path d="M 266 82 L 266 126"/> <path d="M 294 82 L 294 126"/>  <path d="M 322 82 L 322 126"/>
+    <path d="M 350 82 L 350 126"/> <path d="M 378 82 L 378 126"/>  <path d="M 406 82 L 406 126"/>
+    <path d="M 434 82 L 434 126"/> <path d="M 462 82 L 462 126"/>  <path d="M 490 82 L 490 126"/>
+    <path d="M 518 82 L 518 126"/> <path d="M 546 82 L 546 126"/>  <path d="M 574 82 L 574 126"/>
+    <path d="M 602 82 L 602 126"/>
+  </g>
+
+  <!-- as 8 casas ocupadas, nas posicoes proporcionais aos valores 4,8,15,16,23,42,55,68 de 0..100 -->
+  <g>
+    <rect x="93"  y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="2"/>
+    <rect x="116" y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="2"/>
+    <rect x="156" y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="2"/>
+    <rect x="162" y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="2"/>
+    <rect x="202" y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="2"/>
+    <rect x="310" y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="2"/>
+    <rect x="385" y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="3"/>
+    <rect x="459" y="82" width="15" height="44" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="2"/>
+  </g>
+
+  <!-- destaque do 55 -->
+  <text x="392" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#2c5d8a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">[55] = 6</text>
+
+  <!-- extremos da fita -->
+  <text x="78"  y="148" text-anchor="middle" font-size="13" fill="#888">0</text>
+  <text x="638" y="148" text-anchor="middle" font-size="13" fill="#888">100</text>
+
+  <!-- chaves de contagem -->
+  <path d="M 70 166 L 70 174 L 646 174 L 646 166" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="358" y="196" text-anchor="middle" font-size="14" fill="#5a7a9a">
+    <tspan font-weight="600" fill="#2c5d8a">101</tspan> posições de memória alocadas
+  </text>
+  <text x="358" y="220" text-anchor="middle" font-size="14" fill="#5a7a9a">
+    para guardar <tspan font-weight="600" fill="#2c5d8a">8</tspan> valores — as outras 93 valem −1
+  </text>
+
+  <line x1="100" y1="248" x2="600" y2="248" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="276" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">
+    o tamanho acompanha o maior valor possível, não a quantidade de elementos
+  </text>
+</svg>

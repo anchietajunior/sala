@@ -7,7 +7,7 @@ Cada aula vive em sua própria pasta (`aulaNN_tema/`) e contém:
 - O conteúdo escrito em Markdown (`aulaNN_tema.md`) — referência completa para o aluno, com os blocos pedagógicos da disciplina (conceito em camadas progressivas, visualização gráfica, problema motivador, analogias, exercícios e referências; aulas de implementação adicionam o bloco de código em C).
 - A apresentação em Reveal.js (`apresentacao.html`) — usada em sala, com tema claro e transições suaves.
 - Diagramas em SVG (`img/`) — visualizações reaproveitadas tanto no `.md` quanto nos slides.
-- Em aulas de implementação: arquivos `.h`, `.c` e `main.c` executáveis ao lado do `.md`.
+- Em aulas de implementação: um único arquivo `.c` autossuficiente ao lado do `.md` (sem `.h` — modularização é tema de aula futura).
 
 A bibliografia segue a ementa oficial da disciplina: **Backes — Algoritmos e Estruturas de Dados em Linguagem C**, **Veloso & Pereira — Estruturas de Dados em C: Uma Abordagem Didática**, **Toscani & Veloso — Complexidade de Algoritmos** e **Schildt — C Completo e Total** como básica; **Wirth**, **Damas**, **Azevedo**, **Forouzan & Gilbert**, **Ford & Topp** e **Jamsa & Klander** como complementar.
 
@@ -16,12 +16,12 @@ A bibliografia segue a ementa oficial da disciplina: **Backes — Algoritmos e E
 | # | Tema | Tipo | Conteúdo (`.md`) | Apresentação |
 |---|------|------|------------------|--------------|
 | 01 | Fundamentos: Algoritmos, Linguagem C, Listas Sequenciais e Complexidade (Big O) | Conceitual | [aula01_fundamentos/aula01_fundamentos.md](aula01_fundamentos/aula01_fundamentos.md) | [aula01_fundamentos/apresentacao.html](aula01_fundamentos/apresentacao.html) |
-| 02 | Listas Encadeadas (FIFO/LIFO, duplas, circulares) | Conceitual | [aula02_listas_encadeadas/aula02_listas_encadeadas.md](aula02_listas_encadeadas/aula02_listas_encadeadas.md) | [aula02_listas_encadeadas/apresentacao.html](aula02_listas_encadeadas/apresentacao.html) |
-| 03 | Fila (Queue) | Implementação | [aula03_fila/aula03_fila.md](aula03_fila/aula03_fila.md) | [aula03_fila/apresentacao.html](aula03_fila/apresentacao.html) |
-| 04 | Pilha (Stack) | Implementação | [aula04_pilha/aula04_pilha.md](aula04_pilha/aula04_pilha.md) | [aula04_pilha/apresentacao.html](aula04_pilha/apresentacao.html) |
-| 05 | Árvores e Árvores Binárias (BST + 3 travessias) | Implementação | [aula05_arvore_binaria/aula05_arvore_binaria.md](aula05_arvore_binaria/aula05_arvore_binaria.md) | [aula05_arvore_binaria/apresentacao.html](aula05_arvore_binaria/apresentacao.html) |
+| 02 | Análise de Complexidade na Prática: Busca Linear e Busca Binária | Implementação | [aula02_complexidade/aula02_complexidade.md](aula02_complexidade/aula02_complexidade.md) | [aula02_complexidade/apresentacao.html](aula02_complexidade/apresentacao.html) |
 | 06 | Matriz (alocação dinâmica com ponteiro duplo) | Implementação | [aula06_matriz/aula06_matriz.md](aula06_matriz/aula06_matriz.md) | [aula06_matriz/apresentacao.html](aula06_matriz/apresentacao.html) |
-| 07 | Introdução ao Vue.js 3 *(fora do contexto AED — teste)* | Implementação | [aula07_vuejs3/aula07_vuejs3.md](aula07_vuejs3/aula07_vuejs3.md) | [aula07_vuejs3/apresentacao.html](aula07_vuejs3/apresentacao.html) |
+| 08 | Listas Encadeadas (FIFO/LIFO, duplas, circulares) | Conceitual | [aula08_listas_encadeadas/aula08_listas_encadeadas.md](aula08_listas_encadeadas/aula08_listas_encadeadas.md) | [aula08_listas_encadeadas/apresentacao.html](aula08_listas_encadeadas/apresentacao.html) |
+| 09 | Fila (Queue) | Implementação | [aula09_fila/aula09_fila.md](aula09_fila/aula09_fila.md) | [aula09_fila/apresentacao.html](aula09_fila/apresentacao.html) |
+| 10 | Pilha (Stack) | Implementação | [aula10_pilha/aula10_pilha.md](aula10_pilha/aula10_pilha.md) | [aula10_pilha/apresentacao.html](aula10_pilha/apresentacao.html) |
+| 11 | Árvores e Árvores Binárias (BST + 3 travessias) | Implementação | [aula11_arvore_binaria/aula11_arvore_binaria.md](aula11_arvore_binaria/aula11_arvore_binaria.md) | [aula11_arvore_binaria/apresentacao.html](aula11_arvore_binaria/apresentacao.html) |
 
 ## Convenções
 
