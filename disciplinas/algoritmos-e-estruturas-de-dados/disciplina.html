@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algoritmos e Estruturas de Dados — UniRios</title>
+<style>
+  :root {
+    --azul: #2c5d8a;
+    --azul-claro: #5a7a9a;
+    --borda: #cfd6dd;
+    --fundo: #f7f9fc;
+    --destaque: #e8f0f8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1.5rem 4rem;
+    font-family: "Source Sans Pro", -apple-system, Segoe UI, Helvetica, sans-serif;
+    background: var(--fundo);
+    color: #22303c;
+    line-height: 1.5;
+  }
+  main { max-width: 1100px; margin: 0 auto; }
+  h1 { color: var(--azul); font-size: 1.9rem; margin: 0 0 .3rem; }
+  .sub { color: var(--azul-claro); margin: 0 0 2rem; }
+  .rolagem { overflow-x: auto; border: 1px solid var(--borda); border-radius: 6px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  th, td { padding: .7rem .9rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--borda); }
+  thead th { background: var(--azul); color: #fff; font-weight: 600; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: var(--destaque); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; color: var(--azul-claro); }
+  .tema { font-weight: 600; color: var(--azul); }
+  .materiais a { color: var(--azul); text-decoration: none; border-bottom: 1px solid var(--borda); white-space: nowrap; }
+  .materiais a:hover { border-bottom-color: var(--azul); }
+  .tag {
+    display: inline-block; padding: .1rem .5rem; border-radius: 10px;
+    font-size: .8rem; border: 1px solid var(--borda); background: #fff; white-space: nowrap;
+  }
+  .status-completa { border-color: var(--azul); color: var(--azul); background: var(--destaque); }
+  footer { margin-top: 1.2rem; color: var(--azul-claro); font-size: .85rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Algoritmos e Estruturas de Dados</h1>
+  <p class="sub">Graduação — UniRios · aulas produzidas até agora</p>
+
+  <div class="rolagem">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tema</th>
+        <th>Aborda</th>
+        <th>Tipo</th>
+        <th>Materiais</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="num">01</td>
+        <td class="tema">Fundamentos</td>
+        <td>Introdução a algoritmos, estruturas de dados, listas sequenciais e complexidade (Big O)</td>
+        <td><span class="tag">Conceitual</span></td>
+        <td class="materiais">
+          <a href="aula01_fundamentos/aula01_fundamentos.md">Conteúdo</a> ·
+          <a href="aula01_fundamentos/apresentacao.html">Slides</a>
+        </td>
+        <td><span class="tag status-completa">Completa</span></td>
+      </tr>
+      <tr>
+        <td class="num">02</td>
+        <td class="tema">Análise de Complexidade</td>
+        <td>Melhor/pior/médio caso, notações O, Ω e Θ, custo de tempo e de espaço, com busca linear e busca binária como exemplos</td>
+        <td><span class="tag">Implementação</span></td>
+        <td class="materiais">
+          <a href="aula02_complexidade/aula02_complexidade.md">Conteúdo</a> ·
+          <a href="aula02_complexidade/busca.c">busca.c</a>
+        </td>
+        <td><span class="tag">Sem slides</span></td>
+      </tr>
+      <tr>
+        <td class="num">06</td>
+        <td class="tema">Matriz</td>
+        <td>Matriz dinâmica com ponteiro duplo, alocação e liberação de memória</td>
+        <td><span class="tag">Implementação</span></td>
+        <td class="materiais">
+          <a href="aula06_matriz/aula06_matriz.md">Conteúdo</a> ·
+          <a href="aula06_matriz/apresentacao.html">Slides</a> ·
+          <a href="aula06_matriz/matriz.c">matriz.c</a>
+        </td>
+        <td><span class="tag status-completa">Completa</span></td>
+      </tr>
+      <tr>
+        <td class="num">08</td>
+        <td class="tema">Listas Encadeadas</td>
+        <td>Nó e encadeamento, listas simples, duplas e circulares, padrões FIFO e LIFO</td>
+        <td><span class="tag">Conceitual</span></td>
+        <td class="materiais">
+          <a href="aula08_listas_encadeadas/aula08_listas_encadeadas.md">Conteúdo</a> ·
+          <a href="aula08_listas_encadeadas/apresentacao.html">Slides</a>
+        </td>
+        <td><span class="tag status-completa">Completa</span></td>
+      </tr>
+      <tr>
+        <td class="num">09</td>
+        <td class="tema">Fila (Queue)</td>
+        <td>Disciplina FIFO, enfileirar/desenfileirar/frente, três implementações: encadeada simples, dupla e circular</td>
+        <td><span class="tag">Implementação</span></td>
+        <td class="materiais">
+          <a href="aula09_fila/aula09_fila.md">Conteúdo</a> ·
+          <a href="aula09_fila/apresentacao.html">Slides</a> ·
+          <a href="aula09_fila/fila.c">fila.c</a> ·
+          <a href="aula09_fila/fila_dupla.c">fila_dupla.c</a> ·
+          <a href="aula09_fila/fila_circular.c">fila_circular.c</a>
+        </td>
+        <td><span class="tag status-completa">Completa</span></td>
+      </tr>
+      <tr>
+        <td class="num">10</td>
+        <td class="tema">Pilha (Stack)</td>
+        <td>Disciplina LIFO, empilhar/desempilhar/topo em lista encadeada</td>
+        <td><span class="tag">Implementação</span></td>
+        <td class="materiais">
+          <a href="aula10_pilha/aula10_pilha.md">Conteúdo</a> ·
+          <a href="aula10_pilha/apresentacao.html">Slides</a> ·
+          <a href="aula10_pilha/pilha.c">pilha.c</a>
+        </td>
+        <td><span class="tag status-completa">Completa</span></td>
+      </tr>
+      <tr>
+        <td class="num">11</td>
+        <td class="tema">Árvores e Árvores Binárias</td>
+        <td>Tipos de árvore, BST com inserção e busca, travessias pré-ordem, in-ordem e pós-ordem</td>
+        <td><span class="tag">Implementação</span></td>
+        <td class="materiais">
+          <a href="aula11_arvore_binaria/aula11_arvore_binaria.md">Conteúdo</a> ·
+          <a href="aula11_arvore_binaria/apresentacao.html">Slides</a> ·
+          <a href="aula11_arvore_binaria/arvore.c">arvore.c</a>
+        </td>
+        <td><span class="tag status-completa">Completa</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <footer>Status &ldquo;Completa&rdquo; = conteúdo <code>.md</code>, apresentação Reveal.js, diagramas SVG e (em aulas de implementação) código em C presentes.</footer>
+</main>
+</body>
+</html>
