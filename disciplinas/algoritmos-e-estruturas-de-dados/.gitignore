@@ -21,6 +21,9 @@ a.out
 *.log
 *.tmp
 
+# Atividades avaliativas (enunciados e gabaritos ficam fora do repositório)
+atividades/
+
 # Claude Code (versionar apenas as skills)
 .claude/*
 !.claude/skills/
