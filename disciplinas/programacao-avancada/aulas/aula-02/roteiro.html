@@ -331,7 +331,7 @@ def read_repeated_word(word: str, times: int = 2):
 
 <ul>
   <li><strong>Síntese:</strong> o DNS traduz nome em IP; a conversa é texto HTTP com formato fixo; o status code diz de quem é a culpa (4xx cliente, 5xx servidor); o uvicorn traduz bytes↔Python e o FastAPI decide quem responde; na URL, path params <em>identificam</em> e query params <em>ajustam</em>; e o recurso Books nasceu em memória — listar, buscar, obter pelo id e criar via POST.</li>
-  <li><strong>Gancho para a aula 03:</strong> "Hoje o recurso Books nasceu, mas fizemos tudo no instinto — dict cru no POST, verbos escolhidos no olho. Semana que vem: REST, o estilo que organiza a web, para desenhar os recursos direito (users, books), completar o CRUD e trocar o dict cru por schemas Pydantic. E os dados que somem a cada restart? Banco de dados, aula 04."</li>
+  <li><strong>Gancho para a aula 03:</strong> "Hoje o recurso Books nasceu, mas fizemos tudo no instinto — dict cru no POST, verbos escolhidos no olho. Semana que vem o código sobe de patamar: o livro deixa de ser um dicionário e vira uma classe, o recurso ganha o ciclo completo — inclusive o DELETE, que finalmente responde à pergunta do <code>len(books) + 1</code> — e o dict cru dá lugar a schemas Pydantic. E teremos a teoria que dá nome a tudo isso: o que é uma API, o que é REST e como se lê uma URI. E os dados que somem a cada restart? Banco de dados, aula 04."</li>
 </ul>
 
 </body>
