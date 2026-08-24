@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 470"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    fibonacci(5) — 15 chamadas para calcular um número
+  </text>
+
+  <!-- ligacoes: pai (base) -> filho (topo) -->
+  <g stroke="#5a7a9a" stroke-width="1.5" fill="none">
+    <path d="M 418 88 L 258 140"/>
+    <path d="M 418 88 L 577 140"/>
+
+    <path d="M 258 168 L 165 220"/>
+    <path d="M 258 168 L 350 220"/>
+    <path d="M 577 168 L 515 220"/>
+    <path d="M 577 168 L 639 220"/>
+
+    <path d="M 165 248 L 103 300"/>
+    <path d="M 165 248 L 226 300"/>
+    <path d="M 350 248 L 309 300"/>
+    <path d="M 350 248 L 391 300"/>
+    <path d="M 515 248 L 474 300"/>
+    <path d="M 515 248 L 556 300"/>
+
+    <path d="M 103 328 L 61 380"/>
+    <path d="M 103 328 L 144 380"/>
+  </g>
+
+  <!-- nivel 0 -->
+  <rect x="386" y="60" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="418" y="79" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(5)</text>
+
+  <!-- nivel 1 -->
+  <rect x="226" y="140" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="258" y="159" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(4)</text>
+
+  <rect x="545" y="140" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="577" y="159" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(3)</text>
+
+  <!-- nivel 2 -->
+  <rect x="133" y="220" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="165" y="239" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(3)</text>
+
+  <rect x="318" y="220" width="64" height="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="350" y="239" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(2)</text>
+
+  <rect x="483" y="220" width="64" height="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="515" y="239" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(2)</text>
+
+  <rect x="607" y="220" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="639" y="239" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(1)</text>
+
+  <!-- nivel 3 -->
+  <rect x="71" y="300" width="64" height="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="103" y="319" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(2)</text>
+
+  <rect x="194" y="300" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="226" y="319" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(1)</text>
+
+  <rect x="277" y="300" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="309" y="319" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(1)</text>
+
+  <rect x="359" y="300" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="391" y="319" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(0)</text>
+
+  <rect x="442" y="300" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="474" y="319" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(1)</text>
+
+  <rect x="524" y="300" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="556" y="319" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(0)</text>
+
+  <!-- nivel 4 -->
+  <rect x="29" y="380" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="61" y="399" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(1)</text>
+
+  <rect x="112" y="380" width="64" height="28" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="144" y="399" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fib(0)</text>
+
+  <line x1="80" y1="428" x2="620" y2="428" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="450" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    fib(2) é recalculado 3 vezes · fib(3), 2 vezes — nenhuma chamada lembra do trabalho da outra
+  </text>
+</svg>

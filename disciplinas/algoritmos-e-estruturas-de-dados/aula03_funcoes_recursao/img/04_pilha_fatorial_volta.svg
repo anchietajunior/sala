@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    fatorial(4) — a volta: as multiplicações acontecem
+  </text>
+
+  <!-- seta unica, subindo -->
+  <path d="M 108 392 L 108 100" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="103,104 108,90 113,104" fill="#2c5d8a"/>
+  <text x="60" y="418" font-size="13" font-weight="600" fill="#2c5d8a">os valores sobem</text>
+
+  <!-- chamada 1 -->
+  <rect x="130" y="80" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="148" y="111" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(4)</text>
+  <text x="425" y="111" font-size="16" font-weight="600" fill="#2c5d8a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">4 × 6 = 24</text>
+
+  <!-- chamada 2 -->
+  <rect x="155" y="148" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="173" y="179" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(3)</text>
+  <text x="450" y="179" font-size="16" font-weight="600" fill="#2c5d8a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">3 × 2 = 6</text>
+
+  <!-- chamada 3 -->
+  <rect x="180" y="216" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="198" y="247" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(2)</text>
+  <text x="475" y="247" font-size="16" font-weight="600" fill="#2c5d8a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">2 × 1 = 2</text>
+
+  <!-- chamada 4 -->
+  <rect x="205" y="284" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="223" y="315" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(1)</text>
+  <text x="500" y="315" font-size="16" font-weight="600" fill="#2c5d8a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1 × 1 = 1</text>
+
+  <!-- chamada 5: caso base -->
+  <rect x="230" y="352" width="280" height="48" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="248" y="383" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(0)</text>
+  <text x="525" y="383" font-size="16" font-weight="600" fill="#2c5d8a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1</text>
+  <text x="548" y="383" font-size="13" fill="#5a7a9a" font-style="italic">caso base</text>
+
+  <line x1="80" y1="430" x2="620" y2="430" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="453" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    a conta inteira acontece na volta — o 24 só aparece no último passo
+  </text>
+  <text x="350" y="474" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    cada chamada só multiplica depois que a de baixo devolve
+  </text>
+</svg>
