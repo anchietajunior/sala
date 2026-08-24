@@ -129,7 +129,7 @@ Aqui o Eddy é opcional — pode aparecer se tiver curiosidade histórica relaci
 `<section>` pai com:
 
 1. Slide de abertura.
-2. Slide "Um único arquivo: `tema.c`" com o blockquote sobre `.h` ser tema de aula futura.
+2. Slide "Um único arquivo: `tema.c`" com o blockquote explicando que tudo vive num arquivo só, para ler de cima a baixo. **Sem** anunciar aula futura sobre modularização.
 3. **Vários slides com fatias do código**, em vez de um único slide gigante. Tipicamente:
    - includes + structs + `criar`
    - `inserir` (ou `empilhar`/`enfileirar`)
@@ -201,9 +201,10 @@ Aqui o Eddy é opcional — pode aparecer se tiver curiosidade histórica relaci
 ```html
 <section class="capa">
     <h1>Fim — Tema</h1>
-    <h2>Próxima aula em breve</h2>
+    <h2>Perguntas</h2>
     <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
-        <Frase curta indicando o que já foi visto e o próximo passo da disciplina.>
+        <Frase curta fechando o que ESTA aula entregou. Sem teaser da aula seguinte
+         e sem retrospectiva das anteriores — a aula é uma unidade fechada.>
     </p>
 </section>
 ```

@@ -52,9 +52,11 @@ A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas an
 
 Sub-seções típicas:
 
-### `#### Ponte com aula anterior` (opcional, mas comum)
+### `#### Os fundamentos que esta aula usa` (opcional, mas comum)
 
-Para aulas de estruturas encadeadas: retomar o **nó** apresentado na Aula 02 em 1–2 parágrafos, deixando claro que o nó não muda — o que muda é a política de acesso ou o estado externo.
+Quando a estrutura da aula é construída sobre um conceito mais básico (o **nó** das estruturas encadeadas, o acesso por índice do vetor), apresentar esse conceito **aqui, do zero**, em 1–2 parágrafos com definição e exemplo próprios.
+
+**Nunca escrever "como vimos na Aula NN" nem equivalente.** A aula é uma unidade fechada: se o aluno precisa do nó para entender esta aula, o nó é definido nesta aula. Repetir a definição em várias aulas é o comportamento desejado, não desperdício.
 
 ### `#### Os ponteiros / variáveis de estado externo`
 
@@ -175,4 +177,4 @@ Em 1–2 parágrafos após a tabela, justificar a escolha da representação imp
 
 Parágrafo final listando 2–3 variantes principais (vetor × lista, dupla × simples, circular × linear) — apenas **sinalizando** que existem e o que motivaria escolher uma. Não desenvolver aqui.
 
-Encerrar (opcional) apontando para uma **aula futura** que dependerá desta ("aparece naturalmente em aulas futuras quando estudarmos travessia de grafos e árvores").
+Encerrar (opcional) nomeando **outros temas da computação** em que a estrutura reaparece ("é a base da travessia de grafos e árvores"). Nomear o tema é permitido; **anunciar aula** ("veremos na próxima aula", "tema de aula futura") não é — a aula não se posiciona numa sequência.

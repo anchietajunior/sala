@@ -9,7 +9,7 @@ Aplicam-se **apenas a aulas de implementação** (bloco 5). Existem para que o a
   - `typedef struct No { ... } No;` (e/ou outras structs).
   - Todas as funções da TAD na ordem `criar`, `vazia`, `inserir`, `remover`, `consultar`, `destruir`.
   - `main()` demonstrativa ao final.
-- **Sem `.h`**. Cabeçalhos e modularização são tema de aula futura.
+- **Sem `.h`**. O aluno lê o programa inteiro de cima a baixo, sem saltar entre arquivos. (Motivo interno, **não** escrever na aula: modularização tem aula própria.)
 - **Sem múltiplos `.c` ligados por `#include`**. Mesmo motivo.
 
 ## Proibido nesta fase da disciplina

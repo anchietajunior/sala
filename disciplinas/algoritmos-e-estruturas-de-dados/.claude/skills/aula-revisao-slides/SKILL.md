@@ -1,6 +1,6 @@
 ---
 name: aula-revisao-slides
-description: Revisão severa dos slides (`apresentacao.html`) de uma aula da disciplina Algoritmos e Estruturas de Dados (UniRios). Audita cinco defeitos recorrentes — termo jogado sem explicação, registro de palestra em vez de aula, excesso e repetição do que já foi dado, conceito sem código C ilustrando, e conceito sem visualização — corrige direto no HTML e relata o que mudou e o que saiu. Use quando o usuário pedir "revisão severa dos slides", "critique os slides da aula NN", "os slides estão repetitivos / sem código / fracos", ou ao finalizar uma apresentação. Para revisar o `.md` da aula use `aula-revisao`; para gerar a apresentação do zero use `aula-apresentacao`.
+description: Revisão severa dos slides (`apresentacao.html`) de uma aula da disciplina Algoritmos e Estruturas de Dados (UniRios). Audita seis defeitos recorrentes — termo jogado sem explicação, registro de palestra em vez de aula, excesso e repetição do que já foi dado, conceito sem código C ilustrando, conceito sem visualização, e referência a outra aula — corrige direto no HTML e relata o que mudou e o que saiu. Use quando o usuário pedir "revisão severa dos slides", "critique os slides da aula NN", "os slides estão repetitivos / sem código / fracos", ou ao finalizar uma apresentação. Para revisar o `.md` da aula use `aula-revisao`; para gerar a apresentação do zero use `aula-apresentacao`.
 ---
 
 # Skill: aula-revisao-slides
@@ -15,7 +15,7 @@ Difere da `aula-revisao`, que é `.md`-first e trata os slides como checagem de 
 
 - "Faça uma revisão severa nos slides da Aula 02."
 - "Critique a apresentação — está parecendo palestra."
-- "Os slides estão repetindo a aula anterior."
+- "Os slides estão citando outras aulas."
 - "Faltam exemplos de código e diagramas nos slides."
 
 Se a `apresentacao.html` ainda não existe, é caso de `aula-apresentacao`.
@@ -25,20 +25,22 @@ Se a `apresentacao.html` ainda não existe, é caso de `aula-apresentacao`.
 1. Leia `CLAUDE.md` na raiz — fonte de verdade. Em conflito, **`CLAUDE.md` vence** qualquer referência de skill.
 2. Leia a `aulaNN_tema/apresentacao.html` inteira antes de editar.
 3. Leia o `aulaNN_tema/aulaNN_tema.md` — é o contrato de conteúdo que os slides espelham.
-4. **Leia a aula anterior** (`aula(NN-1)_*/`, `.md` e slides). Sem isso é impossível detectar o critério 3 (repetição entre aulas).
+4. **Leia as outras aulas já prontas** (`.md` e slides). Serve para julgar o critério 3 — reconhecer o que é tema de outra aula e, portanto, não deve virar slide próprio aqui. **Não** serve para criar remissões: o critério 6 proíbe citá-las.
 5. Leia `references/criterios-slides.md` desta skill — heurísticas e exemplos ruim → bom.
 
-## Os cinco critérios
+## Os seis critérios
 
 Detalhamento e exemplos em `references/criterios-slides.md`. Em resumo:
 
 1. **Termo órfão** — termo, símbolo ou notação que aparece sem ter sido definido antes **nem no próprio slide**. → *Definir no slide, ou remover o termo se ele não serve à aula.*
 2. **Registro de palestra** — slide que informa/emociona como keynote em vez de ensinar: frase de efeito, metáfora solta, conclusão vaga, sem o **termo formal** do tema. → *Ancorar a intuição no vocabulário canônico da disciplina.*
-3. **Excesso e repetição** — slide que repete aula anterior, repete outro slide da mesma aula, ou não acrescenta nada. → *Cortar.* Retomada só vale quando **referencia** o que já foi visto para fazer uma conexão nova.
+3. **Excesso e repetição** — slide que desenvolve do zero um tema que não é o desta aula, repete outro slide da mesma aula, ou não acrescenta nada. → *Cortar.* Pré-requisito de que a aula depende cabe em **uma linha** dentro do slide que o usa, não em slide próprio.
 4. **Conceito sem código** — conceito que ficaria evidente em 3–8 linhas de C e está só em prosa; ou código exibido complexo demais para quem nunca viu C. → *Adicionar o trecho curto, ou simplificar o existente.*
 5. **Conceito sem visualização** — estrutura, processo ou comparação explicada só em texto, quando um diagrama a tornaria imediata. → *Criar o SVG e embutir.*
 
-**Precedência entre critérios**: 3 (cortar) roda **antes** de 4 e 5 — não se investe código nem diagrama em slide que vai sair.
+6. **Referência a outra aula** — slide que diz "na Aula 02 vimos", "na próxima aula", "tema de aula futura", ou que se posiciona na sequência da disciplina. → *Remover a remissão*; o conceito, se necessário, vira uma linha escrita nas palavras desta aula. Vale para corpo, nota-rodapé, linha-ponte, fala do Eddy e encerramento.
+
+**Precedência entre critérios**: 3 (cortar) e 6 (desamarrar) rodam **antes** de 1, 2, 4 e 5 — não se investe código, diagrama nem reescrita em slide que vai sair ou que ainda vai mudar de texto.
 
 ## Fluxo de execução
 
@@ -50,7 +52,7 @@ Liste todas as `<section>` na ordem, com título e bloco. Anote a contagem inici
 
 ### 2. Varrer e julgar cada slide
 
-Para cada slide, nesta ordem: **3 → 1 → 2 → 4 → 5**. Registre local, critério, defeito e ação.
+Para cada slide, nesta ordem: **3 → 6 → 1 → 2 → 4 → 5**. Registre local, critério, defeito e ação.
 
 A pergunta de corte, aplicada a todo slide: *"se eu apagar este slide, o que exatamente o aluno perde que nenhum outro slide dá?"* Se a resposta for "nada" ou "só a repetição", **corta**.
 
@@ -72,10 +74,11 @@ Antes de declarar pronto, rodar de fato:
 
 ### 5. Relatar
 
-Agrupado pelos cinco critérios: achados, corrigidos, e a **lista explícita de todo slide removido, pelo título**. Contagem antes → depois. O que foi sinalizado mas não corrigido por depender de decisão do usuário.
+Agrupado pelos seis critérios: achados, corrigidos, e a **lista explícita de todo slide removido, pelo título**. Contagem antes → depois. O que foi sinalizado mas não corrigido por depender de decisão do usuário.
 
 ## Regras inegociáveis
 
+- **Cada aula é uma unidade fechada.** Nenhum slide cita outra aula, nem anterior nem posterior, em nenhum campo — corpo, nota-rodapé, linha-ponte, Eddy, `alt`, comentário de código, encerramento. Conceito necessário vira uma linha escrita aqui; conceito desnecessário vira corte.
 - **Cortar é o padrão.** Em dúvida entre remendar e remover, remova — e relate.
 - **Nunca cortar em silêncio.** Todo slide removido aparece no relatório pelo título.
 - **O contrato didático vence a severidade.** Não removem-se: capa, título, encerramento, o **exercício único** com sua "Resposta mínima aceitável", bloco de Referências, nem os 3–4 slides do Eddy. Bloco previsto pela estrutura não desaparece inteiro.

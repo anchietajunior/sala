@@ -1,6 +1,6 @@
 # Aula NN — <Tema> (<Tradução em inglês>)
 
-> **Tipo desta aula**: implementação. <Frase curta justificando a escolha da representação interna escolhida — mencionar a ligação com aulas anteriores quando houver (ex.: "construída sobre o nó da Aula 02").>
+> **Tipo desta aula**: implementação. <Frase curta justificando a escolha da representação interna. **Não** citar outra aula: se a estrutura se apoia num conceito mais básico, ele é apresentado do zero dentro desta aula.>
 
 ---
 
@@ -25,7 +25,7 @@ Note o que a <Tema> **não** oferece: <2–3 coisas que a estrutura proíbe>. <F
 
 ### Camada 3 — Propriedades e comportamento
 
-> A representação interna desta aula é construída sobre o **nó** apresentado na sub-seção *"O nó — unidade de construção das estruturas encadeadas"* da Aula 02. <Continue conforme couber: o nó da <Tema> é exatamente o nó da lista simplesmente encadeada; o que muda é a política de acesso e o estado externo.>
+> <Se a estrutura se apoia num conceito mais básico — o **nó**, o acesso por índice —, defina-o aqui, do zero, com exemplo próprio. Repetir essa definição em várias aulas é o comportamento desejado. **Nunca** escrever "como vimos na Aula NN".>
 
 #### <Sub-seção sobre estado externo>
 
@@ -73,7 +73,7 @@ TAD <Tema> de Inteiros
     A6. <op_remover>(criar())                   = erro
 ```
 
-O **axioma <coração>** é o **coração do <política>**: <explicação em prosa>. <Comparar com axioma análogo de aula anterior, se houver.>
+O **axioma <coração>** é o **coração do <política>**: <explicação em prosa>. <Comparar com axioma análogo de outra estrutura, se ajudar — nomeando a estrutura, nunca a aula.>
 
 #### A representação interna como tupla
 
@@ -114,7 +114,7 @@ A <Tema> aparece em <descrição da abrangência>:
 - **<Aplicação 3>** — <descrição em 1 linha>.
 - **<Aplicação 4>** — <descrição em 1 linha>.
 
-A própria implementação admite variantes: <2–3 variantes apenas sinalizadas, não desenvolvidas — vetor × lista, dupla × simples, circular × linear, etc.>. <Frase final apontando para aulas futuras se houver.>
+A própria implementação admite variantes: <2–3 variantes apenas sinalizadas, não desenvolvidas — vetor × lista, dupla × simples, circular × linear, etc.>. <Frase final nomeando, se couber, outros temas da computação em que a estrutura reaparece — sem anunciar aula.>
 
 ---
 
@@ -190,7 +190,7 @@ A própria implementação admite variantes: <2–3 variantes apenas sinalizadas
 
 <Frase introdutória curta sobre características do código — ex.: "Note como o código é mais curto que o da Fila — menos casos especiais, menos invariantes, mesma legibilidade.">
 
-> **Sobre a organização do arquivo.** Tudo o que vem a seguir vive em **um único arquivo** chamado `<tema>.c`: `#include`s, structs, funções da TAD e a `main()` demonstrativa. A separação em arquivo de cabeçalho (`<tema>.h`) e arquivo de implementação (`<tema>.c`) é assunto da aula futura sobre **organização de projetos em C**. Por enquanto, manter tudo num lugar só facilita ler de cima a baixo.
+> **Sobre a organização do arquivo.** Tudo o que vem a seguir vive em **um único arquivo** chamado `<tema>.c`: `#include`s, structs, funções da TAD e a `main()` demonstrativa. Manter tudo num arquivo só permite ler o programa inteiro de cima a baixo, sem saltar entre arquivos.
 
 ### `<tema>.c` — arquivo único
 
@@ -254,7 +254,7 @@ Saída esperada:
 <...>
 
 **Exercício 5 — Desafio: <Título>.**
-<Extensão ampla — combinar com aula anterior/futura, ou raciocínio mais profundo.>
+<Extensão ampla — combinar o que a própria aula deu, ou exigir raciocínio mais profundo.>
 
 *Critério de aceitação*: <condição>.
 

@@ -12,7 +12,7 @@
 | 2 | Adicionar uma função simples | Implementar uma operação derivada (ex.: `pilha_imprimir`, `fila_tamanho`) no `.c` da aula.          |
 | 3 | Aplicar a um cenário real    | Resolver um sub-problema usando a estrutura (validação de parênteses, inversão de string com pilha).|
 | 4 | Variação na estrutura        | Modificar uma operação para um caso especial (ex.: pilha com limite de capacidade, fila circular).  |
-| 5 | **Desafio**                  | Extensão ampla — combinar estruturas, raciocínio mais profundo, ou ligação com aula futura.        |
+| 5 | **Desafio**                  | Extensão ampla — combinar estruturas ou exigir raciocínio mais profundo, sempre com o que a própria aula deu. |
 
 Para aulas conceituais (sem código C), o **Exercício 1** costuma ser identificar o conceito no cotidiano, e os do meio são aplicação de axiomas / escrita de TAD curto. O desafio final pode ser "escreva um TAD para X" ou "prove por axiomas que Y".
 

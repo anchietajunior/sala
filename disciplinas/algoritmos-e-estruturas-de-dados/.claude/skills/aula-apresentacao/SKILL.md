@@ -108,6 +108,7 @@ Confirmar que a linha da aula no `README.md` aponta tanto para o `.md` quanto pa
 
 ## Regras inegociáveis (resumo)
 
+- **Cada aula é uma unidade fechada.** Nenhum slide menciona outra aula — nem anterior ("na Aula 02 vimos", "a estrutura da aula passada"), nem posterior ("próxima aula", "tema de aula futura", "aula própria mais adiante"). Isso vale para o corpo, a `nota-rodape`, a linha-ponte, a fala do Eddy e o slide de encerramento. Conceito de que a aula depende é **apresentado no próprio slide**, com suas palavras e seu exemplo; o que não couber, sai. Nomear um tema da computação ("ordenação", "árvores") é permitido — anunciar aula, não.
 - **Vendor sempre local** (`../assets/vendor/...`). Sem CDN.
 - **Reveal.js 5.1.0 + highlight.js 11.9.0** (versões fixadas na pasta `vendor/`).
 - **Tema `white`**, transição `fade`, capa institucional fixa.

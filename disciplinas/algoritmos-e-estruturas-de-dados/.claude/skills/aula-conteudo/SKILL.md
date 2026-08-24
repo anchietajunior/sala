@@ -35,7 +35,7 @@ Sigo este fluxo em ordem. Quando um passo for trivial, executo direto; quando ex
 - Tema da aula (`tema` em snake_case sem acento) e número (`NN` com dois dígitos).
 - Tipo (conceitual / implementação).
 - Representação interna a ser implementada (apenas para implementação). Por padrão, a mais simples possível — a que dá origem ao menor número de casos especiais. Justifico a escolha em uma frase no preâmbulo da aula.
-- Se a aula tiver dependência forte de aula anterior (ex.: usa o **nó** apresentado na Aula 02), retomar brevemente no início do bloco 3 (camada 3 do bloco 1).
+- Se a aula depender de um conceito já tratado em outra aula (ex.: o **nó** das estruturas encadeadas), **apresentar esse conceito do zero aqui**, com definição e exemplo próprios — sem citar a outra aula. A aula é uma unidade fechada; ver *Regras inegociáveis*.
 
 ### 2. Criar a pasta e o esqueleto
 
@@ -89,7 +89,8 @@ Estas são extraídas do `CLAUDE.md` e existem para garantir consistência entre
 - **Citações inline** da bibliografia base já a partir da camada 2 do bloco 1, **não** apenas no bloco de Referências.
 - **Não cunhar coloquialismos** para conceitos técnicos (sem "tripa", "miolo", "espiar", "cuspir" etc.); use a terminologia canônica de Backes/Veloso & Pereira/Toscani & Veloso.
 - **Não supor conhecimento prévio** — cada termo técnico definido no primeiro uso. Conceitos avançados de SO/arquitetura (cache, paginação, branch prediction, MMU…) ficam fora salvo se forem o tema da aula.
-- **Um único `.c` por aula**, sem `.h` separado. Cabeçalhos são tema de aula futura sobre organização de projetos.
+- **Cada aula é uma unidade fechada.** Nenhum trecho do `.md`, do `.c` ou dos comentários menciona outra aula — nem anterior ("como vimos na Aula 02", "ponte com a Aula 01"), nem posterior ("tema de aula futura", "na próxima aula"). Conceito de que a aula depende é apresentado **nela mesma**, com definição e exemplo próprios; o que não couber assim, fica de fora. Vale inclusive para o blockquote do bloco de código e para o preâmbulo.
+- **Um único `.c` por aula**, sem `.h` separado. (Motivo, para o agente — **não** escrever isto na aula: modularização é tema de outra aula.)
 - **Comentários no `.c` autoexplicativos** — não usar rótulos abreviados (I1, I2…) que só fazem sentido com a tabela do `.md` aberta ao lado.
 - **Exercícios sem rótulos de dificuldade** (não escreva "fácil/médio/difícil") — a progressão fica implícita na ordem. Apenas 1 desafio por aula, sempre o último. Cada exercício acompanha **"Resposta mínima aceitável"** explicitamente rotulada.
 - **Bibliografia** (ementa oficial — lista completa no `CLAUDE.md`): básica = Backes, Veloso & Pereira, Toscani & Veloso (complexidade), Schildt (linguagem C); complementar = Wirth, Damas, Azevedo, Forouzan & Gilbert, Ford & Topp, Jamsa & Klander. Nunca inventar página/capítulo — se não souber, citar genericamente ("ver capítulo de pilhas em Backes").

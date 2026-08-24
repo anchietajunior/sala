@@ -58,7 +58,7 @@ Cada eixo abaixo tem: **o que procurar**, **como corrigir** e um par **ruim → 
 - Digressão histórica, curiosidade ou tangente que não paga seu custo de atenção.
 - Repetição do que já foi dito com outras palavras.
 - Frase ou oração que pode sair inteira sem que a explicação perca nada.
-- Detalhe que pertence a uma aula futura e só antecipa confusão aqui.
+- Detalhe que só antecipa confusão aqui e não serve ao objetivo do bloco.
 
 **Como corrigir**: **cortar**. A remoção é a ação certa — prefira deletar a digressão inteira a encolhê-la pela metade (uma meia-digressão ainda desvia, e agora sem completar o raciocínio). Curiosidade histórica que valha a pausa cabe melhor numa fala do Eddy, na apresentação — não no corpo do texto.
 
@@ -113,6 +113,37 @@ Antes de marcar uma quebra como defeito, faça **três perguntas**:
 
 ---
 
+## 5. Referência a outra aula
+
+Cada aula é uma **unidade fechada**: o aluno que só tem este material precisa conseguir estudá-lo inteiro. Toda remissão a outra aula quebra isso — manda o aluno buscar fora o que deveria estar dentro.
+
+**O que procurar**
+
+- Remissão ao passado: *"como vimos na Aula 02"*, *"a estrutura da aula anterior"*, *"o nó já apresentado"*, *"retomando"*.
+- Remissão ao futuro: *"tema de aula futura"*, *"na próxima aula"*, *"aula própria mais adiante"*, *"veremos em breve"*.
+- Subtítulos de ponte: *"Ponte com a Aula 01"*, *"O que já sabemos"*.
+- Posicionamento na sequência: *"agora que já temos vetor e custo"*, *"até o fim da disciplina"*, *"daqui para frente"*.
+- Encerramento que anuncia o próximo encontro.
+
+**Como corrigir** — decidir pela **necessidade do conceito nesta aula**:
+
+- **Necessário** → apagar a remissão e escrever a **explicação completa**, com definição e exemplo próprios. Repetir em várias aulas uma definição já dada em outra é o comportamento desejado, não desperdício.
+- **Não necessário** → cortar o trecho inteiro.
+
+Nomear um **tema da computação** continua permitido — *"a ordenação eficiente depende disso"*, *"é a base das árvores de busca"*. O que não se faz é transformar o tema em **anúncio de aula**.
+
+**Ruim**
+
+> Todos os algoritmos da Aula 02 gastavam O(1) de memória adicional. O fatorial recursivo gasta O(n). Manipular endereços explicitamente é tema de aula futura.
+
+**Bom**
+
+> Um algoritmo que só usa duas ou três variáveis auxiliares gasta O(1) de memória adicional, qualquer que seja o tamanho da entrada. O fatorial recursivo gasta O(n): são as n+1 chamadas pendentes ocupando lugar ao mesmo tempo.
+
+---
+
 ## Ordem de aplicação
 
-Numa passagem só, para cada trecho, rode os quatro na ordem: **ambiguidade → explicação → excesso → conexão**. Motivo prático: cortar excesso (3) antes de avaliar conexão (4) evita "consertar a ponte" de um parágrafo que ia ser removido de qualquer forma.
+Numa passagem só, para cada trecho, rode os cinco nesta ordem: **ambiguidade (1) → explicação (2) → excesso (3) → referência a outra aula (5) → conexão (4)**.
+
+A conexão fica por último de propósito. Cortar o excesso antes evita "consertar a ponte" de um parágrafo que ia sair de qualquer forma; e desamarrar as remissões antes evita avaliar a conexão de um trecho que ainda vai ser reescrito — trocar um *"como vimos na Aula 02"* pela explicação completa muda o parágrafo inteiro, e é depois disso que se pergunta se ele decorre do anterior.

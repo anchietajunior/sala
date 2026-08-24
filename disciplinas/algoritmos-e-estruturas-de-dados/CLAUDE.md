@@ -25,7 +25,7 @@ Complementar (quando agregam): **Wirth** — *Algoritmos e Estruturas de Dados* 
 
 - Cada aula vive em `aulaNN_tema/` — `NN` com dois dígitos, `tema` em snake_case sem acento.
 - Conteúdo escrito: `aulaNN_tema/aulaNN_tema.md` · diagramas: `aulaNN_tema/img/NN_descritor.svg` · apresentação: `aulaNN_tema/apresentacao.html`.
-- Código: **um único `.c` autossuficiente** por aula (`#include`s + structs + funções + `main`). **Sem arquivos `.h`** — modularização é tema de aula futura. Exercícios que pedem outro programa também são `.c` autônomos.
+- Código: **um único `.c` autossuficiente** por aula (`#include`s + structs + funções + `main`). **Sem arquivos `.h`** — o aluno lê o programa inteiro de cima a baixo. (Motivo interno, **não** escrever na aula: modularização tem aula própria.) Exercícios que pedem outro programa também são `.c` autônomos.
 - Numeração: usar o **próximo número** disponível, salvo pedido explícito. Nunca renumerar aulas existentes.
 
 ## Tipos de aula
@@ -48,11 +48,13 @@ A mecânica completa (estrutura de cada bloco e suas camadas, regras de código 
 
 Valem para todo material, inclusive pedidos parciais ("só os exercícios", "só o código"):
 
+
+- Simplicidade pedagócica é o nosso lema principal, explicar conceitos complexos para pessoas que não tem background nenhum em algoritmos e estruturas de dados e muito menos em conceitos complexos matemáticos.
+- Ser a ponte entre a complexidade e a simplicidade na explicação com exemplos de uso, metodologias pedagócias e principalmente visualização através de imagens.
 - **Não supor conhecimento prévio** — definir cada termo no primeiro uso; aula autocontida. Evitar conceitos de SO/Arquitetura (cache, paginação, MMU…) salvo se forem o tema da aula.
+- **Cada aula é uma unidade fechada** — nenhum material (`.md`, slides, `.c`, comentários) menciona outra aula. Nem anterior ("como vimos na Aula 02", "ponte com a Aula 01", "a estrutura da aula passada"), nem posterior ("tema de aula futura", "na próxima aula", "aula própria mais adiante"). Todo conceito de que a aula depende é **apresentado nela mesma**, com suas próprias palavras e seu próprio exemplo; o que não couber assim, fica de fora do material. A numeração das pastas organiza o professor — não é referência para o aluno.
 - **Vocabulário canônico**, sem coloquialismos para conceitos técnicos (nada de "tripa", "espiar", "cuspir"). Analogias narrativas são livres; sem siglas ou jargão local.
 - **Citar a bibliografia inline** já nas camadas iniciais do bloco 1 — não só no bloco de Referências.
 - **Não pular blocos nem camadas**, mesmo em temas simples.
-- **Exercícios no `.md`**: 3–5, progressão **implícita** (sem rótulo fácil/médio/difícil), **1 desafio** (o último), cada um com **"Resposta mínima aceitável"** explícita. **Toda aula tem ao menos 1 algoritmo para o aluno praticar**: em aula de implementação, implementar ou modificar uma função; em aula conceitual, executar um algoritmo passo a passo na mão (trace).
-- **Exercícios na apresentação**: o bloco de exercícios dos slides traz **sempre apenas 1**, e ele é **o exercício de implementação** — colocar de pé, em C, o que a aula acabou de mostrar (em aula conceitual, executar o algoritmo na mão). Os demais exercícios existem só no `.md`. A "Resposta mínima aceitável" continua obrigatória, revelada por clique.
 - **Código C didático**: o mais simples possível (o aluno vê C pela primeira vez) — sem `<stdbool.h>`, sem `const` em parâmetro, sem `fprintf(stderr)` (usar `printf` + `exit(1)`); nomes descritivos em PT; comentários explicam o **porquê** (autoexplicativos, sem rótulos como "I1"); liberar memória e tratar falha de `malloc`; compilar limpo com `gcc -Wall -Wextra`.
 - **Slides**: uma ideia por slide, voz que conversa; linha-ponte de contexto logo após o título; Eddy sempre em `<section>` dedicada; **SVG é o único diagrama**, vendor **local** (sem CDN); sem slide de "Roteiro".

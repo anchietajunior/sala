@@ -107,7 +107,7 @@ Cenários **universais**, sem siglas locais (sem "RU", "DCE", etc.). Fila do ban
 
 Cabeçalho: `## 5. Código em C`
 
-Frase introdutória curta. Em seguida um `>` blockquote explicando que **tudo vive em um único arquivo `tema.c`** e que a separação em `.h`/`.c` é tema de aula futura.
+Frase introdutória curta. Em seguida um `>` blockquote explicando que **tudo vive em um único arquivo `tema.c`** — `#include`s, structs, funções e `main()` — para que o aluno leia o programa inteiro de cima a baixo. **Não** anunciar aula futura sobre modularização: a aula é uma unidade fechada.
 
 Subheading `### tema.c — arquivo único` (ou similar) seguido do bloco de código completo em fence ` ```c `:
 

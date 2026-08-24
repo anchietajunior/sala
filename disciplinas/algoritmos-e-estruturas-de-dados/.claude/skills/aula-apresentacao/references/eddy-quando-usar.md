@@ -13,7 +13,7 @@ Eddy é o mascote-assistente da disciplina. Aparece em **slides dedicados** traz
 | Bloco                    | Usar Eddy? | O quê                                                |
 |--------------------------|------------|------------------------------------------------------|
 | Bloco 1, Camada 2 ou 4   | **Sim**    | Citação inline da bibliografia (Backes, Veloso & Pereira) |
-| Bloco 1, Camada 6        | Opcional   | Aponta para aula futura                              |
+| Bloco 1, Camada 6        | Opcional   | Nomeia um tema da computação onde o conceito reaparece (nunca "na próxima aula") |
 | Bloco 3                  | **Sim**    | Exemplo de aplicação real ou curiosidade histórica   |
 | Bloco 4 (analogias)      | Opcional   | Curiosidade relacionada à analogia                   |
 | Bloco 5 (código C)       | **Sim**    | Armadilha comum específica do trecho exibido          |

@@ -94,21 +94,22 @@ Este critério é sobre **registro e vocabulário**: o slide de sala de aula usa
 
 **O que procurar**
 
-- **Repetição entre aulas** — o slide reensina algo que a aula anterior já entregou. (Exige ter lido a aula anterior; é o achado mais frequente e o mais invisível.)
+- **Slide inteiro sobre tema de outra aula** — o slide desenvolve, do começo, um assunto que não é o desta aula e do qual o argumento daqui não depende. (Exige ter lido as outras aulas; é o achado mais invisível.)
 - **Repetição interna** — dois slides da mesma aula dizendo o mesmo com outras palavras.
 - **Slide de passagem** — não acrescenta ideia, só faz ponte que o slide seguinte já faria sozinho.
 - **Sub-bullet redundante** — item que reformula o item acima.
 
-**Retomada legítima × repetição (a distinção que salva o critério)**
+**Pré-requisito legítimo × slide fora do tema (a distinção que salva o critério)**
 
-Retomar é **permitido e desejável** quando o slide **referencia** o que já foi visto para construir uma conexão nova. É repetição quando **reensina** do zero.
+Cada aula é uma unidade fechada, então **conteúdo que também aparece em outra aula não é defeito** — a mesma definição pode e deve ser repetida em toda aula que dependa dela. O defeito é de **proporção**: um assunto de que a aula depende cabe em **uma linha dentro do slide que precisa dele**; se virou slide próprio com desenvolvimento completo, a aula saiu do seu tema.
 
-- ✅ *"Da Aula 01: acesso por índice custa O(1). É exatamente isso que a busca binária exige — e a lista encadeada não dá."* → referencia e conecta.
-- ❌ Um slide reexplicando o que é complexidade de tempo e de espaço, do começo.
+- ✅ *"Acesso por índice custa O(1) — uma multiplicação e uma soma, independentemente do tamanho. É disso que a busca binária depende."* → dá o pré-requisito em uma linha, dentro do slide que o usa, e sem citar outra aula.
+- ❌ Um slide inteiro reexplicando complexidade de tempo e de espaço, do começo, numa aula cujo tema não é complexidade.
+- ❌ *"Da Aula 01: acesso por índice custa O(1)."* → o conteúdo está certo, a remissão é proibida (critério 6).
 
-**Como corrigir**: **cortar**. Se o conteúdo é dependência real, comprimir em **uma linha de retomada** dentro do slide que precisa dela, em vez de manter slide próprio. Menos slides é o objetivo declarado — as faixas de `aula-apresentacao` (45–65 implementação / 35–50 conceitual) são **teto, não meta**.
+**Como corrigir**: **cortar o slide** e, se o conteúdo for dependência real, comprimir em **uma linha** dentro do slide que precisa dela — escrita nas palavras desta aula, sem apontar para outra. Menos slides é o objetivo declarado — as faixas de `aula-apresentacao` (45–65 implementação / 35–50 conceitual) são **teto, não meta**.
 
-**Ruim** *(real — Aula 02; a Aula 01 já tem o slide "Tempo × espaço")*
+**Ruim** *(slide próprio para um pré-requisito, numa aula cujo tema é busca)*
 
 ```html
 <h3>O que exatamente contamos</h3>
@@ -124,7 +125,7 @@ Retomar é **permitido e desejável** quando o slide **referencia** o que já fo
 
 ```html
 <h3>A operação básica desta aula: a comparação</h3>
-<p>Da Aula 01: medimos <strong>tempo</strong> em passos e <strong>espaço</strong> em memória adicional.
+<p>Medimos <strong>tempo</strong> em passos e <strong>espaço</strong> em memória adicional.
    Aqui o passo tem nome — cada <strong>comparação</strong> entre a chave e um elemento.</p>
 ```
 
@@ -207,10 +208,42 @@ Acrescentar `img/08_laco_infinito.svg`: o trecho `[6..7]` com `meio = 6` destaca
 
 ---
 
+## 6. Referência a outra aula
+
+Cada aula é uma **unidade fechada**. O aluno que assiste só a esta aula precisa sair dela inteiro; slide que aponta para fora manda ele buscar o que deveria estar aqui.
+
+**O que procurar** — em qualquer lugar do slide: corpo, `nota-rodape`, linha-ponte, `blockquote`, fala do Eddy, `alt` de imagem, comentário de código, encerramento.
+
+- Remissão ao passado: *"na Aula 02 vimos"*, *"a estrutura da aula passada"*, *"retomando o que já sabemos"*.
+- Remissão ao futuro: *"na próxima aula"*, *"tema de aula futura"*, *"aula própria mais adiante"*.
+- Posicionamento na sequência: *"já temos vetor e custo, agora recursão"*, *"até o fim da disciplina"*, *"tudo que vem daqui para frente"*.
+- Encerramento que anuncia o conteúdo do próximo encontro.
+
+**Como corrigir** — decidir pela necessidade do conceito **nesta** aula:
+
+- **Necessário** → apagar a remissão e dar o conceito em **uma linha**, nas palavras desta aula, dentro do slide que o usa. Ver a distinção de proporção no critério 3.
+- **Não necessário** → cortar a frase, ou o slide inteiro se ele só existia para isso.
+
+Nomear um **tema da computação** é permitido — *"a ordenação eficiente depende disso"*, *"é a base das árvores de busca"*. Transformar o tema em **anúncio de aula**, não.
+
+**Ruim**
+
+```html
+<p class="nota-rodape">Pilha é uma estrutura de dados com aula própria mais adiante.</p>
+```
+
+**Bom**
+
+```html
+<p class="nota-rodape">"Pilha" aqui é o nome dessa cadeia de chamadas à espera.</p>
+```
+
+---
+
 ## Ordem de aplicação
 
 Numa passagem só, por slide, rode nesta ordem:
 
-**3 (cortar) → 1 (ancorar termo) → 2 (registro) → 4 (código) → 5 (visualização)**
+**3 (cortar) → 6 (desamarrar remissão) → 1 (ancorar termo) → 2 (registro) → 4 (código) → 5 (visualização)**
 
-O motivo é econômico: decidir os cortes primeiro evita escrever código e desenhar SVG para um slide que ia sair de qualquer forma.
+Dois motivos, ambos econômicos. Decidir os cortes primeiro evita escrever código e desenhar SVG para um slide que ia sair de qualquer forma. E desamarrar as remissões logo em seguida evita ancorar termo (1) num slide cujo texto ainda vai ser reescrito — trocar *"na Aula 02 vimos X"* pela explicação de X muda o slide inteiro.

@@ -315,7 +315,7 @@
 
             <section>
                 <h3>Um único arquivo: <code>tema.c</code></h3>
-                <!-- Blockquote sobre .h ser tema de aula futura. -->
+                <!-- Blockquote: tudo num arquivo so, para ler de cima a baixo. Sem citar outra aula. -->
             </section>
 
             <!-- Várias <section> com fatias do código:
@@ -366,9 +366,9 @@
         <!-- ENCERRAMENTO -->
         <section class="capa">
             <h1>Fim — Tema</h1>
-            <h2>Próxima aula em breve</h2>
+            <h2>Perguntas</h2>
             <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
-                <Frase sobre o já visto + próximo passo da disciplina>
+                <Frase curta fechando o que ESTA aula entregou — sem teaser da seguinte>
             </p>
         </section>
 
