@@ -145,21 +145,10 @@ SELECT id, name, email FROM user;
 <section>
   <h2>A nossa API vira cliente de outro servidor</h2>
   <p style="font-size:.7em">A partir de hoje o backend são <strong>dois processos</strong>: o uvicorn (porta 8000) e o servidor MySQL (porta 3306) — e <strong>a nossa API é o cliente</strong> do banco.</p>
-  <div class="duas-colunas" style="font-size:.6em">
-    <div>
-      <p class="os-label">Mac</p>
-      <pre><code class="language-bash" data-trim>
-brew install mysql
-brew services start mysql
-mysql -u root
-      </code></pre>
-    </div>
-    <div>
-      <p class="os-label">Windows</p>
-      <p style="font-size:.95em">MySQL Installer (<em>Server only</em>) em<br><code>dev.mysql.com/downloads/installer</code><br>Define a senha do <code>root</code> na instalação.<br>Cliente: <strong>MySQL Command Line Client</strong>.</p>
-    </div>
-  </div>
-  <div class="nota">Homebrew: <code>root</code> nasce <strong>sem senha</strong>. Windows: o instalador <strong>obriga</strong> a definir uma — anote-a.</div>
+  <ul style="font-size:.7em">
+    <li>O MySQL é um servidor como o uvicorn: um processo que escuta uma porta e atende pedidos;</li>
+    <li>A conversa com ele passa pelo <strong>cliente de linha de comando</strong> do MySQL — é nele que o SQL desta aula é digitado.</li>
+  </ul>
 </section>
 
 <section>
