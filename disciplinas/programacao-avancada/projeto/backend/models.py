@@ -1,16 +1,22 @@
 from datetime import datetime
 
-# Field configura as colunas e SQLModel é a classe-mãe dos modelos
-from sqlmodel import Field, SQLModel
+# Tipos e funções do SQLAlchemy usados para definir as colunas
+from sqlalchemy import String, func
+from sqlalchemy.orm import Mapped, mapped_column
+
+# Classe-mãe declarativa, definida junto da infraestrutura de conexão
+from database import Base
 
 
-# Modelo User: table=True transforma a classe na tabela "user" do banco
-class User(SQLModel, table=True):
-    # Chave primária: nasce None e o banco preenche no INSERT
-    id: int | None = Field(default=None, primary_key=True)
-    name: str = Field(max_length=100)
+# Modelo User: cada atributo Mapped vira uma coluna da tabela "user"
+class User(Base):
+    __tablename__ = "user"
+
+    # Chave primária: inteiro + primary_key → PRIMARY KEY e AUTO_INCREMENT
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
     # unique=True: o banco recusa dois usuários com o mesmo email
-    email: str = Field(max_length=255, unique=True)
-    password: str = Field(max_length=255)
-    # Preenchido na criação do objeto, com a data/hora daquele momento
-    created_at: datetime = Field(default_factory=datetime.now)
+    email: Mapped[str] = mapped_column(String(255), unique=True)
+    password: Mapped[str] = mapped_column(String(255))
+    # O próprio banco preenche com a data/hora do INSERT
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())

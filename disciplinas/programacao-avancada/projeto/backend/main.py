@@ -1,39 +1,45 @@
 # Importa o FastAPI, a injeção de dependências (Depends) e a exceção de erros HTTP
 from fastapi import Depends, FastAPI, HTTPException
-# Base dos schemas, a sessão de banco e o construtor de consultas
-from sqlmodel import Session, SQLModel, select
+# Base dos schemas e configuração para ler objetos do ORM
+from pydantic import BaseModel, ConfigDict
+# select monta consultas SQL; Session é a sessão de banco do ORM
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 # Modelos (tabelas) e infraestrutura de conexão definidos nos outros módulos
 import models
-from database import engine, get_session
+from database import Base, engine, get_session
 
 # Cria no banco as tabelas dos modelos registrados que ainda não existem
-SQLModel.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 # Cria a instância da aplicação, que registra as rotas e atende as requisições
 app = FastAPI()
 
 
 # Schema de entrada: o corpo aceito ao criar/atualizar um livro (só o nome)
-class BookCreate(SQLModel):
+class BookCreate(BaseModel):
     name: str
 
 
 # Schema de saída: o formato do livro devolvido pela API (com id)
-class Book(SQLModel):
+class Book(BaseModel):
     id: int
     name: str
 
 
 # Schema de entrada do cadastro de usuário
-class UserCreate(SQLModel):
+class UserCreate(BaseModel):
     name: str
     email: str
     password: str
 
 
 # Schema de saída do usuário — sem a senha, que nunca volta na resposta
-class UserRead(SQLModel):
+class UserRead(BaseModel):
+    # from_attributes: permite montar o schema a partir de um objeto do ORM
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     email: str
@@ -119,7 +125,7 @@ def delete_book(book_id: int):
 def signup(user: UserCreate, session: Session = Depends(get_session)):
     # Monta a consulta e executa: existe alguém com este email?
     statement = select(models.User).where(models.User.email == user.email)
-    existing_user = session.exec(statement).first()
+    existing_user = session.scalars(statement).first()
     # 409 = conflito: o email já está em uso
     if existing_user is not None:
         raise HTTPException(status_code=409, detail="Email already registered")
