@@ -9,24 +9,20 @@
   <rect x="20" y="40" width="240" height="200" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
   <text x="140" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e6da4">Python — objetos</text>
   <g font-family="monospace" font-size="13.5" fill="#333">
-    <text x="32" y="100" font-size="11">class User(Base):</text>
-    <text x="60" y="124">id</text>
-    <text x="60" y="146">name</text>
-    <text x="60" y="168">email</text>
-    <text x="60" y="190">password</text>
-    <text x="60" y="212">created_at</text>
+    <text x="32" y="104" font-size="12">class Book(Base):</text>
+    <text x="60" y="136">id</text>
+    <text x="60" y="166">name</text>
+    <text x="60" y="196">created_at</text>
   </g>
 
   <!-- mundo das tabelas -->
   <rect x="520" y="40" width="240" height="200" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
-  <text x="640" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a6508">MySQL — tabela user</text>
-  <g font-family="monospace" font-size="13.5" fill="#333">
-    <text x="545" y="100">CREATE TABLE user (</text>
-    <text x="560" y="124">id ... PRIMARY KEY</text>
-    <text x="560" y="146">name VARCHAR(100)</text>
-    <text x="560" y="168">email ... UNIQUE</text>
-    <text x="560" y="190">password ...</text>
-    <text x="560" y="212">created_at DATETIME</text>
+  <text x="640" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a6508">MySQL — tabela book</text>
+  <g font-family="monospace" font-size="13" fill="#333">
+    <text x="540" y="104">CREATE TABLE book (</text>
+    <text x="555" y="136">id ... PRIMARY KEY</text>
+    <text x="555" y="166">name VARCHAR(255)</text>
+    <text x="555" y="196">created_at DATETIME</text>
   </g>
 
   <!-- tradutor -->
