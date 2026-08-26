@@ -43,9 +43,8 @@
 </section>
 
 <section>
-  <h2>Revisão — o estado do projeto</h2>
-  <p style="font-size:.7em">O CRUD de Books está <strong>completo</strong> — GET, POST, PUT e DELETE — com schemas Pydantic validando entrada e saída, e ids gerados por um contador monotônico.</p>
-  <p style="font-size:.7em;text-align:left;margin-top:.8em">Duas fraquezas atravessaram as aulas 02 e 03 sem solução:</p>
+  <h2>Nossos dados morrem a cada restart</h2>
+  <p style="font-size:.7em">O CRUD de Books está <strong>completo</strong> — GET, POST, PUT e DELETE — com schemas Pydantic validando entrada e saída, e ids gerados por um contador monotônico. E, ainda assim:</p>
   <ul style="font-size:.7em">
     <li><strong>Os dados morrem com o processo</strong> — todo restart devolve a lista aos três livros de fábrica;</li>
     <li><strong>O contador de ids é artesanal</strong> — mora na memória do processo e morre com ela.</li>
@@ -58,7 +57,7 @@
     <li><span class="tema-badge">T-7</span> Explicar o <strong>modelo relacional</strong>: tabela, linha, coluna, chave primária;</li>
     <li><span class="tema-badge">T-7</span> Escrever <strong>SQL</strong> básico no cliente do MySQL;</li>
     <li><span class="tema-badge">T-7</span> Definir <strong>ORM</strong> e comparar SQL cru com ORM;</li>
-    <li>Configurar FastAPI → SQLModel → MySQL e declarar o model <strong>User</strong>;</li>
+    <li>Configurar FastAPI → SQLAlchemy → MySQL e declarar o model <strong>User</strong>;</li>
     <li>Implementar a primeira rota persistente: <strong><code>POST /signup</code></strong>.</li>
   </ul>
 </section>
@@ -85,8 +84,8 @@
   <h2>O banco gera a chave primária sozinho</h2>
   <ul style="font-size:.7em">
     <li><strong>Auto-increment:</strong> um contador que só cresce, mantido pelo próprio banco;</li>
-    <li>É exatamente o nosso <code>next_book_id</code> da aula 03 — mas <strong>não morre com o processo</strong>;</li>
-    <li>Id de registro removido nunca é reaproveitado — a regra que implementamos à mão, agora garantida pelo banco;</li>
+    <li>É o papel do nosso <code>next_book_id</code> — mas <strong>não morre com o processo</strong>;</li>
+    <li>Id de registro removido nunca é reaproveitado — a regra que hoje mantemos à mão, agora garantida pelo banco;</li>
     <li>O contador artesanal se aposenta hoje.</li>
   </ul>
 </section>
@@ -128,7 +127,7 @@ VALUES ('Machado de Assis', 'machado@exemplo.com', 'segredo123');
 
 SELECT id, name, email FROM user;
   </code></pre>
-  <p style="font-size:.6em">No fim da aula, ninguém digita este <code>CREATE TABLE</code> — o ORM o escreve por nós.</p>
+  <p style="font-size:.6em">Este é o último <code>CREATE TABLE</code> digitado à mão — daqui em diante, quem o escreve é o ORM.</p>
 </section>
 
 <section>
@@ -144,7 +143,7 @@ SELECT id, name, email FROM user;
 <!-- ============ Live 1: MySQL no ar ============ -->
 
 <section>
-  <h2>Dois programas, de novo cliente-servidor</h2>
+  <h2>A nossa API vira cliente de outro servidor</h2>
   <p style="font-size:.7em">A partir de hoje o backend são <strong>dois processos</strong>: o uvicorn (porta 8000) e o servidor MySQL (porta 3306) — e <strong>a nossa API é o cliente</strong> do banco.</p>
   <div class="duas-colunas" style="font-size:.6em">
     <div>
@@ -206,14 +205,13 @@ DESCRIBE user;
 <section>
   <h2>O ORM é um tradutor</h2>
   <img src="img/orm-tradutor.png" alt="Diagrama do ORM traduzindo entre a classe User em Python e a tabela user no MySQL" style="width:100%;max-width:740px">
-  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · sqlmodel.tiangolo.com</p>
+  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · docs.sqlalchemy.org</p>
 </section>
 
 <section>
-  <h2>SQLModel</h2>
+  <h2>SQLAlchemy</h2>
   <ul style="font-size:.65em">
-    <li>O ORM da disciplina, criado por <strong>Sebastián Ramírez</strong> (2021) — o mesmo autor do FastAPI;</li>
-    <li>Não é um ORM do zero: é uma camada fina sobre o <strong>SQLAlchemy</strong> (Bayer, 2006, o mais maduro do Python) casada com o <strong>Pydantic</strong>, que já usamos desde a aula 03;</li>
+    <li>O ORM da disciplina, criado por <strong>Michael Bayer</strong> (2006) — o mais maduro do ecossistema Python e padrão de fato da indústria;</li>
     <li>Os padrões que estruturam os ORMs foram catalogados por <strong>Martin Fowler</strong> (PoEAA, 2002):
       <ul style="font-size:.9em">
         <li><em>Active Record</em> — o objeto sabe se salvar (<code>user.save()</code>);</li>
@@ -221,26 +219,26 @@ DESCRIBE user;
         <li><em>Unit of Work</em> — acumular mudanças e gravá-las juntas, numa transação;</li>
       </ul>
     </li>
-    <li>Herda do SQLAlchemy o <strong>Data Mapper</strong> e o <strong>Unit of Work</strong>: nossos objetos não têm <code>.save()</code> — quem grava é a <strong>Session</strong>.</li>
+    <li>O SQLAlchemy implementa o <strong>Data Mapper</strong> e o <strong>Unit of Work</strong>: nossos objetos não têm <code>.save()</code> — quem grava é a <strong>Session</strong>.</li>
   </ul>
-  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · sqlmodel.tiangolo.com</p>
+  <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · docs.sqlalchemy.org</p>
 </section>
 
 <section>
-  <h2>Por que SQLModel, e não SQLAlchemy direto</h2>
+  <h2>Duas fronteiras, duas declarações</h2>
   <table class="status-tab">
-    <tr><th></th><th>SQLAlchemy puro</th><th>SQLModel</th></tr>
-    <tr><td>Tabela</td><td><code>class User(Base)</code>, com <code>Mapped</code>/<code>mapped_column</code></td><td><code>class User(SQLModel, table=True)</code></td></tr>
-    <tr><td>Schema da API</td><td>uma <strong>segunda</strong> classe, em Pydantic</td><td>a mesma sintaxe, sem <code>table=True</code></td></tr>
-    <tr><td>Formas de declarar dados</td><td>duas</td><td>uma</td></tr>
+    <tr><th></th><th>Schema (Pydantic)</th><th>Model (SQLAlchemy)</th></tr>
+    <tr><td>Fronteira</td><td>JSON ↔ objeto</td><td>objeto ↔ linha</td></tr>
+    <tr><td>Declara</td><td><code>name: str</code></td><td><code>name: Mapped[str]</code></td></tr>
+    <tr><td>Trabalho</td><td>valida e filtra o que entra e sai da API</td><td>descreve a coluna que o banco cria e defende</td></tr>
   </table>
-  <p style="font-size:.62em;margin-top:.6em">Menos peças novas para o mesmo resultado — a lição é <strong>o ORM</strong>, não a API do ORM.</p>
+  <p style="font-size:.62em;margin-top:.6em">As declarações se parecem — um campo por linha, com tipo — mas cada uma é <strong>especializada na sua fronteira</strong>.</p>
 </section>
 
 <section>
   <h2>SQL cru × ORM</h2>
   <table class="status-tab">
-    <tr><th></th><th>SQL cru (driver direto)</th><th>ORM (SQLModel)</th></tr>
+    <tr><th></th><th>SQL cru (driver direto)</th><th>ORM (SQLAlchemy)</th></tr>
     <tr><td>Consulta</td><td>string SQL montada à mão</td><td><code>select(User).where(...)</code></td></tr>
     <tr><td>Resultado</td><td>tuplas cruas, conversão manual</td><td>objetos <code>User</code> prontos</td></tr>
     <tr><td>Schema</td><td><code>CREATE TABLE</code> à mão</td><td>gerado dos models (<code>create_all</code>)</td></tr>
@@ -266,36 +264,40 @@ DESCRIBE user;
   <ul style="font-size:.8em">
     <li>Objetos e relações não se encaixam: descompasso objeto-relacional;</li>
     <li>ORM traduz: classe ↔ tabela, atributo ↔ coluna, objeto ↔ linha;</li>
-    <li>SQLModel (Ramírez, 2021) sobre SQLAlchemy: <em>Data Mapper</em> + <em>Unit of Work</em> — a Session grava, o objeto não;</li>
+    <li>SQLAlchemy (Bayer, 2006): <em>Data Mapper</em> + <em>Unit of Work</em> — a Session grava, o objeto não;</li>
     <li>A tradução pode (e deve) ser lida: <code>echo=True</code>.</li>
   </ul>
 </section>
 
-<!-- ============ Live 2: SQLModel ============ -->
+<!-- ============ Live 2: SQLAlchemy ============ -->
 
 <section>
   <h2>Três dependências novas, uma por camada</h2>
   <pre><code class="language-bash" data-trim>
-pip install sqlmodel pymysql cryptography
+pip install sqlalchemy pymysql cryptography
 pip freeze &gt; requirements.txt
   </code></pre>
   <ul style="font-size:.65em">
-    <li><strong>sqlmodel</strong> — o ORM;</li>
+    <li><strong>sqlalchemy</strong> — o ORM;</li>
     <li><strong>pymysql</strong> — o driver: fala o protocolo do MySQL na porta 3306;</li>
     <li><strong>cryptography</strong> — exigida pelo PyMySQL para a autenticação do MySQL 8+;</li>
-    <li>O FastAPI não sabe que banco existe; o SQLModel traduz; o PyMySQL transporta.</li>
+    <li>O FastAPI não sabe que banco existe; o SQLAlchemy traduz; o PyMySQL transporta.</li>
   </ul>
-  <div class="nota">No <code>requirements.txt</code> aparece uma linha que ninguém pediu: <strong><code>SQLAlchemy</code></strong> — o motor sobre o qual o SQLModel é construído.</div>
 </section>
 
 <section>
   <h2>database.py — a conexão</h2>
   <pre><code class="language-python" data-trim>
-from sqlmodel import Session, create_engine
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, Session
 
 DATABASE_URL = "mysql+pymysql://root@127.0.0.1:3306/reading_tracker"
 
 engine = create_engine(DATABASE_URL, echo=True)
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 def get_session():
@@ -304,6 +306,7 @@ def get_session():
   </code></pre>
   <ul style="font-size:.6em">
     <li><strong>engine</strong> — ponto único de conexão (<code>echo=True</code>: didático e deliberado);</li>
+    <li><strong>Base</strong> — a classe-mãe declarativa: quem herda dela se registra como tabela no <em>metadata</em>;</li>
     <li><strong>get_session</strong> — o canal com o banco: cada requisição abre a sua sessão;</li>
     <li>O <code>with</code> fecha a sessão sozinho — no fim da requisição ou se a rota der erro.</li>
   </ul>
@@ -317,7 +320,7 @@ mysql+pymysql://root@127.0.0.1:3306/reading_tracker
  dialeto+driver user    host  porta   banco (caminho)
   </code></pre>
   <ul style="font-size:.65em">
-    <li>A anatomia da aula 03 lê a string inteira — o esquema virou <em>dialeto+driver</em>;</li>
+    <li>A anatomia de uma URI lê a string inteira — o esquema virou <em>dialeto+driver</em>;</li>
     <li>Root com senha (Windows): <code>root:minhasenha@...</code> — credenciais antes do <code>@</code>.</li>
   </ul>
   <p class="cite">RFC 3986 — Uniform Resource Identifier (URI): Generic Syntax, IETF, 2005</p>
@@ -328,29 +331,33 @@ mysql+pymysql://root@127.0.0.1:3306/reading_tracker
   <pre><code class="language-python" data-trim>
 from datetime import datetime
 
-from sqlmodel import Field, SQLModel
+from sqlalchemy import String, func
+from sqlalchemy.orm import Mapped, mapped_column
+
+from database import Base
 
 
-class User(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    name: str = Field(max_length=100)
-    email: str = Field(max_length=255, unique=True)
-    password: str = Field(max_length=255)
-    created_at: datetime = Field(default_factory=datetime.now)
+class User(Base):
+    __tablename__ = "user"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(255), unique=True)
+    password: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
   </code></pre>
-  <div class="nota">Compare com o <code>BookCreate</code> da aula 03: <strong>é a mesma sintaxe</strong>. A diferença cabe em duas palavras — <code>table=True</code>.</div>
+  <div class="nota">Compare com o schema <code>BookCreate</code>, que está no <code>main.py</code>: a forma é a mesma — um campo por linha —, mas aqui cada campo é <code>Mapped</code>: <strong>mapeado para uma coluna</strong>.</div>
 </section>
 
 <section>
   <h2>O model, linha a linha</h2>
   <ul style="font-size:.58em">
-    <li><code>table=True</code> — é ele que diz "esta classe <strong>é</strong> uma tabela"; sem ele, seria só um schema;</li>
-    <li><strong>Nenhum <code>__tablename__</code></strong>: o nome da classe em minúsculas vira o nome da tabela — <code>User</code> → <code>user</code>, já no singular do ADR-0002;</li>
-    <li><code>id: int | None</code> — "inteiro <em>ou</em> nada": antes do INSERT não há id; depois, o banco atribui um;</li>
-    <li><code>primary_key=True</code> num inteiro → <code>PRIMARY KEY</code> <strong>e</strong> <code>AUTO_INCREMENT</code>;</li>
-    <li><code>max_length=100</code> — o MySQL exige tamanho para <code>VARCHAR</code> (e o Pydantic valida a entrada com o mesmo número);</li>
+    <li><code>class User(Base)</code> — herdar de <code>Base</code> é o que diz "esta classe <strong>é</strong> uma tabela": no import, ela se registra no metadata;</li>
+    <li><code>__tablename__ = "user"</code> — o nome da tabela é declarado, não adivinhado — <code>lower_case_snake</code> no singular, como no ADR-0002;</li>
+    <li><code>primary_key=True</code> num inteiro → <code>PRIMARY KEY</code> <strong>e</strong> <code>AUTO_INCREMENT</code>: o objeto nasce sem id, o banco atribui um no INSERT;</li>
+    <li><code>String(100)</code> — o MySQL exige tamanho para <code>VARCHAR</code>: <code>Mapped[str]</code> escolhe o tipo, <code>String(100)</code> fixa a largura;</li>
     <li><code>unique=True</code> — a constraint mora <strong>no banco</strong>, não no Python;</li>
-    <li><code>default_factory=datetime.now</code> — <em>fábrica</em>: a função é chamada a cada objeto novo (com parênteses, todos nasceriam com a hora em que o programa subiu);</li>
+    <li><code>server_default=func.now()</code> — <em>server</em> porque quem preenche é o banco: vira o <code>DEFAULT CURRENT_TIMESTAMP</code>; <code>func.now()</code> é a função SQL <code>NOW()</code> escrita em Python;</li>
     <li>Convenção do ADR-0002: colunas de data/hora com sufixo <strong><code>_at</code></strong>.</li>
   </ul>
 </section>
@@ -359,18 +366,19 @@ class User(SQLModel, table=True):
   <h2>create_all — a tabela nasce do model</h2>
   <pre><code class="language-python" data-trim>
 from fastapi import Depends, FastAPI, HTTPException
-from sqlmodel import Session, SQLModel, select
+from pydantic import BaseModel, ConfigDict
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 import models
-from database import engine, get_session
+from database import Base, engine, get_session
 
-SQLModel.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 app = FastAPI()
   </code></pre>
   <ul style="font-size:.6em">
-    <li>Sumiu o <code>from pydantic import BaseModel</code>: o Pydantic continua embaixo, mas agora chegamos nele pelo <code>SQLModel</code>;</li>
-    <li>O <code>import models</code> vem <strong>antes</strong>: é ele que registra <code>User</code> no metadata do <code>SQLModel</code>;</li>
+    <li>O <code>import models</code> vem <strong>antes</strong>: é ele que registra <code>User</code> no metadata da <code>Base</code>;</li>
     <li>Na subida do uvicorn, o <code>echo</code> mostra o <strong><code>CREATE TABLE user (...)</code></strong> — o SQL do quadro, escrito pelo ORM;</li>
     <li>Conferir no mysql: <code>SHOW TABLES;</code> e <code>DESCRIBE user;</code>.</li>
   </ul>
@@ -388,13 +396,15 @@ app = FastAPI()
 <section>
   <h2>Schemas: a senha entra, mas nunca sai</h2>
   <pre><code class="language-python" data-trim>
-class UserCreate(SQLModel):
+class UserCreate(BaseModel):
     name: str
     email: str
     password: str
 
 
-class UserRead(SQLModel):
+class UserRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     email: str
@@ -402,8 +412,7 @@ class UserRead(SQLModel):
   <ul style="font-size:.6em">
     <li>O que entra não tem <code>id</code>; o que sai não tem <code>password</code> — o <code>response_model</code> é o filtro;</li>
     <li><code>UserRead</code>, não <code>User</code>: este nome já pertence ao model do banco;</li>
-    <li><strong>Sem <code>table=True</code></strong>: são schemas, não tabelas — a mesma classe-mãe, papéis diferentes;</li>
-    <li>Nenhuma configuração extra para ler <strong>atributos de objeto</strong> (<code>user.email</code>): todo schema SQLModel já sabe.</li>
+    <li><code>from_attributes=True</code> — o <code>UserRead</code> vai ler um <strong>objeto</strong> do ORM: campos em atributos (<code>user.email</code>), não em chaves (<code>user["email"]</code>).</li>
   </ul>
 </section>
 
@@ -417,7 +426,7 @@ def get_session():
   <ul style="font-size:.65em">
     <li><strong><code>Depends(get_session)</code></strong> — injeção de dependência: a rota declara o que precisa, o framework entrega pronto e garante o fechamento, com sucesso ou erro;</li>
     <li><code>yield</code>, não <code>return</code>: a função <em>entrega</em> a sessão, a rota roda, e só então o <code>with</code> fecha;</li>
-    <li>É a inversão de controle da aula 01, outra vez — <code>get_session</code> é o ensaio geral da autenticação da aula 10.</li>
+    <li>É inversão de controle: no FastAPI, recurso caro ou compartilhado — conexão, sessão, credencial — se <strong>declara</strong>, não se constrói dentro da rota.</li>
   </ul>
 </section>
 
@@ -436,7 +445,7 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
   <ul style="font-size:.6em">
     <li><code>add</code> — <strong>anota</strong> a intenção; nada foi ao banco;</li>
     <li><code>commit</code> — executa o <code>INSERT</code> e confirma a transação;</li>
-    <li><code>refresh</code> — recarrega o que <strong>o banco</strong> gerou: o <code>id</code>. É aqui que o <code>int | None</code> deixa de ser <code>None</code>;</li>
+    <li><code>refresh</code> — recarrega o que <strong>o banco</strong> gerou: o <code>id</code> do auto-increment e o <code>created_at</code> do <code>DEFAULT</code>;</li>
     <li>É o <em>Unit of Work</em> da teoria, ao vivo.</li>
   </ul>
   <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002</p>
@@ -452,8 +461,8 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
   <ul style="font-size:.7em">
     <li><code>SELECT * FROM user;</code> — a senha está lá, <strong>legível</strong>;</li>
     <li>Qualquer pessoa com acesso ao banco lê a senha de todos os usuários;</li>
-    <li>É um erro grave — e <strong>deliberado</strong> (ADR-0001): fica assim até a aula 09;</li>
-    <li>Esse defeito abrirá a discussão de <strong>hash de senha</strong> na aula de autenticação.</li>
+    <li>É um erro grave — e <strong>deliberado</strong> (ADR-0001);</li>
+    <li>A correção é guardar apenas o <strong>hash</strong> da senha, nunca ela — mecanismo que pertence à autenticação, que o projeto ainda não tem.</li>
   </ul>
   <div class="nota">No quadro, anotar: <strong>"dívida: senha em texto puro"</strong>.</div>
 </section>
@@ -473,14 +482,14 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
   <p style="font-size:.65em">Signup repetido → <strong>500</strong> (<code>IntegrityError: Duplicate entry</code>). O banco defendeu a regra, mas 5xx diz "culpa do servidor" — e a culpa é do pedido. O código certo: <strong>409 Conflict</strong>.</p>
   <pre><code class="language-python" data-trim>
     statement = select(models.User).where(models.User.email == user.email)
-    existing_user = session.exec(statement).first()
+    existing_user = session.scalars(statement).first()
     if existing_user is not None:
         raise HTTPException(status_code=409,
                             detail="Email already registered")
   </code></pre>
   <ul style="font-size:.6em">
     <li>Primeira consulta ORM do projeto — a expressão Python <em>parece</em> SQL;</li>
-    <li><code>statement</code> é a pergunta montada; <code>exec</code> executa e <code>first()</code> devolve o objeto ou <code>None</code>;</li>
+    <li><code>statement</code> é a pergunta montada; <code>scalars</code> executa e devolve objetos <code>User</code>; <code>first()</code> pega o primeiro ou <code>None</code>;</li>
     <li>No <code>echo</code>: <code>SELECT ... WHERE user.email = %s</code>, com parâmetro.</li>
   </ul>
   <div class="nota">Duas requisições simultâneas com o mesmo e-mail? Ambas passam pelo <code>if</code> — a última defesa é o <code>UNIQUE</code> no banco. É para isso que a constraint existe.</div>
@@ -491,12 +500,12 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
 <section>
   <h2>Exercício em sala</h2>
   <ol style="font-size:.7em">
-    <li>Adicione ao model o campo <code>age: int</code>;</li>
+    <li>Adicione ao model o campo <code>age: Mapped[int]</code>;</li>
     <li>Adicione <code>age: int</code> aos dois schemas e passe-o na criação do <code>models.User(...)</code>;</li>
     <li>Teste um signup e observe a falha — <em>por que a coluna não existe, se o model tem o campo?</em></li>
     <li>Corrija: <code>DROP TABLE user;</code>, reinicie o uvicorn e assista ao <code>create_all</code> recriar a tabela — agora com <code>age</code>.</li>
   </ol>
-  <div class="nota">Exercício descartável: a branch da disciplina segue <strong>sem</strong> o campo <code>age</code> — desfazer, <code>DROP TABLE user;</code> e reiniciar. A aula 05 parte do model original.</div>
+  <div class="nota">Exercício descartável: o projeto segue <strong>sem</strong> o campo <code>age</code> — desfazer, <code>DROP TABLE user;</code> e reiniciar, para o model voltar ao original.</div>
 </section>
 
 <section>
@@ -504,20 +513,10 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
   <ul style="font-size:.65em">
     <li>Modelo relacional (Codd, 1970): tabelas, linhas, colunas, chaves primárias e constraints que o banco defende sozinho;</li>
     <li>SQL (Chamberlin &amp; Boyce, 1974): a língua declarativa desse mundo — escrita à mão uma vez, na vida;</li>
-    <li>ORM: classe ↔ tabela, atributo ↔ coluna, objeto ↔ linha; SQLModel é <em>Data Mapper</em> com <em>Unit of Work</em> (<code>add</code>/<code>commit</code>/<code>refresh</code>), e uma classe só serve de tabela ou de schema conforme leve ou não o <code>table=True</code>;</li>
+    <li>ORM: classe ↔ tabela, atributo ↔ coluna, objeto ↔ linha; o SQLAlchemy é <em>Data Mapper</em> com <em>Unit of Work</em> (<code>add</code>/<code>commit</code>/<code>refresh</code>) — models na fronteira do banco, schemas Pydantic na fronteira da API;</li>
     <li>O <code>create_all</code> materializou o model <code>User</code> na tabela que antes escrevemos à mão;</li>
     <li><code>POST /signup</code>: a primeira rota persistente — 201 sem senha na resposta, 409 no e-mail repetido;</li>
-    <li>Dívida anotada no quadro: <strong>senha em texto puro</strong> (ADR-0001 → aula 09).</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Próxima aula: relações 1:N</h2>
-  <p style="font-size:.8em">O User mora no banco, mas os Books continuam morrendo a cada restart — e livro não tem dono.</p>
-  <ul style="font-size:.75em">
-    <li>Model <strong>Book</strong> no MySQL, com <strong>chave estrangeira</strong> para o User — a primeira <em>relação</em> do banco relacional;</li>
-    <li>O CRUD da aula 03 refeito sobre o banco;</li>
-    <li>As rotas <code>/users/{user_id}/books</code> do nosso mapa REST.</li>
+    <li>Dívida anotada no quadro: <strong>senha em texto puro</strong> (ADR-0001).</li>
   </ul>
 </section>
 
@@ -526,8 +525,8 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
   <ul style="font-size:.55em">
     <li>CODD, E. F. <em>A Relational Model of Data for Large Shared Data Banks</em>. Communications of the ACM, 1970. (o artigo que fundou o modelo relacional)</li>
     <li>CHAMBERLIN, D.; BOYCE, R. <em>SEQUEL: A Structured English Query Language</em>. ACM SIGFIDET, 1974. (a origem do SQL)</li>
-    <li>FOWLER, M. <em>Patterns of Enterprise Application Architecture</em>. Addison-Wesley, 2002. (Active Record, Data Mapper, Unit of Work — a base conceitual do SQLAlchemy, motor sobre o qual o SQLModel é construído)</li>
-    <li>Documentação oficial do SQLModel — sqlmodel.tiangolo.com.</li>
+    <li>FOWLER, M. <em>Patterns of Enterprise Application Architecture</em>. Addison-Wesley, 2002. (Active Record, Data Mapper, Unit of Work — a base conceitual do SQLAlchemy)</li>
+    <li>Documentação oficial do SQLAlchemy — docs.sqlalchemy.org.</li>
     <li>Documentação oficial do MySQL — dev.mysql.com/doc.</li>
     <li>Documentação oficial do FastAPI — fastapi.tiangolo.com.</li>
     <li>Documentação oficial do Pydantic — docs.pydantic.dev.</li>

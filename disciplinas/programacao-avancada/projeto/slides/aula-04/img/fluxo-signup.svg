@@ -9,7 +9,7 @@
   <line x1="205" y1="30" x2="205" y2="255" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6,5"/>
   <text x="205" y="20" text-anchor="middle" font-size="12.5" fill="#777">fronteira JSON ↔ objeto (Pydantic)</text>
   <line x1="595" y1="30" x2="595" y2="255" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6,5"/>
-  <text x="595" y="20" text-anchor="middle" font-size="12.5" fill="#777">fronteira objeto ↔ linha (SQLModel)</text>
+  <text x="595" y="20" text-anchor="middle" font-size="12.5" fill="#777">fronteira objeto ↔ linha (SQLAlchemy)</text>
 
   <!-- ida -->
   <rect x="20" y="60" width="160" height="70" rx="10" fill="#f4f2ee" stroke="#888" stroke-width="2"/>
