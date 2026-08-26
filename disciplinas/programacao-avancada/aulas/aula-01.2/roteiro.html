@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 01.2 — Programação Orientada a Objetos com Python</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 820px; margin: 3rem auto; padding: 0 1.5rem; color: #222; line-height: 1.65; }
+  h1 { font-size: 1.6rem; border-bottom: 2px solid #222; padding-bottom: .4rem; }
+  h2 { font-size: 1.25rem; margin-top: 2.4rem; }
+  h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+  code, pre { font-family: 'SF Mono', Consolas, monospace; background: #f4f2ee; border-radius: 4px; }
+  code { padding: .1rem .35rem; font-size: .9em; }
+  pre { padding: .9rem 1.1rem; overflow-x: auto; font-size: .88em; line-height: 1.5; }
+  .meta { background: #f4f2ee; border-radius: 6px; padding: 1rem 1.3rem; }
+  .meta p { margin: .3rem 0; }
+  .tempo { display: inline-block; background: #222; color: #fff; border-radius: 999px; padding: .1rem .7rem; font-size: .8em; font-family: Consolas, monospace; vertical-align: middle; }
+  .teoria { border-left: 4px solid #2e6da4; padding-left: 1rem; margin: 1.4rem 0; }
+  .codigo { border-left: 4px solid #b8860b; padding-left: 1rem; margin: 1.4rem 0; }
+  .pergunta { background: #eef4fa; border: 1px solid #c5d9ec; border-radius: 6px; padding: .7rem 1rem; font-style: italic; margin: .8rem 0; }
+  .os { font-weight: bold; font-size: .85em; color: #555; margin-bottom: -.5rem; display: block; margin-top: .8rem; }
+  .checkpoint { background: #eef7ee; border: 1px solid #bcd9bc; border-radius: 6px; padding: .8rem 1.1rem; margin: 1.4rem 0; }
+  .atencao { background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .8rem 1.1rem; margin: 1rem 0; font-size: .95em; }
+  .fonte { font-size: .85em; color: #555; margin-top: .4rem; }
+</style>
+</head>
+<body>
+
+<h1>Aula 01.2 — Programação Orientada a Objetos com Python</h1>
+
+<div class="meta">
+  <p><strong>Duração:</strong> ~2h &nbsp;·&nbsp; <strong>Branch:</strong> nenhuma — aula extra de fundamentos</p>
+  <p><strong>Natureza:</strong> aula complementar, entre a 01 e a 02. Não evolui o Reading Tracker: prepara a turma para <em>ler</em> o código que as aulas 03 a 06 vão escrever. Todo o código de hoje vive num arquivo de laboratório, <code>oop_lab.py</code>, criado <strong>fora</strong> do repositório do projeto.</p>
+  <p><strong>Objetivos — ao final, o aluno consegue:</strong></p>
+  <ul>
+    <li>Explicar o que são classe, objeto, atributo e método, e por que a POO surgiu;</li>
+    <li>Escrever classes com <code>__init__</code>, atributos e métodos, e explicar o papel do <code>self</code>;</li>
+    <li>Aplicar encapsulamento e <code>@property</code> para expor dados derivados sem armazená-los;</li>
+    <li>Distinguir herança ("é-um") de composição ("tem-um") e escolher entre as duas;</li>
+    <li>Identificar polimorfismo e <em>duck typing</em> em código Python;</li>
+    <li>Ler uma classe declarativa como <code>class Book(SQLModel, table=True)</code> e explicar o que cada símbolo faz.</li>
+  </ul>
+</div>
+
+<h2><span class="tempo">5 min</span> Ponte — já estamos usando objetos desde a aula 01</h2>
+
+<p>Retome as três linhas escritas na aula anterior e leia-as em voz alta com outros olhos:</p>
+
+<pre>from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Reading Tracker API"}</pre>
+
+<ul>
+  <li><code>FastAPI</code> é uma <strong>classe</strong>; <code>FastAPI()</code> cria um <strong>objeto</strong> a partir dela.</li>
+  <li><code>app</code> é esse objeto — uma aplicação com estado próprio (a tabela de rotas).</li>
+  <li><code>app.get</code> é um <strong>método</strong> desse objeto: uma função que só existe porque pertence a ele.</li>
+</ul>
+
+<p>Mensagem de abertura: <em>a turma já escreveu código orientado a objetos sem ter estudado o assunto</em>. Hoje fechamos essa lacuna, porque das aulas 03 em diante quase toda linha nova será uma classe.</p>
+
+<p>Escreva no quadro (ou projete) o alvo da aula — código real da aula 05, que hoje ainda é críptico:</p>
+
+<pre>class Book(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    title: str = Field(max_length=200)
+    pages: int
+    user_id: int = Field(foreign_key="user.id")
+
+    user: User | None = Relationship(back_populates="books")</pre>
+
+<div class="pergunta">Para a turma: "Quantos símbolos desse trecho vocês conseguem explicar agora? Vamos repetir a pergunta no fim da aula."</div>
+
+<h2><span class="tempo">10 min</span> Teoria — por que a orientação a objetos existe</h2>
+
+<div class="teoria">
+<p><strong>Origem.</strong> A POO nasce em Oslo, no Norwegian Computing Center, com a linguagem <strong>Simula 67</strong>, de <strong>Ole-Johan Dahl e Kristen Nygaard</strong> (1967). O problema deles era <em>simulação</em>: representar navios, filas e portos, em que cada entidade simulada tem estado próprio e comportamento próprio. Foi para isso que inventaram <code>class</code>, objeto e herança — e por esse trabalho receberam o Prêmio Turing de 2001.</p>
+
+<p><strong>O termo.</strong> <em>Object-oriented programming</em> foi cunhado por <strong>Alan Kay</strong>, no Xerox PARC, e materializado na linguagem <strong>Smalltalk</strong> (1972). Para Kay, o centro da ideia não são as classes, e sim as mensagens trocadas entre objetos que escondem seu estado interno.</p>
+
+<p><strong>Definição formal</strong> (Grady Booch, <em>Object-Oriented Analysis and Design with Applications</em>, 3ª ed., 2007):</p>
+<blockquote>"An object has state, behavior, and identity."</blockquote>
+<p class="fonte">Estado (os dados que ele guarda), comportamento (o que ele sabe fazer) e identidade (ele é ele mesmo, distinto de outro objeto com os mesmos dados).</p>
+
+<p><strong>Propósito — o problema concreto que resolve.</strong> Sem POO, dados e comportamento andam separados:</p>
+<pre>book = {"title": "Clean Code", "pages": 464, "current_page": 120}
+
+
+def progress_percentage(book):
+    return book["current_page"] / book["pages"] * 100</pre>
+<ul>
+  <li>Nada garante que o dicionário tenha as chaves certas — <code>book["titulo"]</code> só explode em produção;</li>
+  <li>A função que entende de livro mora longe do dado de livro; num arquivo com 40 funções, ninguém sabe quais servem para quê;</li>
+  <li>Qualquer parte do programa pode inventar um campo novo no dicionário.</li>
+</ul>
+<p>A POO junta estado e comportamento numa única unidade e coloca uma fronteira em volta dela.</p>
+
+<div class="atencao">Em Python isso não é opcional nem exótico: a linguagem é orientada a objetos desde a origem (Guido van Rossum, 1991). <code>int</code>, <code>str</code>, <code>list</code> e até funções e módulos são objetos. Demonstre no interpretador: <code>(5).__class__</code>, <code>"abc".upper()</code>, <code>type(print)</code>.</div>
+
+<div class="pergunta">Para a turma: "Se todo dicionário aceita qualquer chave, quem garante que o livro que chega na sua função tem <code>pages</code>? (resposta honesta: ninguém — e é por isso que existe Pydantic, que veremos na aula 03)"</div>
+</div>
+
+<h2><span class="tempo">20 min</span> Live-coding 1 — classes, objetos, <code>self</code></h2>
+
+<div class="codigo">
+<p>Crie <code>oop_lab.py</code> numa pasta qualquer <strong>fora</strong> do repositório do projeto (código de laboratório não entra no Reading Tracker) e rode com <code>python oop_lab.py</code>.</p>
+
+<span class="os">Mac</span>
+<pre>mkdir -p ~/oop-lab
+cd ~/oop-lab
+python3 oop_lab.py</pre>
+
+<span class="os">Windows (PowerShell)</span>
+<pre>mkdir $HOME\oop-lab
+cd $HOME\oop-lab
+python oop_lab.py</pre>
+
+<h3>Passo 1 — a classe como molde</h3>
+<p><em>Por quê:</em> a classe descreve <em>o que todo livro tem e faz</em>; o objeto é um livro concreto.</p>
+
+<pre>class Book:
+    def __init__(self, title, pages):
+        self.title = title
+        self.pages = pages
+        self.current_page = 0
+
+    def progress_percentage(self):
+        return self.current_page / self.pages * 100</pre>
+
+<p>Explique linha a linha, sem pressa:</p>
+<ul>
+  <li><code>class Book:</code> — declara um novo <strong>tipo</strong>. Por convenção (PEP 8), nomes de classe em <code>CapWords</code>.</li>
+  <li><code>__init__</code> — o <strong>inicializador</strong>: roda automaticamente quando um objeto é criado, e sua função é dar o estado inicial ao objeto. Os nomes cercados por dois sublinhados são os <em>dunder methods</em> ("double underscore"), chamados pela linguagem, não por nós.</li>
+  <li><code>self</code> — <strong>o próprio objeto</strong>, recebido como primeiro parâmetro. Não é palavra reservada; é convenção universal.</li>
+  <li><code>self.title = title</code> — cria o atributo no objeto. Sem <code>self.</code>, seria só uma variável local que morre no fim da função.</li>
+  <li><code>progress_percentage</code> — um <strong>método</strong>: função que pertence à classe e recebe o objeto em <code>self</code>.</li>
+</ul>
+
+<h3>Passo 2 — instanciar e observar a independência dos objetos</h3>
+
+<pre>clean_code = Book("Clean Code", 464)
+pragmatic = Book("The Pragmatic Programmer", 352)
+
+clean_code.current_page = 120
+
+print(clean_code.progress_percentage())   # 25.86...
+print(pragmatic.current_page)             # 0 — estado independente
+print(type(clean_code))                   # &lt;class '__main__.Book'&gt;
+print(isinstance(clean_code, Book))       # True
+print(clean_code is pragmatic)            # False — identidade</pre>
+
+<p>Amarre com a definição de Booch, ponto a ponto: <strong>estado</strong> (<code>title</code>, <code>pages</code>, <code>current_page</code>), <strong>comportamento</strong> (<code>progress_percentage</code>), <strong>identidade</strong> (<code>clean_code is pragmatic</code> é falso mesmo que todos os campos fossem iguais).</p>
+
+<h3>Passo 3 — desmistificar o <code>self</code></h3>
+<p><em>Por quê:</em> é o ponto que mais confunde a turma, e a explicação cabe em duas linhas.</p>
+
+<pre>print(clean_code.progress_percentage())        # forma usual
+print(Book.progress_percentage(clean_code))    # exatamente a mesma chamada</pre>
+
+<p>Diga a frase que resolve o assunto: <strong><code>objeto.metodo()</code> é açúcar sintático para <code>Classe.metodo(objeto)</code></strong>. O <code>self</code> não é mágica — é o primeiro argumento, passado pelo interpretador.</p>
+
+<h3>Passo 4 — <code>__repr__</code>: como o objeto se apresenta</h3>
+
+<pre>    def __repr__(self):
+        return f"Book(title={self.title!r}, pages={self.pages})"</pre>
+
+<p>Antes: <code>print(clean_code)</code> mostra <code>&lt;__main__.Book object at 0x104f2b1d0&gt;</code>. Depois: <code>Book(title='Clean Code', pages=464)</code>. Explique que a linguagem procura métodos com nomes convencionados — <code>__repr__</code>, <code>__str__</code>, <code>__len__</code>, <code>__eq__</code> — e que implementá-los faz o objeto se comportar como um tipo nativo.</p>
+
+<h3>Passo 5 — atributo de classe × atributo de instância</h3>
+
+<pre>class Book:
+    genre = "unknown"          # atributo de classe: existe um só, compartilhado
+
+    def __init__(self, title, pages):
+        self.title = title     # atributo de instância: um por objeto
+        ...</pre>
+
+<p><strong>Agora a armadilha</strong> — vale digitar e rodar, porque ninguém acredita antes de ver. Um atributo de classe <em>mutável</em> (uma lista, um dicionário) é <strong>um objeto só</strong>, compartilhado por todas as instâncias:</p>
+
+<pre>class Book:
+    tags = []                  # mutável e compartilhado — a armadilha
+
+    def __init__(self, title):
+        self.title = title
+
+
+clean_code = Book("Clean Code")
+pragmatic = Book("The Pragmatic Programmer")
+
+clean_code.tags.append("favorito")
+
+print(clean_code.tags)     # ['favorito']
+print(pragmatic.tags)      # ['favorito'] — mudou junto!
+print(clean_code.tags is pragmatic.tags)   # True — é a MESMA lista</pre>
+
+<p>A correção é criar a lista <em>por objeto</em>, dentro do <code>__init__</code>:</p>
+
+<pre>class Book:
+    def __init__(self, title):
+        self.title = title
+        self.tags = []         # uma lista nova a cada objeto</pre>
+
+<div class="atencao">A regra geral: <strong>valor padrão que precisa ser novo a cada objeto não pode morar no corpo da classe</strong> — tem de ser criado na inicialização. Guardem a armadilha; ela reaparece na aula 04, quando um campo precisar da data e hora do momento em que <em>cada</em> registro é criado. Não antecipe o código de lá: por ora, a lição é a lista compartilhada que vocês acabaram de ver.</div>
+
+<div class="pergunta">Para a turma: "Se dois alunos cadastram livros diferentes, quantos objetos <code>Book</code> existem em memória? E quantas classes <code>Book</code>?"</div>
+</div>
+
+<div class="checkpoint">
+<strong>Checkpoint:</strong> todos rodaram <code>oop_lab.py</code>, viram a porcentagem de <code>clean_code</code> mudar sem afetar <code>pragmatic</code>, e o <code>print</code> do objeto passou a exibir o <code>__repr__</code>. Erro típico: esquecer o <code>self</code> no parâmetro do método (<code>TypeError: ... takes 0 positional arguments but 1 was given</code>) — aproveite o erro, ele confirma que o objeto é passado automaticamente.
+</div>
+
+<h2><span class="tempo">15 min</span> Encapsulamento e propriedades</h2>
+
+<div class="teoria">
+<p><strong>Origem e propósito.</strong> A ideia é anterior à própria POO: <strong>David Parnas</strong>, em <em>On the Criteria To Be Used in Decomposing Systems into Modules</em> (Communications of the ACM, 1972), propõe o <strong>ocultamento de informação</strong> — cada módulo deve esconder uma decisão de projeto sujeita a mudar, expondo apenas uma interface estável. Encapsulamento é essa ideia aplicada ao objeto: quem usa o objeto conversa com a interface pública e ignora como o estado é guardado por dentro.</p>
+
+<p><strong>Como Python trata o assunto.</strong> Não existem <code>private</code> nem <code>public</code>. Existe convenção, sustentada pela cultura da linguagem:</p>
+<ul>
+  <li><code>nome</code> — público, faz parte da interface;</li>
+  <li><code>_nome</code> — uso interno, "não mexa" (PEP 8); o interpretador não impede nada;</li>
+  <li><code>__nome</code> — sofre <em>name mangling</em>: vira <code>_Classe__nome</code>, o que evita colisão em herança. Não é segurança.</li>
+</ul>
+<p class="fonte">Fonte: PEP 8 — <em>Style Guide for Python Code</em>, seção "Designing for Inheritance".</p>
+</div>
+
+<div class="codigo">
+<h3>Passo 6 — <code>@property</code>: dado derivado, não armazenado</h3>
+<p><em>Por quê:</em> esta é a peça de POO mais importante para o nosso domínio. O <strong>Reading Progress</strong> do Reading Tracker é, por definição, <em>derivado</em>: a porcentagem é a página atual sobre o total, e "concluído" é 100% — <strong>não existe campo de status armazenado</strong>. Uma <code>@property</code> é exatamente isso: um cálculo que se lê como se fosse um atributo.</p>
+
+<pre>class Book:
+    def __init__(self, title, pages):
+        self.title = title
+        self.pages = pages          # passa pelo setter e já é validado
+        self.current_page = 0
+
+    @property
+    def pages(self):
+        return self._pages
+
+    @pages.setter
+    def pages(self, value):
+        if value &lt;= 0:
+            raise ValueError("pages must be greater than zero")
+        self._pages = value
+
+    @property
+    def progress_percentage(self):
+        return round(self.current_page / self.pages * 100, 1)
+
+    @property
+    def is_finished(self):
+        return self.current_page &gt;= self.pages
+
+    def __repr__(self):
+        return f"Book(title={self.title!r}, pages={self.pages})"</pre>
+
+<pre>clean_code = Book("Clean Code", 464)
+clean_code.current_page = 464
+
+print(clean_code.progress_percentage)   # 100.0 — sem parênteses
+print(clean_code.is_finished)           # True
+
+Book("Broken", 0)                       # ValueError: pages must be greater than zero</pre>
+
+<p>Pontos a destacar:</p>
+<ul>
+  <li><code>progress_percentage</code> é <strong>lido como atributo</strong> e <strong>calculado como método</strong>. Nunca fica desatualizado, porque não é guardado.</li>
+  <li>O <code>setter</code> centraliza a validação: <em>um único lugar</em> impede um livro com zero páginas, venha o valor de onde vier. É o mesmo raciocínio que a aula 15 aplicará às validações da API.</li>
+  <li>A propriedade permite <strong>trocar a implementação sem quebrar quem usa</strong>: hoje <code>self._pages</code> é um inteiro; amanhã poderia vir de outra fonte, e <code>book.pages</code> continuaria funcionando. É Parnas em três linhas.</li>
+</ul>
+
+<div class="atencao">Mencione de passagem, sem aprofundar: <code>@staticmethod</code> (função que vive na classe mas não usa o objeto) e <code>@classmethod</code> (recebe a classe em vez do objeto, útil para construtores alternativos). A turma vai encontrá-los em bibliotecas.</div>
+
+<div class="pergunta">Para a turma: "Se guardássemos <code>progress_percentage</code> como um campo comum, o que aconteceria depois de o usuário registrar uma nova página? (resposta: o campo mentiria até alguém lembrar de atualizá-lo — o clássico dado derivado desatualizado)"</div>
+</div>
+
+<h2><span class="tempo">20 min</span> Herança</h2>
+
+<div class="teoria">
+<p><strong>Origem.</strong> A subclasse nasce no Simula 67 (Dahl e Nygaard) e serve a dois propósitos que convém não confundir: <strong>reutilizar</strong> implementação e <strong>declarar um subtipo</strong> ("todo EBook é um Book").</p>
+
+<p><strong>Definição formal do subtipo</strong> — o Princípio da Substituição, de <strong>Barbara Liskov</strong> (<em>Data Abstraction and Hierarchy</em>, OOPSLA, 1987):</p>
+<blockquote>"If for each object o1 of type S there is an object o2 of type T such that for all programs P defined in terms of T, the behavior of P is unchanged when o1 is substituted for o2, then S is a subtype of T."</blockquote>
+<p class="fonte">Em português de sala de aula: <em>onde o programa espera um Book, um EBook tem de funcionar sem surpresas</em>. Se a subclasse quebra a expectativa da superclasse, a herança está errada — mesmo que o código compile.</p>
+</div>
+
+<div class="codigo">
+<h3>Passo 7 — herdar e estender</h3>
+
+<pre>class EBook(Book):
+    def __init__(self, title, pages, file_format):
+        super().__init__(title, pages)     # reaproveita a inicialização do Book
+        self.file_format = file_format
+
+    def __repr__(self):
+        return f"EBook(title={self.title!r}, format={self.file_format!r})"</pre>
+
+<pre>fluent = EBook("Fluent Python", 1012, "epub")
+fluent.current_page = 506
+
+print(fluent.progress_percentage)      # 50.0 — herdado, não reescrito
+print(isinstance(fluent, EBook))       # True
+print(isinstance(fluent, Book))        # True — "é-um"
+print(fluent)                          # usa o __repr__ da subclasse</pre>
+
+<ul>
+  <li><code>class EBook(Book)</code> — a classe entre parênteses é a <strong>superclasse</strong> (ou classe-mãe).</li>
+  <li><code>super().__init__(...)</code> — chama o inicializador da superclasse. Esquecê-lo é o erro mais comum: o objeto nasce sem <code>title</code> e sem <code>pages</code>.</li>
+  <li>Redefinir <code>__repr__</code> é <strong>sobrescrita</strong> (<em>override</em>): a versão da subclasse tem precedência.</li>
+  <li>Python decide qual método usar percorrendo a <strong>MRO</strong> (<em>Method Resolution Order</em>) — visível em <code>EBook.__mro__</code>. Mostre a saída e siga adiante; herança múltipla não é assunto de hoje.</li>
+</ul>
+
+<h3>Passo 8 — a herança que a turma vai usar no projeto</h3>
+<p><em>Por quê:</em> nas aulas 03 a 06, quase toda classe do projeto será uma subclasse de algo que outra pessoa escreveu. É aqui que a herança deixa de ser exercício.</p>
+
+<p>Projete o código real (preview das aulas 03 e 04) e leia à luz do que acabou de ser visto:</p>
+
+<pre># aula 03 — Pydantic (Samuel Colvin, 2017)
+class BookCreate(BaseModel):
+    title: str
+    pages: int
+
+
+# aula 04 — SQLModel, construído sobre Pydantic e SQLAlchemy
+class User(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(max_length=100)</pre>
+
+<ul>
+  <li>Herdar de <code>BaseModel</code> traz <strong>de graça</strong>: inicializador por palavras-chave, validação de tipos, conversão para JSON e mensagens de erro. Nós escrevemos duas linhas; a superclasse fornece centenas.</li>
+  <li><code>SQLModel</code> herda de <code>BaseModel</code>: a hierarquia é <code>BaseModel → SQLModel → User</code>. Por isso um modelo de tabela também valida dados como um schema.</li>
+  <li>Herança também organiza o <em>nosso</em> código. O <code>main.py</code> da aula 05 repete <code>title</code> e <code>pages</code> em <code>BookCreate</code> e <code>BookRead</code>; com uma base comum, a parte compartilhada é escrita uma vez:</li>
+</ul>
+
+<pre>class BookBase(SQLModel):
+    title: str
+    pages: int
+
+
+class BookCreate(BookBase):
+    pass
+
+
+class BookRead(BookBase):
+    id: int
+    user_id: int</pre>
+
+<div class="atencao">Deixe explícito: <strong>não vamos alterar o projeto agora</strong> — os schemas seguem escritos por extenso enquanto forem pequenos, porque a duplicação ainda é mais legível que a indireção. Guardem o padrão; ele reaparece quando os schemas crescerem.</div>
+
+<div class="pergunta">Para a turma: "<code>EBook</code> herda de <code>Book</code> e um e-book não tem páginas físicas. Isso quebra Liskov? Em que situação a herança seria a escolha errada aqui?"</div>
+</div>
+
+<h2><span class="tempo">10 min</span> Polimorfismo e <em>duck typing</em></h2>
+
+<div class="teoria">
+<p><strong>Origem do termo.</strong> <em>Polimorfismo</em> entra na computação com <strong>Christopher Strachey</strong> (<em>Fundamental Concepts in Programming Languages</em>, 1967), que separa polimorfismo paramétrico de <em>ad hoc</em>; a taxonomia moderna vem de <strong>Cardelli e Wegner</strong> (<em>On Understanding Types, Data Abstraction, and Polymorphism</em>, ACM Computing Surveys, 1985).</p>
+<p><strong>Propósito:</strong> escrever um código que serve a vários tipos — quem chama não precisa saber com qual está falando.</p>
+</div>
+
+<div class="codigo">
+<pre>library = [
+    Book("Clean Code", 464),
+    EBook("Fluent Python", 1012, "epub"),
+]
+
+for item in library:
+    print(item)          # cada objeto se apresenta do seu jeito</pre>
+
+<p>Um único <code>print</code>, dois comportamentos: a linguagem escolhe o <code>__repr__</code> do tipo concreto em tempo de execução.</p>
+
+<h3><em>Duck typing</em> — a variante pythônica</h3>
+<p>"Se anda como um pato e grasna como um pato, é um pato": Python não exige parentesco, exige que o objeto tenha o método usado.</p>
+
+<pre>class Magazine:                 # não herda de Book
+    def __init__(self, name, pages):
+        self.name = name
+        self.pages = pages
+        self.current_page = 0
+
+    @property
+    def progress_percentage(self):
+        return round(self.current_page / self.pages * 100, 1)
+
+
+def print_progress(item):
+    print(f"{item.progress_percentage}%")
+
+
+print_progress(Book("Clean Code", 464))          # funciona
+print_progress(Magazine("Superinteressante", 90))  # funciona também</pre>
+
+<p><code>print_progress</code> não pede um <code>Book</code>: pede <em>qualquer coisa</em> que tenha <code>progress_percentage</code>. Vantagem: flexibilidade. Preço: o erro só aparece quando o método falta, em tempo de execução — motivo pelo qual anotações de tipo e validação (Pydantic, aula 03) ganharam tanto espaço no ecossistema.</p>
+
+<div class="atencao">Prepare a turma para o que vem na semana seguinte: na aula 02 vocês vão escrever <code>raise HTTPException(status_code=404, ...)</code>. <code>HTTPException</code> <strong>herda de</strong> <code>Exception</code> — e é por ser um subtipo que o <code>raise</code> a aceita e que o FastAPI consegue capturá-la junto com qualquer outra exceção. Quando a linha aparecer, ela já estará explicada.</div>
+</div>
+
+<h2><span class="tempo">10 min</span> Composição — "tem-um" em vez de "é-um"</h2>
+
+<div class="teoria">
+<p>Duas formas de um objeto usar outro:</p>
+<ul>
+  <li><strong>Herança</strong> — relação "<em>é-um</em>": <code>EBook</code> <em>é um</em> <code>Book</code>;</li>
+  <li><strong>Composição</strong> — relação "<em>tem-um</em>": <code>User</code> <em>tem</em> <code>Books</code>.</li>
+</ul>
+<p><strong>Recomendação clássica</strong> (Gamma, Helm, Johnson e Vlissides, <em>Design Patterns</em>, 1994):</p>
+<blockquote>"Favor object composition over class inheritance."</blockquote>
+<p class="fonte">Motivo: a herança amarra a subclasse à implementação da superclasse — mudou a mãe, quebraram as filhas. A composição amarra apenas a uma interface, e pode ser trocada em tempo de execução.</p>
+</div>
+
+<div class="codigo">
+<pre>class User:
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+        self.books = []                      # tem-um (na verdade, tem-vários)
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    @property
+    def finished_count(self):
+        return sum(1 for book in self.books if book.is_finished)</pre>
+
+<pre>user = User("Ana", "ana@example.com")
+user.add_book(Book("Clean Code", 464))
+user.add_book(EBook("Fluent Python", 1012, "epub"))
+
+print(len(user.books))          # 2
+print(user.finished_count)      # 0</pre>
+
+<p>Ligue diretamente ao projeto: esta é a relação <strong>1:N</strong> que a aula 05 grava no banco. O que aqui é uma lista Python, lá é uma chave estrangeira mais uma relação do ORM — mas o desenho é o mesmo:</p>
+
+<pre># projeto/backend/models.py — aula 05
+class User(SQLModel, table=True):
+    books: list["Book"] = Relationship(back_populates="user")</pre>
+
+<div class="pergunta">Para a turma: "<code>User</code> deveria herdar de <code>Admin</code>, ou <code>Admin</code> herdar de <code>User</code>, ou nenhum dos dois? (o projeto escolhe nenhum: <em>Admin é um User com uma flag</em> — decisão que a aula 11 revisita)"</div>
+</div>
+
+<h2><span class="tempo">10 min</span> POO declarativa — anotações e decorators</h2>
+
+<div class="teoria">
+<p>Falta explicar o estilo de classe que a turma mais vai escrever no projeto — e que não se parece com nada do que fizemos até aqui: sem <code>__init__</code>, sem <code>self</code>, sem métodos.</p>
+
+<pre>class BookCreate(SQLModel):
+    title: str
+    pages: int</pre>
+
+<p><strong>Primeiro ponto: <code>title: str</code> não é atribuição, é anotação.</strong> Nada é atribuído a <code>title</code>; a linha apenas registra que o nome <code>title</code> tem o tipo <code>str</code>. As anotações ficam guardadas num dicionário da classe (PEP 526 — <em>Syntax for Variable Annotations</em>, Python 3.6, 2016). Demonstre no interpretador:</p>
+
+<pre>&gt;&gt;&gt; class BookCreate(SQLModel):
+...     title: str
+...     pages: int
+...
+&gt;&gt;&gt; BookCreate.__annotations__
+{'title': &lt;class 'str'&gt;, 'pages': &lt;class 'int'&gt;}</pre>
+
+<p>A superclasse <strong>lê essas anotações</strong> e, a partir delas, gera o inicializador, a validação e a conversão para JSON. É por isso que <code>BookCreate(title="Clean Code", pages=464)</code> funciona sem que ninguém tenha escrito um <code>__init__</code>. As anotações de tipo em si vêm do PEP 484 (2014); o Pydantic, de Samuel Colvin (2017), foi quem transformou anotação em validação em tempo de execução.</p>
+
+<p><strong>Segundo ponto: <code>table=True</code></strong> é um argumento nomeado passado na <em>definição</em> da classe (PEP 3115). Quem o recebe é a maquinaria que constrói a classe — a <em>metaclasse</em> — e é ela que decide criar também uma tabela no banco. Cite o nome e siga: metaclasses não são assunto de graduação inicial; o que importa é saber que <code>table=True</code> é um interruptor, não um atributo.</p>
+
+<p><strong>Terceiro ponto: o <code>@</code>.</strong> Um decorator é apenas uma função que recebe uma função e devolve algo no lugar dela (PEP 318, Python 2.4, 2004).</p>
+
+<pre>def log_call(function):
+    def wrapper(*args, **kwargs):
+        print(f"calling {function.__name__}")
+        return function(*args, **kwargs)
+    return wrapper
+
+
+@log_call
+def read_health():
+    return {"status": "Ok"}
+
+
+read_health()          # imprime "calling read_health" e devolve o dicionário</pre>
+
+<p>Com isso, <code>@property</code> e <code>@app.get("/health")</code> deixam de ser mágica: o primeiro transforma o método num atributo calculado; o segundo <strong>não</strong> altera a função — ele a registra na tabela de rotas do objeto <code>app</code> e a devolve intacta. Este é o mecanismo da <em>inversão de controle</em> discutida na aula 01: nós declaramos, o framework chama.</p>
+</div>
+
+<div class="checkpoint">
+<strong>Checkpoint — feche o ciclo da abertura.</strong> Volte ao trecho projetado no início da aula e peça que a turma leia em voz alta, símbolo a símbolo: <code>class Book(SQLModel, table=True)</code> é uma classe que herda de <code>SQLModel</code> com um interruptor de tabela ligado; <code>id: int | None</code> é uma anotação de tipo; <code>Field(...)</code> configura a coluna; <code>Relationship(...)</code> é a composição 1:N do lado do ORM.
+</div>
+
+<h2><span class="tempo">15 min</span> Exercício em sala</h2>
+
+<p>Individual, em <code>oop_lab.py</code>, usando tudo o que foi visto:</p>
+
+<ol>
+  <li>Crie a classe <code>Author</code> com <code>name</code> e <code>country</code>, e um <code>__repr__</code> legível.</li>
+  <li>Faça <code>Book</code> receber um <code>Author</code> no <code>__init__</code> (composição) e exiba o nome do autor no <code>__repr__</code>.</li>
+  <li>Crie <code>AudioBook(Book)</code> com o atributo extra <code>duration_minutes</code> e sobrescreva <code>__repr__</code>.</li>
+  <li>Crie <code>Library</code> com uma lista de livros, o método <code>add(book)</code> e a propriedade <code>average_progress</code> (média das porcentagens; devolva <code>0.0</code> se a biblioteca estiver vazia).</li>
+  <li>Monte uma biblioteca com um <code>Book</code> e um <code>AudioBook</code>, avance páginas e imprima a média.</li>
+</ol>
+
+<p><strong>Gabarito (para o professor):</strong></p>
+
+<pre>class Author:
+    def __init__(self, name, country):
+        self.name = name
+        self.country = country
+
+    def __repr__(self):
+        return f"Author(name={self.name!r})"
+
+
+class Book:
+    def __init__(self, title, pages, author):
+        self.title = title
+        self.pages = pages
+        self.author = author
+        self.current_page = 0
+
+    @property
+    def progress_percentage(self):
+        return round(self.current_page / self.pages * 100, 1)
+
+    @property
+    def is_finished(self):
+        return self.current_page &gt;= self.pages
+
+    def __repr__(self):
+        return f"Book(title={self.title!r}, author={self.author.name!r})"
+
+
+class AudioBook(Book):
+    def __init__(self, title, pages, author, duration_minutes):
+        super().__init__(title, pages, author)
+        self.duration_minutes = duration_minutes
+
+    def __repr__(self):
+        return f"AudioBook(title={self.title!r}, minutes={self.duration_minutes})"
+
+
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add(self, book):
+        self.books.append(book)
+
+    @property
+    def average_progress(self):
+        if not self.books:
+            return 0.0
+        total = sum(book.progress_percentage for book in self.books)
+        return round(total / len(self.books), 1)
+
+
+martin = Author("Robert C. Martin", "US")
+library = Library()
+library.add(Book("Clean Code", 464, martin))
+library.add(AudioBook("Clean Architecture", 432, martin, 780))
+
+library.books[0].current_page = 232
+print(library.books)                 # __repr__ de cada tipo
+print(library.average_progress)      # 25.0</pre>
+
+<p>Circule pela sala. Erros esperados: <code>super().__init__()</code> esquecido em <code>AudioBook</code>; parênteses indevidos ao ler uma <code>@property</code> (<code>book.progress_percentage()</code> → <code>TypeError: 'float' object is not callable</code>); divisão por zero na biblioteca vazia — que é justamente o item 4 do enunciado.</p>
+
+<h2><span class="tempo">5 min</span> Fechamento</h2>
+
+<ul>
+  <li><strong>Síntese:</strong> objeto é estado + comportamento + identidade; <code>self</code> é o próprio objeto passado como primeiro argumento; <code>@property</code> expõe dado derivado sem armazená-lo; herança é "é-um", composição é "tem-um" — e a recomendação é preferir a segunda; <em>duck typing</em> troca parentesco por presença do método; classes declarativas funcionam porque a superclasse lê as anotações de tipo.</li>
+  <li><strong>Por que esta aula existe:</strong> a partir da aula 03, o projeto passa a ser escrito em classes o tempo todo — schemas Pydantic, modelos SQLModel, relações 1:N. Sem esta base, o aluno copia o código; com ela, o aluno o lê.</li>
+  <li><strong>Gancho para a aula 02:</strong> "Voltamos ao Reading Tracker. Na aula 01, digitamos um endereço e apareceu um JSON. Na próxima, dissecamos a viagem entre uma coisa e outra — DNS, HTTP, o papel real do uvicorn — e criamos as primeiras rotas de <em>books</em>, ainda com dicionários crus. Guardem o incômodo: na aula 03, esses dicionários viram classes."</li>
+</ul>
+
+</body>
+</html>
