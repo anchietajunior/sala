@@ -35,7 +35,6 @@ Abra http://127.0.0.1:8000
 | POST | /api/books | Cria um livro; corpo validado pelo schema BookCreate |
 | PUT | /api/books/{book_id} | Atualiza o nome de um livro (404 se não existir) |
 | DELETE | /api/books/{book_id} | Remove um livro; responde 204 sem corpo (404 se não existir) |
-| POST | /signup | Cadastra um User; e-mail repetido responde 409 |
 
 A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
 
