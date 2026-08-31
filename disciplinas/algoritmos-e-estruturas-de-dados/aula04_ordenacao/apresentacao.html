@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 04 — Ordenação | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.44em;
+            line-height: 1.32;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+        .reveal .resposta pre {
+            font-size: 0.85em;
+            margin: 0.3em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <!-- 1. CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- 2. TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 04</p>
+            <h1>Ordenação</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                Bubble sort · Merge sort · Quick sort
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — três caminhos para o mesmo
+                resultado, com custos que diferem por fatores de milhares.
+            </p>
+        </section>
+
+        <!-- ============================ BLOCO 1 — CONCEITO ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>As cartas na mão</h3>
+                <p style="text-align: left;">
+                    Você recebe seis cartas de uma vez e quer segurá-las em ordem.
+                    Ninguém precisa ensinar: você vê a que está fora de lugar e a encaixa
+                    onde deveria estar.
+                </p>
+                <blockquote>
+                    Existe <strong>mais de um caminho</strong> para chegar à mesma mão ordenada.
+                    O que muda é <strong>quanto trabalho</strong> cada caminho custa.
+                </blockquote>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>O que é ordenar</h3>
+                <p style="text-align: left;">
+                    <span class="destaque">Ordenar</span> é rearranjar os elementos para que
+                    fiquem em uma ordem determinada. Aqui: um vetor de inteiros, em ordem
+                    <strong>crescente</strong>.
+                </p>
+                <p style="text-align: left;">
+                    O valor que decide a ordem chama-se <span class="destaque">chave</span>.
+                    Num vetor de inteiros a chave é o próprio número — mas poderia ser a nota
+                    de um aluno ou o preço de um produto.
+                </p>
+            </section>
+            <section>
+                <h3>Só existem duas ações</h3>
+                <p style="text-align: left;">
+                    Todo algoritmo desta aula é feito de duas ações elementares — e contá-las
+                    é como se mede o custo, independentemente da máquina.
+                </p>
+                <ul style="font-size: 0.85em;">
+                    <li><span class="destaque">Comparar</span> — qual destes dois é o menor?</li>
+                    <li><span class="destaque">Movimentar</span> — trocar dois de lugar, ou
+                        copiar um para outro lugar.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Os três algoritmos</h3>
+                <p style="text-align: left;">
+                    Mesma entrada, mesmo resultado, três estratégias diferentes.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><span class="destaque">Bubble sort</span> — compara <strong>vizinhos</strong>
+                        e troca os que estão fora de ordem.</li>
+                    <li><span class="destaque">Merge sort</span> — divide em duas metades, ordena
+                        cada uma e <strong>intercala</strong> as duas.</li>
+                    <li><span class="destaque">Quick sort</span> — escolhe um <strong>pivô</strong>
+                        e joga os menores para um lado, os maiores para o outro.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Divisão e conquista</h3>
+                <p style="text-align: left;">
+                    Merge sort e quick sort pertencem à mesma família de estratégia:
+                    resolver um problema quebrando-o em <strong>problemas menores do mesmo
+                    tipo</strong> e combinando os resultados.
+                </p>
+                <blockquote>
+                    O bubble sort não é dessa família — ele ataca o vetor inteiro de uma vez,
+                    repetidas vezes.
+                </blockquote>
+            </section>
+        <section class="eddy-slide">
+            <div class="eddy-card">
+                <div class="eddy-avatar">
+                    <img src="../assets/bot/eddy.svg" alt="Eddy">
+                </div>
+                <div class="eddy-balao">
+                    <strong class="eddy-nome">Eddy</strong>
+                    <p class="eddy-fala">
+                        Turma, tanto Backes quanto Veloso e Pereira apresentam primeiro os métodos
+                        elementares e só depois os de divisão e conquista. A ordem não é acidental:
+                        é olhando o bubble sort custar caro que a gente entende por que valeu a pena
+                        inventar os outros dois.
+                        <cite>Backes, capítulo de métodos de ordenação · Veloso &amp; Pereira, capítulo de ordenação</cite>
+                    </p>
+                </div>
+            </div>
+        </section>
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>O vetor e o índice</h3>
+                <p style="text-align: left;">
+                    Um <span class="destaque">vetor</span> guarda elementos lado a lado, e cada
+                    um é acessado por um número inteiro chamado <span class="destaque">índice</span>.
+                </p>
+                <p style="text-align: left;">
+                    O que importa aqui: ler <code>v[0]</code> ou <code>v[7]</code> custa
+                    <strong>o mesmo</strong>. Ninguém precisa passar pelos anteriores.
+                </p>
+            </section>
+            <section>
+                <h3>A troca precisa de uma terceira variável</h3>
+                <p style="text-align: left;">
+                    Parece detalhe, mas é onde quase todo mundo erra na primeira vez.
+                </p>
+                <pre><code class="language-c" data-trim data-noescape>
+int guardado = vetor[i];   /* sem esta linha, o valor de vetor[i] se perde */
+vetor[i] = vetor[j];
+vetor[j] = guardado;
+</code></pre>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Sem <code>guardado</code>, a primeira atribuição apaga
+                    <code>vetor[i]</code> antes de ele ser copiado — e o vetor termina com o
+                    mesmo elemento duas vezes.
+                </p>
+            </section>
+            <section>
+                <h3>Recursão e caso base</h3>
+                <p style="text-align: left;">
+                    Dois dos três algoritmos <strong>chamam a si mesmos</strong> para resolver
+                    uma versão menor do mesmo problema. Isso é <span class="destaque">recursão</span>.
+                </p>
+                <blockquote>
+                    Para não repetir para sempre, toda recursão precisa de um
+                    <strong>caso base</strong>. Aqui ele é sempre o mesmo: um trecho de zero ou
+                    um elemento já está ordenado.
+                </blockquote>
+            </section>
+            <section>
+                <h3>Bubble sort — o que uma passagem faz</h3>
+                <p style="text-align: left;">
+                    Uma <span class="destaque">passagem</span> caminha do início ao fim comparando
+                    cada elemento com o vizinho da direita e trocando quando o da esquerda é maior.
+                </p>
+                <blockquote>
+                    Toda passagem termina com o <strong>maior elemento ainda solto</strong> na
+                    última posição. Ele vence todas as comparações e é arrastado até a borda.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Logo, depois da passagem <em>i</em> as <em>i</em> últimas posições estão
+                    resolvidas — e a passagem seguinte já pode parar antes delas.
+                </p>
+            </section>
+            <section>
+                <h3>A parada antecipada</h3>
+                <p style="text-align: left;">
+                    Se uma passagem inteira termina <strong>sem nenhuma troca</strong>, não existe
+                    mais nenhum par de vizinhos fora de ordem — o vetor está ordenado.
+                </p>
+                <blockquote>
+                    Uma linha de código a mais. Num vetor que já chega ordenado, o custo cai de
+                    <strong>O(n²)</strong> para <strong>O(n)</strong>.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.8em;">Lê-se: de "cresce no ritmo de n ao
+                    quadrado" para "cresce no ritmo de n".</p>
+            </section>
+            <section>
+                <h3>Merge sort — a pergunta é outra</h3>
+                <p style="text-align: left;">
+                    Em vez de "como conserto este vetor?", o merge sort pergunta:
+                    <strong>"como junto duas partes que já estão certas?"</strong>
+                </p>
+                <p style="text-align: left;">
+                    Junta-se dois montes de cartas já arrumados: olha a de cima de cada monte,
+                    pega a menor, repete. É a <span class="destaque">intercalação</span>.
+                </p>
+            </section>
+            <section>
+                <h3>Duas propriedades da intercalação</h3>
+                <p style="text-align: left;">
+                    Elas explicam o custo e a memória extra do merge sort inteiro.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li>Cada comparação decide o destino de <strong>um</strong> elemento — juntar
+                        <em>n</em> elementos custa menos de <em>n</em> comparações: é
+                        <span class="destaque">O(n)</span>.</li>
+                    <li>Ela lê dos dois trechos ao mesmo tempo, então precisa escrever em um
+                        <span class="destaque">vetor auxiliar</span>. Essa é a memória que o merge
+                        sort cobra.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>O algoritmo inteiro em três linhas</h3>
+                <p style="text-align: left;">
+                    Com a intercalação pronta, o resto é quase trivial de enunciar.
+                </p>
+                <blockquote>
+                    Para ordenar um trecho: ordene a metade esquerda, ordene a metade direita,
+                    intercale as duas.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Repare <strong>onde mora o trabalho</strong>: a ida só divide, sem comparar
+                    nada. Toda a ordenação acontece na volta.
+                </p>
+            </section>
+            <section>
+                <h3>Por que dá n log n</h3>
+                <p style="text-align: left;">
+                    A divisão pela metade cria <strong>níveis</strong>: um trecho de <em>n</em>,
+                    depois dois de <em>n</em>/2, depois quatro de <em>n</em>/4.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li>Cada nível percorre os <em>n</em> elementos uma vez — custo <em>n</em>.</li>
+                    <li>O número de níveis é quantas vezes dá para dividir <em>n</em> por 2 até
+                        chegar a 1 — isso é o <strong>logaritmo de n na base 2</strong>.</li>
+                </ul>
+                <p><span class="destaque">n níveis × n por nível → O(n log n)</span></p>
+                <p style="text-align: left; font-size: 0.75em;">Lê-se: "cresce no ritmo de n vezes
+                    o log de n". E vale sempre — a divisão não depende dos valores.</p>
+            </section>
+            <section>
+                <h3>Quick sort — dividir pelo valor</h3>
+                <p style="text-align: left;">
+                    O quick sort também divide, mas divide <strong>pelo valor</strong>, não pela
+                    posição.
+                </p>
+                <p style="text-align: left;">
+                    Ele escolhe um elemento como <span class="destaque">pivô</span> e rearranja o
+                    trecho: menores ou iguais à esquerda, maiores à direita. Isso é o
+                    <span class="destaque">particionamento</span>.
+                </p>
+            </section>
+            <section>
+                <h3>A posição definitiva</h3>
+                <p style="text-align: left;">
+                    É a afirmação mais forte de todo o algoritmo — e ela vale sempre.
+                </p>
+                <blockquote>
+                    Terminado o particionamento, o pivô está <strong>exatamente</strong> onde
+                    estará no vetor ordenado. Nenhuma chamada seguinte precisa tocá-lo.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.8em;">
+                    O motivo: a posição final de um elemento depende só de <strong>quantos são
+                    menores que ele</strong> — e é isso que o particionamento acaba de contar.
+                </p>
+            </section>
+            <section>
+                <h3>Tudo depende de onde o pivô cai</h3>
+                <p style="text-align: left;">
+                    Aqui está a força e a fraqueza do quick sort, no mesmo lugar.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li>Pivô perto do <strong>meio dos valores</strong>: dois lados de tamanho
+                        parecido, mesmos níveis do merge sort → <strong>O(n log n)</strong>.</li>
+                    <li>Pivô sempre no <strong>extremo</strong>: um lado vazio, o outro com
+                        <em>n</em> − 1 → <em>n</em> níveis → <strong>O(n²)</strong>.</li>
+                </ul>
+                <blockquote>
+                    Com o pivô fixo no último elemento, o pior caso é o vetor
+                    <strong>já ordenado</strong>.
+                </blockquote>
+            </section>
+            <section>
+                <h3>O que vale sempre — as invariantes</h3>
+                <p style="text-align: left;">
+                    São as afirmações que precisam continuar verdadeiras a cada passo. É o que
+                    garante que o algoritmo está correto.
+                </p>
+                <ul style="font-size: 0.75em;">
+                    <li><strong>Bubble</strong> — depois da passagem <em>i</em>, as <em>i</em>
+                        últimas posições têm os maiores, já em ordem.</li>
+                    <li><strong>Merge</strong> — a intercalação só recebe trechos que já estão
+                        ordenados.</li>
+                    <li><strong>Quick</strong> — depois de particionar, os dois lados nunca mais
+                        se comparam entre si.</li>
+                    <li><strong>Nos três</strong> — o vetor final tem exatamente os mesmos
+                        elementos do inicial.</li>
+                </ul>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>O problema, dito com precisão</h3>
+                <p style="text-align: left;">
+                    Ordenar não é só "sair em ordem". A definição cobra duas coisas ao mesmo tempo.
+                </p>
+                <pre><code class="language-c" data-trim data-noescape>
+Entrada: uma sequencia de n numeros   A  = (a1, a2, ..., an)
+Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
+         com  a'1 &lt;= a'2 &lt;= ... &lt;= a'n
+</code></pre>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Devolver <code>(1, 2, 3)</code> para a entrada <code>(3, 3, 1)</code> está
+                    <strong>errado</strong>: está em ordem, mas perdeu um 3 e inventou um 2.
+                </p>
+            </section>
+            <section>
+                <h3>Estável ou não</h3>
+                <p style="text-align: left;">
+                    Um algoritmo é <span class="destaque">estável</span> quando elementos de
+                    <strong>chaves iguais</strong> terminam na mesma ordem em que estavam.
+                </p>
+                <p style="text-align: left;">
+                    Numa lista de alunos já em ordem alfabética, reordenada por nota: o estável
+                    entrega os de mesma nota <strong>ainda em ordem alfabética</strong>.
+                </p>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Bubble e merge são estáveis. Quick <strong>não</strong> é — uma troca pode
+                    arremessar um elemento por cima de outros iguais.
+                </p>
+            </section>
+            <section>
+                <h3>Quanta memória extra</h3>
+                <p style="text-align: left;">
+                    Um algoritmo é <span class="destaque">in-place</span> quando usa memória
+                    adicional constante — o mesmo tanto para dez ou dez milhões de elementos.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Bubble</strong> — in-place: dois índices e uma variável de troca.</li>
+                    <li><strong>Merge</strong> — <strong>não</strong>: o vetor auxiliar é O(n).</li>
+                    <li><strong>Quick</strong> — não aloca nada, mas as chamadas recursivas
+                        pendentes ocupam memória: O(log n) tipicamente.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>O que a notação O responde</h3>
+                <p style="text-align: left;">
+                    Não contamos passos exatos. Respondemos uma pergunta só: quando a entrada
+                    cresce, <strong>o trabalho cresce em que ritmo?</strong>
+                </p>
+                <p><span class="destaque">n(n − 1)/2 comparações → O(n²)</span></p>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Lê-se: "cresce no ritmo de n ao quadrado". Constantes e termos menores são
+                    descartados de propósito — eles não mudam o ritmo.
+                </p>
+                <p class="nota-rodape">A definição matemática completa está no material escrito da aula.</p>
+            </section>
+            <section>
+                <h3>Existe algo melhor que n log n?</h3>
+                <p style="text-align: left;">
+                    Para algoritmos que ordenam <strong>comparando</strong> elementos — os três
+                    desta aula —, a resposta é <strong>não</strong>. E isso é um teorema.
+                </p>
+                <blockquote>
+                    O merge sort não é apenas bom: ele é o <strong>melhor possível</strong> nessa
+                    classe. Ninguém vai vencê-lo por uma classe inteira de complexidade.
+                </blockquote>
+            </section>
+        <section class="eddy-slide">
+            <div class="eddy-card">
+                <div class="eddy-avatar">
+                    <img src="../assets/bot/eddy.svg" alt="Eddy">
+                </div>
+                <div class="eddy-balao">
+                    <strong class="eddy-nome">Eddy</strong>
+                    <p class="eddy-fala">
+                        Turma, esse limite não é chute de quem testou muito: é contagem. Uma sequência
+                        de <em>n</em> elementos admite um número enorme de ordens possíveis, e cada
+                        comparação só separa esses casos em dois grupos. Não há como isolar a ordem
+                        certa com menos comparações do que isso.
+                        <cite>Toscani &amp; Veloso, capítulo de limites inferiores</cite>
+                    </p>
+                </div>
+            </div>
+        </section>
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>Os três lado a lado</h3>
+                <p style="text-align: left;">
+                    Nenhuma linha é melhor que as outras em todas as colunas — e é justamente por
+                    isso que os três continuam existindo.
+                </p>
+                <table>
+                    <tr>
+                        <th>Algoritmo</th><th>Melhor</th><th>Médio</th><th>Pior</th>
+                        <th>Memória extra</th><th>Estável</th>
+                    </tr>
+                    <tr><td>Bubble</td><td><strong>O(n)</strong></td><td>O(n²)</td>
+                        <td><strong>O(n²)</strong></td><td>O(1)</td><td>sim</td></tr>
+                    <tr><td>Merge</td><td>O(n log n)</td><td>O(n log n)</td>
+                        <td><strong>O(n log n)</strong></td><td><strong>O(n)</strong></td><td>sim</td></tr>
+                    <tr><td>Quick</td><td>O(n log n)</td><td>O(n log n)</td>
+                        <td><strong>O(n²)</strong></td><td>O(log n)</td><td>não</td></tr>
+                </table>
+            </section>
+            <section>
+                <h3>O que isso significa em número</h3>
+                <p style="text-align: left;">
+                    Comparações no pior caso, e o tempo numa máquina que faça cem milhões de
+                    comparações por segundo.
+                </p>
+                <table>
+                    <tr><th>n</th><th>Bubble</th><th>Merge</th><th>Tempo bubble</th><th>Tempo merge</th></tr>
+                    <tr><td>8</td><td>28</td><td>24</td><td>instantâneo</td><td>instantâneo</td></tr>
+                    <tr><td>1.000</td><td>499.500</td><td>9.966</td><td>0,005 s</td><td>0,0001 s</td></tr>
+                    <tr><td>100.000</td><td>~5 bilhões</td><td>1.660.964</td><td>~50 segundos</td><td>~0,02 segundo</td></tr>
+                    <tr><td>1.000.000</td><td>~500 bilhões</td><td>19.931.569</td><td><strong>~1h23min</strong></td><td><strong>~0,2 segundo</strong></td></tr>
+                </table>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Multiplicar o vetor por mil multiplica por <strong>um milhão</strong> o trabalho
+                    do bubble sort.
+                </p>
+            </section>
+            <section>
+                <h3>Então por que usar o quick sort?</h3>
+                <p style="text-align: left;">
+                    Ele tem o pior caso mais feio da tabela — e mesmo assim costuma ser o mais
+                    <strong>rápido</strong> na prática. A tabela esconde por quê.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li>A notação descarta constantes. As do quick sort são <strong>pequenas</strong>:
+                        ele não aloca nada e não copia para lugar nenhum.</li>
+                    <li>O merge sort paga, a cada nível, uma alocação e uma cópia de ida e volta —
+                        trabalho que o O(n log n) não mostra, mas o relógio mostra.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Não existe "o melhor algoritmo"</h3>
+                <p style="text-align: left;">
+                    A pergunta certa nunca é qual é o melhor. É <strong>qual restrição pesa mais
+                    aqui</strong>.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li>Preciso de tempo <strong>garantido</strong> no pior caso → merge sort.</li>
+                    <li>Memória apertada → quick sort ou bubble sort.</li>
+                    <li>Vetor pequeno ou quase ordenado → bubble sort e parentes.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Ordenar um milhão de inteiros com merge sort exige um vetor auxiliar de um
+                    milhão de inteiros — memória que pode simplesmente não existir.
+                </p>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde ordenação aparece</h3>
+                <p style="text-align: left;">
+                    Quase sempre sem se anunciar como ordenação.
+                </p>
+                <ul style="font-size: 0.78em;">
+                    <li><code>ORDER BY</code> em bancos de dados.</li>
+                    <li>Produtos por preço, rankings, placares, feeds.</li>
+                    <li><strong>Ordenar para procurar rápido</strong> — em vetor ordenado dá para
+                        descartar metade dos candidatos a cada comparação.</li>
+                    <li><strong>Detectar duplicatas</strong> — depois de ordenar, os repetidos
+                        ficam vizinhos.</li>
+                    <li>Mediana e percentis: é o elemento do meio do vetor ordenado.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Os vizinhos e as variantes</h3>
+                <p style="text-align: left;">
+                    A família é grande, e os três desta aula têm parentes próximos que vale
+                    reconhecer pelo nome.
+                </p>
+                <ul style="font-size: 0.75em;">
+                    <li><strong>Selection sort</strong> — pega o menor e põe na primeira posição,
+                        e repete. O mínimo de trocas possível.</li>
+                    <li><strong>Insertion sort</strong> — insere cada novo elemento no lugar certo
+                        entre os já arrumados. É como a maioria ordena cartas na mão.</li>
+                    <li><strong>Mediana de três</strong> — escolhe o pivô olhando três elementos,
+                        e o pior caso do quick sort deixa de ser alcançado por vetores ordenados.</li>
+                    <li><strong>Merge externo</strong> — ordena arquivos maiores que a memória
+                        disponível, intercalando pedaços lidos do disco.</li>
+                </ul>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 2 — VISUALIZAÇÃO ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Sempre o mesmo vetor — <code>[7, 3, 9, 1, 5, 8, 2, 6]</code> — para os três
+                    algoritmos poderem ser comparados.
+                </p>
+            </section>
+            <section>
+                <h3>Passo 1 — o vetor de partida</h3>
+                <p style="text-align: left; font-size: 0.8em;">Oito inteiros fora de ordem, com os índices marcados embaixo. É daqui que os três algoritmos partem.</p>
+                <img class="diagrama" src="img/01_vetor_inicial.svg" alt="Vetor de oito posições com os valores 7, 3, 9, 1, 5, 8, 2, 6 e os índices 0 a 7">
+            </section>
+            <section>
+                <h3>Passo 2 — bubble sort, a operação elementar</h3>
+                <p style="text-align: left; font-size: 0.8em;">Repare que só <strong>vizinhos</strong> se comparam: o 7 nunca é comparado direto com o 6 do fim.</p>
+                <img class="diagrama" src="img/02_bubble_comparacao.svg" alt="Comparação entre as duas primeiras posições, 7 e 3, e a troca resultante">
+            </section>
+            <section>
+                <h3>Passo 3 — bubble sort, a primeira passagem</h3>
+                <p style="text-align: left; font-size: 0.8em;">Acompanhe o 9: ele é encontrado na terceira caixa e vai sendo empurrado, uma troca de cada vez, até o fim.</p>
+                <img class="diagrama" src="img/03_bubble_passagem.svg" alt="Sete comparações ao longo do vetor e o 9 chegando à última posição">
+            <p class="nota-rodape">Sete comparações · a última posição fica resolvida e a próxima passagem já pode ignorá-la.</p>
+            </section>
+            <section>
+                <h3>Passo 4 — merge sort, a divisão</h3>
+                <p style="text-align: left; font-size: 0.8em;">Conte os degraus: são <strong>três</strong> divisões até sobrarem trechos de um elemento — e 8 dividido por 2 três vezes chega a 1.</p>
+                <img class="diagrama" src="img/04_merge_divisao.svg" alt="Árvore de divisão do vetor em metades sucessivas até oito trechos de um elemento">
+            <p class="nota-rodape">Nenhuma comparação aconteceu ainda. A ida apenas divide.</p>
+            </section>
+            <section>
+                <h3>Passo 5 — merge sort, a intercalação</h3>
+                <p style="text-align: left; font-size: 0.8em;">As duas metades já estão ordenadas. Cada comparação olha só os dois primeiros ainda não usados e decide quem sai.</p>
+                <img class="diagrama" src="img/05_merge_intercalacao.svg" alt="Duas metades ordenadas sendo intercaladas para um vetor auxiliar">
+            </section>
+            <section>
+                <h3>Passo 6 — quick sort, o particionamento</h3>
+                <p style="text-align: left; font-size: 0.8em;">Uma varredura só, e o 6 já está no lugar definitivo dele. Os dois lados ainda estão bagunçados — e tudo bem.</p>
+                <img class="diagrama" src="img/06_quick_particao.svg" alt="Vetor antes e depois do particionamento em torno do pivô 6">
+            </section>
+            <section>
+                <h3>Passo 7 — quick sort, a recursão</h3>
+                <p style="text-align: left; font-size: 0.8em;">Diferente do merge sort, os trechos <strong>não</strong> têm tamanhos iguais: eles dependem de onde o pivô caiu.</p>
+                <img class="diagrama" src="img/07_quick_recursao.svg" alt="Árvore de chamadas do quick sort com os pivôs 6, 2, 9, 3 e 7">
+            <p class="nota-rodape">Bastaram cinco particionamentos: três trechos tinham um só elemento e pararam no caso base.</p>
+            </section>
+            <section>
+                <h3>Passo 8 — as três contagens</h3>
+                <p style="text-align: left; font-size: 0.8em;">Mesmo vetor, mesmo resultado, três custos. Guarde a comparação — ela muda de figura quando n cresce.</p>
+                <img class="diagrama" src="img/08_comparacao_final.svg" alt="Gráfico de barras comparando 27, 17 e 14 comparações">
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 3 — PROBLEMA MOTIVADOR ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que isso importa?</h2>
+                <blockquote style="margin-top: 1em;">
+                    Como uma loja virtual com quarenta mil produtos mostra a lista inteira do mais
+                    barato para o mais caro em <strong>menos de um segundo</strong>?
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A conta dos quarenta mil</h3>
+                <p style="text-align: left;">
+                    A mesma máquina, a mesma lista. Só muda o algoritmo.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Bubble sort</strong> — cerca de 800 milhões de comparações:
+                        <strong>oito segundos</strong>.</li>
+                    <li><strong>Merge ou quick</strong> — cerca de 610 mil comparações:
+                        <strong>seis milésimos de segundo</strong>.</li>
+                </ul>
+                <blockquote>
+                    A diferença entre a página que responde e a página que trava não está no
+                    servidor. Está na escolha do algoritmo.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Ordenar uma vez, consultar muitas</h3>
+                <p style="text-align: left;">
+                    Este é o motivo mais comum de ordenar alguma coisa — e ele não aparece na
+                    tela de ninguém.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li>Vetor desordenado: achar um elemento exige olhar um a um.</li>
+                    <li>Vetor ordenado: dá para comparar com o do meio e <strong>descartar
+                        metade</strong> de uma vez. Dezesseis comparações para os mesmos
+                        quarenta mil.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Ordenar custa caro <strong>uma vez</strong>. A busca fica barata para sempre.
+                </p>
+            </section>
+
+            <section>
+                <h3>Ordenar como etapa do meio</h3>
+                <p style="text-align: left;">
+                    Descobrir se há produtos duplicados parece exigir comparar cada um com todos
+                    os outros: oitocentos milhões de pares.
+                </p>
+                <blockquote>
+                    Ordene primeiro. Os duplicados ficam <strong>necessariamente vizinhos</strong>,
+                    e uma passagem de quarenta mil comparações resolve.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Ordenar transformou um problema quadrático num problema n log n. É por isso
+                    que ordenação aparece dentro de tantos algoritmos que nada têm a ver com ordem.
+                </p>
+            </section>
+        <section class="eddy-slide">
+            <div class="eddy-card">
+                <div class="eddy-avatar">
+                    <img src="../assets/bot/eddy.svg" alt="Eddy">
+                </div>
+                <div class="eddy-balao">
+                    <strong class="eddy-nome">Eddy</strong>
+                    <p class="eddy-fala">
+                        Turma, o quick sort tem dono e data: foi criado por Tony Hoare no fim dos anos 1950,
+                        quando ele era estudante e precisava ordenar palavras para um projeto de tradução
+                        automática do russo. O nome não é marketing — na época, ordenar rápido era
+                        literalmente o problema que ele tinha na mesa.
+                    </p>
+                </div>
+            </div>
+        </section>
+        </section>
+
+        <!-- ============================ BLOCO 4 — ANALOGIAS ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>As cartas na mão</h3>
+                <p style="text-align: left;">
+                    Olhe o primeiro par de cartas vizinhas. Se a da esquerda for maior, troque.
+                    Passe para o par seguinte e repita até o fim do leque.
+                </p>
+                <p style="text-align: left;">
+                    Uma varredura nunca ordena de primeira — mas sempre empurra a maior carta para
+                    a ponta. Quando uma varredura passa <strong>sem nenhuma troca</strong>, acabou.
+                </p>
+                <p style="text-align: left; font-size: 0.78em;">
+                    A analogia mostra até o defeito: uma carta pequena na ponta direita precisa de
+                    uma varredura inteira para andar <strong>uma</strong> posição.
+                </p>
+            </section>
+
+            <section>
+                <h3>A correção de provas em dupla</h3>
+                <p style="text-align: left;">
+                    Cem provas para entregar em ordem de nota, e duas pessoas para fazer isso.
+                </p>
+                <p style="text-align: left;">
+                    Cada uma leva cinquenta, ordena as suas, e no fim as duas juntam: olham a de
+                    cima de cada monte e põem a menor sobre a mesa. Isso é o
+                    <span class="destaque">merge sort</span> — inclusive o espaço livre da mesa,
+                    que é o vetor auxiliar.
+                </p>
+            </section>
+
+            <section>
+                <h3>A mesma dupla, outra estratégia</h3>
+                <p style="text-align: left;">
+                    Agora elas nem dividem em quantidades iguais. Pegam uma prova qualquer, de
+                    nota 6, e separam a pilha em "abaixo de 6" e "acima de 6".
+                </p>
+                <p style="text-align: left;">
+                    A prova de nota 6 já vai para o lugar exato dela e nunca mais é tocada. Cada
+                    uma leva um monte e repete lá dentro. Isso é o
+                    <span class="destaque">quick sort</span>.
+                </p>
+                <blockquote>
+                    E o risco aparece na analogia: se a prova escolhida for a de maior nota, um
+                    monte fica com tudo e o outro fica vazio. O trabalho não foi repartido.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 5 — CÓDIGO EM C ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Código em C</h2>
+            </section>
+
+            <section>
+                <h3>Um único arquivo: <code>ordenacao.c</code></h3>
+                <p style="text-align: left;">
+                    Tudo vive no mesmo lugar — os <code>#include</code>, os contadores, os três
+                    algoritmos e a <code>main()</code>.
+                </p>
+                <blockquote>
+                    A ideia é ler o programa <strong>de cima a baixo</strong>, sem saltar entre
+                    arquivos.
+                </blockquote>
+                <pre><code class="language-bash" data-trim data-noescape>
+gcc -Wall -Wextra -o ordenacao_demo ordenacao.c
+./ordenacao_demo
+</code></pre>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Os <code>printf</code> dentro dos algoritmos existem só para a aula: eles
+                    tornam visível cada passagem, cada intercalação e cada partição.
+                </p>
+            </section>
+
+            <section>
+                <h3>A troca</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A função mais curta do arquivo — e a que todo o bubble sort e todo o quick
+                    sort usam.
+                </p>
+<pre><code class="language-c" data-trim data-noescape>
+/*
+ * Troca de lugar os elementos das posicoes i e j.
+ *
+ * A variavel guardado e indispensavel: sem ela, a primeira atribuicao
+ * sobrescreveria vetor[i] e o valor antigo estaria perdido antes de ser
+ * copiado para vetor[j].
+ */
+void trocar(int vetor[], int i, int j) {
+    int guardado = vetor[i];
+
+    vetor[i] = vetor[j];
+    vetor[j] = guardado;
+    trocas++;
+}
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Bubble sort</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Dois laços. Repare no <code>tamanho - 1 - i</code> do laço de dentro.
+                </p>
+<pre><code class="language-c" data-trim data-noescape>
+void bubble_sort(int vetor[], int tamanho) {
+    int i, j;
+    int houve_troca;
+
+    for (i = 0; i &lt; tamanho - 1; i++) {
+        houve_troca = 0;
+
+        for (j = 0; j &lt; tamanho - 1 - i; j++) {
+            comparacoes++;
+            if (vetor[j] &gt; vetor[j + 1]) {
+                trocar(vetor, j, j + 1);
+                houve_troca = 1;
+            }
+        }
+
+        printf(&quot;  passagem %d: &quot;, i + 1);
+        imprimir_vetor(vetor, tamanho);
+
+        /* Uma passagem inteira sem nenhuma troca significa que nao existe
+           mais nenhum par vizinho fora de ordem - ou seja, o vetor ja esta
+           ordenado e continuar seria desperdicio. */
+        if (houve_troca == 0) {
+            printf(&quot;  nenhuma troca nesta passagem: o vetor ja esta ordenado\n&quot;);
+            return;
+        }
+    }
+}
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Intercalar — a comparação</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Enquanto as duas metades têm elementos, cada comparação decide de qual delas
+                    sai o próximo valor.
+                </p>
+<pre><code class="language-c" data-trim data-noescape>
+void intercalar(int vetor[], int inicio, int meio, int fim) {
+    int tamanho = fim - inicio + 1;
+    int i = inicio;    /* proxima posicao a ser lida na metade esquerda */
+    int j = meio + 1;  /* proxima posicao a ser lida na metade direita */
+    int k = 0;         /* proxima posicao a ser escrita no auxiliar */
+    int* auxiliar = malloc(tamanho * sizeof(int));
+
+    if (auxiliar == NULL) {
+        printf(&quot;erro: memoria insuficiente\n&quot;);
+        exit(1);
+    }
+
+    /* Enquanto as duas metades ainda tem elementos, a comparacao decide de
+       qual delas sai o proximo menor valor. */
+    while (i &lt;= meio &amp;&amp; j &lt;= fim) {
+        comparacoes++;
+        if (vetor[i] &lt;= vetor[j]) {
+            auxiliar[k] = vetor[i];
+            i++;
+        } else {
+            auxiliar[k] = vetor[j];
+            j++;
+        }
+        k++;
+    }
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Intercalar — o que sobrou</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Uma das metades acaba antes. O resto da outra já está ordenado e é maior que
+                    tudo — vai direto, <strong>sem comparação nenhuma</strong>.
+                </p>
+<pre><code class="language-c" data-trim data-noescape>
+    /* Uma das metades acabou antes da outra. O que sobrou na outra ja esta
+       ordenado e e maior que tudo o que ja foi copiado, entao vai direto,
+       sem comparacao nenhuma. */
+    while (i &lt;= meio) {
+        auxiliar[k] = vetor[i];
+        i++;
+        k++;
+    }
+    while (j &lt;= fim) {
+        auxiliar[k] = vetor[j];
+        j++;
+        k++;
+    }
+
+    for (k = 0; k &lt; tamanho; k++) {
+        vetor[inicio + k] = auxiliar[k];
+        copias++;
+    }
+
+    printf(&quot;  intercalando [%d..%d] com [%d..%d]: &quot;, inicio, meio, meio + 1, fim);
+    imprimir_vetor(auxiliar, tamanho);
+
+    free(auxiliar);
+}
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Merge sort</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    O algoritmo inteiro são quatro linhas: caso base, divide, ordena os dois
+                    lados, intercala.
+                </p>
+<pre><code class="language-c" data-trim data-noescape>
+void merge_sort(int vetor[], int inicio, int fim) {
+    int meio;
+
+    if (inicio &gt;= fim) {
+        return;
+    }
+
+    meio = (inicio + fim) / 2;
+    merge_sort(vetor, inicio, meio);
+    merge_sort(vetor, meio + 1, fim);
+    intercalar(vetor, inicio, meio, fim);
+}
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Particionar</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A variável <code>menor</code> é a fronteira: até ela, já se sabe que tudo é
+                    menor ou igual ao pivô. Ela nasce em <code>inicio - 1</code> porque a região
+                    começa vazia.
+                </p>
+<pre><code class="language-c" data-trim data-noescape>
+int particionar(int vetor[], int inicio, int fim) {
+    int pivo = vetor[fim];
+    int menor = inicio - 1;
+    int j;
+
+    for (j = inicio; j &lt; fim; j++) {
+        comparacoes++;
+        if (vetor[j] &lt;= pivo) {
+            menor++;
+            /* Quando menor e j sao a mesma posicao, esta troca e do elemento
+               com ele mesmo: nao muda nada e so acontece porque o elemento ja
+               estava no lado certo. */
+            trocar(vetor, menor, j);
+        }
+    }
+
+    /* O pivo estava guardado no fim do trecho. Agora ele vai para a primeira
+       posicao depois da regiao dos menores - a sua posicao DEFINITIVA no
+       vetor ordenado, que nenhuma chamada seguinte vai mexer. */
+    trocar(vetor, menor + 1, fim);
+
+    printf(&quot;  pivo %d no trecho [%d..%d]: &quot;, pivo, inicio, fim);
+    imprimir_trecho(vetor, inicio, fim);
+
+    return menor + 1;
+}
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Quick sort</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Compare com o merge sort: aqui o trabalho acontece <strong>na ida</strong>,
+                    dentro de <code>particionar</code>. A volta não faz nada.
+                </p>
+<pre><code class="language-c" data-trim data-noescape>
+void quick_sort(int vetor[], int inicio, int fim) {
+    int posicao_pivo;
+
+    if (inicio &gt;= fim) {
+        return;
+    }
+
+    posicao_pivo = particionar(vetor, inicio, fim);
+    quick_sort(vetor, inicio, posicao_pivo - 1);
+    quick_sort(vetor, posicao_pivo + 1, fim);
+}
+</code></pre>
+            </section>
+
+
+            <section>
+                <h3>A saída — bubble sort</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Acompanhe o 9: ele chega ao fim já na passagem 1 e não se move mais.
+                </p>
+                <pre><code data-trim data-noescape>
+Vetor original: [7, 3, 9, 1, 5, 8, 2, 6]
+
+[1] Bubble sort
+  passagem 1: [3, 7, 1, 5, 8, 2, 6, 9]
+  passagem 2: [3, 1, 5, 7, 2, 6, 8, 9]
+  passagem 3: [1, 3, 5, 2, 6, 7, 8, 9]
+  passagem 4: [1, 3, 2, 5, 6, 7, 8, 9]
+  passagem 5: [1, 2, 3, 5, 6, 7, 8, 9]
+  passagem 6: [1, 2, 3, 5, 6, 7, 8, 9]
+  nenhuma troca nesta passagem: o vetor ja esta ordenado
+  27 comparacoes, 15 trocas
+</code></pre>
+                <p style="text-align: left; font-size: 0.78em;">
+                    A passagem 6 não troca nada e o algoritmo para ali. Sem a parada antecipada,
+                    faria a sétima passagem à toa.
+                </p>
+            </section>
+
+            <section>
+                <h3>A saída — merge sort</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A ordem das linhas revela a recursão: as duas primeiras juntam trechos de um
+                    elemento, e só a última vê o vetor inteiro.
+                </p>
+                <pre><code data-trim data-noescape>
+[2] Merge sort
+  intercalando [0..0] com [1..1]: [3, 7]
+  intercalando [2..2] com [3..3]: [1, 9]
+  intercalando [0..1] com [2..3]: [1, 3, 7, 9]
+  intercalando [4..4] com [5..5]: [5, 8]
+  intercalando [6..6] com [7..7]: [2, 6]
+  intercalando [4..5] com [6..7]: [2, 5, 6, 8]
+  intercalando [0..3] com [4..7]: [1, 2, 3, 5, 6, 7, 8, 9]
+  17 comparacoes, 24 copias de volta do auxiliar para o vetor
+</code></pre>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Nada foi comparado na descida. Toda comparação aconteceu na subida.
+                </p>
+            </section>
+
+            <section>
+                <h3>A saída — quick sort</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    O pivô 6 da primeira linha fica na posição 4 até o fim do programa — a posição
+                    definitiva, exatamente como prometido.
+                </p>
+                <pre><code data-trim data-noescape>
+[3] Quick sort
+  pivo 6 no trecho [0..7]: [3, 1, 5, 2, 6, 8, 7, 9]
+  pivo 2 no trecho [0..3]: [1, 2, 5, 3]
+  pivo 3 no trecho [2..3]: [3, 5]
+  pivo 9 no trecho [5..7]: [8, 7, 9]
+  pivo 7 no trecho [5..6]: [7, 8]
+  14 comparacoes, 12 trocas
+
+Resumo para n = 8
+  bubble sort: 27 comparacoes
+  merge sort:  17 comparacoes
+  quick sort:  14 comparacoes
+</code></pre>
+            </section>
+        <section class="eddy-slide">
+            <div class="eddy-card">
+                <div class="eddy-avatar">
+                    <img src="../assets/bot/eddy.svg" alt="Eddy">
+                </div>
+                <div class="eddy-balao">
+                    <strong class="eddy-nome">Eddy</strong>
+                    <p class="eddy-fala">
+                        Turma, atenção a uma armadilha do <code>particionar</code>: o pivô é sempre o
+                        <strong>último</strong> elemento do trecho. Isso é simples de escrever, mas
+                        significa que um vetor <strong>já ordenado</strong> é o pior caso do quick sort —
+                        cada partição deixa um lado vazio. O algoritmo mais rápido da aula vira o mais
+                        lento justamente na entrada que parecia mais fácil.
+                    </p>
+                </div>
+            </div>
+        </section>
+        </section>
+
+        <!-- ============================ BLOCO 6 — EXERCÍCIO ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 6</p>
+                <h2>Exercício</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Um só, para fazer agora. Os demais estão no material escrito.
+                </p>
+            </section>
+        <section class="eddy-slide">
+            <div class="eddy-card">
+                <div class="eddy-avatar">
+                    <img src="../assets/bot/eddy.svg" alt="Eddy">
+                </div>
+                <div class="eddy-balao">
+                    <strong class="eddy-nome">Eddy</strong>
+                    <p class="eddy-fala">
+                        Turma, antes de escrever qualquer linha: em cada um dos três algoritmos existe
+                        <strong>uma</strong> comparação que decide o que é "estar na ordem certa".
+                        Encontrem essas três linhas primeiro. Depois disso o exercício vira quase
+                        mecânico — e se mexerem em qualquer outra coisa, é sinal de que acharam a
+                        linha errada.
+                    </p>
+                </div>
+            </div>
+        </section>
+            <section>
+                <h3>Exercício — os três em ordem decrescente</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Modifique <code>bubble_sort</code>, <code>intercalar</code> e
+                    <code>particionar</code> para que ordenem do <strong>maior para o menor</strong>.
+                    Faça a menor mudança possível em cada um e escreva, em uma frase por algoritmo,
+                    qual comparação foi invertida e por quê.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta mínima aceitável:</strong>
+                    <ul>
+                        <li>Os três produzem <code>[9, 8, 7, 6, 5, 3, 2, 1]</code>.</li>
+                        <li>Mudou <strong>um operador por algoritmo</strong> — nada além disso.</li>
+                        <li>As contagens continuam <strong>27, 17 e 14</strong>: o número de
+                            comparações não depende do sentido da ordem.</li>
+                        <li>Compila sem nenhum aviso com <code>-Wall -Wextra</code>.</li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 7 — REFERÊNCIAS ============================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.72em;">
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em
+                    Linguagem C</em>. LTC, 2023. Capítulo de métodos de ordenação.</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C:
+                    uma abordagem didática</em>. Saraiva, 2016. Capítulo de ordenação.</li>
+                <li><strong>Toscani, L. V.; Veloso, P. A. S.</strong> — <em>Complexidade de
+                    Algoritmos</em>. Bookman, 2012. Recorrências e limites inferiores.</li>
+                <li><strong>Schildt, H.</strong> — <em>C Completo e Total</em>. Makron Books, 1997.
+                    Vetores, alocação dinâmica e a função <code>qsort</code>.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.65em; color: #666;">
+                <li>Wirth — <em>Algoritmos e Estruturas de Dados</em> — a apresentação clássica dos métodos.</li>
+                <li>Damas — <em>Linguagem C</em> — vetores e ponteiros em profundidade.</li>
+                <li>Forouzan &amp; Gilbert · Ford &amp; Topp · Jamsa &amp; Klander — contraste em pseudocódigo e C++.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Ordenação</h1>
+            <h2>Perguntas</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Três algoritmos, o mesmo resultado e custos que se separam quando n cresce.
+            </p>
+        </section>
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

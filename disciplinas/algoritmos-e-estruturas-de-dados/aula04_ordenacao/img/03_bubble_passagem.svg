@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 360"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Bubble sort — a primeira passagem inteira</text>
+  <text x="48" y="68" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">antes</text>
+
+  <rect x="48" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="125" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="202" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <rect x="279" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="356" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="433" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="510" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="587" y="76" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#222">
+    <text x="84" y="111" text-anchor="middle" font-weight="400" fill="#222">7</text>
+    <text x="161" y="111" text-anchor="middle" font-weight="400" fill="#222">3</text>
+    <text x="238" y="111" text-anchor="middle" font-weight="700" fill="#222">9</text>
+    <text x="315" y="111" text-anchor="middle" font-weight="400" fill="#222">1</text>
+    <text x="392" y="111" text-anchor="middle" font-weight="400" fill="#222">5</text>
+    <text x="469" y="111" text-anchor="middle" font-weight="400" fill="#222">8</text>
+    <text x="546" y="111" text-anchor="middle" font-weight="400" fill="#222">2</text>
+    <text x="623" y="111" text-anchor="middle" font-weight="400" fill="#222">6</text>
+  </g>
+
+  <path d="M 84.0 136 Q 122.5 160, 161.0 136" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="122.5" y="170" text-anchor="middle" font-size="12" fill="#5a7a9a">1</text>
+  <path d="M 161.0 136 Q 199.5 160, 238.0 136" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="199.5" y="170" text-anchor="middle" font-size="12" fill="#5a7a9a">2</text>
+  <path d="M 238.0 136 Q 276.5 160, 315.0 136" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="276.5" y="170" text-anchor="middle" font-size="12" fill="#5a7a9a">3</text>
+  <path d="M 315.0 136 Q 353.5 160, 392.0 136" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="353.5" y="170" text-anchor="middle" font-size="12" fill="#5a7a9a">4</text>
+  <path d="M 392.0 136 Q 430.5 160, 469.0 136" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="430.5" y="170" text-anchor="middle" font-size="12" fill="#5a7a9a">5</text>
+  <path d="M 469.0 136 Q 507.5 160, 546.0 136" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="507.5" y="170" text-anchor="middle" font-size="12" fill="#5a7a9a">6</text>
+  <path d="M 546.0 136 Q 584.5 160, 623.0 136" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="584.5" y="170" text-anchor="middle" font-size="12" fill="#5a7a9a">7</text>
+  <text x="48" y="208" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">depois da passagem 1</text>
+
+  <rect x="48" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="125" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="202" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="279" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="356" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="433" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="510" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="587" y="216" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#222">
+    <text x="84" y="251" text-anchor="middle" font-weight="400" fill="#222">3</text>
+    <text x="161" y="251" text-anchor="middle" font-weight="400" fill="#222">7</text>
+    <text x="238" y="251" text-anchor="middle" font-weight="400" fill="#222">1</text>
+    <text x="315" y="251" text-anchor="middle" font-weight="400" fill="#222">5</text>
+    <text x="392" y="251" text-anchor="middle" font-weight="400" fill="#222">8</text>
+    <text x="469" y="251" text-anchor="middle" font-weight="400" fill="#222">2</text>
+    <text x="546" y="251" text-anchor="middle" font-weight="400" fill="#222">6</text>
+    <text x="623" y="251" text-anchor="middle" font-weight="700" fill="#222">9</text>
+  </g>
+  <text x="623" y="296" text-anchor="middle" font-size="12" fill="#2c5d8a" font-weight="600">resolvida</text>
+
+  <line x1="60" y1="312" x2="640" y2="312" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="338" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">sete comparações · o 9 foi arrastado até o fim e não se move mais</text>
+</svg>

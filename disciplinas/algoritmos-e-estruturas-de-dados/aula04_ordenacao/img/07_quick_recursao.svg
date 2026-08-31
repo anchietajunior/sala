@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 345"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Quick sort — a recursão sobre os dois lados</text>
+
+  <rect x="275" y="56" width="150" height="46" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="350" y="77" text-anchor="middle" font-size="14" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">[0..7]</text>
+  <text x="350" y="94" text-anchor="middle" font-size="12" fill="#2c5d8a">pivô 6</text>
+  <rect x="110" y="140" width="170" height="46" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="195" y="161" text-anchor="middle" font-size="14" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">[0..3]</text>
+  <text x="195" y="178" text-anchor="middle" font-size="12" fill="#2c5d8a">pivô 2</text>
+  <rect x="420" y="140" width="170" height="46" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="505" y="161" text-anchor="middle" font-size="14" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">[5..7]</text>
+  <text x="505" y="178" text-anchor="middle" font-size="12" fill="#2c5d8a">pivô 9</text>
+  <rect x="47" y="224" width="140" height="46" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="117" y="245" text-anchor="middle" font-size="14" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">[0..0]</text>
+  <text x="117" y="262" text-anchor="middle" font-size="12" fill="#888">caso base</text>
+  <rect x="202" y="224" width="140" height="46" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="272" y="245" text-anchor="middle" font-size="14" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">[2..3]</text>
+  <text x="272" y="262" text-anchor="middle" font-size="12" fill="#2c5d8a">pivô 3</text>
+  <rect x="357" y="224" width="140" height="46" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="427" y="245" text-anchor="middle" font-size="14" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">[5..6]</text>
+  <text x="427" y="262" text-anchor="middle" font-size="12" fill="#2c5d8a">pivô 7</text>
+  <rect x="512" y="224" width="140" height="46" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="582" y="245" text-anchor="middle" font-size="14" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">vazio</text>
+  <text x="582" y="262" text-anchor="middle" font-size="12" fill="#888">caso base</text>
+
+  <path d="M 350 102 L 195 140" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 350 102 L 505 140" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 195 186 L 117 224" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 195 186 L 272 224" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 505 186 L 427 224" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 505 186 L 582 224" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+
+  <line x1="60" y1="288" x2="640" y2="288" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="314" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">os trechos não têm tamanhos iguais — dependem de onde o pivô caiu</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 370"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Merge sort — a intercalação de duas metades ordenadas</text>
+  <text x="60" y="64" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">metade esquerda — já ordenada</text>
+  <text x="372" y="64" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">metade direita — já ordenada</text>
+
+  <rect x="60" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <text x="92" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">1</text>
+  <rect x="128" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="160" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">3</text>
+  <rect x="196" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="228" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">7</text>
+  <rect x="264" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="296" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">9</text>
+  <rect x="372" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <text x="404" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">2</text>
+  <rect x="440" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="472" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">5</text>
+  <rect x="508" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="540" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">6</text>
+  <rect x="576" y="74" width="64" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="608" y="107" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">8</text>
+
+  <text x="350" y="158" text-anchor="middle" font-size="14" fill="#2c5d8a">compara 1 com 2 → sai o 1 · compara 3 com 2 → sai o 2</text>
+
+  <path d="M 350 168 L 350 188" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="344,187 350,200 356,187" fill="#2c5d8a"/>
+  <text x="60" y="224" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">vetor auxiliar — sendo preenchido</text>
+
+  <rect x="60" y="234" width="68" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="94" y="267" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">1</text>
+  <rect x="132" y="234" width="68" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="166" y="267" text-anchor="middle" font-size="19" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">2</text>
+  <rect x="204" y="234" width="68" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4" stroke-dasharray="5,4"/>
+  <rect x="276" y="234" width="68" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4" stroke-dasharray="5,4"/>
+  <rect x="348" y="234" width="68" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4" stroke-dasharray="5,4"/>
+  <rect x="420" y="234" width="68" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4" stroke-dasharray="5,4"/>
+  <rect x="492" y="234" width="68" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4" stroke-dasharray="5,4"/>
+  <rect x="564" y="234" width="68" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4" stroke-dasharray="5,4"/>
+
+  <line x1="60" y1="306" x2="640" y2="306" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="332" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">cada comparação decide o destino de um elemento · intercalar custa O(n)</text>
+</svg>

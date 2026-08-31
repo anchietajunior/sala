@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 310"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Bubble sort — a operação elementar</text>
+
+  <text x="122.5" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="#2c5d8a">7 &gt; 3 ? sim → troca</text>
+  <text x="48" y="92" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">antes</text>
+
+  <rect x="48" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <rect x="125" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <rect x="202" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="279" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="356" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="433" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="510" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="587" y="100" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#222">
+    <text x="84" y="135" text-anchor="middle" font-weight="700" fill="#222">7</text>
+    <text x="161" y="135" text-anchor="middle" font-weight="700" fill="#222">3</text>
+    <text x="238" y="135" text-anchor="middle" font-weight="400" fill="#222">9</text>
+    <text x="315" y="135" text-anchor="middle" font-weight="400" fill="#222">1</text>
+    <text x="392" y="135" text-anchor="middle" font-weight="400" fill="#222">5</text>
+    <text x="469" y="135" text-anchor="middle" font-weight="400" fill="#222">8</text>
+    <text x="546" y="135" text-anchor="middle" font-weight="400" fill="#222">2</text>
+    <text x="623" y="135" text-anchor="middle" font-weight="400" fill="#222">6</text>
+  </g>
+
+  <path d="M 84.0 162 Q 122.5 192, 161.0 162" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="152.0,166 161.0,158 164.0,171" fill="#2c5d8a"/>
+  <polygon points="81.0,171 84.0,158 93.0,166" fill="#2c5d8a"/>
+  <text x="48" y="202" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">depois</text>
+
+  <rect x="48" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <rect x="125" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <rect x="202" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="279" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="356" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="433" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="510" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="587" y="210" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#222">
+    <text x="84" y="245" text-anchor="middle" font-weight="700" fill="#222">3</text>
+    <text x="161" y="245" text-anchor="middle" font-weight="700" fill="#222">7</text>
+    <text x="238" y="245" text-anchor="middle" font-weight="400" fill="#222">9</text>
+    <text x="315" y="245" text-anchor="middle" font-weight="400" fill="#222">1</text>
+    <text x="392" y="245" text-anchor="middle" font-weight="400" fill="#222">5</text>
+    <text x="469" y="245" text-anchor="middle" font-weight="400" fill="#222">8</text>
+    <text x="546" y="245" text-anchor="middle" font-weight="400" fill="#222">2</text>
+    <text x="623" y="245" text-anchor="middle" font-weight="400" fill="#222">6</text>
+  </g>
+
+  <line x1="60" y1="276" x2="640" y2="276" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="302" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">só vizinhos são comparados · o algoritmo inteiro é esta figura repetida</text>
+</svg>
