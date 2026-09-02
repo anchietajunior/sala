@@ -72,15 +72,15 @@
 
 <p><strong>O SQL que interessa hoje</strong> — deixe no quadro (vamos digitá-lo de verdade daqui a pouco):</p>
 
-<pre>CREATE TABLE book (
+<pre>CREATE TABLE books (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO book (name) VALUES ('Dom Casmurro');
+INSERT INTO books (name) VALUES ('Dom Casmurro');
 
-SELECT id, name FROM book;</pre>
+SELECT id, name FROM books;</pre>
 
 <p>Este será o último <code>CREATE TABLE</code> que alguém digita à mão: daqui a pouco quem o escreve é o ORM. Mas só se confia em um tradutor quando se conhecem as duas línguas — por isso o SQL vem primeiro.</p>
 
@@ -127,26 +127,26 @@ USE reading_tracker;</pre>
 <p><em>Por quê:</em> antes de delegar ao ORM, cada aluno cria uma tabela, insere e consulta <strong>uma vez na vida com as próprias mãos</strong>.</p>
 
 <span class="os">Mac e Windows (dentro do cliente mysql)</span>
-<pre>CREATE TABLE book (
+<pre>CREATE TABLE books (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO book (name) VALUES ('Dom Casmurro');
+INSERT INTO books (name) VALUES ('Dom Casmurro');
 
-SELECT id, name FROM book;
-DESCRIBE book;</pre>
+SELECT id, name FROM books;
+DESCRIBE books;</pre>
 
 <p>Pontos a mostrar no resultado: o <code>id</code> veio <strong>1</strong> sem ninguém pedir (auto-increment); o <code>created_at</code> se preencheu sozinho (<code>DEFAULT CURRENT_TIMESTAMP</code>); o <code>DESCRIBE</code> exibe a estrutura da tabela. Agora tente gravar um livro sem nome:</p>
 
-<pre>INSERT INTO book (name) VALUES (NULL);</pre>
+<pre>INSERT INTO books (name) VALUES (NULL);</pre>
 
 <p>O MySQL recusa com <strong>ERROR 1048: Column 'name' cannot be null</strong> — é a constraint trabalhando. A API valida na porta de entrada; o banco defende o dado contra <em>qualquer</em> caminho — inclusive este cliente mysql, que não passa pela API.</p>
 
 <p>Para fechar, apague a tabela:</p>
 
-<pre>DROP TABLE book;</pre>
+<pre>DROP TABLE books;</pre>
 
 <p>Digitamos o SQL para <em>aprender</em>; daqui em diante, quem escreve <code>CREATE TABLE</code> é o ORM — e precisamos da tabela fora do caminho para vê-lo trabalhar.</p>
 </div>
@@ -256,7 +256,7 @@ from database import Base
 
 
 class Book(Base):
-    __tablename__ = "book"
+    __tablename__ = "books"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255))
@@ -267,7 +267,7 @@ class Book(Base):
 <p>Agora compare com o <code>CREATE TABLE</code> do quadro, coluna a coluna:</p>
 <ul>
   <li><code>class Book(Base)</code> — herdar de <code>Base</code> é o que diz "esta classe <strong>é</strong> uma tabela": no momento do import, ela se registra no metadata;</li>
-  <li><code>__tablename__ = "book"</code> — o nome da tabela é declarado, não adivinhado. Seguimos a convenção do ADR-0002: <code>lower_case_snake</code> no <strong>singular</strong>;</li>
+  <li><code>__tablename__ = "books"</code> — o nome da tabela é declarado, não adivinhado. Seguimos a convenção do ADR-0002: <code>lower_case_snake</code> no <strong>singular</strong>;</li>
   <li><code>id: Mapped[int] = mapped_column(primary_key=True)</code> — <code>primary_key=True</code> num inteiro → o MySQL ganha <code>PRIMARY KEY</code> <strong>e</strong> <code>AUTO_INCREMENT</code>, e a conta do <code>next_book_id()</code> se aposenta. Repare que o objeto recém-criado ainda <em>não tem</em> id — ele nasce sem, e o banco atribui um no INSERT;</li>
   <li><code>String(255)</code> — o MySQL exige tamanho para <code>VARCHAR</code>; a anotação <code>str</code> sozinha não basta nesse dialeto — <code>Mapped[str]</code> escolhe o tipo da coluna, <code>String(255)</code> fixa a largura. Como não há <code>Mapped[str | None]</code>, a coluna nasce <code>NOT NULL</code> — a constraint que o passo 3 viu trabalhar;</li>
   <li><code>server_default=func.now()</code> — <em>server</em> porque quem preenche é o banco, não o Python: vira o <code>DEFAULT CURRENT_TIMESTAMP</code> do quadro. <code>func.now()</code> não executa nada aqui — é a função SQL <code>NOW()</code> escrita em Python, carimbada pelo MySQL na hora do INSERT;</li>
@@ -300,10 +300,10 @@ app = FastAPI()</pre>
 <span class="os">Mac e Windows (iguais, venv ativo, dentro de <code>projeto/backend</code>)</span>
 <pre>uvicorn main:app --reload</pre>
 
-<p>O <code>echo=True</code> mostra o ORM trabalhando: um <code>DESCRIBE</code> para ver se a tabela existe e, como não existe, o <strong><code>CREATE TABLE book (...)</code></strong> completo — compare com o do quadro. Confirme no cliente mysql:</p>
+<p>O <code>echo=True</code> mostra o ORM trabalhando: um <code>DESCRIBE</code> para ver se a tabela existe e, como não existe, o <strong><code>CREATE TABLE books (...)</code></strong> completo — compare com o do quadro. Confirme no cliente mysql:</p>
 
 <pre>SHOW TABLES;
-DESCRIBE book;</pre>
+DESCRIBE books;</pre>
 
 <div class="atencao"><code>create_all</code> cria o que <strong>não existe</strong> — ele nunca <em>altera</em> tabela existente. Mudou o model? Na disciplina: <code>DROP TABLE</code> e deixe recriar (dado de aula é descartável — decisão registrada em <code>docs/convencoes.md</code>). No mundo real, mudanças de schema são versionadas com <strong>migrations</strong> (a ferramenta do ecossistema é o Alembic) — fica na menção, não é tema do curso.</div>
 
@@ -349,7 +349,7 @@ def create_book(book: BookCreate, session: Session = Depends(get_session)):
 
 <p>Repare no que a linha do <code>models.Book(...)</code> <em>não</em> traz: nenhum <code>id</code> e nenhum <code>created_at</code>. Os dois são preenchidos <strong>pelo banco</strong> no INSERT — exatamente as duas colunas que, no <code>CREATE TABLE</code> do quadro, tinham <code>AUTO_INCREMENT</code> e <code>DEFAULT</code>. E a chamada ao <code>next_book_id()</code> sumiu — a função ficou sem uso; ela sai de vez na limpeza do passo 13.</p>
 
-<p>Teste no Swagger (<code>/docs</code>): <code>POST /api/books</code> com <code>{"name": "Dom Casmurro"}</code> → <strong>201</strong> com <code>id</code> 1. No terminal do uvicorn, o <code>echo</code> mostra o <code>INSERT</code> e o <code>COMMIT</code>. No cliente mysql, <code>SELECT * FROM book;</code> — a linha está lá, com o <code>created_at</code> que a API não devolve. Cadastre mais dois (<code>O Hobbit</code>, <code>Clean Code</code>): os três livros de fábrica agora são linhas do banco, criadas pela API.</p>
+<p>Teste no Swagger (<code>/docs</code>): <code>POST /api/books</code> com <code>{"name": "Dom Casmurro"}</code> → <strong>201</strong> com <code>id</code> 1. No terminal do uvicorn, o <code>echo</code> mostra o <code>INSERT</code> e o <code>COMMIT</code>. No cliente mysql, <code>SELECT * FROM books;</code> — a linha está lá, com o <code>created_at</code> que a API não devolve. Cadastre mais dois (<code>O Hobbit</code>, <code>Clean Code</code>): os três livros de fábrica agora são linhas do banco, criadas pela API.</p>
 
 <h3>Passo 10 — GET /api/books: a consulta</h3>
 <p><em>Por quê:</em> a listagem é a primeira <em>consulta</em> ORM do projeto — e o filtro por nome vira SQL de verdade.</p>
@@ -443,7 +443,7 @@ senha? Ajuste para mysql+pymysql://root:SUASENHA@127.0.0.1:3306/reading_tracker<
 <strong>Checkpoint — como saber que funcionou:</strong>
 <ul>
   <li>O terminal do uvicorn mostra o SQL de tudo (<code>echo=True</code>): o <code>CREATE TABLE</code> na primeira subida, o <code>INSERT</code> de cada POST, o <code>SELECT</code> das listagens (com <code>LIKE</code> quando há filtro), o <code>UPDATE</code> do PUT e o <code>DELETE</code>;</li>
-  <li><code>SHOW TABLES</code> exibe <code>book</code>; <code>DESCRIBE book</code> bate com o model (id auto_increment PK, name varchar(255) NOT NULL, created_at com default);</li>
+  <li><code>SHOW TABLES</code> exibe <code>book</code>; <code>DESCRIBE books</code> bate com o model (id auto_increment PK, name varchar(255) NOT NULL, created_at com default);</li>
   <li><code>POST /api/books</code> devolve <strong>201</strong> com o id gerado pelo banco; GET, PUT e DELETE mantêm os contratos de antes — <strong>404</strong> onde o livro não existe;</li>
   <li>Depois de reiniciar o uvicorn, os livros continuam; id de livro removido não é reaproveitado;</li>
   <li><code>main.py</code> sem lista, sem contador e sem a classe antiga — e a turma sabe apontar, no <code>models.Book</code>, qual linha gerou cada pedaço do <code>CREATE TABLE</code>.</li>
@@ -459,12 +459,12 @@ senha? Ajuste para mysql+pymysql://root:SUASENHA@127.0.0.1:3306/reading_tracker<
   <li>Adicione <code>author: str</code> aos <strong>dois</strong> schemas (<code>BookCreate</code> e <code>BookRead</code>);</li>
   <li>Passe o campo na criação (<code>models.Book(name=book.name, author=book.author)</code>) e na atualização (<code>stored_book.author = book.author</code>);</li>
   <li>Teste um POST no Swagger e observe a falha (<em>por que a coluna não existe, se o model tem o campo?</em>);</li>
-  <li>Corrija: <code>DROP TABLE book;</code> no mysql, reinicie o uvicorn e assista ao <code>create_all</code> recriar a tabela — agora com <code>author</code>. Repita o POST: 201, com o autor na resposta e no <code>SELECT</code>.</li>
+  <li>Corrija: <code>DROP TABLE books;</code> no mysql, reinicie o uvicorn e assista ao <code>create_all</code> recriar a tabela — agora com <code>author</code>. Repita o POST: 201, com o autor na resposta e no <code>SELECT</code>.</li>
 </ol>
 
 <p><strong>Gabarito (para o professor):</strong> a falha do item 4 é <code>OperationalError: Unknown column 'author'</code> — o <code>create_all</code> viu que a tabela <code>book</code> já existia e <strong>não a alterou</strong> (a nota do passo 7, agora sentida na pele: é para isso que existem migrations). Circule pela sala: os erros clássicos serão esquecer o <code>author=book.author</code> na construção do <code>models.Book</code> (o INSERT tenta gravar <code>NULL</code> numa coluna <code>NOT NULL</code> → <code>IntegrityError</code>) e esquecer o <code>DROP TABLE</code> (a falha do item 4 nunca se resolve sozinha).</p>
 
-<div class="atencao">O exercício é descartável: a branch da disciplina segue <strong>sem</strong> o campo <code>author</code>. Ao final, desfaça as mudanças, <code>DROP TABLE book;</code> e reinicie, para que o model volte ao original.</div>
+<div class="atencao">O exercício é descartável: a branch da disciplina segue <strong>sem</strong> o campo <code>author</code>. Ao final, desfaça as mudanças, <code>DROP TABLE books;</code> e reinicie, para que o model volte ao original.</div>
 
 <h2><span class="tempo">5 min</span> Fechamento</h2>
 
