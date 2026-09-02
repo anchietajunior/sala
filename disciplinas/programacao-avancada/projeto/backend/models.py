@@ -10,7 +10,7 @@ from database import Base
 
 # Modelo Book: cada atributo Mapped vira uma coluna da tabela "book"
 class Book(Base):
-    __tablename__ = "book"
+    __tablename__ = "books"
 
     # Chave primária: inteiro + primary_key → PRIMARY KEY e AUTO_INCREMENT
     id: Mapped[int] = mapped_column(primary_key=True)
