@@ -59,7 +59,8 @@
     <li>Implementar <code>POST /signup</code> guardando apenas o <strong>hash</strong> da senha (bcrypt);</li>
     <li><span class="tema-badge">T-8</span> Comparar <strong>cookies e sessions</strong> com <strong>tokens</strong> — e justificar o JWT nesta aplicação;</li>
     <li><span class="tema-badge">T-8</span> Descrever a <strong>anatomia de um JWT</strong> e os claims que ele carrega;</li>
-    <li>Implementar <code>POST /login</code> e proteger o CRUD: cada usuário só enxerga e altera <strong>os próprios livros</strong>.</li>
+    <li>Implementar <code>POST /login</code> e proteger o CRUD: cada usuário só enxerga e altera <strong>os próprios livros</strong>;</li>
+    <li>Organizar o backend: <code>schemas.py</code>, <code>routers/</code> por recurso e o <code>main.py</code> como ponto de entrada.</li>
   </ul>
 </section>
 
@@ -107,14 +108,15 @@
 <section>
   <h2>Senha não se armazena — armazena-se o hash</h2>
   <pre><code class="language-bash" data-trim>
-pip install bcrypt
+pip install bcrypt "pydantic[email]"
 pip freeze &gt; requirements.txt
   </code></pre>
   <ul style="font-size:.65em">
     <li><strong>bcrypt</strong> (Provos &amp; Mazières, USENIX 1999): função de <strong>mão única</strong> — do hash não se recupera a senha;</li>
     <li><strong>Salt embutido:</strong> duas senhas iguais geram hashes diferentes — tabelas pré-computadas não funcionam;</li>
     <li><strong>Custo ajustável:</strong> lento de propósito, para inviabilizar força bruta;</li>
-    <li>No login, calcula-se o hash do que foi digitado e <strong>comparam-se os hashes</strong>.</li>
+    <li>No login, calcula-se o hash do que foi digitado e <strong>comparam-se os hashes</strong>;</li>
+    <li><strong><code>pydantic[email]</code></strong> — extra do pip: o Pydantic com o validador de e-mail, para o schema do cadastro.</li>
   </ul>
   <p class="cite">PROVOS, N.; MAZIÈRES, D. — A Future-Adaptable Password Scheme, USENIX, 1999</p>
 </section>
@@ -186,9 +188,9 @@ class BookRead(BaseModel):
   <h2>A senha entra, mas nunca sai</h2>
   <pre><code class="language-python" data-trim>
 class UserCreate(BaseModel):
-    name: str
-    email: str
-    password: str
+    name: str = Field(min_length=1, max_length=100)
+    email: EmailStr = Field(max_length=255)
+    password: str = Field(min_length=8, max_length=72)
 
 
 class UserRead(BaseModel):
@@ -198,9 +200,10 @@ class UserRead(BaseModel):
     name: str
     email: str
   </code></pre>
-  <ul style="font-size:.6em">
-    <li>A senha existe no <code>UserCreate</code> e <strong>não existe</strong> no <code>UserRead</code> — nem o hash;</li>
-    <li>É o caso mais forte de <code>response_model</code> do projeto: <strong>o contrato de saída é o filtro</strong>.</li>
+  <ul style="font-size:.55em">
+    <li>Entrada validada como a do Book: <code>name</code> espelha o <code>String(100)</code>; <code>EmailStr</code> recusa e-mail malformado com 422 (o formato é do schema; a <em>unicidade</em> é do banco);</li>
+    <li><code>password</code> entre <strong>8 e 72</strong>: mínimo por política; máximo é o limite real do bcrypt — o schema barra com 422 antes do erro da biblioteca;</li>
+    <li>A senha existe no <code>UserCreate</code> e <strong>não existe</strong> no <code>UserRead</code> — nem o hash: <strong>o contrato de saída é o filtro</strong>.</li>
   </ul>
 </section>
 
@@ -400,7 +403,7 @@ def get_current_user(
   <h2>POST /login — credenciais viram token</h2>
   <pre><code class="language-python" data-trim>
 class LoginRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
@@ -485,6 +488,48 @@ def read_book(book_id: int, session: Session = Depends(get_session),
   </ol>
 </section>
 
+<section>
+  <h2>main.py virou o arquivo onde tudo mora</h2>
+  <pre><code class="language-text" data-trim>
+backend/
+├── main.py          ← ponto de entrada: app, create_all, include_router
+├── database.py      ← conexão, Base e sessão do ORM
+├── models.py        ← as tabelas (User, Book)
+├── schemas.py       ← todas as classes Pydantic
+├── security.py      ← hash, token e get_current_user
+└── routers/
+    ├── __init__.py
+    └── users.py / books.py ← as rotas de cada recurso
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Seis schemas e oito rotas de dois recursos num arquivo só — hora de separar;</li>
+    <li><strong>Estrutura por tipo de arquivo</strong> (ADR-0002): cada responsabilidade num módulo;</li>
+    <li>Os schemas <strong>se movem</strong> para <code>schemas.py</code> sem mudar uma linha.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>APIRouter — o recurso com nome próprio</h2>
+  <pre><code class="language-python" data-trim>
+# routers/books.py
+router = APIRouter(prefix="/api/books", tags=["books"])
+
+@router.get("", response_model=list[BookRead])          # era /api/books
+@router.get("/{book_id}", response_model=BookRead)
+
+# main.py — só o ponto de entrada
+app = FastAPI()
+app.include_router(users.router)
+app.include_router(books.router)
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li><strong><code>prefix</code></strong> — o nome padrão do recurso, declarado uma vez: toda rota do arquivo nasce sob <code>/api/books</code>;</li>
+    <li><strong><code>tags</code></strong> — o Swagger se reorganiza em seções por recurso: <em>users</em> e <em>books</em>;</li>
+    <li><code>include_router</code> — o <code>main.py</code> não conhece rota nenhuma; <code>/health</code> fica nele por ser infraestrutura;</li>
+    <li><strong>Nenhuma URL mudou</strong>: refatorar é mover sem mudar comportamento.</li>
+  </ul>
+</section>
+
 <!-- ============ Exercício e fechamento ============ -->
 
 <section>
@@ -494,7 +539,7 @@ def read_book(book_id: int, session: Session = Depends(get_session),
     <li>Teste com o token de cada usuário — a resposta muda com o token, sem parâmetro na URL;</li>
     <li>Teste sem token → 401.</li>
   </ol>
-  <div class="nota">O corpo da rota tem uma linha: a dependency já fez todo o trabalho — identidade virou <strong>infraestrutura</strong>. Atenção ao <code>response_model</code>: é ele que impede o hash da senha de sair na resposta.</div>
+  <div class="nota">A rota mora em <code>routers/users.py</code> e o corpo tem uma linha: a dependency já fez todo o trabalho — identidade virou <strong>infraestrutura</strong>. Atenção ao <code>response_model</code>: é ele que impede o hash da senha de sair na resposta.</div>
 </section>
 
 <section>
@@ -505,7 +550,8 @@ def read_book(book_id: int, session: Session = Depends(get_session),
     <li>Senha não se armazena: armazena-se o <strong>hash</strong> (bcrypt — mão única, salt, custo);</li>
     <li>HTTP é stateless: cookies+sessions guardam o estado no servidor; <strong>tokens o carregam consigo</strong>;</li>
     <li>JWT (RFC 7519) é assinado, não cifrado: <code>header.payload.signature</code>, claims <code>sub</code> e <code>exp</code> — a assinatura impede a falsificação;</li>
-    <li>O login emite; a dependency <code>get_current_user</code> verifica; o CRUD opera <strong>sobre os livros do usuário logado</strong> — dono vem do token, nunca do corpo.</li>
+    <li>O login emite; a dependency <code>get_current_user</code> verifica; o CRUD opera <strong>sobre os livros do usuário logado</strong> — dono vem do token, nunca do corpo;</li>
+    <li>O backend se organizou por tipo de arquivo: schemas num módulo, cada recurso com seu router (<code>prefix</code> e <code>tags</code>) e o <code>main.py</code> como ponto de entrada.</li>
   </ul>
 </section>
 
