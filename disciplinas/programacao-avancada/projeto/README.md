@@ -28,6 +28,16 @@ no cliente mysql e deixe o `create_all` recriar as tabelas na próxima subida.
 
 Abra http://127.0.0.1:8000
 
+## Estrutura do backend
+
+    backend/
+    ├── main.py          ← ponto de entrada: app, create_all, include_router
+    ├── database.py      ← conexão, Base e sessão do ORM
+    ├── models.py        ← as tabelas (User, Book)
+    ├── schemas.py       ← as classes Pydantic de entrada e saída
+    ├── security.py      ← hash de senha, token JWT e get_current_user
+    └── routers/         ← as rotas de cada recurso (users.py, books.py)
+
 ## Endpoints
 
 | Método | Rota | Autenticação | O que faz |
@@ -58,6 +68,8 @@ A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
 | cffi | Ponte entre Python e código C (usada pela cryptography) | 2.1.0 |
 | click | Criação de comandos de terminal (usada pelo uvicorn) | 8.4.2 |
 | cryptography | Primitivas criptográficas; o PyMySQL a exige para a autenticação do MySQL 8+ | 49.0.0 |
+| dnspython | Consultas DNS (usada pelo email-validator) | 2.8.0 |
+| email-validator | Validação de formato de e-mail (o EmailStr do pydantic) | 2.3.0 |
 | fastapi | Framework web: rotas, validação e documentação automática | 0.139.2 |
 | h11 | Implementação do protocolo HTTP/1.1 (usada pelo uvicorn) | 0.16.0 |
 | idna | Suporte a nomes de domínio internacionais | 3.18 |
@@ -72,4 +84,4 @@ A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
 | typing_extensions | Recursos novos de tipagem para versões antigas do Python | 4.16.0 |
 | uvicorn | Servidor web que executa a aplicação | 0.51.0 |
 
-Instalamos diretamente apenas **fastapi**, **uvicorn**, **sqlalchemy**, **pymysql**, **cryptography**, **bcrypt** e **pyjwt**; as demais vieram como dependências delas.
+Instalamos diretamente apenas **fastapi**, **uvicorn**, **sqlalchemy**, **pymysql**, **cryptography**, **bcrypt**, **pyjwt** e o extra **pydantic[email]** (que traz email-validator e dnspython); as demais vieram como dependências delas.
