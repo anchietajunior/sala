@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" style="width:100%;max-width:760px">
+  <!-- token codificado -->
+  <g font-family="monospace" font-size="14.5" font-weight="bold">
+    <text x="70" y="40" fill="#c0392b">eyJhbGciOiJIUzI1NiJ9</text>
+    <text x="320" y="40" fill="#8a6508">.eyJzdWIiOiIxIiwiZXhwIjoxNzg4MDAwMDAwfQ</text>
+    <text x="723" y="40" fill="#2e6da4">.SflKx...</text>
+  </g>
+  <text x="400" y="66" text-anchor="middle" font-size="12.5" fill="#777">um único texto, três partes separadas por ponto — codificadas em base64url</text>
+
+  <!-- header -->
+  <rect x="30" y="90" width="230" height="130" rx="10" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+  <text x="145" y="116" text-anchor="middle" font-size="15" font-weight="bold" fill="#c0392b">header</text>
+  <g font-family="monospace" font-size="12.5" fill="#333">
+    <text x="50" y="145">{</text>
+    <text x="65" y="165">"alg": "HS256",</text>
+    <text x="65" y="185">"typ": "JWT"</text>
+    <text x="50" y="205">}</text>
+  </g>
+
+  <!-- payload -->
+  <rect x="285" y="90" width="230" height="130" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
+  <text x="400" y="116" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6508">payload — os claims</text>
+  <g font-family="monospace" font-size="12.5" fill="#333">
+    <text x="305" y="145">{</text>
+    <text x="320" y="165">"sub": "1",</text>
+    <text x="320" y="185">"exp": 1788000000</text>
+    <text x="305" y="205">}</text>
+  </g>
+
+  <!-- signature -->
+  <rect x="540" y="90" width="230" height="130" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="655" y="116" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e6da4">assinatura</text>
+  <g font-size="12.5" fill="#333" font-family="monospace">
+    <text x="655" y="150" text-anchor="middle">HMAC-SHA256(</text>
+    <text x="655" y="170" text-anchor="middle">header + payload,</text>
+    <text x="655" y="190" text-anchor="middle">SECRET_KEY)</text>
+  </g>
+
+  <text x="145" y="248" text-anchor="middle" font-size="12.5" fill="#777">qual algoritmo assina</text>
+  <text x="400" y="248" text-anchor="middle" font-size="12.5" fill="#777">sub: quem é · exp: até quando vale</text>
+  <text x="655" y="248" text-anchor="middle" font-size="12.5" fill="#777">só quem tem a chave produz</text>
+
+  <text x="400" y="286" text-anchor="middle" font-size="13.5" fill="#333">Header e payload são <tspan font-weight="bold">legíveis por qualquer um</tspan> — a assinatura garante <tspan font-weight="bold">origem e integridade</tspan>, não sigilo.</text>
+  <text x="400" y="310" text-anchor="middle" font-size="12.5" fill="#999">RFC 7519 — JSON Web Token, IETF, 2015</text>
+</svg>

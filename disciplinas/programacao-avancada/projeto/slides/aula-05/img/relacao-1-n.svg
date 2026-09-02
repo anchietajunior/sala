@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+  </defs>
+
+  <!-- tabela users (lado 1) -->
+  <text x="40" y="30" font-size="16" font-weight="bold" fill="#8a6508" font-family="monospace">tabela users (lado 1)</text>
+  <g font-family="monospace" font-size="13">
+    <rect x="40" y="45" width="60" height="32" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <rect x="100" y="45" width="180" height="32" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <text x="70" y="66" text-anchor="middle" font-weight="bold" fill="#8a6508">id</text>
+    <text x="190" y="66" text-anchor="middle" font-weight="bold" fill="#8a6508">name</text>
+
+    <rect x="40" y="77" width="60" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="100" y="77" width="180" height="30" fill="#fff" stroke="#ccc"/>
+    <text x="70" y="97" text-anchor="middle" fill="#333">1</text>
+    <text x="190" y="97" text-anchor="middle" fill="#333">Machado</text>
+
+    <rect x="40" y="107" width="60" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="100" y="107" width="180" height="30" fill="#fff" stroke="#ccc"/>
+    <text x="70" y="127" text-anchor="middle" fill="#333">2</text>
+    <text x="190" y="127" text-anchor="middle" fill="#333">Clarice</text>
+  </g>
+
+  <!-- tabela books (lado N) -->
+  <text x="430" y="30" font-size="16" font-weight="bold" fill="#8a6508" font-family="monospace">tabela books (lado N)</text>
+  <g font-family="monospace" font-size="13">
+    <rect x="430" y="45" width="55" height="32" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <rect x="485" y="45" width="190" height="32" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.5"/>
+    <rect x="675" y="45" width="90" height="32" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+    <text x="457" y="66" text-anchor="middle" font-weight="bold" fill="#8a6508">id</text>
+    <text x="580" y="66" text-anchor="middle" font-weight="bold" fill="#8a6508">name</text>
+    <text x="720" y="66" text-anchor="middle" font-weight="bold" fill="#2e6da4">user_id</text>
+
+    <rect x="430" y="77" width="55" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="485" y="77" width="190" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="675" y="77" width="90" height="30" fill="#eef4fa" stroke="#2e6da4"/>
+    <text x="457" y="97" text-anchor="middle" fill="#333">1</text>
+    <text x="580" y="97" text-anchor="middle" fill="#333">Dom Casmurro</text>
+    <text x="720" y="97" text-anchor="middle" fill="#2e6da4" font-weight="bold">1</text>
+
+    <rect x="430" y="107" width="55" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="485" y="107" width="190" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="675" y="107" width="90" height="30" fill="#eef4fa" stroke="#2e6da4"/>
+    <text x="457" y="127" text-anchor="middle" fill="#333">2</text>
+    <text x="580" y="127" text-anchor="middle" fill="#333">O Hobbit</text>
+    <text x="720" y="127" text-anchor="middle" fill="#2e6da4" font-weight="bold">1</text>
+
+    <rect x="430" y="137" width="55" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="485" y="137" width="190" height="30" fill="#fff" stroke="#ccc"/>
+    <rect x="675" y="137" width="90" height="30" fill="#eef4fa" stroke="#2e6da4"/>
+    <text x="457" y="157" text-anchor="middle" fill="#333">3</text>
+    <text x="580" y="157" text-anchor="middle" fill="#333">A Hora da Estrela</text>
+    <text x="720" y="157" text-anchor="middle" fill="#2e6da4" font-weight="bold">2</text>
+  </g>
+
+  <!-- setas FK -->
+  <path d="M 675 92 C 360 92, 360 92, 105 92" fill="none" stroke="#2e6da4" stroke-width="1.8" marker-end="url(#setaR)"/>
+  <path d="M 675 152 C 360 152, 360 127, 105 127" fill="none" stroke="#2e6da4" stroke-width="1.8" marker-end="url(#setaR)"/>
+
+  <text x="400" y="215" text-anchor="middle" font-size="14" fill="#2e6da4" font-weight="bold" font-family="monospace">FOREIGN KEY (user_id) REFERENCES users (id)</text>
+  <text x="400" y="248" text-anchor="middle" font-size="13.5" fill="#333">Um User possui <tspan font-weight="bold">vários</tspan> Books; cada Book pertence a <tspan font-weight="bold">exatamente um</tspan> User.</text>
+  <text x="400" y="276" text-anchor="middle" font-size="13" fill="#777">A coluna é NOT NULL: não existe livro sem dono — e o banco recusa user_id inexistente.</text>
+  <text x="400" y="308" text-anchor="middle" font-size="12.5" fill="#999">Relação 1:N (Chen, 1976) — a relação não é um desenho: é uma coluna.</text>
+</svg>

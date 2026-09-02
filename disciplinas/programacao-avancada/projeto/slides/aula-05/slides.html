@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 05 — Users e autenticação com JWT</title>
+<link rel="stylesheet" href="../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../assets/reveal/dist/theme/white.css">
+<link rel="stylesheet" href="../assets/reveal/plugin/highlight/monokai.css">
+<style>
+  .reveal { font-size: 34px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+  .reveal h2 { font-size: 1.35em; }
+  .reveal ul { display: block; }
+  .reveal li { margin: .35em 0; }
+  .reveal pre { box-shadow: none; width: 100%; }
+  .reveal pre code { padding: .8em 1em; border-radius: 6px; max-height: 480px; }
+  .cite { font-size: .45em; color: #999; margin-top: 1.6em; }
+  .duas-colunas { display: flex; gap: 1em; align-items: flex-start; text-align: left; }
+  .duas-colunas > div { flex: 1; min-width: 0; }
+  .os-label { font-size: .55em; font-weight: bold; color: #666; margin: 0 0 .2em .1em; }
+  .nota { font-size: .6em; background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .6em .9em; margin-top: .8em; }
+  .destaque { color: #2e6da4; font-weight: bold; }
+  .tema-badge { display: inline-block; background: #2e6da4; color: #fff; border-radius: 999px; padding: .05em .6em; font-size: .5em; vertical-align: middle; }
+  .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
+  .status-tab { font-size: .7em; border-collapse: collapse; margin: 0 auto; }
+  .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ Abertura ============ -->
+
+<section>
+  <h1 style="font-size:1.5em">Users e autenticação<br>com JWT</h1>
+  <p>Programação Avançada — Aula 05</p>
+  <p style="font-size:.55em;color:#888">Universidade Unirios</p>
+</section>
+
+<section>
+  <h2>Qualquer um apaga qualquer livro</h2>
+  <p style="font-size:.7em">O CRUD de Books persiste no MySQL — restart não apaga nada, o banco gera os ids. Abra uma janela anônima e chame a API: listar, criar, alterar e apagar <strong>funcionam para qualquer um</strong>.</p>
+  <ul style="font-size:.7em">
+    <li><strong>Livro não tem dono</strong> — a tabela <code>books</code> não sabe de quem é cada linha (posse);</li>
+    <li><strong>A API não sabe quem chama</strong> — não existe sequer o conceito de usuário (identidade).</li>
+  </ul>
+  <p style="font-size:.65em">Posse se resolve <strong>no banco</strong>, com uma relação. Identidade se resolve <strong>na API</strong>, com autenticação. A aula constrói os dois, nessa ordem.</p>
+</section>
+
+<section>
+  <h2>Objetivos da aula</h2>
+  <ul style="font-size:.72em">
+    <li><span class="tema-badge">T-7</span> Declarar a relação <strong>1:N</strong> com chave estrangeira obrigatória de <code>books</code> para <code>users</code>;</li>
+    <li>Implementar <code>POST /signup</code> guardando apenas o <strong>hash</strong> da senha (bcrypt);</li>
+    <li><span class="tema-badge">T-8</span> Comparar <strong>cookies e sessions</strong> com <strong>tokens</strong> — e justificar o JWT nesta aplicação;</li>
+    <li><span class="tema-badge">T-8</span> Descrever a <strong>anatomia de um JWT</strong> e os claims que ele carrega;</li>
+    <li>Implementar <code>POST /login</code> e proteger o CRUD: cada usuário só enxerga e altera <strong>os próprios livros</strong>.</li>
+  </ul>
+</section>
+
+<!-- ============ T-7 Relação 1:N ============ -->
+
+<section>
+  <h2>Entidades e relacionamentos</h2>
+  <p class="definicao">O modelo entidade-relacionamento descreve os dados como entidades ligadas por relacionamentos com cardinalidade: 1:1, 1:N, N:M.</p>
+  <ul style="font-size:.65em;margin-top:.8em">
+    <li><strong>Origem:</strong> formalizado por <strong>Peter Chen</strong> em <em>The Entity-Relationship Model — Toward a Unified View of Data</em> (ACM TODS, 1976);</li>
+    <li><strong>Nosso caso é 1:N:</strong> <em>um</em> User possui <em>vários</em> Books; cada Book pertence a <em>exatamente um</em> User — a regra do domínio do projeto.</li>
+  </ul>
+  <p class="cite">CHEN, P. — The Entity-Relationship Model, ACM TODS, 1976</p>
+</section>
+
+<section>
+  <h2>A relação é uma coluna</h2>
+  <img src="img/relacao-1-n.png" alt="Diagrama da relação 1:N: a coluna user_id em books aponta para a chave primária de users" style="width:100%;max-width:760px">
+  <p class="cite">CHEN, P. — 1976 · DATE, C. J. — An Introduction to Database Systems, 2003</p>
+</section>
+
+<section>
+  <h2>Chave estrangeira: constraint, não convenção</h2>
+  <ul style="font-size:.68em">
+    <li>A <strong>foreign key</strong> mora no lado N: <code>books.user_id</code> guarda a chave primária do lado 1 (<code>users.id</code>) — cada livro tem <em>um</em> dono, a resposta cabe numa coluna;</li>
+    <li><strong>Integridade referencial:</strong> o MySQL <strong>recusa</strong> um <code>user_id</code> que não exista em <code>users.id</code> — livro órfão não entra;</li>
+    <li><strong>NOT NULL por decisão de domínio:</strong> não existe livro sem dono neste sistema;</li>
+    <li>Constraint é regra de negócio que o banco defende sozinho — como o <code>UNIQUE</code> e o <code>NOT NULL</code> já vistos.</li>
+  </ul>
+  <p class="cite">DATE, C. J. — An Introduction to Database Systems, 8ª ed., 2003</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — relação 1:N</span></h2>
+  <ul style="font-size:.8em">
+    <li>Entidades se ligam por relacionamentos com cardinalidade (Chen, 1976);</li>
+    <li>1:N no relacional = chave estrangeira no lado N apontando para o lado 1;</li>
+    <li>O banco defende a relação: integridade referencial;</li>
+    <li><code>NOT NULL</code> na FK: todo livro tem dono, por regra de domínio.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 1: User, FK e signup ============ -->
+
+<section>
+  <h2>Senha não se armazena — armazena-se o hash</h2>
+  <pre><code class="language-bash" data-trim>
+pip install bcrypt
+pip freeze &gt; requirements.txt
+  </code></pre>
+  <ul style="font-size:.65em">
+    <li><strong>bcrypt</strong> (Provos &amp; Mazières, USENIX 1999): função de <strong>mão única</strong> — do hash não se recupera a senha;</li>
+    <li><strong>Salt embutido:</strong> duas senhas iguais geram hashes diferentes — tabelas pré-computadas não funcionam;</li>
+    <li><strong>Custo ajustável:</strong> lento de propósito, para inviabilizar força bruta;</li>
+    <li>No login, calcula-se o hash do que foi digitado e <strong>comparam-se os hashes</strong>.</li>
+  </ul>
+  <p class="cite">PROVOS, N.; MAZIÈRES, D. — A Future-Adaptable Password Scheme, USENIX, 1999</p>
+</section>
+
+<section>
+  <h2>models.py — o User e a chave estrangeira</h2>
+  <pre><code class="language-python" data-trim>
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(255), unique=True)
+    password: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+
+class Book(Base):
+    __tablename__ = "books"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(255))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li><code>email</code> com <code>unique=True</code> — o banco recusa dois cadastros com o mesmo e-mail;</li>
+    <li><code>password</code> guarda <strong>o hash</strong>, nunca a senha;</li>
+    <li><code>ForeignKey("users.id")</code> — <em>tabela.coluna</em>, os nomes do banco; sem <code>| None</code>, a coluna é <code>NOT NULL</code>: <strong>não existe livro sem dono</strong>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Recriar as tabelas</h2>
+  <pre><code class="language-sql" data-trim>
+DROP TABLE books;
+-- suba o uvicorn e leia o echo: CREATE TABLE users, depois books
+SHOW CREATE TABLE books;
+  </code></pre>
+  <ul style="font-size:.65em">
+    <li>O model mudou e o <code>create_all</code> <strong>não altera</strong> tabela existente — dado de aula é descartável;</li>
+    <li>Os dois <code>CREATE TABLE</code> saem <strong>na ordem certa</strong>: <code>users</code> primeiro, porque <code>books</code> o referencia;</li>
+    <li>Na saída do <code>SHOW CREATE TABLE</code>: <code>FOREIGN KEY (user_id) REFERENCES users (id)</code> — o ORM declarou a constraint da teoria.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>A senha entra, mas nunca sai</h2>
+  <pre><code class="language-python" data-trim>
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+
+
+class UserRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    email: str
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>A senha existe no <code>UserCreate</code> e <strong>não existe</strong> no <code>UserRead</code> — nem o hash;</li>
+    <li>É o caso mais forte de <code>response_model</code> do projeto: <strong>o contrato de saída é o filtro</strong>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>security.py — o hash na frente do banco</h2>
+  <pre><code class="language-python" data-trim>
+import bcrypt
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+
+def verify_password(password: str, hashed: str) -> bool:
+    return bcrypt.checkpw(password.encode(), hashed.encode())
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><code>gensalt()</code> gera o salt; <code>hashpw</code> devolve o hash <strong>com o salt embutido</strong> — não há coluna de salt;</li>
+    <li><code>checkpw</code> refaz o hash da senha digitada e compara — a verificação de mão única;</li>
+    <li>Segurança ganha arquivo próprio, como a conexão ganhou o <code>database.py</code> (ADR-0002).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>POST /signup</h2>
+  <pre><code class="language-python" data-trim>
+@app.post("/signup", response_model=UserRead, status_code=201)
+def signup(user: UserCreate, session: Session = Depends(get_session)):
+    statement = select(models.User).where(models.User.email == user.email)
+    existing_user = session.scalars(statement).first()
+    if existing_user is not None:
+        raise HTTPException(status_code=409, detail="Email already registered")
+    new_user = models.User(name=user.name, email=user.email,
+                           password=hash_password(user.password))
+    session.add(new_user)
+    session.commit()
+    session.refresh(new_user)
+    return new_user
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li>E-mail repetido → <strong>409 Conflict</strong>: o pedido é válido, mas conflita com o estado do recurso;</li>
+    <li>Duas requisições simultâneas com o mesmo e-mail? Ambas passam pelo <code>if</code> — a última defesa é o <code>UNIQUE</code> no banco;</li>
+    <li>No <code>SELECT</code> do mysql: <code>$2b$12$...</code> — e senhas iguais com hashes <strong>diferentes</strong> (o salt trabalhando).</li>
+  </ul>
+</section>
+
+<!-- ============ T-8 Autenticação ============ -->
+
+<section>
+  <h2>O HTTP tem amnésia</h2>
+  <ul style="font-size:.7em">
+    <li>O HTTP é <em>stateless</em>: cada requisição chega sozinha, sem memória da anterior;</li>
+    <li>O usuário fez login às 10h; às 10h01, o servidor já não sabe quem ele é;</li>
+    <li>Toda autenticação web é uma resposta a essa amnésia — a diferença entre as soluções é <strong>onde mora o estado</strong>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Cookies + sessions — o estado no servidor</h2>
+  <ul style="font-size:.68em">
+    <li><strong>Origem:</strong> o cookie foi criado por <strong>Lou Montulli</strong> (Netscape, 1994) e padronizado na RFC 6265 (2011);</li>
+    <li>No login, o servidor cria um registro de <strong>sessão</strong> e devolve um cookie com o <em>id</em> dessa sessão;</li>
+    <li>O navegador reenvia o cookie sozinho a cada requisição;</li>
+    <li>O estado mora <strong>no servidor</strong>: o cookie é só a chave do armário.</li>
+  </ul>
+  <p class="cite">RFC 6265 — HTTP State Management Mechanism, IETF, 2011</p>
+</section>
+
+<section>
+  <h2>Tokens — o estado viaja com o cliente</h2>
+  <ul style="font-size:.68em">
+    <li>No login, o servidor emite um <strong>token autocontido</strong> — e não guarda nada;</li>
+    <li>O cliente o guarda e o envia <strong>explicitamente</strong> no header <code>Authorization: Bearer &lt;token&gt;</code>;</li>
+    <li>A cada requisição, o servidor <strong>verifica</strong> o token — em vez de consultar um armário de sessões;</li>
+    <li><em>Bearer</em>: token "ao portador" — quem o carrega, é. Por isso não se compartilha.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Cookie + session × token</h2>
+  <table class="status-tab">
+    <tr><th></th><th>Cookie + session</th><th>Token (JWT)</th></tr>
+    <tr><td>Onde mora o estado</td><td>no servidor (armário de sessões)</td><td>no próprio token</td></tr>
+    <tr><td>O que o cliente guarda</td><td>id de sessão (cookie)</td><td>o token inteiro</td></tr>
+    <tr><td>Como viaja</td><td>cookie, automático pelo navegador</td><td>header <code>Authorization</code>, explícito</td></tr>
+    <tr><td>Revogação</td><td>imediata (apaga a sessão)</td><td>difícil — vale até expirar</td></tr>
+    <tr><td>Vocação</td><td>aplicações renderizadas no servidor</td><td>APIs consumidas por SPAs e apps</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>JWT — JSON Web Token</h2>
+  <p class="definicao">"Um meio compacto e seguro para URLs de representar claims a serem transferidos entre duas partes."</p>
+  <ul style="font-size:.65em;margin-top:.8em">
+    <li><strong>Origem:</strong> padronizado pela IETF na <strong>RFC 7519</strong> (2015);</li>
+    <li><strong>Claim:</strong> uma afirmação sobre o portador — <code>sub</code> (quem é), <code>exp</code> (até quando vale), <code>iat</code> (quando foi emitido);</li>
+    <li>Três partes separadas por ponto: <code>header.payload.signature</code>.</li>
+  </ul>
+  <p class="cite">RFC 7519 — JSON Web Token (JWT), IETF, 2015</p>
+</section>
+
+<section>
+  <h2>A anatomia de um JWT</h2>
+  <img src="img/anatomia-jwt.png" alt="As três partes de um JWT: header com o algoritmo, payload com os claims sub e exp, e a assinatura HMAC-SHA256" style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <h2>Assinado, não cifrado</h2>
+  <ul style="font-size:.68em">
+    <li>Base64url é <strong>codificação</strong>, não criptografia: qualquer um decodifica e lê header e payload (demonstração em <strong>jwt.io</strong>);</li>
+    <li>A assinatura garante <strong>integridade e origem</strong>: alterou um caractere, o HMAC não bate e o token é recusado;</li>
+    <li>Só quem tem a <code>SECRET_KEY</code> produz uma assinatura válida — ler é permitido, <strong>forjar não</strong>;</li>
+    <li>Consequência: <strong>nunca</strong> colocar senha ou dado sensível no payload.</li>
+  </ul>
+  <p class="cite">RFC 7519 — JSON Web Token (JWT), IETF, 2015</p>
+</section>
+
+<section>
+  <h2>Por que JWT nesta aplicação</h2>
+  <ul style="font-size:.68em">
+    <li>O backend é uma <strong>API</strong> que servirá um frontend React: cliente e servidor conversam por requisições explícitas, e o token viaja no header <code>Authorization</code>;</li>
+    <li><strong>Sem sessão no servidor:</strong> qualquer instância da API valida o token só com a chave secreta — não há armário de sessões para consultar nem sincronizar;</li>
+    <li><strong>O custo do stateless:</strong> um JWT emitido não pode ser "apagado" — vale até o <code>exp</code>. Por isso tokens têm vida curta;</li>
+    <li>Cookies+sessions seguem excelentes para aplicações renderizadas no servidor — a escolha aqui é <strong>pela arquitetura do projeto</strong>, não por moda.</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — autenticação</span></h2>
+  <ul style="font-size:.75em">
+    <li>HTTP é stateless; autenticar é responder à amnésia;</li>
+    <li>Cookies+sessions: estado no servidor. Tokens: estado no próprio token;</li>
+    <li>JWT (RFC 7519): <code>header.payload.signature</code> — legível, mas infalsificável sem a chave;</li>
+    <li>Claims <code>sub</code> e <code>exp</code>: quem é, até quando;</li>
+    <li>API + SPA → token no header <code>Authorization: Bearer</code>.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 2: login, token, dono ============ -->
+
+<section>
+  <h2>Emitir tokens — PyJWT</h2>
+  <pre><code class="language-bash" data-trim>
+pip install pyjwt
+pip freeze &gt; requirements.txt
+  </code></pre>
+  <pre><code class="language-python" data-trim>
+SECRET_KEY = "change-me-in-production-32-bytes-min!"
+ALGORITHM = "HS256"
+TOKEN_LIFETIME = timedelta(hours=2)
+
+
+def create_access_token(user_id: int) -> str:
+    payload = {
+        "sub": str(user_id),
+        "exp": datetime.now(timezone.utc) + TOKEN_LIFETIME,
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li><code>SECRET_KEY</code> — quem a tem, emite tokens válidos. Em produção: variável de ambiente, nunca o código. Mínimo de <strong>32 bytes</strong> para o HMAC-SHA256 (RFC 7518);</li>
+    <li><code>TOKEN_LIFETIME</code> — o <code>exp</code>: a resposta ao problema da revogação;</li>
+    <li><code>sub</code> vai como texto, por exigência da RFC.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>get_current_user — a dependency de identidade</h2>
+  <pre><code class="language-python" data-trim>
+bearer_scheme = HTTPBearer(auto_error=False)
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    session: Session = Depends(get_session),
+) -> models.User:
+    if credentials is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY,
+                             algorithms=[ALGORITHM])
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    user = session.get(models.User, int(payload["sub"]))
+    if user is None:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return user
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li>Uma dependency como <code>get_session</code> — a rota declara e recebe <strong>o usuário logado, pronto</strong>;</li>
+    <li><code>jwt.decode</code> valida assinatura <em>e</em> expiração numa chamada;</li>
+    <li><strong>401</strong> é "quem é você?" — 403 ("sei quem é, não pode") é assunto de autorização, adiante no curso.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>POST /login — credenciais viram token</h2>
+  <pre><code class="language-python" data-trim>
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+@app.post("/login", response_model=TokenResponse)
+def login(credentials: LoginRequest, session: Session = Depends(get_session)):
+    statement = select(models.User).where(models.User.email == credentials.email)
+    user = session.scalars(statement).first()
+    if user is None or not verify_password(credentials.password, user.password):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    return TokenResponse(access_token=create_access_token(user.id))
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li><code>verify_password</code> fecha o ciclo do bcrypt: hash digitado × hash guardado;</li>
+    <li><strong>Uma única mensagem</strong> para e-mail inexistente e senha errada — não entregar a lista de quem tem conta;</li>
+    <li>Cole o token em <strong>jwt.io</strong>: payload legível, assinatura só com a chave.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O ciclo completo</h2>
+  <img src="img/fluxo-jwt.png" alt="Fluxo do JWT: o login troca credenciais por um token assinado; cada requisição envia o token, a dependency verifica e a rota opera sobre o usuário logado" style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <h2>O CRUD ganha dono — listar e criar</h2>
+  <pre><code class="language-python" data-trim>
+@app.get("/api/books", response_model=list[BookRead])
+def list_books(name: str = "", session: Session = Depends(get_session),
+               current_user: models.User = Depends(get_current_user)):
+    statement = select(models.Book).where(models.Book.user_id == current_user.id)
+    if name != "":
+        statement = statement.where(models.Book.name.contains(name))
+    return session.scalars(statement).all()
+
+
+@app.post("/api/books", response_model=BookRead, status_code=201)
+def create_book(book: BookCreate, session: Session = Depends(get_session),
+                current_user: models.User = Depends(get_current_user)):
+    new_book = models.Book(name=book.name, user_id=current_user.id)
+    session.add(new_book)
+    session.commit()
+    session.refresh(new_book)
+    return new_book
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li>No <code>where(user_id == current_user.id)</code>, <strong>a FK e o token se encontram</strong>;</li>
+    <li>No POST, o dono vem <strong>do token, nunca do corpo</strong> — se viesse do corpo, qualquer um cadastraria em nome de qualquer um.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Livro alheio não existe: 404</h2>
+  <pre><code class="language-python" data-trim>
+@app.get("/api/books/{book_id}", response_model=BookRead)
+def read_book(book_id: int, session: Session = Depends(get_session),
+              current_user: models.User = Depends(get_current_user)):
+    book = session.get(models.Book, book_id)
+    if book is None or book.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return book
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>PUT e DELETE seguem o mesmo desenho: buscar pela chave, conferir o dono, agir;</li>
+    <li><strong>404, não 403:</strong> a API não confirma a existência de um recurso que não é seu — livro alheio e livro inexistente são indistinguíveis para quem pede;</li>
+    <li><code>/health</code> continua público: rota de infraestrutura, não de dados.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>A prova com dois usuários</h2>
+  <ol style="font-size:.68em">
+    <li>Sem token: <code>GET /api/books</code> → <strong>401</strong>;</li>
+    <li>Login com o primeiro usuário, token no <strong>Authorize</strong> do Swagger, dois livros criados;</li>
+    <li>Login com a segunda usuária, <strong>troque o token</strong>: <code>GET /api/books</code> → <strong>lista vazia</strong>;</li>
+    <li>Com o token dela, <code>GET /api/books/1</code> (livro do outro) → <strong>404</strong> — idem PUT e DELETE;</li>
+    <li>No mysql, <code>SELECT id, name, user_id FROM books;</code>: as linhas de cada dono lado a lado — e o Swagger mostrando só as do token ativo.</li>
+  </ol>
+</section>
+
+<!-- ============ Exercício e fechamento ============ -->
+
+<section>
+  <h2>Exercício em sala</h2>
+  <ol style="font-size:.7em">
+    <li>Crie <code>GET /api/users/me</code>, que devolve <strong>o usuário logado</strong> no formato <code>UserRead</code>;</li>
+    <li>Teste com o token de cada usuário — a resposta muda com o token, sem parâmetro na URL;</li>
+    <li>Teste sem token → 401.</li>
+  </ol>
+  <div class="nota">O corpo da rota tem uma linha: a dependency já fez todo o trabalho — identidade virou <strong>infraestrutura</strong>. Atenção ao <code>response_model</code>: é ele que impede o hash da senha de sair na resposta.</div>
+</section>
+
+<section>
+  <h2>Síntese da aula</h2>
+  <ul style="font-size:.62em">
+    <li>A relação 1:N (Chen, 1976) vira uma coluna com chave estrangeira — <code>books.user_id</code> — defendida pelo banco: não existe livro sem dono;</li>
+    <li>Senha não se armazena: armazena-se o <strong>hash</strong> (bcrypt — mão única, salt, custo);</li>
+    <li>HTTP é stateless: cookies+sessions guardam o estado no servidor; <strong>tokens o carregam consigo</strong>;</li>
+    <li>JWT (RFC 7519) é assinado, não cifrado: <code>header.payload.signature</code>, claims <code>sub</code> e <code>exp</code> — a assinatura impede a falsificação;</li>
+    <li>O login emite; a dependency <code>get_current_user</code> verifica; o CRUD opera <strong>sobre os livros do usuário logado</strong> — dono vem do token, nunca do corpo.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Referências</h2>
+  <ul style="font-size:.52em">
+    <li>CHEN, P. <em>The Entity-Relationship Model — Toward a Unified View of Data</em>. ACM TODS, 1976. (entidades, relacionamentos e cardinalidades)</li>
+    <li>DATE, C. J. <em>An Introduction to Database Systems</em>. 8ª ed., Addison-Wesley, 2003. (chave estrangeira e integridade referencial)</li>
+    <li>PROVOS, N.; MAZIÈRES, D. <em>A Future-Adaptable Password Scheme</em>. USENIX, 1999. (o bcrypt)</li>
+    <li>RFC 6265 — <em>HTTP State Management Mechanism</em>. IETF, 2011. (cookies)</li>
+    <li>RFC 7519 — <em>JSON Web Token (JWT)</em>. IETF, 2015.</li>
+    <li>OWASP. <em>JSON Web Token Cheat Sheet</em> e <em>Authentication Cheat Sheet</em> — cheatsheetseries.owasp.org.</li>
+    <li>Documentação oficial do PyJWT — pyjwt.readthedocs.io.</li>
+    <li>Documentação oficial do SQLAlchemy — docs.sqlalchemy.org (ForeignKey).</li>
+  </ul>
+</section>
+
+</div>
+</div>
+
+<script src="../assets/reveal/dist/reveal.js"></script>
+<script src="../assets/reveal/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    plugins: [ RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>
