@@ -157,7 +157,28 @@ SHOW CREATE TABLE books;
   <ul style="font-size:.65em">
     <li>O model mudou e o <code>create_all</code> <strong>não altera</strong> tabela existente — dado de aula é descartável;</li>
     <li>Os dois <code>CREATE TABLE</code> saem <strong>na ordem certa</strong>: <code>users</code> primeiro, porque <code>books</code> o referencia;</li>
-    <li>Na saída do <code>SHOW CREATE TABLE</code>: <code>FOREIGN KEY (user_id) REFERENCES users (id)</code> — o ORM declarou a constraint da teoria.</li>
+    <li>Na saída do <code>SHOW CREATE TABLE</code>: <code>FOREIGN KEY (user_id) REFERENCES users (id)</code> — o ORM declarou a constraint da teoria — e o <code>name varchar(255) NOT NULL</code> de sempre.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Os schemas do Book acompanham</h2>
+  <pre><code class="language-python" data-trim>
+class BookCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=255)
+
+
+class BookRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    user_id: int
+  </code></pre>
+  <ul style="font-size:.55em">
+    <li><strong>Validação na criação:</strong> <code>Field</code> declara as regras — <code>min_length=1</code> recusa nome vazio, <code>max_length=255</code> espelha o <code>String(255)</code> da coluna. Quem erra recebe <strong>422</strong>, não um erro cru do banco. O PUT usa o mesmo schema: mesma regra, de graça;</li>
+    <li><strong>O contrato de saída ganha o dono:</strong> <code>user_id</code> entra no <code>BookRead</code> — a relação do banco aparece na resposta;</li>
+    <li>Um POST <em>válido</em> agora quebra: <code>user_id</code> é <code>NOT NULL</code> e a rota não tem dono para dar ao livro — <strong>o banco acabou de exigir a autenticação</strong>.</li>
   </ul>
 </section>
 
@@ -480,6 +501,7 @@ def read_book(book_id: int, session: Session = Depends(get_session),
   <h2>Síntese da aula</h2>
   <ul style="font-size:.62em">
     <li>A relação 1:N (Chen, 1976) vira uma coluna com chave estrangeira — <code>books.user_id</code> — defendida pelo banco: não existe livro sem dono;</li>
+    <li>Os schemas do Book espelham as regras da coluna: <code>Field(min_length, max_length)</code> valida a entrada com 422, e o <code>BookRead</code> publica o dono (<code>user_id</code>);</li>
     <li>Senha não se armazena: armazena-se o <strong>hash</strong> (bcrypt — mão única, salt, custo);</li>
     <li>HTTP é stateless: cookies+sessions guardam o estado no servidor; <strong>tokens o carregam consigo</strong>;</li>
     <li>JWT (RFC 7519) é assinado, não cifrado: <code>header.payload.signature</code>, claims <code>sub</code> e <code>exp</code> — a assinatura impede a falsificação;</li>
