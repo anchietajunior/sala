@@ -134,9 +134,36 @@ class Book(Base):
 
 <pre>SHOW CREATE TABLE books;</pre>
 
-<p>Na saída, aponte a linha <code>FOREIGN KEY (user_id) REFERENCES users (id)</code> — o ORM declarou a constraint que a teoria descreveu.</p>
+<p>Na saída, aponte a linha <code>FOREIGN KEY (user_id) REFERENCES users (id)</code> — o ORM declarou a constraint que a teoria descreveu. Aponte também o <code>name varchar(255) NOT NULL</code>: no banco, livro sem nome nunca entrou — a coluna é <code>NOT NULL</code> desde que o model existe (<code>Mapped[str]</code> sem <code>| None</code>).</p>
 
-<h3>Passo 4 — os schemas do User e o POST /signup</h3>
+<h3>Passo 4 — os schemas do Book: validação na entrada, contrato na saída</h3>
+<p><em>Por quê:</em> a tabela mudou e os schemas do Book precisam acompanhar — e ainda devem uma validação de verdade: o <code>BookCreate</code> de hoje aceita até nome vazio, e a regra que a coluna do banco impõe deveria valer também na porta da API.</p>
+
+<p>No <code>main.py</code>, ajuste o import do Pydantic e os dois schemas do Book:</p>
+
+<pre>from pydantic import BaseModel, ConfigDict, Field</pre>
+
+<pre>class BookCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=255)
+
+
+class BookRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    user_id: int</pre>
+
+<p>Três decisões para verbalizar:</p>
+<ul>
+  <li><strong>Validação na criação:</strong> <code>Field</code> declara as regras do campo — <code>min_length=1</code> recusa nome vazio e <code>max_length=255</code> espelha o <code>String(255)</code> da coluna. A fronteira da API passa a exigir o que a coluna exige: quem erra recebe <strong>422</strong> com a explicação do campo, em vez de um erro cru do banco;</li>
+  <li>O PUT usa o mesmo <code>BookCreate</code> — a atualização ganha a mesma validação, sem escrever nada a mais;</li>
+  <li><strong>O contrato de saída ganha o dono:</strong> <code>user_id</code> entra no <code>BookRead</code> — a relação criada no banco aparece na resposta da API. O <code>created_at</code> continua fora: o contrato publica o que o cliente precisa.</li>
+</ul>
+
+<p>Teste no Swagger: <code>POST /api/books</code> com <code>{"name": ""}</code> → <strong>422</strong>, apontando o <code>min_length</code> — a validação age antes de a função da rota executar. Agora tente um POST <em>válido</em> e deixe a falha acontecer: <code>IntegrityError</code> — a coluna <code>user_id</code> é <code>NOT NULL</code> e a rota não tem dono para dar ao livro. <strong>O banco acabou de exigir a segunda metade da aula:</strong> não existe livro sem dono, e ainda não sabemos quem chama a API.</p>
+
+<h3>Passo 5 — os schemas do User e o POST /signup</h3>
 <p><em>Por quê:</em> para um livro ter dono, o dono precisa existir — o cadastro de usuários é o pré-requisito de tudo que vem depois.</p>
 
 <p>No <code>main.py</code>, os schemas primeiro, junto aos de Book:</p>
@@ -177,7 +204,7 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
   <li><code>hash_password(user.password)</code> — a senha em texto puro existe só em trânsito, dentro desta função; o que desce para o banco é o hash.</li>
 </ul>
 
-<h3>Passo 5 — security.py, parte 1: o hash</h3>
+<h3>Passo 6 — security.py, parte 1: o hash</h3>
 <p><em>Por quê:</em> tudo que é segurança — hash, verificação, e daqui a pouco tokens — merece um arquivo próprio, como a conexão mereceu o <code>database.py</code> (estrutura por tipo de arquivo, ADR-0002).</p>
 
 <p>Crie <code>backend/security.py</code>:</p>
@@ -247,14 +274,14 @@ def verify_password(password: str, hashed: str) -> bool:
 <h2><span class="tempo">40 min</span> Live-coding 2 — login, token e o CRUD com dono</h2>
 
 <div class="codigo">
-<h3>Passo 6 — instalar o PyJWT</h3>
+<h3>Passo 7 — instalar o PyJWT</h3>
 <p><em>Por quê:</em> emitir e verificar JWTs tem biblioteca de referência no ecossistema Python: <strong>PyJWT</strong>.</p>
 
 <span class="os">Mac e Windows (venv ativo, dentro de <code>projeto/backend</code>)</span>
 <pre>pip install pyjwt
 pip freeze > requirements.txt</pre>
 
-<h3>Passo 7 — security.py, parte 2: emitir e verificar tokens</h3>
+<h3>Passo 8 — security.py, parte 2: emitir e verificar tokens</h3>
 <p><em>Por quê:</em> as duas metades da autenticação — o login <em>emite</em>; toda rota protegida <em>verifica</em>.</p>
 
 <p>Complete o <code>backend/security.py</code>:</p>
@@ -318,7 +345,7 @@ def get_current_user(
   <li><code>get_current_user</code> — a peça central da aula: uma <strong>dependency</strong> como o <code>get_session</code>. Verifica a assinatura e a validade (<code>jwt.decode</code> levanta <code>InvalidTokenError</code> para assinatura errada <em>ou</em> token vencido), busca o User do <code>sub</code> e o devolve. A rota que a declarar recebe <strong>o usuário logado, pronto</strong> — toda a mecânica de token fica fora dela.</li>
 </ul>
 
-<h3>Passo 8 — POST /login</h3>
+<h3>Passo 9 — POST /login</h3>
 <p><em>Por quê:</em> a porta de entrada — troca credenciais válidas por um token.</p>
 
 <p>No <code>main.py</code>, ajuste o import da segurança e acrescente os schemas e a rota:</p>
@@ -351,7 +378,7 @@ def login(credentials: LoginRequest, session: Session = Depends(get_session)):
 
 <p>Teste no Swagger: <code>POST /login</code> com as credenciais do Machado → <strong>200</strong> com o token. Copie o token, cole em <strong>jwt.io</strong> e mostre: header e payload legíveis (<code>sub</code>, <code>exp</code>), assinatura verificável só com a <code>SECRET_KEY</code>. Troque uma letra do payload no próprio site e aponte: <em>Invalid Signature</em>.</p>
 
-<h3>Passo 9 — o CRUD ganha dono</h3>
+<h3>Passo 10 — o CRUD ganha dono</h3>
 <p><em>Por quê:</em> o momento que junta as duas metades da aula — a FK (posse) e o token (identidade). Cada rota de books passa a declarar <code>get_current_user</code> e a operar <strong>só sobre os livros do usuário logado</strong>.</p>
 
 <p>Substitua as cinco rotas de books no <code>main.py</code>:</p>
@@ -406,16 +433,7 @@ def delete_book(book_id: int, session: Session = Depends(get_session),
     session.delete(book)
     session.commit()</pre>
 
-<p>E o <code>BookRead</code> ganha a coluna nova, para a posse ficar visível na resposta:</p>
-
-<pre>class BookRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int
-    name: str
-    user_id: int</pre>
-
-<p>Quatro decisões para verbalizar:</p>
+<p>O <code>IntegrityError</code> do passo 4 morre aqui: o POST voltou a funcionar, agora com dono. As decisões para verbalizar:</p>
 <ul>
   <li><strong>A rota não mexe com token.</strong> Ela declara <code>Depends(get_current_user)</code> e recebe um <code>models.User</code> — a mesma inversão de controle do <code>get_session</code>, agora carregando identidade;</li>
   <li><strong>Na listagem, o filtro é pelo dono:</strong> <code>where(models.Book.user_id == current_user.id)</code> — a FK e o token se encontram nesta linha. O filtro por nome continua, encadeado;</li>
@@ -424,7 +442,7 @@ def delete_book(book_id: int, session: Session = Depends(get_session),
   <li><code>/health</code> fica público de propósito: é rota de infraestrutura, não de dados.</li>
 </ul>
 
-<h3>Passo 10 — a prova com dois usuários</h3>
+<h3>Passo 11 — a prova com dois usuários</h3>
 <p><em>Por quê:</em> autorização só se demonstra com dois atores.</p>
 
 <ol>
@@ -435,7 +453,7 @@ def delete_book(book_id: int, session: Session = Depends(get_session),
   <li>No mysql: <code>SELECT id, name, user_id FROM books;</code> — as linhas de cada dono, lado a lado, e o Swagger mostrando só as do token ativo.</li>
 </ol>
 
-<h3>Passo 11 — registrar a aula no README</h3>
+<h3>Passo 12 — registrar a aula no README</h3>
 <p>Em <code>projeto/README.md</code>: (1) acrescente as rotas novas à tabela de Endpoints e marque as de books como autenticadas (<code>Authorization: Bearer</code>); (2) atualize a <strong>Tabela de Dependências</strong> espelhando o novo <code>requirements.txt</code> (novatas: <code>bcrypt</code> e <code>PyJWT</code>); (3) uma linha na seção do banco: mudou o model? <code>DROP TABLE books; DROP TABLE users;</code> e deixe o <code>create_all</code> recriar.</p>
 </div>
 
@@ -443,6 +461,7 @@ def delete_book(book_id: int, session: Session = Depends(get_session),
 <strong>Checkpoint — como saber que funcionou:</strong>
 <ul>
   <li><code>SHOW CREATE TABLE books</code> exibe a <code>FOREIGN KEY (user_id) REFERENCES users (id)</code>;</li>
+  <li><code>POST /api/books</code> com nome vazio ou acima de 255 caracteres responde <strong>422</strong> apontando o campo — a validação do schema age antes do banco;</li>
   <li>Signup: 201 sem senha na resposta; 409 no e-mail repetido; hashes diferentes para senhas iguais no banco;</li>
   <li>Login: 200 com token para credenciais certas; <strong>401 com a mesma mensagem</strong> para e-mail inexistente e senha errada;</li>
   <li>Books sem token: 401 em todas as rotas; com token: cada usuário vê e altera <strong>só os próprios livros</strong> — livro alheio responde 404 em GET, PUT e DELETE;</li>
