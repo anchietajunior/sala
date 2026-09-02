@@ -1,7 +1,7 @@
 # Importa o FastAPI, a injeção de dependências (Depends) e a exceção de erros HTTP
 from fastapi import Depends, FastAPI, HTTPException
-# Base dos schemas e configuração para ler objetos do ORM
-from pydantic import BaseModel, ConfigDict
+# Base dos schemas, configuração para ler objetos do ORM e regras de campo
+from pydantic import BaseModel, ConfigDict, Field
 # select monta consultas SQL; Session é a sessão de banco do ORM
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -22,7 +22,9 @@ app = FastAPI()
 
 # Schema de entrada: o corpo aceito ao criar ou atualizar um livro (só o nome)
 class BookCreate(BaseModel):
-    name: str
+    # As regras da coluna valem também na porta da API: nome não-vazio,
+    # até 255 caracteres (o String(255) do model) — quem erra recebe 422
+    name: str = Field(min_length=1, max_length=255)
 
 
 # Schema de saída: o formato do livro devolvido pela API (com id e dono)
