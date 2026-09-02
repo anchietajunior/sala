@@ -39,7 +39,8 @@
     <li>Implementar <code>POST /signup</code> guardando apenas o hash da senha (bcrypt) e explicar por que senha nunca se armazena em texto puro;</li>
     <li>Comparar as formas de autenticação — cookies e sessions vs tokens — e justificar a escolha do JWT nesta aplicação;</li>
     <li>Descrever a anatomia de um JWT (header, payload, assinatura) e os claims que ele carrega;</li>
-    <li>Implementar <code>POST /login</code> emitindo JWT e proteger o CRUD de books: cada usuário só enxerga e altera os próprios livros.</li>
+    <li>Implementar <code>POST /login</code> emitindo JWT e proteger o CRUD de books: cada usuário só enxerga e altera os próprios livros;</li>
+    <li>Organizar o backend por tipo de arquivo — <code>schemas.py</code> e <code>routers/</code> por recurso — com o <code>main.py</code> como ponto de entrada.</li>
   </ul>
 </div>
 
@@ -77,13 +78,14 @@
 <p><em>Por quê:</em> o signup vai guardar senha, e senha não se armazena — armazena-se o <strong>hash</strong> dela. O algoritmo da disciplina é o <strong>bcrypt</strong> (Provos &amp; Mazières, USENIX 1999): uma função de mão única, com <em>salt</em> embutido e custo computacional ajustável — lenta de propósito, para inviabilizar força bruta.</p>
 
 <span class="os">Mac e Windows (venv ativo, dentro de <code>projeto/backend</code>)</span>
-<pre>pip install bcrypt
+<pre>pip install bcrypt "pydantic[email]"
 pip freeze > requirements.txt</pre>
 
 <ul>
   <li><strong>Mão única:</strong> do hash não se recupera a senha — no login, calcula-se o hash do que o usuário digitou e comparam-se os hashes;</li>
   <li><strong>Salt embutido:</strong> duas senhas iguais geram hashes diferentes — tabelas pré-computadas de hash não funcionam;</li>
-  <li>Quem tiver acesso ao banco verá apenas o hash — e é assim que deve ser.</li>
+  <li>Quem tiver acesso ao banco verá apenas o hash — e é assim que deve ser;</li>
+  <li><strong><code>pydantic[email]</code></strong> — a sintaxe de <em>extra</em> do pip: instala o Pydantic com o validador de e-mail (<code>email-validator</code>), que o schema do cadastro vai usar.</li>
 </ul>
 
 <h3>Passo 2 — models.py: o User e a chave estrangeira</h3>
@@ -166,12 +168,14 @@ class BookRead(BaseModel):
 <h3>Passo 5 — os schemas do User e o POST /signup</h3>
 <p><em>Por quê:</em> para um livro ter dono, o dono precisa existir — o cadastro de usuários é o pré-requisito de tudo que vem depois.</p>
 
-<p>No <code>main.py</code>, os schemas primeiro, junto aos de Book:</p>
+<p>No <code>main.py</code>, os schemas primeiro, junto aos de Book — com o import do Pydantic ganhando o <code>EmailStr</code>:</p>
+
+<pre>from pydantic import BaseModel, ConfigDict, EmailStr, Field</pre>
 
 <pre>class UserCreate(BaseModel):
-    name: str
-    email: str
-    password: str
+    name: str = Field(min_length=1, max_length=100)
+    email: EmailStr = Field(max_length=255)
+    password: str = Field(min_length=8, max_length=72)
 
 
 class UserRead(BaseModel):
@@ -181,7 +185,14 @@ class UserRead(BaseModel):
     name: str
     email: str</pre>
 
-<p>O <code>UserRead</code> é o caso mais forte de <code>response_model</code> que o projeto já viu: <strong>a senha entra no <code>UserCreate</code> e nunca sai no <code>UserRead</code></strong> — nem o hash. O contrato de saída é o filtro.</p>
+<p>A entrada nasce validada, como a do Book:</p>
+<ul>
+  <li><code>name</code> espelha o <code>String(100)</code> da coluna — não-vazio, até 100;</li>
+  <li><code>EmailStr</code> valida o <strong>formato</strong> do e-mail (é o <code>email-validator</code> do passo 1 em ação): e-mail malformado responde 422 antes de a rota executar. O formato é problema do schema; a <em>unicidade</em> continua sendo do banco (<code>UNIQUE</code>);</li>
+  <li><code>password</code> entre <strong>8 e 72</strong>: o mínimo é política de senha; o máximo é um limite real do bcrypt — acima de 72 bytes a biblioteca levanta erro, e o schema barra antes, com 422 explicativo em vez de 500.</li>
+</ul>
+
+<p>E o <code>UserRead</code> é o caso mais forte de <code>response_model</code> que o projeto já viu: <strong>a senha entra no <code>UserCreate</code> e nunca sai no <code>UserRead</code></strong> — nem o hash. O contrato de saída é o filtro.</p>
 
 <p>Agora a rota, com o hash na frente do banco. Import no topo do <code>main.py</code>: <code>from security import hash_password</code> — o arquivo <code>security.py</code> nasce no passo seguinte; escreva a rota primeiro para a turma sentir a falta dele:</p>
 
@@ -271,7 +282,7 @@ def verify_password(password: str, hashed: str) -> bool:
 <div class="pergunta">Para a turma: "Se o token diz quem você é, o que acontece se você alterar o <code>sub</code> para o id de outra pessoa?" (a assinatura deixa de bater — o servidor recalcula o HMAC e recusa. É o que o live-coding vai demonstrar)</div>
 </div>
 
-<h2><span class="tempo">40 min</span> Live-coding 2 — login, token e o CRUD com dono</h2>
+<h2><span class="tempo">50 min</span> Live-coding 2 — login, token, o CRUD com dono e a organização</h2>
 
 <div class="codigo">
 <h3>Passo 7 — instalar o PyJWT</h3>
@@ -354,7 +365,7 @@ def get_current_user(
                       verify_password)</pre>
 
 <pre>class LoginRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
@@ -453,15 +464,83 @@ def delete_book(book_id: int, session: Session = Depends(get_session),
   <li>No mysql: <code>SELECT id, name, user_id FROM books;</code> — as linhas de cada dono, lado a lado, e o Swagger mostrando só as do token ativo.</li>
 </ol>
 
-<h3>Passo 12 — registrar a aula no README</h3>
-<p>Em <code>projeto/README.md</code>: (1) acrescente as rotas novas à tabela de Endpoints e marque as de books como autenticadas (<code>Authorization: Bearer</code>); (2) atualize a <strong>Tabela de Dependências</strong> espelhando o novo <code>requirements.txt</code> (novatas: <code>bcrypt</code> e <code>PyJWT</code>); (3) uma linha na seção do banco: mudou o model? <code>DROP TABLE books; DROP TABLE users;</code> e deixe o <code>create_all</code> recriar.</p>
+<h3>Passo 12 — organizar o backend: schemas.py e routers/</h3>
+<p><em>Por quê:</em> o <code>main.py</code> acumulou seis schemas e oito rotas de dois recursos diferentes — virou o arquivo onde tudo mora. A estrutura por tipo de arquivo (decisão do ADR-0002 para quando este momento chegasse) separa as responsabilidades: os schemas num módulo, as rotas de cada recurso num <em>router</em> próprio, e o <code>main.py</code> como puro ponto de entrada.</p>
+
+<p>A estrutura final:</p>
+
+<pre>backend/
+├── main.py          ← ponto de entrada: app, create_all, include_router
+├── database.py      ← conexão, Base e sessão do ORM
+├── models.py        ← as tabelas (User, Book)
+├── schemas.py       ← todas as classes Pydantic
+├── security.py      ← hash, token e get_current_user
+└── routers/
+    ├── __init__.py  ← vazio: torna a pasta um pacote
+    └── users.py / books.py ← as rotas de cada recurso</pre>
+
+<p>Crie <code>backend/schemas.py</code> e <strong>mova</strong> para lá as seis classes Pydantic, com o import que as serve — nada muda nelas. Depois crie <code>backend/routers/__init__.py</code> (vazio) e <code>backend/routers/books.py</code>. A peça nova é o <strong><code>APIRouter</code></strong>: um "mini-app" que registra rotas fora do <code>main.py</code>, com um <strong>prefixo</strong> e uma <strong>tag</strong> declarados uma vez para o recurso inteiro:</p>
+
+<pre>from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+import models
+from database import get_session
+from schemas import BookCreate, BookRead
+from security import get_current_user
+
+router = APIRouter(prefix="/api/books", tags=["books"])</pre>
+
+<p>Mova as cinco rotas de books, trocando <code>@app</code> por <code>@router</code> e <strong>removendo o prefixo de cada path</strong> — ele agora existe num lugar só:</p>
+
+<pre>@router.get("", response_model=list[BookRead])        # era @app.get("/api/books")
+@router.get("/{book_id}", response_model=BookRead)    # era /api/books/{book_id}
+@router.post("", response_model=BookRead, status_code=201)
+@router.put("/{book_id}", response_model=BookRead)
+@router.delete("/{book_id}", status_code=204)</pre>
+
+<p>Idem <code>backend/routers/users.py</code> com o signup e o login — sem prefixo, porque <code>/signup</code> e <code>/login</code> são ações de topo, mas com a tag do recurso:</p>
+
+<pre>router = APIRouter(tags=["users"])</pre>
+
+<p>E o <code>main.py</code> encolhe para o papel de ponto de entrada:</p>
+
+<pre>from fastapi import FastAPI
+
+import models
+from database import Base, engine
+from routers import books, users
+
+Base.metadata.create_all(engine)
+
+app = FastAPI()
+
+app.include_router(users.router)
+app.include_router(books.router)
+
+
+@app.get("/health")
+def read_health():
+    return {"status": "Ok"}</pre>
+
+<ul>
+  <li><strong><code>prefix</code></strong> — o nome padrão do recurso, declarado uma vez: toda rota do arquivo nasce sob <code>/api/books</code>;</li>
+  <li><strong><code>tags</code></strong> — o Swagger se reorganiza em seções por recurso: <em>users</em> e <em>books</em>, em vez de uma lista única;</li>
+  <li><strong><code>include_router</code></strong> — o <code>main.py</code> não conhece rota nenhuma: registra os recursos e sobe o app. O <code>/health</code> fica nele por ser rota de infraestrutura, não de recurso;</li>
+  <li>Abra o Swagger e compare: <strong>nenhuma URL mudou</strong> — a reorganização é interna. Refatorar é isto: mover sem mudar comportamento.</li>
+</ul>
+
+<h3>Passo 13 — registrar a aula no README</h3>
+<p>Em <code>projeto/README.md</code>: (1) acrescente as rotas novas à tabela de Endpoints e marque as de books como autenticadas (<code>Authorization: Bearer</code>); (2) atualize a <strong>Tabela de Dependências</strong> espelhando o novo <code>requirements.txt</code> (novatas: <code>bcrypt</code>, <code>PyJWT</code>, <code>email-validator</code> e <code>dnspython</code>); (3) documente a <strong>estrutura de pastas</strong> do backend; (4) uma linha na seção do banco: mudou o model? <code>DROP TABLE books; DROP TABLE users;</code> e deixe o <code>create_all</code> recriar.</p>
 </div>
 
 <div class="checkpoint">
 <strong>Checkpoint — como saber que funcionou:</strong>
 <ul>
   <li><code>SHOW CREATE TABLE books</code> exibe a <code>FOREIGN KEY (user_id) REFERENCES users (id)</code>;</li>
-  <li><code>POST /api/books</code> com nome vazio ou acima de 255 caracteres responde <strong>422</strong> apontando o campo — a validação do schema age antes do banco;</li>
+  <li><code>POST /api/books</code> com nome vazio ou acima de 255 caracteres responde <strong>422</strong> apontando o campo — a validação do schema age antes do banco; o mesmo vale no signup para nome vazio, e-mail malformado e senha fora de 8–72;</li>
+  <li>O Swagger está agrupado por recurso (<em>users</em> e <em>books</em>) e o <code>main.py</code> contém apenas app, <code>create_all</code>, <code>include_router</code> e o <code>/health</code>;</li>
   <li>Signup: 201 sem senha na resposta; 409 no e-mail repetido; hashes diferentes para senhas iguais no banco;</li>
   <li>Login: 200 com token para credenciais certas; <strong>401 com a mesma mensagem</strong> para e-mail inexistente e senha errada;</li>
   <li>Books sem token: 401 em todas as rotas; com token: cada usuário vê e altera <strong>só os próprios livros</strong> — livro alheio responde 404 em GET, PUT e DELETE;</li>
@@ -479,9 +558,9 @@ def delete_book(book_id: int, session: Session = Depends(get_session),
   <li>Teste sem token → 401.</li>
 </ol>
 
-<p><strong>Gabarito (para o professor):</strong></p>
+<p><strong>Gabarito (para o professor):</strong> a rota mora em <code>routers/users.py</code> — é o router do recurso. O arquivo ainda não importa <code>get_current_user</code>; o aluno precisa acrescentá-lo ao import do <code>security</code>.</p>
 
-<pre>@app.get("/api/users/me", response_model=UserRead)
+<pre>@router.get("/api/users/me", response_model=UserRead)
 def read_current_user(current_user: models.User = Depends(get_current_user)):
     return current_user</pre>
 
@@ -490,7 +569,7 @@ def read_current_user(current_user: models.User = Depends(get_current_user)):
 <h2><span class="tempo">5 min</span> Fechamento</h2>
 
 <ul>
-  <li><strong>Síntese:</strong> a relação 1:N (Chen, 1976) vira uma coluna com chave estrangeira — <code>books.user_id</code> — que o banco defende com integridade referencial: não existe livro sem dono; senha não se armazena — armazena-se o hash (bcrypt: mão única, salt, custo); o HTTP é stateless e a autenticação responde a isso — cookies+sessions guardam o estado no servidor, tokens o carregam consigo; o JWT (RFC 7519) é assinado, não cifrado: <code>header.payload.signature</code>, claims <code>sub</code> e <code>exp</code>, e a assinatura HMAC com a chave secreta é o que impede a falsificação; no código, o login emite o token e a dependency <code>get_current_user</code> o verifica — e o CRUD inteiro passou a operar sobre os livros <strong>do usuário logado</strong>, com o dono vindo do token e nunca do corpo da requisição.</li>
+  <li><strong>Síntese:</strong> a relação 1:N (Chen, 1976) vira uma coluna com chave estrangeira — <code>books.user_id</code> — que o banco defende com integridade referencial: não existe livro sem dono; senha não se armazena — armazena-se o hash (bcrypt: mão única, salt, custo); o HTTP é stateless e a autenticação responde a isso — cookies+sessions guardam o estado no servidor, tokens o carregam consigo; o JWT (RFC 7519) é assinado, não cifrado: <code>header.payload.signature</code>, claims <code>sub</code> e <code>exp</code>, e a assinatura HMAC com a chave secreta é o que impede a falsificação; no código, o login emite o token e a dependency <code>get_current_user</code> o verifica — e o CRUD inteiro passou a operar sobre os livros <strong>do usuário logado</strong>, com o dono vindo do token e nunca do corpo da requisição; por fim, o backend se organizou por tipo de arquivo — schemas num módulo, cada recurso com seu router (prefixo e tag próprios) e o <code>main.py</code> como puro ponto de entrada.</li>
 </ul>
 
 </body>
