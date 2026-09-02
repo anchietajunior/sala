@@ -17,9 +17,9 @@
 
   <!-- mundo das tabelas -->
   <rect x="520" y="40" width="240" height="200" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
-  <text x="640" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a6508">MySQL — tabela book</text>
+  <text x="640" y="68" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a6508">MySQL — tabela books</text>
   <g font-family="monospace" font-size="13" fill="#333">
-    <text x="540" y="104">CREATE TABLE book (</text>
+    <text x="540" y="104">CREATE TABLE books (</text>
     <text x="555" y="136">id ... PRIMARY KEY</text>
     <text x="555" y="166">name VARCHAR(255)</text>
     <text x="555" y="196">created_at DATETIME</text>

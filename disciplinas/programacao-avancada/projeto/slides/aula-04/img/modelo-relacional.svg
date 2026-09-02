@@ -5,7 +5,7 @@
     </marker>
   </defs>
 
-  <text x="30" y="30" font-size="16" font-weight="bold" fill="#8a6508" font-family="monospace">tabela book</text>
+  <text x="30" y="30" font-size="16" font-weight="bold" fill="#8a6508" font-family="monospace">tabela books</text>
 
   <!-- callouts topo -->
   <text x="60" y="62" font-size="13" fill="#2e6da4" font-weight="bold">chave primária (auto-increment)</text>

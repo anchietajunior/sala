@@ -114,15 +114,15 @@
 <section>
   <h2>O SQL de hoje</h2>
   <pre><code class="language-sql" data-trim>
-CREATE TABLE book (
+CREATE TABLE books (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO book (name) VALUES ('Dom Casmurro');
+INSERT INTO books (name) VALUES ('Dom Casmurro');
 
-SELECT id, name FROM book;
+SELECT id, name FROM books;
   </code></pre>
   <p style="font-size:.6em">Este é o último <code>CREATE TABLE</code> digitado à mão — daqui em diante, quem o escreve é o ORM.</p>
 </section>
@@ -154,15 +154,15 @@ SELECT id, name FROM book;
 CREATE DATABASE reading_tracker;
 USE reading_tracker;
 
-CREATE TABLE book ( ... );   -- o CREATE do slide anterior
-INSERT INTO book (name) VALUES ('Dom Casmurro');
-SELECT id, name FROM book;
-DESCRIBE book;
+CREATE TABLE books ( ... );   -- o CREATE do slide anterior
+INSERT INTO books (name) VALUES ('Dom Casmurro');
+SELECT id, name FROM books;
+DESCRIBE books;
   </code></pre>
   <ul style="font-size:.6em">
     <li>O <code>id</code> veio <strong>1</strong> sem ninguém pedir; o <code>created_at</code> se preencheu sozinho;</li>
     <li><code>INSERT</code> com nome <code>NULL</code> → <strong>ERROR 1048: Column 'name' cannot be null</strong> — a constraint trabalhando, mesmo por fora da API;</li>
-    <li>Ao final, <code>DROP TABLE book;</code> — daqui em diante, quem escreve o <code>CREATE TABLE</code> é o ORM.</li>
+    <li>Ao final, <code>DROP TABLE books;</code> — daqui em diante, quem escreve o <code>CREATE TABLE</code> é o ORM.</li>
   </ul>
 </section>
 
@@ -190,7 +190,7 @@ DESCRIBE book;
 
 <section>
   <h2>O ORM é um tradutor</h2>
-  <img src="img/orm-tradutor.png" alt="Diagrama do ORM traduzindo entre a classe Book em Python e a tabela book no MySQL" style="width:100%;max-width:740px">
+  <img src="img/orm-tradutor.png" alt="Diagrama do ORM traduzindo entre a classe Book em Python e a tabela books no MySQL" style="width:100%;max-width:740px">
   <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · docs.sqlalchemy.org</p>
 </section>
 
@@ -324,7 +324,7 @@ from database import Base
 
 
 class Book(Base):
-    __tablename__ = "book"
+    __tablename__ = "books"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255))
@@ -337,7 +337,7 @@ class Book(Base):
   <h2>O model, linha a linha</h2>
   <ul style="font-size:.58em">
     <li><code>class Book(Base)</code> — herdar de <code>Base</code> é o que diz "esta classe <strong>é</strong> uma tabela": no import, ela se registra no metadata;</li>
-    <li><code>__tablename__ = "book"</code> — o nome da tabela é declarado, não adivinhado — <code>lower_case_snake</code> no singular, como no ADR-0002;</li>
+    <li><code>__tablename__ = "books"</code> — o nome da tabela é declarado, não adivinhado — <code>lower_case_snake</code> no singular, como no ADR-0002;</li>
     <li><code>primary_key=True</code> num inteiro → <code>PRIMARY KEY</code> <strong>e</strong> <code>AUTO_INCREMENT</code>: o objeto nasce sem id, o banco atribui um no INSERT — e a conta do <code>next_book_id()</code> se aposenta;</li>
     <li><code>String(255)</code> — o MySQL exige tamanho para <code>VARCHAR</code>: <code>Mapped[str]</code> escolhe o tipo, <code>String(255)</code> fixa a largura — e, sem <code>| None</code>, a coluna nasce <code>NOT NULL</code>;</li>
     <li><code>server_default=func.now()</code> — <em>server</em> porque quem preenche é o banco: vira o <code>DEFAULT CURRENT_TIMESTAMP</code>; <code>func.now()</code> é a função SQL <code>NOW()</code> escrita em Python;</li>
@@ -362,8 +362,8 @@ app = FastAPI()
   </code></pre>
   <ul style="font-size:.6em">
     <li>O <code>import models</code> vem <strong>antes</strong>: é ele que registra <code>Book</code> no metadata da <code>Base</code>;</li>
-    <li>Na subida do uvicorn, o <code>echo</code> mostra o <strong><code>CREATE TABLE book (...)</code></strong> — o SQL do quadro, escrito pelo ORM;</li>
-    <li>Conferir no mysql: <code>SHOW TABLES;</code> e <code>DESCRIBE book;</code>.</li>
+    <li>Na subida do uvicorn, o <code>echo</code> mostra o <strong><code>CREATE TABLE books (...)</code></strong> — o SQL do quadro, escrito pelo ORM;</li>
+    <li>Conferir no mysql: <code>SHOW TABLES;</code> e <code>DESCRIBE books;</code>.</li>
   </ul>
 </section>
 
@@ -535,9 +535,9 @@ def delete_book(book_id: int, session: Session = Depends(get_session)):
     <li>Adicione <code>author: str</code> aos dois schemas;</li>
     <li>Passe o campo na criação (<code>author=book.author</code>) e na atualização (<code>stored_book.author = book.author</code>);</li>
     <li>Teste um POST e observe a falha — <em>por que a coluna não existe, se o model tem o campo?</em></li>
-    <li>Corrija: <code>DROP TABLE book;</code>, reinicie o uvicorn e assista ao <code>create_all</code> recriar a tabela — agora com <code>author</code>.</li>
+    <li>Corrija: <code>DROP TABLE books;</code>, reinicie o uvicorn e assista ao <code>create_all</code> recriar a tabela — agora com <code>author</code>.</li>
   </ol>
-  <div class="nota">Exercício descartável: o projeto segue <strong>sem</strong> o campo <code>author</code> — desfazer, <code>DROP TABLE book;</code> e reiniciar, para o model voltar ao original.</div>
+  <div class="nota">Exercício descartável: o projeto segue <strong>sem</strong> o campo <code>author</code> — desfazer, <code>DROP TABLE books;</code> e reiniciar, para o model voltar ao original.</div>
 </section>
 
 <section>

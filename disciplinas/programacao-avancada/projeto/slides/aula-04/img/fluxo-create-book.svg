@@ -31,7 +31,7 @@
 
   <rect x="630" y="60" width="150" height="70" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
   <text x="705" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a6508">MySQL</text>
-  <text x="705" y="112" text-anchor="middle" font-size="12.5" fill="#8a6508" font-family="monospace">tabela book</text>
+  <text x="705" y="112" text-anchor="middle" font-size="12.5" fill="#8a6508" font-family="monospace">tabela books</text>
 
   <line x1="185" y1="95" x2="225" y2="95" stroke="#444" stroke-width="2" marker-end="url(#setaF)"/>
   <line x1="385" y1="95" x2="410" y2="95" stroke="#444" stroke-width="2" marker-end="url(#setaF)"/>
