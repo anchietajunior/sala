@@ -40,7 +40,8 @@ def read_book(book_id: int, session: Session = Depends(get_session),
 @router.post("", response_model=BookRead, status_code=201)
 def create_book(book: BookCreate, session: Session = Depends(get_session),
                 current_user: models.User = Depends(get_current_user)):
-    new_book = models.Book(name=book.name, user_id=current_user.id)
+    new_book = models.Book(name=book.name, pages=book.pages,
+                           current_page=book.current_page, user_id=current_user.id)
     # add coloca na sessão, commit grava no banco, refresh traz o que o banco gerou
     session.add(new_book)
     session.commit()
@@ -56,8 +57,10 @@ def update_book(book_id: int, book: BookCreate,
     stored_book = session.get(models.Book, book_id)
     if stored_book is None or stored_book.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Book not found")
-    # A sessão rastreia o objeto: trocar o atributo basta, o commit emite o UPDATE
+    # A sessão rastreia o objeto: trocar os atributos basta, o commit emite o UPDATE
     stored_book.name = book.name
+    stored_book.pages = book.pages
+    stored_book.current_page = book.current_page
     session.commit()
     session.refresh(stored_book)
     return stored_book

@@ -1,5 +1,7 @@
 # Importa o FastAPI, que cria a aplicação e atende as requisições
 from fastapi import FastAPI
+# Middleware que informa ao navegador quais origens podem chamar a API
+from fastapi.middleware.cors import CORSMiddleware
 
 # Importar models registra as tabelas no metadata antes do create_all
 import models
@@ -12,6 +14,15 @@ Base.metadata.create_all(engine)
 
 # Cria a instância da aplicação: o main.py é só o ponto de entrada
 app = FastAPI()
+
+# O frontend roda em outra origem (porta 5173): sem esta permissão, o
+# navegador bloqueia a resposta — é a política de mesma origem
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Registra as rotas de cada recurso na aplicação
 app.include_router(users.router)

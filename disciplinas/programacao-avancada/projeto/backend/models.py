@@ -29,6 +29,16 @@ class Book(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255))
+    # Total de páginas e a página em que a leitura está; só o tipo Python
+    # basta — Mapped[int] vira INTEGER NOT NULL
+    pages: Mapped[int]
+    current_page: Mapped[int]
     # Chave estrangeira obrigatória: todo livro pertence a um usuário
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+    # Reading Progress: porcentagem derivada das duas colunas a cada leitura;
+    # dado calculado não se armazena — assim nunca fica desatualizado
+    @property
+    def progress(self) -> int:
+        return round(self.current_page * 100 / self.pages)
