@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 06 - Frontend com React e o consumo da API</title>
+<link rel="stylesheet" href="../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../assets/reveal/dist/theme/white.css">
+<link rel="stylesheet" href="../assets/reveal/plugin/highlight/monokai.css">
+<style>
+  .reveal { font-size: 34px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+  .reveal h2 { font-size: 1.35em; }
+  .reveal ul { display: block; }
+  .reveal li { margin: .35em 0; }
+  .reveal pre { box-shadow: none; width: 100%; }
+  .reveal pre code { padding: .8em 1em; border-radius: 6px; max-height: 480px; }
+  .cite { font-size: .45em; color: #999; margin-top: 1.6em; }
+  .duas-colunas { display: flex; gap: 1em; align-items: flex-start; text-align: left; }
+  .duas-colunas > div { flex: 1; min-width: 0; }
+  .os-label { font-size: .55em; font-weight: bold; color: #666; margin: 0 0 .2em .1em; }
+  .nota { font-size: .6em; background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .6em .9em; margin-top: .8em; }
+  .destaque { color: #2e6da4; font-weight: bold; }
+  .tema-badge { display: inline-block; background: #2e6da4; color: #fff; border-radius: 999px; padding: .05em .6em; font-size: .5em; vertical-align: middle; }
+  .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
+  .status-tab { font-size: .7em; border-collapse: collapse; margin: 0 auto; }
+  .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ Abertura ============ -->
+
+<section>
+  <h1 style="font-size:1.5em">Frontend com React<br>e o consumo da API</h1>
+  <p>Programação Avançada - Aula 06</p>
+  <p style="font-size:.55em;color:#888">Universidade Unirios</p>
+</section>
+
+<section>
+  <h2>O único cliente da API é o Swagger</h2>
+  <p style="font-size:.7em">Cadastro, login e o CRUD de Books autenticado estão prontos - e para usá-los uma pessoa precisaria escrever requisições HTTP à mão, copiar o token e montar o header.</p>
+  <ul style="font-size:.7em">
+    <li><strong>Não existe interface</strong> - o User é uma pessoa; a API fala JSON. Falta o programa que roda no navegador e conversa com a API em nome dela;</li>
+    <li><strong>Book só tem nome</strong> - o Reading Progress é a página atual sobre o total de páginas, e a tabela <code>books</code> não guarda nenhum dos dois números.</li>
+  </ul>
+  <p style="font-size:.65em">Primeiro os dados (páginas e progresso, no backend); depois a interface (React) que os exibe.</p>
+</section>
+
+<section>
+  <h2>Objetivos da aula</h2>
+  <ul style="font-size:.7em">
+    <li>Estender o <code>Book</code> com <code>pages</code> e <code>current_page</code> e expor o Reading Progress como dado <strong>derivado</strong>;</li>
+    <li>Criar um projeto React com <strong>Vite</strong>, configurar o <strong>Tailwind</strong> e explicar o papel de cada ferramenta;</li>
+    <li>Explicar o modelo de componentes do React - <strong>interface como função do estado</strong> - com <code>useState</code>, <code>useEffect</code> e props;</li>
+    <li>Explicar a <strong>política de mesma origem</strong>, ler o erro de CORS e configurar o <code>CORSMiddleware</code>;</li>
+    <li>Consumir a API com <code>fetch</code>: cadastro, login e o CRUD de Books, com o token no <code>localStorage</code> e no header <code>Authorization: Bearer</code>.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 1: SPA e React ============ -->
+
+<section>
+  <h2>Aplicação de página única: trocar dados, não páginas</h2>
+  <p class="definicao">O navegador carrega um único documento HTML e um programa que, de forma assíncrona, pede dados ao servidor e atualiza a tela - sem recarregar a página.</p>
+  <ul style="font-size:.65em;margin-top:.8em">
+    <li><strong>Origem:</strong> nomeada por <strong>Jesse James Garrett</strong> no ensaio <em>Ajax: A New Approach to Web Applications</em> (2005) - a comunicação assíncrona deixa de trocar páginas inteiras;</li>
+    <li>A API construída até aqui é o <strong>lado dos dados</strong> desse modelo; o que falta é o lado da tela.</li>
+  </ul>
+  <p class="cite">GARRETT, J. J. - Ajax: A New Approach to Web Applications, 2005</p>
+</section>
+
+<section>
+  <h2>Dois servidores, dois papéis</h2>
+  <img src="img/spa-dois-servidores.png" alt="Diagrama: o Vite entrega o programa React ao navegador; a API FastAPI entrega dados em JSON; são duas origens diferentes" style="width:100%;max-width:760px">
+  <p class="cite">GARRETT, J. J. - 2005 · Documentação oficial do Vite - vite.dev</p>
+</section>
+
+<section>
+  <h2>React: a interface é uma função do estado</h2>
+  <p class="definicao">"The library for web and native user interfaces." - react.dev</p>
+  <ul style="font-size:.65em;margin-top:.8em">
+    <li><strong>Origem:</strong> criada por <strong>Jordan Walke</strong> no Facebook, em uso interno desde 2011 e publicada como código aberto na JSConf US de 2013;</li>
+    <li><strong>Interface declarativa:</strong> o componente descreve <em>como a tela deve ficar</em> para um dado estado; o React calcula <em>o que mudar</em> no DOM quando o estado muda;</li>
+    <li>Em uma fórmula: <span class="destaque">UI = f(estado)</span>. O programador nunca toca o DOM.</li>
+  </ul>
+  <p class="cite">Documentação oficial do React - react.dev (Thinking in React)</p>
+</section>
+
+<section>
+  <h2>Mudar o estado é a única forma de mudar a tela</h2>
+  <img src="img/ui-funcao-do-estado.png" alt="Diagrama do ciclo: estado alimenta o componente, que devolve JSX desenhado no DOM; um evento altera o estado e o ciclo recomeça" style="width:100%;max-width:760px">
+  <p class="cite">Documentação oficial do React - react.dev (Managing State)</p>
+</section>
+
+<section>
+  <h2>Componente, props, estado e efeito</h2>
+  <ul style="font-size:.66em">
+    <li><strong>Componente:</strong> uma função JavaScript que devolve <strong>JSX</strong> - sintaxe parecida com HTML, compilada para chamadas JavaScript pelo Vite;</li>
+    <li><strong>Props:</strong> os parâmetros do componente - o pai passa dados e funções para o filho;</li>
+    <li><strong>Estado</strong> (<code>useState</code>): o valor cuja mudança redesenha o componente;</li>
+    <li><strong>Efeito</strong> (<code>useEffect</code>): código que roda <em>depois</em> de desenhar - o lugar de buscar dados quando a tela aparece;</li>
+    <li>Os <em>hooks</em> existem desde o React 16.8 (2019) e são a forma atual de escrever componentes.</li>
+  </ul>
+  <p class="cite">Documentação oficial do React - react.dev (Describing the UI)</p>
+</section>
+
+<section>
+  <h2>As ferramentas: Node, npm, Vite e Tailwind</h2>
+  <table class="status-tab">
+    <tr><th>No backend (Python)</th><th>No frontend (Node)</th></tr>
+    <tr><td>interpretador Python</td><td><strong>Node.js</strong> (Ryan Dahl, 2009) - JavaScript fora do navegador</td></tr>
+    <tr><td><code>pip</code> + <code>requirements.txt</code></td><td><strong>npm</strong> + <code>package.json</code> (e o <code>package-lock.json</code> fixa versões)</td></tr>
+    <tr><td><code>.venv/</code></td><td><code>node_modules/</code></td></tr>
+    <tr><td><code>uvicorn --reload</code></td><td><strong>Vite</strong> (Evan You, 2020): servidor de desenvolvimento e build</td></tr>
+  </table>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li><strong>Tailwind CSS</strong> (Adam Wathan, 2017): <em>utility-first</em> - cada classe faz uma coisa (<code>p-2</code>, <code>rounded</code>, <code>bg-blue-600</code>); o estilo é composto no JSX e o build inclui só as classes usadas.</li>
+  </ul>
+  <p class="cite">vite.dev · tailwindcss.com · docs.npmjs.com</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - SPA e React</span></h2>
+  <ul style="font-size:.8em">
+    <li>Uma página, um programa que pede dados (Garrett, 2005);</li>
+    <li>React: componentes descrevem a tela para um estado - <strong>UI = f(estado)</strong>;</li>
+    <li>Props descem do pai; <code>useState</code> muda e redesenha; <code>useEffect</code> roda depois de desenhar;</li>
+    <li>Node executa as ferramentas; npm gerencia pacotes; Vite serve e empacota; Tailwind estiliza no JSX.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 1: backend ============ -->
+
+<section>
+  <h2>Reading Progress: dado derivado, nunca armazenado</h2>
+  <pre><code class="language-python" data-trim>
+class Book(Base):
+    __tablename__ = "books"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(255))
+    pages: Mapped[int]
+    current_page: Mapped[int]
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+    @property
+    def progress(self) -> int:
+        return round(self.current_page * 100 / self.pages)
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>Mapped[int]</code> sem <code>mapped_column</code>: o tipo Python basta - vira <code>INTEGER NOT NULL</code>;</li>
+    <li><code>progress</code> é property, não coluna: calculada a cada leitura, nunca desatualizada. Concluído = 100%, sem campo de status.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>A entrada valida dois campos de uma vez</h2>
+  <pre><code class="language-python" data-trim>
+class BookCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=255)
+    pages: int = Field(gt=0)
+    current_page: int = Field(default=0, ge=0)
+
+    @model_validator(mode="after")
+    def check_current_page(self):
+        if self.current_page &gt; self.pages:
+            raise ValueError("current_page must not exceed pages")
+        return self
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>Field(gt=0)</code> e <code>Field(ge=0)</code>: regras de um campo só; <code>default=0</code> - cadastrar um livro é começar a lê-lo;</li>
+    <li><code>@model_validator(mode="after")</code>: regra entre <strong>dois campos</strong>, depois da validação individual; o <code>ValueError</code> vira <strong>422</strong> com a mensagem.</li>
+  </ul>
+  <p class="cite">Documentação oficial do Pydantic - docs.pydantic.dev (Validators)</p>
+</section>
+
+<section>
+  <h2>O contrato de saída publica a porcentagem</h2>
+  <pre><code class="language-python" data-trim>
+class BookRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    pages: int
+    current_page: int
+    progress: int
+    user_id: int
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Com <code>from_attributes=True</code>, o Pydantic lê <code>book.progress</code> como lê <code>book.name</code> - coluna ou property, tanto faz;</li>
+    <li>As rotas que <em>escrevem</em> passam os campos novos: <code>models.Book(name=..., pages=book.pages, current_page=book.current_page, user_id=...)</code> no POST; os três atributos no PUT.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Registrar a leitura é atualizar o livro</h2>
+  <table class="status-tab">
+    <tr><th>Requisição</th><th>Resposta</th></tr>
+    <tr><td><code>POST /api/books</code> <code>{"name": "Dom Casmurro", "pages": 300}</code></td><td><strong>201</strong> - <code>current_page: 0, progress: 0</code></td></tr>
+    <tr><td><code>PUT /api/books/1</code> com <code>current_page: 120</code></td><td><strong>200</strong> - <code>progress: 40</code></td></tr>
+    <tr><td><code>PUT /api/books/1</code> com <code>current_page: 400</code></td><td><strong>422</strong> - <em>current_page must not exceed pages</em></td></tr>
+  </table>
+  <div class="nota">Antes: <code>DROP TABLE books;</code> no cliente mysql - o model ganhou colunas e o <code>create_all</code> não altera tabela existente. Dado de aula é descartável.</div>
+</section>
+
+<!-- ============ Live 2: o projeto React ============ -->
+
+<section>
+  <h2>Criar o projeto</h2>
+  <p class="os-label">Mac e Windows (dentro de projeto/, ao lado de backend/)</p>
+  <pre><code class="language-bash" data-trim>
+npm create vite@latest frontend -- --template react
+cd frontend
+npm install
+npm install tailwindcss @tailwindcss/vite
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><code>create-vite</code> gera o esqueleto; o <code>npm install</code> lê o <code>package.json</code> e cria <code>node_modules/</code>;</li>
+    <li>O segundo <code>install</code> grava o Tailwind no <code>package.json</code> - o <code>pip install</code> que já escreve no <code>requirements.txt</code>;</li>
+    <li>Se perguntar <em>"Install with npm and start now?"</em>: <strong>No</strong>. Requer Node.js LTS (nodejs.org).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Tailwind entra pelo plugin e pelo import</h2>
+  <p class="os-label">vite.config.js</p>
+  <pre><code class="language-javascript" data-trim>
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+  </code></pre>
+  <p class="os-label">src/index.css</p>
+  <pre><code class="language-css" data-trim>
+@import "tailwindcss";
+  </code></pre>
+  <p style="font-size:.55em">Apague a demonstração: <code>App.css</code>, <code>src/assets/</code>, <code>public/icons.svg</code>, o <code>README.md</code> gerado.</p>
+</section>
+
+<section>
+  <h2>index.html: o único HTML da aplicação</h2>
+  <pre><code class="language-javascript" data-trim>
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+
+createRoot(document.getElementById("root")).render(
+  &lt;StrictMode&gt;
+    &lt;App /&gt;
+  &lt;/StrictMode&gt;,
+);
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>O <code>index.html</code> tem uma <code>div#root</code> vazia e um <code>&lt;script type="module" src="/src/main.jsx"&gt;</code>; tudo que aparece é o React desenhando dentro dela;</li>
+    <li><code>StrictMode</code>: em desenvolvimento, executa os efeitos duas vezes para denunciar código que dependa de rodar uma só - cada listagem aparece em dobro no uvicorn.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O primeiro componente</h2>
+  <pre><code class="language-javascript" data-trim>
+export default function App() {
+  return &lt;h1 className="p-8 text-2xl font-bold"&gt;Reading Tracker&lt;/h1&gt;;
+}
+  </code></pre>
+  <p class="os-label">Mac e Windows (dentro de projeto/frontend)</p>
+  <pre><code class="language-bash" data-trim>
+npm run dev
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Um componente é uma <strong>função que devolve JSX</strong>; <code>export default</code> é o que o <code>main.jsx</code> importa;</li>
+    <li><code>className</code>, não <code>class</code>: JSX é JavaScript, e <code>class</code> é palavra reservada;</li>
+    <li>Abra <strong>exatamente</strong> <code>http://localhost:5173</code>. Troque o texto e salve: a tela muda sem recarregar.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 3: api.js e Signup ============ -->
+
+<section>
+  <h2>Uma função para toda conversa com a API</h2>
+  <pre><code class="language-javascript" data-trim>
+const API_URL = "http://127.0.0.1:8000";
+
+export async function request(path, { method = "GET", body } = {}) {
+  const headers = { "Content-Type": "application/json" };
+  const token = localStorage.getItem("token");
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const response = await fetch(API_URL + path, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>fetch</code>: a função do navegador para HTTP; <code>async</code>/<code>await</code> como no Python - espera sem travar a tela;</li>
+    <li>O token é lido do <code>localStorage</code> a cada requisição e vai no header - o que o botão <em>Authorize</em> do Swagger montava.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Erro da API vira exceção com a mensagem</h2>
+  <pre><code class="language-javascript" data-trim>
+  if (response.status === 204) {
+    return null;
+  }
+  const data = await response.json();
+  if (!response.ok) {
+    const error = new Error(
+      Array.isArray(data.detail) ? data.detail[0].msg : data.detail,
+    );
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><strong>204</strong> não tem corpo - chamar <code>json()</code> nele quebraria;</li>
+    <li><code>detail</code> é texto nas <code>HTTPException</code> e uma lista no <strong>422</strong> (o <code>msg</code> do campo inválido); <code>error.status</code> guarda o código HTTP.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Signup.jsx: estado por campo, submit sem reload</h2>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
+export default function Signup({ onDone }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    try {
+      await request("/signup", { method: "POST", body: { name, email, password } });
+      onDone();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>{ onDone }</code> é uma prop: o pai decide o que acontece depois do cadastro;</li>
+    <li><code>preventDefault()</code> impede o formulário HTML de recarregar a página - o que destruiria a aplicação.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O input controlado: o estado é a fonte da verdade</h2>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
+&lt;form onSubmit={handleSubmit} className="mx-auto mt-16 max-w-sm space-y-3"&gt;
+  &lt;h1 className="text-2xl font-bold"&gt;Sign up&lt;/h1&gt;
+  &lt;input className="w-full rounded border p-2" placeholder="Name"
+         value={name} onChange={(e) =&gt; setName(e.target.value)} /&gt;
+  ...
+  {error &amp;&amp; &lt;p className="text-red-600"&gt;{error}&lt;/p&gt;}
+  &lt;button className="w-full rounded bg-blue-600 p-2 text-white"&gt;Create account&lt;/button&gt;
+  &lt;button type="button" className="w-full text-blue-600" onClick={onDone}&gt;
+    I already have an account
+  &lt;/button&gt;
+&lt;/form&gt;
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Cada tecla chama <code>setName</code>; o estado muda; o componente redesenha; o input mostra o valor novo;</li>
+    <li><code>{error &amp;&amp; ...}</code>: expressão JavaScript entre chaves - com <code>error</code> vazio, nada é desenhado;</li>
+    <li>Sem <code>type</code>, o botão é o submit; <code>type="button"</code> não submete.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>A primeira requisição falha</h2>
+  <pre><code class="language-text" data-trim>
+Access to fetch at 'http://127.0.0.1:8000/signup' from origin
+'http://localhost:5173' has been blocked by CORS policy: Response to
+preflight request doesn't pass access control check: No
+'Access-Control-Allow-Origin' header is present on the requested resource.
+  </code></pre>
+  <p style="font-size:.65em">E no terminal do uvicorn, uma linha que ninguém escreveu:</p>
+  <pre><code class="language-text" data-trim>
+"OPTIONS /signup HTTP/1.1" 405 Method Not Allowed
+  </code></pre>
+  <p style="font-size:.62em">O navegador enviou uma requisição própria, a API a recusou e o <code>POST</code> nunca saiu. Cada palavra do erro tem nome.</p>
+</section>
+
+<!-- ============ Teoria 2: CORS ============ -->
+
+<section>
+  <h2>Origem = esquema + host + porta</h2>
+  <p class="definicao">Dois URLs têm a mesma origem quando esquema, host e porta coincidem - a tripla que identifica de onde um documento veio.</p>
+  <ul style="font-size:.65em;margin-top:.8em">
+    <li><strong>Origem:</strong> RFC 6454, <em>The Web Origin Concept</em> (Adam Barth, IETF, 2011);</li>
+    <li><code>http://localhost:5173</code> e <code>http://127.0.0.1:8000</code> diferem <strong>duas vezes</strong> - host e porta. Bastaria uma.</li>
+  </ul>
+  <p class="cite">RFC 6454 - The Web Origin Concept, IETF, 2011</p>
+</section>
+
+<section>
+  <h2>A política de mesma origem protege o usuário</h2>
+  <ul style="font-size:.66em">
+    <li><strong>Origem:</strong> introduzida no <strong>Netscape Navigator 2.0</strong> (1995), junto com o JavaScript;</li>
+    <li><strong>A regra:</strong> um script só pode <em>ler</em> respostas da origem de onde veio;</li>
+    <li><strong>O motivo:</strong> sem ela, qualquer página aberta em outra aba leria, com os cookies do usuário, as respostas do banco dele;</li>
+    <li>É uma regra <strong>do navegador, para o navegador</strong> - o <code>curl</code>, o Swagger e um script Python não a consultam.</li>
+  </ul>
+  <p class="cite">MDN Web Docs - Same-origin policy</p>
+</section>
+
+<section>
+  <h2>CORS: o servidor declara, o navegador aplica</h2>
+  <p class="definicao">Cross-Origin Resource Sharing: o mecanismo pelo qual o servidor declara, por headers de resposta, quais origens podem ler suas respostas.</p>
+  <ul style="font-size:.62em;margin-top:.8em">
+    <li><strong>Origem:</strong> especificado por <strong>Anne van Kesteren</strong>; Recomendação W3C em 2014, hoje parte do <em>Fetch Standard</em> da WHATWG;</li>
+    <li>A declaração: <code>Access-Control-Allow-Origin: http://localhost:5173</code>. Sem o header, ou com outra origem, o navegador descarta a resposta - foi o que o erro disse.</li>
+  </ul>
+  <p class="cite">W3C - Cross-Origin Resource Sharing, 2014 · WHATWG - Fetch Standard</p>
+</section>
+
+<section>
+  <h2>Preflight: o OPTIONS que ninguém escreveu</h2>
+  <img src="img/cors-preflight.png" alt="Diagrama de sequência: o navegador envia OPTIONS com Origin e Access-Control-Request-Method, a API responde 200 com Access-Control-Allow-Origin, e só então o POST é enviado" style="width:100%;max-width:760px">
+  <p class="cite">WHATWG - Fetch Standard (CORS protocol)</p>
+</section>
+
+<section>
+  <h2>CORS não é autenticação</h2>
+  <table class="status-tab">
+    <tr><th></th><th>Política de mesma origem</th><th>CORS</th></tr>
+    <tr><td>Quem define</td><td>o navegador</td><td>o servidor, por headers</td></tr>
+    <tr><td>O que faz</td><td>bloqueia leitura entre origens</td><td>libera origens específicas</td></tr>
+    <tr><td>Quem protege</td><td>o usuário do navegador</td><td>(relaxa a proteção com critério)</td></tr>
+    <tr><td>Vale fora do navegador?</td><td>não</td><td>não</td></tr>
+  </table>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li>Quem protege a API é o <strong>token</strong>; o CORS protege quem usa o navegador contra páginas que não são a nossa;</li>
+    <li>Em produção, a origem do frontend publicado - nunca <code>"*"</code> numa API com token.</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - mesma origem e CORS</span></h2>
+  <ul style="font-size:.8em">
+    <li>Origem = esquema + host + porta (RFC 6454);</li>
+    <li>O navegador não deixa um script ler resposta de outra origem (Netscape, 1995);</li>
+    <li>CORS: o servidor libera origens por header; o navegador obedece (W3C 2014, Fetch Standard);</li>
+    <li>Preflight <code>OPTIONS</code> antes de métodos e headers não triviais;</li>
+    <li>Não vale fora do navegador - não substitui o token.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O CORSMiddleware envolve todas as rotas</h2>
+  <pre><code class="language-python" data-trim>
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Responde o preflight sozinho e acrescenta os <code>Access-Control-Allow-*</code> em toda resposta a uma origem permitida;</li>
+    <li>No uvicorn: <code>OPTIONS /signup 200</code> seguido de <code>POST /signup 201</code>. Repetir o cadastro mostra <em>Email already registered</em> em vermelho - o 409 chegou ao usuário.</li>
+  </ul>
+  <div class="nota"><code>127.0.0.1:5173</code> em vez de <code>localhost:5173</code> traz o erro de volta: origens diferentes, só uma na lista.</div>
+</section>
+
+<!-- ============ Teoria 3: o token no navegador ============ -->
+
+<section>
+  <h2>Bearer: quem porta o token, é</h2>
+  <p class="definicao">"A security token with the property that any party in possession of the token (a 'bearer') can use the token in any way that any other party in possession of it can."</p>
+  <ul style="font-size:.62em;margin-top:.8em">
+    <li><strong>Origem:</strong> RFC 6750, <em>The OAuth 2.0 Authorization Framework: Bearer Token Usage</em> (IETF, 2012) - define o header <code>Authorization: Bearer &lt;token&gt;</code>;</li>
+    <li>A API é <em>stateless</em>: o cliente apresenta o token em toda requisição - logo o navegador precisa <strong>guardá-lo</strong> entre uma requisição e outra, e entre um F5 e outro.</li>
+  </ul>
+  <p class="cite">RFC 6750 - Bearer Token Usage, IETF, 2012</p>
+</section>
+
+<section>
+  <h2>localStorage: armazenamento por origem</h2>
+  <ul style="font-size:.64em">
+    <li><strong>Origem:</strong> a API <em>Web Storage</em> - especificação W3C de 2013, hoje no <em>HTML Standard</em> da WHATWG;</li>
+    <li>Chave-valor <strong>por origem</strong>, sobrevive ao fechamento do navegador: <code>setItem</code>, <code>getItem</code>, <code>removeItem</code>;</li>
+    <li>Ao contrário do cookie, o navegador <strong>não o envia sozinho</strong>: só o nosso JavaScript o lê e o coloca no header;</li>
+    <li>Consequência: outra página não consegue fazer o navegador anexar o token - o ataque de requisição forjada entre sites (<strong>CSRF</strong>) não se aplica.</li>
+  </ul>
+  <p class="cite">WHATWG - HTML Standard, Web storage · MDN - Window: localStorage</p>
+</section>
+
+<section>
+  <h2>XSS ou CSRF: o custo de cada escolha</h2>
+  <table class="status-tab">
+    <tr><th></th><th>Cookie <code>HttpOnly</code></th><th><code>localStorage</code> + header</th></tr>
+    <tr><td>Quem envia</td><td>o navegador, sozinho</td><td>o nosso JavaScript, explícito</td></tr>
+    <tr><td>Legível por script?</td><td>não</td><td>sim</td></tr>
+    <tr><td>Risco principal</td><td>CSRF</td><td>XSS</td></tr>
+    <tr><td>Funciona entre origens?</td><td>com restrições</td><td>sim</td></tr>
+  </table>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li>Qualquer script que rode na página lê o <code>localStorage</code>: se um atacante injetar JavaScript (XSS), lê o token;</li>
+    <li>Mitigações (OWASP): nenhum script de terceiros, escapar o que vem do usuário (o React escapa por padrão), token de vida curta - as duas horas do <code>exp</code>.</li>
+  </ul>
+  <p class="cite">OWASP - HTML5 Security Cheat Sheet (Local Storage)</p>
+</section>
+
+<section>
+  <h2>O token entra no login e sai em toda requisição</h2>
+  <img src="img/token-no-navegador.png" alt="Diagrama: o login recebe o token, o App guarda no localStorage, o api.js o lê e envia no header Authorization: Bearer em toda requisição, que a API verifica" style="width:100%;max-width:760px">
+  <p class="cite">RFC 6750 - 2012 · WHATWG - HTML Standard</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - o token no navegador</span></h2>
+  <ul style="font-size:.8em">
+    <li><code>Authorization: Bearer</code> - quem porta, é (RFC 6750);</li>
+    <li><code>localStorage</code>: por origem, sobrevive ao F5, enviado só pelo nosso código;</li>
+    <li>Sem CSRF; com risco de XSS - mitigado por escape, sem script alheio, vida curta;</li>
+    <li>Sair é esquecer o token: a API não tem sessão para encerrar.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 4: login, App e Books ============ -->
+
+<section>
+  <h2>Login.jsx entrega o token ao pai</h2>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
+export default function Login({ onLogin, onShowSignup }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    try {
+      const data = await request("/login", { method: "POST", body: { email, password } });
+      onLogin(data.access_token);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+  </code></pre>
+  <p style="font-size:.6em">Mesma anatomia do cadastro; a diferença é que a resposta interessa. O componente <strong>não guarda</strong> o token: guardar e escolher a próxima tela é de quem conhece as telas.</p>
+</section>
+
+<section>
+  <h2>App.jsx: o token decide a tela</h2>
+  <pre><code class="language-javascript" data-trim>
+export default function App() {
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [showSignup, setShowSignup] = useState(false);
+
+  function handleLogin(newToken) {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setToken(null);
+  }
+
+  if (token) {
+    return &lt;Books onLogout={handleLogout} /&gt;;
+  }
+  if (showSignup) {
+    return &lt;Signup onDone={() =&gt; setShowSignup(false)} /&gt;;
+  }
+  return &lt;Login onLogin={handleLogin} onShowSignup={() =&gt; setShowSignup(true)} /&gt;;
+}
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>Estado inicial vem do <code>localStorage</code>: o F5 mantém o login. <code>handleLogin</code> guarda <em>e</em> muda o estado - um sem o outro não bastaria;</li>
+    <li>Três <code>return</code> condicionais: UI = f(estado) na forma mais literal.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Books.jsx: buscar dados quando a tela aparece</h2>
+  <pre><code class="language-javascript" data-trim>
+export default function Books({ onLogout }) {
+  const [books, setBooks] = useState([]);
+  const [form, setForm] = useState(emptyForm);
+  const [error, setError] = useState("");
+
+  useEffect(() =&gt; {
+    loadBooks();
+  }, []);
+
+  async function loadBooks() {
+    try {
+      setBooks(await request("/api/books"));
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  function handleChange(event) {
+    setForm({ ...form, [event.target.name]: event.target.value });
+  }
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><code>useEffect(..., [])</code>: roda depois do primeiro desenho, uma vez. Buscar fora do efeito dispararia uma requisição a cada redesenho;</li>
+    <li>Um <code>handleChange</code> para três inputs: o <code>name</code> do input é a chave; <code>{ ...form }</code> cria um objeto novo - só assim o React redesenha.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Listar é mapear dados em elementos</h2>
+  <pre><code class="language-javascript" data-trim>
+&lt;ul className="space-y-3"&gt;
+  {books.map((book) =&gt; (
+    &lt;li key={book.id} className="rounded border p-3"&gt;
+      &lt;strong&gt;{book.name}&lt;/strong&gt;
+    &lt;/li&gt;
+  ))}
+&lt;/ul&gt;
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><code>map</code> transforma a lista de dados em lista de elementos; o <code>key</code> é a identidade de cada item - o <code>id</code> do banco serve exatamente para isso;</li>
+    <li>Inputs entregam <strong>texto</strong> mesmo com <code>type="number"</code>: <code>Number(form.pages)</code> antes de enviar;</li>
+    <li>Depois de criar, <code>loadBooks()</code> de novo: a lista vem da API, a fonte da verdade.</li>
+  </ul>
+  <div class="nota">Teste: cadastre-se, entre, cadastre dois livros, <strong>F5</strong> - continua logado. No console, <code>localStorage.getItem("token")</code> mostra o JWT; após <em>Log out</em>, <code>null</code>.</div>
+</section>
+
+<section>
+  <h2>A garantia mora na API, não na interface</h2>
+  <pre><code class="language-javascript" data-trim>
+fetch("http://127.0.0.1:8000/api/books/1", {
+  method: "DELETE",
+  headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+}).then((r) =&gt; console.log(r.status));
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li>Em uma <strong>janela anônima</strong> (outro <code>localStorage</code>), a segunda usuária vê a lista <strong>vazia</strong>;</li>
+    <li>No console dela, apagar o livro 1 <em>por fora da interface</em> responde <strong>404</strong>;</li>
+    <li>O JavaScript da página é substituível por qualquer coisa que o usuário digitar - o frontend <strong>não garante nada</strong>. Quem garante é a API: dono pela FK, autor pelo token.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 5: editar, apagar, progresso ============ -->
+
+<section>
+  <h2>Editar e apagar com o mesmo formulário</h2>
+  <pre><code class="language-javascript" data-trim>
+const [editingId, setEditingId] = useState(null);
+
+if (editingId === null) {
+  await request("/api/books", { method: "POST", body });
+} else {
+  await request(`/api/books/${editingId}`, { method: "PUT", body });
+}
+
+function startEditing(book) {
+  setEditingId(book.id);
+  setForm({ name: book.name, pages: book.pages, current_page: book.current_page });
+}
+
+async function handleDelete(id) {
+  await request(`/api/books/${id}`, { method: "DELETE" });
+  loadBooks();
+}
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><code>editingId</code> nulo é "criando"; com id, "editando" - muda o verbo e a URL, não o formulário. O botão diz <em>Add book</em> ou <em>Save</em>;</li>
+    <li><code>onClick={() =&gt; handleDelete(book.id)}</code>: a seta adia a chamada para o clique; sem ela, executaria durante o desenho.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O Reading Progress na tela</h2>
+  <pre><code class="language-javascript" data-trim>
+&lt;div className="flex justify-between"&gt;
+  &lt;strong&gt;{book.name}&lt;/strong&gt;
+  &lt;span className="text-sm text-gray-600"&gt;
+    {book.current_page}/{book.pages} pages · {book.progress}%
+  &lt;/span&gt;
+&lt;/div&gt;
+&lt;div className="mt-2 h-2 rounded bg-gray-200"&gt;
+  &lt;div className="h-2 rounded bg-green-600" style={{ width: `${book.progress}%` }} /&gt;
+&lt;/div&gt;
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Duas <code>div</code>: fundo cinza e barra verde cuja largura é a porcentagem - o único estilo que vem de um dado, não de uma classe;</li>
+    <li><code>book.progress</code> veio pronto da API: a tela <strong>não recalcula</strong>. Se a regra mudar, muda no model;</li>
+    <li>Avance a página atual até o total: <strong>100%</strong>, concluído - sem campo de status.</li>
+  </ul>
+</section>
+
+<!-- ============ Exercício e fechamento ============ -->
+
+<section>
+  <h2>Exercício em sala</h2>
+  <ol style="font-size:.68em">
+    <li>O token dura duas horas; vencido, a API responde <strong>401</strong> e a tela mostra <em>Invalid or expired token</em> - mas continua na lista;</li>
+    <li>Em <code>Books.jsx</code>, trate o 401: quando <code>err.status === 401</code>, chame <code>onLogout()</code> em vez de mostrar a mensagem;</li>
+    <li>Teste sem esperar: no console, <code>localStorage.setItem("token", "abc")</code> e F5 - a aplicação deve voltar sozinha ao login.</li>
+  </ol>
+  <div class="nota">O <code>error.status</code> do <code>api.js</code> existe para isso. Atenção: tratar o 401 dentro do próprio <code>api.js</code> quebraria o login com senha errada, que também é 401 - a decisão pertence a quem sabe em que tela está.</div>
+</section>
+
+<section>
+  <h2>Síntese da aula</h2>
+  <ul style="font-size:.58em">
+    <li>O Book ganhou <code>pages</code> e <code>current_page</code>; o Reading Progress é <strong>dado derivado</strong> - property no model, publicada pelo <code>BookRead</code>, nunca armazenada;</li>
+    <li>Aplicação de página única (Garrett, 2005): um HTML, um programa React que pede dados à API e desenha telas;</li>
+    <li>Componentes como funções de estado - <code>useState</code> para o que muda, <code>useEffect</code> para buscar dados, props para conversar com o pai; Vite serve e empacota, Tailwind estiliza no JSX, npm gerencia como o pip;</li>
+    <li>Duas origens esbarraram na <strong>política de mesma origem</strong> (RFC 6454); o <strong>CORS</strong> liberou a origem do Vite - headers que o servidor declara e o navegador aplica, com o preflight <code>OPTIONS</code> explicando a linha inesperada;</li>
+    <li>O token vive no <code>localStorage</code> e viaja em <code>Authorization: Bearer</code> (RFC 6750) - custo assumido do XSS, defesa da vida curta;</li>
+    <li>O CRUD inteiro roda na tela; a garantia de que cada um só mexe nos próprios livros continua <strong>onde sempre esteve: na API</strong>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Referências</h2>
+  <ul style="font-size:.5em">
+    <li>GARRETT, J. J. <em>Ajax: A New Approach to Web Applications</em>. Adaptive Path, 2005. (aplicações de página única)</li>
+    <li>Documentação oficial do React - react.dev (<em>Thinking in React</em>, <em>Describing the UI</em>, <em>Managing State</em>).</li>
+    <li>Documentação oficial do Vite - vite.dev; do Tailwind CSS - tailwindcss.com; do npm - docs.npmjs.com.</li>
+    <li>RFC 6454 - <em>The Web Origin Concept</em>. IETF, 2011. (origem: esquema, host e porta)</li>
+    <li>W3C. <em>Cross-Origin Resource Sharing</em>. W3C Recommendation, 2014; WHATWG. <em>Fetch Standard</em> - fetch.spec.whatwg.org.</li>
+    <li>RFC 6750 - <em>The OAuth 2.0 Authorization Framework: Bearer Token Usage</em>. IETF, 2012.</li>
+    <li>WHATWG. <em>HTML Standard</em> - Web storage. html.spec.whatwg.org.</li>
+    <li>OWASP. <em>HTML5 Security Cheat Sheet</em> e <em>Cross Site Scripting Prevention Cheat Sheet</em> - cheatsheetseries.owasp.org.</li>
+    <li>MDN Web Docs - <em>Same-origin policy</em>, <em>CORS</em>, <em>Fetch API</em>, <em>Window: localStorage</em>.</li>
+    <li>Documentação oficial do FastAPI - fastapi.tiangolo.com (CORS); do Pydantic - docs.pydantic.dev (Validators).</li>
+  </ul>
+</section>
+
+</div>
+</div>
+
+<script src="../assets/reveal/dist/reveal.js"></script>
+<script src="../assets/reveal/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    plugins: [ RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+  </defs>
+
+  <!-- navegador -->
+  <rect x="30" y="60" width="270" height="220" rx="10" fill="#fff" stroke="#333" stroke-width="2"/>
+  <rect x="30" y="60" width="270" height="34" rx="10" fill="#eee" stroke="#333" stroke-width="2"/>
+  <text x="165" y="83" text-anchor="middle" font-size="14" font-family="monospace" fill="#333">http://localhost:5173</text>
+  <text x="165" y="125" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Navegador</text>
+  <rect x="55" y="145" width="220" height="110" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="165" y="172" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6da4">aplicação React</text>
+  <text x="165" y="196" text-anchor="middle" font-size="12.5" font-family="monospace" fill="#333">App.jsx · Login.jsx</text>
+  <text x="165" y="216" text-anchor="middle" font-size="12.5" font-family="monospace" fill="#333">Books.jsx · api.js</text>
+  <text x="165" y="240" text-anchor="middle" font-size="12" fill="#666">localStorage: token</text>
+
+  <!-- vite -->
+  <rect x="500" y="40" width="250" height="80" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
+  <text x="625" y="68" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6508">Vite  (porta 5173)</text>
+  <text x="625" y="92" text-anchor="middle" font-size="12.5" fill="#333">entrega o programa: index.html + módulos JS</text>
+  <path d="M 500 85 L 305 130" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <text x="440" y="120" text-anchor="middle" font-size="12" fill="#8a6508" font-style="italic">HTML + JavaScript</text>
+
+  <!-- api -->
+  <rect x="500" y="190" width="250" height="90" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="625" y="218" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e6da4">API FastAPI  (porta 8000)</text>
+  <text x="625" y="240" text-anchor="middle" font-size="12.5" fill="#333">entrega os dados: JSON</text>
+  <text x="625" y="262" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">/signup  /login  /api/books</text>
+  <path d="M 305 215 L 495 225" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <path d="M 495 250 L 305 245" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <text x="400" y="207" text-anchor="middle" font-size="12" fill="#2e6da4" font-style="italic">fetch + Authorization: Bearer</text>
+  <text x="400" y="270" text-anchor="middle" font-size="12" fill="#2e6da4" font-style="italic">JSON (200, 201, 401, 404, 422)</text>
+
+  <!-- legenda -->
+  <text x="400" y="318" text-anchor="middle" font-size="13.5" fill="#333">Duas origens diferentes: <tspan font-family="monospace">localhost:5173</tspan> e <tspan font-family="monospace">127.0.0.1:8000</tspan> - por isso a API precisa liberar CORS.</text>
+  <text x="400" y="342" text-anchor="middle" font-size="12.5" fill="#999">Aplicação de página única (Garrett, 2005): um HTML, um programa que pede dados.</text>
+</svg>

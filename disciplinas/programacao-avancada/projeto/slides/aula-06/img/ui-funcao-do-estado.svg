@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+  </defs>
+
+  <!-- estado -->
+  <rect x="40" y="110" width="200" height="90" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="140" y="140" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e6da4">estado</text>
+  <text x="140" y="162" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">books, form,</text>
+  <text x="140" y="180" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">editingId, error</text>
+
+  <!-- componente -->
+  <path d="M 245 155 L 295 155" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <rect x="300" y="110" width="200" height="90" rx="10" fill="#fff" stroke="#333" stroke-width="2"/>
+  <text x="400" y="140" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">componente</text>
+  <text x="400" y="162" text-anchor="middle" font-size="12" fill="#333">função que devolve JSX</text>
+  <text x="400" y="180" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">Books({ onLogout })</text>
+
+  <!-- DOM -->
+  <path d="M 505 155 L 555 155" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <rect x="560" y="110" width="200" height="90" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="660" y="140" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e6da4">tela (DOM)</text>
+  <text x="660" y="162" text-anchor="middle" font-size="12" fill="#333">o React altera só</text>
+  <text x="660" y="180" text-anchor="middle" font-size="12" fill="#333">o que mudou</text>
+
+  <!-- evento: volta -->
+  <path d="M 660 205 L 660 250 L 140 250 L 140 205" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <rect x="225" y="228" width="350" height="44" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="400" y="246" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">evento</text>
+  <text x="400" y="264" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#333">tecla, clique, resposta da API → setX(...)</text>
+
+  <!-- fórmula -->
+  <text x="400" y="60" text-anchor="middle" font-size="26" font-weight="bold" font-family="monospace" fill="#333">UI = f(estado)</text>
+  <text x="400" y="310" text-anchor="middle" font-size="12.5" fill="#999">O programador descreve a tela para um estado; mudar o estado é a única forma de mudar a tela (react.dev).</text>
+</svg>

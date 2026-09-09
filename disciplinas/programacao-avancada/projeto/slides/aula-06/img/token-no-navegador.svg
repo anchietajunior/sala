@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+  </defs>
+
+  <!-- coluna do navegador -->
+  <text x="200" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e6da4">Navegador (React)</text>
+  <text x="600" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6508">API</text>
+
+  <!-- login -->
+  <rect x="60" y="55" width="280" height="56" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="200" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">Login.jsx</text>
+  <text x="200" y="98" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">request("/login", {email, password})</text>
+  <path d="M 345 83 L 480 83" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <rect x="485" y="55" width="255" height="56" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="612" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">POST /login</text>
+  <text x="612" y="98" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">200 {"access_token": "eyJ..."}</text>
+
+  <!-- guarda -->
+  <path d="M 560 114 L 345 160" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <rect x="60" y="135" width="280" height="56" rx="8" fill="#fff" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="200" y="158" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">App.jsx guarda o token</text>
+  <text x="200" y="178" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">localStorage.setItem("token", ...)</text>
+
+  <!-- cada requisição -->
+  <rect x="60" y="220" width="280" height="76" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="200" y="243" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">api.js, em toda requisição</text>
+  <text x="200" y="263" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">token = localStorage.getItem("token")</text>
+  <text x="200" y="283" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">Authorization: Bearer &lt;token&gt;</text>
+  <path d="M 345 258 L 480 258" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <rect x="485" y="220" width="255" height="76" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="612" y="243" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">get_current_user</text>
+  <text x="612" y="263" text-anchor="middle" font-size="12" fill="#333">verifica assinatura e exp</text>
+  <text x="612" y="283" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">200 dados do dono · 401 sem/inválido</text>
+
+  <!-- rodapé -->
+  <text x="400" y="335" text-anchor="middle" font-size="13" fill="#333">Sair = <tspan font-family="monospace">localStorage.removeItem("token")</tspan>: a API não tem sessão para encerrar.</text>
+  <text x="400" y="360" text-anchor="middle" font-size="12.5" fill="#999">Bearer: quem porta o token, é (RFC 6750). Web Storage por origem, sobrevive ao F5 (HTML Standard).</text>
+</svg>
