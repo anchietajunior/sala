@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Books from "./Books";
-import Login from "./Login";
-import Signup from "./Signup";
+import BooksPage from "./pages/BooksPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
-// Componente raiz: decide qual tela aparece a partir do estado
+// Componente raiz: decide qual página aparece a partir do estado
 export default function App() {
   // O token guardado no navegador decide a tela: sem token, login; com, livros
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -23,10 +23,10 @@ export default function App() {
   }
 
   if (token) {
-    return <Books onLogout={handleLogout} />;
+    return <BooksPage onLogout={handleLogout} />;
   }
   if (showSignup) {
-    return <Signup onDone={() => setShowSignup(false)} />;
+    return <SignupPage onDone={() => setShowSignup(false)} />;
   }
-  return <Login onLogin={handleLogin} onShowSignup={() => setShowSignup(true)} />;
+  return <LoginPage onLogin={handleLogin} onShowSignup={() => setShowSignup(true)} />;
 }

@@ -38,8 +38,9 @@ com o backend já rodando:
     npm run dev
 
 Abra exatamente http://localhost:5173 - é a única origem liberada no CORS da API
-(backend/main.py, `allow_origins`); em 127.0.0.1:5173 as requisições são bloqueadas
-pelo navegador.
+(backend/main.py, `allow_origins`). Se a porta 5173 estiver ocupada, o Vite sobe em
+outra (5174) e o navegador bloqueia as requisições: libere a 5173 ou acrescente a
+nova origem em `allow_origins`.
 
 ## Estrutura do backend
 
@@ -58,13 +59,29 @@ pelo navegador.
     ├── vite.config.js   ← plugins do Vite (React e Tailwind)
     ├── package.json     ← dependências e scripts (dev, build)
     └── src/
-        ├── main.jsx     ← ponto de entrada: monta o App na div#root
-        ├── index.css    ← importa o Tailwind
-        ├── api.js       ← request(): fetch com JSON, token e tratamento de erro
-        ├── App.jsx      ← componente raiz: o token decide a tela
-        ├── Signup.jsx   ← cadastro (POST /signup)
-        ├── Login.jsx    ← login (POST /login) e guarda do token no localStorage
-        └── Books.jsx    ← livros do usuário: listar, criar, editar, apagar e o progresso
+        ├── main.jsx           ← ponto de entrada: monta o App na div#root
+        ├── index.css          ← importa o Tailwind
+        ├── App.jsx            ← componente raiz: o token decide a página e fica no localStorage
+        ├── services/          ← conversa com a API: URLs, verbos e formato das respostas
+        │   ├── api.js         ← request(): fetch com JSON, token e tratamento de erro
+        │   ├── authService.js ← signup() e login()
+        │   └── bookService.js ← listBooks(), createBook(), updateBook(), deleteBook()
+        ├── pages/             ← telas inteiras: guardam o estado e chamam os services
+        │   ├── SignupPage.jsx ← cadastro
+        │   ├── LoginPage.jsx  ← login; entrega o token ao App
+        │   └── BooksPage.jsx  ← livros do usuário: listar, criar, editar e apagar
+        └── components/        ← pedaços de tela: recebem props, não chamam a API
+            ├── Button.jsx       ← botão do sistema, com as variantes primary, secondary e danger
+            ├── TextInput.jsx    ← campo com rótulo, borda e foco padronizados
+            ├── ErrorMessage.jsx ← mensagem de erro em destaque (role="alert")
+            ├── Card.jsx         ← superfície branca que envolve formulários e livros
+            ├── BookForm.jsx     ← formulário de criar ou editar um livro
+            └── BookItem.jsx     ← um livro da lista, com a barra de progresso
+
+Cada pasta tem uma responsabilidade: só os `services` falam com a API, as `pages`
+guardam o estado de cada tela e os `components` desenham o que recebem por props.
+A aparência vive em `Button`, `TextInput`, `ErrorMessage` e `Card`, estilizados com
+classes do Tailwind: as páginas usam esses componentes em vez de repetir classes.
 
 ## Endpoints
 
