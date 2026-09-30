@@ -26,6 +26,7 @@
   .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
   .status-tab { font-size: .7em; border-collapse: collapse; margin: 0 auto; }
   .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .reveal pre.quebra code { white-space: pre-wrap; }
   .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
 </style>
 </head>
@@ -39,6 +40,7 @@
 <section>
   <h1 style="font-size:1.5em">Frontend com React<br>e o consumo da API</h1>
   <p>Programação Avançada - Aula 06</p>
+  <p style="font-size:.55em"><a href="https://github.com/anchietajunior/readingtracker">https://github.com/anchietajunior/readingtracker</a></p>
   <p style="font-size:.55em;color:#888">Universidade Unirios</p>
 </section>
 
@@ -49,16 +51,16 @@
     <li><strong>Não existe interface</strong> - o User é uma pessoa; a API fala JSON. Falta o programa que roda no navegador e conversa com a API em nome dela;</li>
     <li><strong>Book só tem nome</strong> - o Reading Progress é a página atual sobre o total de páginas, e a tabela <code>books</code> não guarda nenhum dos dois números.</li>
   </ul>
-  <p style="font-size:.65em">Primeiro os dados (páginas e progresso, no backend); depois a interface (React) que os exibe.</p>
+  <p style="font-size:.65em">Primeiro o backend - páginas e progresso nos dados, e a permissão para um cliente de outra origem; depois a interface (React) que os exibe.</p>
 </section>
 
 <section>
   <h2>Objetivos da aula</h2>
-  <ul style="font-size:.7em">
+  <ul style="font-size:.66em">
     <li>Estender o <code>Book</code> com <code>pages</code> e <code>current_page</code> e expor o Reading Progress como dado <strong>derivado</strong>;</li>
-    <li>Criar um projeto React com <strong>Vite</strong>, configurar o <strong>Tailwind</strong> e explicar o papel de cada ferramenta;</li>
-    <li>Explicar o modelo de componentes do React - <strong>interface como função do estado</strong> - com <code>useState</code>, <code>useEffect</code> e props;</li>
-    <li>Explicar a <strong>política de mesma origem</strong>, ler o erro de CORS e configurar o <code>CORSMiddleware</code>;</li>
+    <li>Explicar a <strong>política de mesma origem</strong>, configurar o <code>CORSMiddleware</code> e verificar o preflight com <code>curl</code>;</li>
+    <li>Criar um projeto React com <strong>Vite</strong>, configurar o <strong>Tailwind</strong> e situá-lo entre as bibliotecas de estilo e de componentes;</li>
+    <li>Explicar o modelo de componentes do React - <strong>interface como função do estado</strong> - e organizar o código em <code>pages</code>, <code>components</code> e <code>services</code>, com componentes estilizados reutilizáveis;</li>
     <li>Consumir a API com <code>fetch</code>: cadastro, login e o CRUD de Books, com o token no <code>localStorage</code> e no header <code>Authorization: Bearer</code>.</li>
   </ul>
 </section>
@@ -211,7 +213,151 @@ class BookRead(BaseModel):
   <div class="nota">Antes: <code>DROP TABLE books;</code> no cliente mysql - o model ganhou colunas e o <code>create_all</code> não altera tabela existente. Dado de aula é descartável.</div>
 </section>
 
-<!-- ============ Live 2: o projeto React ============ -->
+<!-- ============ Teoria 2: CORS ============ -->
+
+<section>
+  <h2>Origem = esquema + host + porta</h2>
+  <p class="definicao">Dois URLs têm a mesma origem quando esquema, host e porta coincidem - a tripla que identifica de onde um documento veio.</p>
+  <ul style="font-size:.65em;margin-top:.8em">
+    <li><strong>Origem:</strong> RFC 6454, <em>The Web Origin Concept</em> (Adam Barth, IETF, 2011);</li>
+    <li><code>http://localhost:5173</code> e <code>http://127.0.0.1:8000</code> diferem <strong>duas vezes</strong> - host e porta. Bastaria uma.</li>
+  </ul>
+  <p class="cite">RFC 6454 - The Web Origin Concept, IETF, 2011</p>
+</section>
+
+<section>
+  <h2>A política de mesma origem protege o usuário</h2>
+  <ul style="font-size:.66em">
+    <li><strong>Origem:</strong> introduzida no <strong>Netscape Navigator 2.0</strong> (1995), junto com o JavaScript;</li>
+    <li><strong>A regra:</strong> um script só pode <em>ler</em> respostas da origem de onde veio;</li>
+    <li><strong>O motivo:</strong> sem ela, qualquer página aberta em outra aba leria, com os cookies do usuário, as respostas do banco dele;</li>
+    <li>É uma regra <strong>do navegador, para o navegador</strong> - o <code>curl</code>, o Swagger e um script Python não a consultam.</li>
+  </ul>
+  <p class="cite">MDN Web Docs - Same-origin policy</p>
+</section>
+
+<section>
+  <h2>CORS: o servidor declara, o navegador aplica</h2>
+  <p class="definicao">Cross-Origin Resource Sharing: o mecanismo pelo qual o servidor declara, por headers de resposta, quais origens podem ler suas respostas.</p>
+  <ul style="font-size:.62em;margin-top:.8em">
+    <li><strong>Origem:</strong> especificado por <strong>Anne van Kesteren</strong>; Recomendação W3C em 2014, hoje parte do <em>Fetch Standard</em> da WHATWG;</li>
+    <li>A declaração: <code>Access-Control-Allow-Origin: http://localhost:5173</code>. Sem o header, ou com outra origem, o navegador descarta a resposta e o script recebe um erro de rede.</li>
+  </ul>
+  <p class="cite">W3C - Cross-Origin Resource Sharing, 2014 · WHATWG - Fetch Standard</p>
+</section>
+
+<section>
+  <h2>Preflight: o OPTIONS que ninguém escreveu</h2>
+  <img src="img/cors-preflight.png" alt="Diagrama de sequência: o navegador envia OPTIONS com Origin e Access-Control-Request-Method, a API responde 200 com Access-Control-Allow-Origin, e só então o POST é enviado" style="width:100%;max-width:760px">
+  <p class="cite">WHATWG - Fetch Standard (CORS protocol)</p>
+</section>
+
+<section>
+  <h2>CORS não é autenticação</h2>
+  <table class="status-tab">
+    <tr><th></th><th>Política de mesma origem</th><th>CORS</th></tr>
+    <tr><td>Quem define</td><td>o navegador</td><td>o servidor, por headers</td></tr>
+    <tr><td>O que faz</td><td>bloqueia leitura entre origens</td><td>libera origens específicas</td></tr>
+    <tr><td>Quem protege</td><td>o usuário do navegador</td><td>(relaxa a proteção com critério)</td></tr>
+    <tr><td>Vale fora do navegador?</td><td>não</td><td>não</td></tr>
+  </table>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li>Quem protege a API é o <strong>token</strong>; o CORS protege quem usa o navegador contra páginas que não são a nossa;</li>
+    <li>Em produção, a origem do frontend publicado - nunca <code>"*"</code> numa API com token.</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - mesma origem e CORS</span></h2>
+  <ul style="font-size:.8em">
+    <li>Origem = esquema + host + porta (RFC 6454);</li>
+    <li>O navegador não deixa um script ler resposta de outra origem (Netscape, 1995);</li>
+    <li>CORS: o servidor libera origens por header; o navegador obedece (W3C 2014, Fetch Standard);</li>
+    <li>Preflight <code>OPTIONS</code> antes de métodos e headers não triviais;</li>
+    <li>Não vale fora do navegador - não substitui o token.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 2: a API libera a origem do frontend ============ -->
+
+<section>
+  <h2>O curl envia a consulta que o navegador enviará</h2>
+  <p class="os-label">Mac</p>
+  <pre><code class="language-bash" data-trim>
+curl -i -X OPTIONS http://127.0.0.1:8000/signup \
+  -H "Origin: http://localhost:5173" \
+  -H "Access-Control-Request-Method: POST" \
+  -H "Access-Control-Request-Headers: content-type"
+  </code></pre>
+  <p class="os-label">Windows (PowerShell)</p>
+  <pre><code class="language-powershell" data-trim>
+curl.exe -i -X OPTIONS http://127.0.0.1:8000/signup `
+  -H "Origin: http://localhost:5173" `
+  -H "Access-Control-Request-Method: POST" `
+  -H "Access-Control-Request-Headers: content-type"
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><code>-i</code> mostra os headers da resposta; cada <code>-H</code> é uma pergunta do preflight: quem pede, com que método, com que headers;</li>
+    <li>No PowerShell, <code>curl.exe</code> com a extensão - <code>curl</code> sozinho pode ser um apelido para outro comando.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Sem configuração, a API recusa o preflight</h2>
+  <pre><code class="language-http" data-trim>
+HTTP/1.1 405 Method Not Allowed
+server: uvicorn
+allow: POST
+content-type: application/json
+
+{"detail":"Method Not Allowed"}
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li><strong>405</strong> com <code>allow: POST</code>: a rota <code>/signup</code> só conhece <code>POST</code>;</li>
+    <li>Nenhum header <code>Access-Control-Allow-*</code>: para o navegador, a resposta é "não" - e o <code>POST</code> real nunca sairia;</li>
+    <li>No uvicorn: <code>"OPTIONS /signup HTTP/1.1" 405 Method Not Allowed</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O CORSMiddleware envolve todas as rotas</h2>
+  <pre><code class="language-python" data-trim>
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Toda requisição passa pelo middleware antes da rota, e toda resposta passa por ele na volta;</li>
+    <li>Responde o preflight sozinho e acrescenta os <code>Access-Control-Allow-*</code> em toda resposta a uma origem permitida;</li>
+    <li><code>"*"</code> em métodos e headers libera o que o frontend envia: <code>PUT</code>, <code>DELETE</code>, <code>Authorization</code> - só para a origem listada.</li>
+  </ul>
+  <p class="cite">Documentação oficial do FastAPI - fastapi.tiangolo.com (CORS)</p>
+</section>
+
+<section>
+  <h2>Com o middleware, o preflight é respondido</h2>
+  <pre><code class="language-http" data-trim>
+HTTP/1.1 200 OK
+vary: Origin
+access-control-allow-methods: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT
+access-control-max-age: 600
+access-control-allow-origin: http://localhost:5173
+access-control-allow-headers: content-type
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>access-control-allow-origin</code> repete a origem que perguntou - é a autorização que o navegador procura;</li>
+    <li><code>access-control-max-age: 600</code>: o navegador guarda a resposta por 600 s e não repete o preflight nesse intervalo;</li>
+    <li>O <code>curl</code> recebe tudo, sempre: os headers são instruções para o navegador, que é quem descarta a resposta.</li>
+  </ul>
+  <div class="nota">Com <code>Origin: http://127.0.0.1:5173</code>: <strong>400</strong>, <em>Disallowed CORS origin</em>. <code>localhost</code> e <code>127.0.0.1</code> são a mesma máquina, mas origens diferentes - a lista é literal.</div>
+</section>
+
+<!-- ============ Live 3: o projeto React ============ -->
 
 <section>
   <h2>Criar o projeto</h2>
@@ -282,14 +428,256 @@ npm run dev
   <ul style="font-size:.6em">
     <li>Um componente é uma <strong>função que devolve JSX</strong>; <code>export default</code> é o que o <code>main.jsx</code> importa;</li>
     <li><code>className</code>, não <code>class</code>: JSX é JavaScript, e <code>class</code> é palavra reservada;</li>
-    <li>Abra <strong>exatamente</strong> <code>http://localhost:5173</code>. Troque o texto e salve: a tela muda sem recarregar.</li>
+    <li>Abra <strong>exatamente</strong> <code>http://localhost:5173</code> - a origem liberada no <code>CORSMiddleware</code>. Troque o texto e salve: a tela muda sem recarregar.</li>
   </ul>
 </section>
 
-<!-- ============ Live 3: api.js e Signup ============ -->
+<!-- ============ Teoria: separação de responsabilidades ============ -->
 
 <section>
-  <h2>Uma função para toda conversa com a API</h2>
+  <h2>Separação de responsabilidades: um aspecto de cada vez</h2>
+  <p class="definicao">"It is what I sometimes have called 'the separation of concerns', which, even if not perfectly possible, is yet the only available technique for effective ordering of one's thoughts, that I know of."</p>
+  <ul style="font-size:.62em;margin-top:.8em">
+    <li><strong>Origem:</strong> <strong>Edsger W. Dijkstra</strong>, <em>On the role of scientific thought</em> (EWD 447, 1974);</li>
+    <li>O problema no frontend: cada tela desenha campos, guarda o que o usuário digitou e conversa com a API. No mesmo arquivo, uma rota nova na API obriga a abrir todas as telas.</li>
+  </ul>
+  <p class="cite">DIJKSTRA, E. W. - On the role of scientific thought, EWD 447, 1974</p>
+</section>
+
+<section>
+  <h2>Cada módulo esconde uma decisão</h2>
+  <p class="definicao">"Every module in the second decomposition is characterized by its knowledge of a design decision which it hides from all others."</p>
+  <ul style="font-size:.62em;margin-top:.8em">
+    <li><strong>Origem:</strong> <strong>David L. Parnas</strong>, <em>On the Criteria To Be Used in Decomposing Systems into Modules</em> (<em>Communications of the ACM</em>, 1972) - a ocultação de informação;</li>
+    <li>O React não impõe pastas; a documentação recomenda a responsabilidade única: <em>"a component should ideally only do one thing"</em> (<em>Thinking in React</em>);</li>
+    <li>A pergunta para cada arquivo: <strong>que decisão ele esconde?</strong></li>
+  </ul>
+  <p class="cite">PARNAS, D. L. - CACM, v. 15, n. 12, 1972 · react.dev (Thinking in React)</p>
+</section>
+
+<section>
+  <h2>Três pastas, três decisões escondidas</h2>
+  <img src="img/camadas-do-frontend.png" alt="Diagrama: App.jsx escolhe a página; as páginas passam props aos componentes e recebem callbacks; as páginas chamam os services, que usam fetch para falar com a API FastAPI" style="width:100%;max-width:760px">
+  <p class="cite">DIJKSTRA, 1974 · PARNAS, 1972</p>
+</section>
+
+<section>
+  <h2>Quem faz o quê em src/</h2>
+  <table class="status-tab">
+    <tr><th>Pasta</th><th>Responsabilidade</th><th>Não faz</th></tr>
+    <tr><td><code>services/</code></td><td>conversar com a API: URL, rotas, verbos, formato da resposta</td><td>nada de tela</td></tr>
+    <tr><td><code>pages/</code></td><td>uma tela inteira: o estado dela e a ordem das ações</td><td>não monta URL nem escolhe verbo</td></tr>
+    <tr><td><code>components/</code></td><td>um pedaço de tela: desenha o que recebe por props</td><td>não chama a API nem guarda dados</td></tr>
+  </table>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li><code>App.jsx</code> fica na raiz de <code>src/</code> e só escolhe a página;</li>
+    <li>Um componente avisa o pai por <strong>callbacks</strong>: funções recebidas por props, chamadas num clique ou num envio;</li>
+    <li>A API passar a devolver <code>token</code> em vez de <code>access_token</code> muda <strong>um</strong> arquivo: o <code>authService.js</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - separação de responsabilidades</span></h2>
+  <ul style="font-size:.8em">
+    <li>Tratar um aspecto de cada vez (Dijkstra, 1974);</li>
+    <li>Cada módulo esconde uma decisão de projeto (Parnas, 1972);</li>
+    <li><code>services</code> escondem a API; <code>pages</code> guardam o estado da tela; <code>components</code> só desenham;</li>
+    <li>Props descem, callbacks sobem; só os services chamam <code>request</code>.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria: bibliotecas de estilo e componentes prontos ============ -->
+
+<section>
+  <h2>Componentes prontos ou utilitários</h2>
+  <table class="status-tab">
+    <tr><th></th><th>Bootstrap</th><th>Tailwind CSS</th></tr>
+    <tr><td>Origem</td><td>Mark Otto e Jacob Thornton, Twitter, 2011</td><td>Adam Wathan, 2017</td></tr>
+    <tr><td>Unidade</td><td>o componente (<code>btn</code>, <code>card</code>)</td><td>a propriedade (<code>p-2</code>, <code>rounded-lg</code>)</td></tr>
+    <tr><td>Exemplo</td><td><code>class="btn btn-primary"</code></td><td><code>className="rounded-lg bg-indigo-600 px-4 py-2 text-white"</code></td></tr>
+    <tr><td>Personalizar</td><td>sobrescrever o CSS do framework</td><td>trocar as classes</td></tr>
+  </table>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li>O Tailwind segue o <em>Atomic CSS</em>, nomeado por <strong>Thierry Koblentz</strong> (<em>Challenging CSS Best Practices</em>, Smashing Magazine, 2013): uma propriedade por classe, composição no HTML;</li>
+    <li>Um campo bem acabado leva uma dúzia de classes; o sistema tem oito campos e oito botões.</li>
+  </ul>
+  <p class="cite">getbootstrap.com · KOBLENTZ, T., 2013 · tailwindcss.com</p>
+</section>
+
+<section>
+  <h2>Classes que se repetem viram um componente</h2>
+  <ul style="font-size:.66em">
+    <li>A documentação do Tailwind responde à repetição: quando um conjunto de classes se repete, <strong>extraia um componente</strong> do framework de interface - no React, uma função que devolve JSX;</li>
+    <li>O argumento vem do ensaio de Adam Wathan, <em>CSS Utility Classes and "Separation of Concerns"</em> (2017): a unidade de reúso é o componente, não a classe CSS;</li>
+    <li>É a separação de responsabilidades aplicada à aparência: cada componente esconde <em>como</em> um pedaço de tela se desenha.</li>
+  </ul>
+  <p class="cite">tailwindcss.com (Styling with utility classes) · WATHAN, A., 2017</p>
+</section>
+
+<section>
+  <h2>Bibliotecas de componentes sobre o Tailwind</h2>
+  <table class="status-tab">
+    <tr><th>Biblioteca</th><th>Origem</th><th>Como entrega</th></tr>
+    <tr><td>Tailwind Plus (antiga Tailwind UI)</td><td>Tailwind Labs, 2020</td><td>trechos de HTML e React copiados para o projeto (comercial)</td></tr>
+    <tr><td>Headless UI</td><td>Tailwind Labs</td><td>comportamento acessível sem aparência: menus, diálogos, abas</td></tr>
+    <tr><td>daisyUI</td><td>Pouya Saadeghi</td><td>plugin com classes de componente (<code>btn</code>, <code>card</code>)</td></tr>
+    <tr><td>Flowbite</td><td>código aberto</td><td>componentes com classes Tailwind, copiados ou via pacote</td></tr>
+    <tr><td>shadcn/ui</td><td>shadcn, 2023</td><td>componentes copiados para dentro do projeto e editados</td></tr>
+  </table>
+  <p class="cite">tailwindcss.com/plus · headlessui.com · daisyui.com · flowbite.com · ui.shadcn.com</p>
+</section>
+
+<section>
+  <h2>O projeto copia e adapta, sem dependência nova</h2>
+  <p class="definicao">"This is not a component library. It is how you build your component library." - shadcn/ui</p>
+  <ul style="font-size:.62em;margin-top:.8em">
+    <li>Quatro componentes próprios em <code>components/</code>: <code>Button</code>, <code>TextInput</code>, <code>ErrorMessage</code>, <code>Card</code> - as classes de cada um num lugar só;</li>
+    <li>Para quatro peças, uma biblioteca inteira traria vocabulário e atualizações próprios;</li>
+    <li>Comportamento difícil de acertar - diálogos, menus navegáveis pelo teclado - é onde uma biblioteca como a Headless UI compensa.</li>
+  </ul>
+  <p class="cite">ui.shadcn.com (Introduction)</p>
+</section>
+
+<section>
+  <h2>O Tailwind só gera classes escritas por inteiro</h2>
+  <div class="duas-colunas">
+    <div>
+      <p class="os-label">Não gera CSS</p>
+      <pre><code class="language-javascript" data-trim>
+const className = `bg-${color}-600`;
+      </code></pre>
+    </div>
+    <div>
+      <p class="os-label">Gera CSS</p>
+      <pre><code class="language-javascript" data-trim>
+const variantClasses = {
+  primary: "bg-indigo-600 ...",
+  danger: "bg-white text-red-600 ...",
+};
+      </code></pre>
+    </div>
+  </div>
+  <ul style="font-size:.62em;margin-top:.6em">
+    <li>O Tailwind lê o código-fonte como <strong>texto</strong> e gera CSS apenas para os nomes completos que encontra;</li>
+    <li>Uma variante se escolhe num objeto que contém as classes inteiras.</li>
+  </ul>
+  <p class="cite">tailwindcss.com (Detecting classes in source files)</p>
+</section>
+
+<section>
+  <h2>A acessibilidade vem junto com o componente</h2>
+  <ul style="font-size:.64em">
+    <li><strong>Rótulo visível ligado ao campo:</strong> o placeholder some ao digitar e não substitui o rótulo - o <code>&lt;label&gt;</code> que envolve o <code>&lt;input&gt;</code> liga os dois (W3C WAI, <em>Forms Tutorial: Labeling Controls</em>);</li>
+    <li><strong>Foco visível:</strong> quem navega pelo teclado precisa ver onde está - <code>focus-visible:outline-2</code> (WCAG 2.1, critério 2.4.7, <em>Focus Visible</em>);</li>
+    <li><strong>Erro anunciado:</strong> <code>role="alert"</code> faz o leitor de tela ler a mensagem assim que ela aparece;</li>
+    <li>Escrito uma vez no componente, vale para toda tela que o usa.</li>
+  </ul>
+  <p class="cite">W3C WAI - Forms Tutorial · W3C - WCAG 2.1, 2018</p>
+</section>
+
+<section>
+  <h2>A tela antes e depois dos componentes</h2>
+  <div class="duas-colunas">
+    <div>
+      <p class="os-label">Classes soltas em cada tela</p>
+      <img src="img/app-antes.png" alt="A tela de livros com bordas pretas, campos só com placeholder e botões de texto" style="width:100%;border:1px solid #ddd">
+    </div>
+    <div>
+      <p class="os-label">Button, TextInput, ErrorMessage e Card</p>
+      <img src="img/app-depois.png" alt="A mesma tela com fundo cinza-claro, cards brancos, campos com rótulo e botões com variantes" style="width:100%;border:1px solid #ddd">
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - bibliotecas de estilo</span></h2>
+  <ul style="font-size:.78em">
+    <li>Bootstrap (2011): componentes prontos por classe; Tailwind (2017): uma propriedade por classe;</li>
+    <li>Classes repetidas viram componente; sobre o Tailwind, bibliotecas entregam componentes prontos;</li>
+    <li>O projeto copia e adapta: <code>Button</code>, <code>TextInput</code>, <code>ErrorMessage</code>, <code>Card</code>;</li>
+    <li>Classes escritas por inteiro; rótulo, foco visível e erro anunciado.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 4: os componentes estilizados ============ -->
+
+<section>
+  <h2>Button.jsx: a variante escolhe a aparência</h2>
+  <pre class="quebra" style="font-size:.44em"><code class="language-javascript" data-trim>
+const baseClasses = "rounded-lg px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+
+const variantClasses = {
+  primary: "bg-indigo-600 text-white shadow-xs hover:bg-indigo-500",
+  secondary: "bg-white text-slate-700 shadow-xs ring-1 ring-slate-300 ring-inset hover:bg-slate-50",
+  danger: "bg-white text-red-600 shadow-xs ring-1 ring-red-200 ring-inset hover:bg-red-50",
+};
+
+export default function Button({ variant = "primary", children, ...props }) {
+  return (
+    &lt;button className={`${baseClasses} ${variantClasses[variant]}`} {...props}&gt;
+      {children}
+    &lt;/button&gt;
+  );
+}
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><code>children</code>: o texto entre <code>&lt;Button&gt;</code> e <code>&lt;/Button&gt;</code>; <code>...props</code> repassa <code>onClick</code> e <code>type</code> ao <code>&lt;button&gt;</code>;</li>
+    <li><code>hover:</code> e <code>focus-visible:</code> são prefixos de estado: a classe vale com o mouse em cima ou com o foco do teclado.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>TextInput.jsx: o rótulo envolve o campo</h2>
+  <pre class="quebra" style="font-size:.44em"><code class="language-javascript" data-trim>
+export default function TextInput({ label, ...props }) {
+  return (
+    &lt;label className="grid gap-1 text-sm font-medium text-slate-700"&gt;
+      {label}
+      &lt;input
+        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base text-slate-900 shadow-xs focus:border-indigo-600 focus:outline-2 focus:outline-indigo-600/20"
+        {...props}
+      /&gt;
+    &lt;/label&gt;
+  );
+}
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>O <code>&lt;label&gt;</code> que envolve o <code>&lt;input&gt;</code> liga os dois sem <code>id</code>: clicar no rótulo foca o campo;</li>
+    <li><code>value</code>, <code>onChange</code>, <code>type</code> e <code>name</code> chegam por <code>...props</code> - o input continua controlado pela página;</li>
+    <li><code>indigo-600/20</code>: a barra define a opacidade da cor.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>ErrorMessage e Card: null e children</h2>
+  <pre class="quebra" style="font-size:.44em"><code class="language-javascript" data-trim>
+export default function ErrorMessage({ text }) {
+  if (!text) {
+    return null;
+  }
+  return (
+    &lt;p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 ring-1 ring-red-200 ring-inset"&gt;
+      {text}
+    &lt;/p&gt;
+  );
+}
+  </code></pre>
+  <pre class="quebra" style="font-size:.44em"><code class="language-javascript" data-trim>
+export default function Card({ children }) {
+  return &lt;div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200"&gt;{children}&lt;/div&gt;;
+}
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>Devolver <code>null</code> não desenha nada: a decisão "há erro?" sai das páginas;</li>
+    <li>O <code>Card</code> não sabe o que contém - o JSX entre <code>&lt;Card&gt;</code> e <code>&lt;/Card&gt;</code> chega como <code>children</code>: composição.</li>
+  </ul>
+  <div class="nota">No <code>index.html</code>: <code>&lt;body class="bg-slate-50 text-slate-900 antialiased"&gt;</code> - é HTML, então <code>class</code>, não <code>className</code>.</div>
+</section>
+
+<!-- ============ Live 5: services e a página de cadastro ============ -->
+
+<section>
+  <h2>services/api.js: uma função para toda conversa com a API</h2>
   <pre><code class="language-javascript" data-trim>
 const API_URL = "http://127.0.0.1:8000";
 
@@ -335,9 +723,32 @@ export async function request(path, { method = "GET", body } = {}) {
 </section>
 
 <section>
-  <h2>Signup.jsx: estado por campo, submit sem reload</h2>
+  <h2>authService.js: a página pede uma ação, não uma rota</h2>
+  <pre><code class="language-javascript" data-trim>
+import { request } from "./api";
+
+export function signup(name, email, password) {
+  return request("/signup", { method: "POST", body: { name, email, password } });
+}
+
+export async function login(email, password) {
+  const data = await request("/login", { method: "POST", body: { email, password } });
+  return data.access_token;
+}
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O nome é o da <strong>ação</strong>: quem chama <code>signup(...)</code> não sabe que existe um <code>POST /signup</code>;</li>
+    <li><code>login</code> devolve <strong>só o token</strong> - o formato da resposta da API fica escondido aqui;</li>
+    <li><code>signup</code> devolve a promessa do <code>request</code> direto; <code>login</code> precisa de <code>async</code> porque trabalha a resposta.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>SignupPage.jsx: estado por campo, submit sem reload</h2>
   <pre style="font-size:.47em"><code class="language-javascript" data-trim>
-export default function Signup({ onDone }) {
+import { signup } from "../services/authService";
+
+export default function SignupPage({ onDone }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -346,7 +757,7 @@ export default function Signup({ onDone }) {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      await request("/signup", { method: "POST", body: { name, email, password } });
+      await signup(name, email, password);
       onDone();
     } catch (err) {
       setError(err.message);
@@ -354,6 +765,7 @@ export default function Signup({ onDone }) {
   }
   </code></pre>
   <ul style="font-size:.58em">
+    <li>A página chama uma ação do service: nenhuma URL, nenhum verbo HTTP neste arquivo;</li>
     <li><code>{ onDone }</code> é uma prop: o pai decide o que acontece depois do cadastro;</li>
     <li><code>preventDefault()</code> impede o formulário HTML de recarregar a página - o que destruiria a aplicação.</li>
   </ul>
@@ -362,122 +774,46 @@ export default function Signup({ onDone }) {
 <section>
   <h2>O input controlado: o estado é a fonte da verdade</h2>
   <pre style="font-size:.47em"><code class="language-javascript" data-trim>
-&lt;form onSubmit={handleSubmit} className="mx-auto mt-16 max-w-sm space-y-3"&gt;
-  &lt;h1 className="text-2xl font-bold"&gt;Sign up&lt;/h1&gt;
-  &lt;input className="w-full rounded border p-2" placeholder="Name"
-         value={name} onChange={(e) =&gt; setName(e.target.value)} /&gt;
-  ...
-  {error &amp;&amp; &lt;p className="text-red-600"&gt;{error}&lt;/p&gt;}
-  &lt;button className="w-full rounded bg-blue-600 p-2 text-white"&gt;Create account&lt;/button&gt;
-  &lt;button type="button" className="w-full text-blue-600" onClick={onDone}&gt;
-    I already have an account
-  &lt;/button&gt;
-&lt;/form&gt;
+&lt;Card&gt;
+  &lt;form onSubmit={handleSubmit} className="grid gap-4"&gt;
+    &lt;h1 className="text-2xl font-bold"&gt;Sign up&lt;/h1&gt;
+    &lt;TextInput label="Name"
+               value={name} onChange={(e) =&gt; setName(e.target.value)} /&gt;
+    ...
+    &lt;ErrorMessage text={error} /&gt;
+    &lt;Button&gt;Create account&lt;/Button&gt;
+    &lt;Button type="button" variant="secondary" onClick={onDone}&gt;
+      I already have an account
+    &lt;/Button&gt;
+  &lt;/form&gt;
+&lt;/Card&gt;
   </code></pre>
   <ul style="font-size:.58em">
     <li>Cada tecla chama <code>setName</code>; o estado muda; o componente redesenha; o input mostra o valor novo;</li>
-    <li><code>{error &amp;&amp; ...}</code>: expressão JavaScript entre chaves - com <code>error</code> vazio, nada é desenhado;</li>
-    <li>Sem <code>type</code>, o botão é o submit; <code>type="button"</code> não submete.</li>
+    <li>A página monta a tela com os componentes estilizados: nenhuma classe de campo ou de botão se repete aqui;</li>
+    <li>Sem <code>type</code>, o botão é o submit; <code>type="button"</code> chega ao elemento pelo <code>...props</code> e não submete.</li>
   </ul>
 </section>
 
 <section>
-  <h2>A primeira requisição falha</h2>
+  <h2>O cadastro passa pelo preflight</h2>
+  <pre><code class="language-javascript" data-trim>
+import SignupPage from "./pages/SignupPage";
+
+export default function App() {
+  return &lt;SignupPage onDone={() =&gt; console.log("account created")} /&gt;;
+}
+  </code></pre>
+  <p style="font-size:.62em">No terminal do uvicorn, a mesma sequência vista com o <code>curl</code>:</p>
   <pre><code class="language-text" data-trim>
-Access to fetch at 'http://127.0.0.1:8000/signup' from origin
-'http://localhost:5173' has been blocked by CORS policy: Response to
-preflight request doesn't pass access control check: No
-'Access-Control-Allow-Origin' header is present on the requested resource.
+"OPTIONS /signup HTTP/1.1" 200 OK
+"POST /signup HTTP/1.1" 201 Created
   </code></pre>
-  <p style="font-size:.65em">E no terminal do uvicorn, uma linha que ninguém escreveu:</p>
-  <pre><code class="language-text" data-trim>
-"OPTIONS /signup HTTP/1.1" 405 Method Not Allowed
-  </code></pre>
-  <p style="font-size:.62em">O navegador enviou uma requisição própria, a API a recusou e o <code>POST</code> nunca saiu. Cada palavra do erro tem nome.</p>
-</section>
-
-<!-- ============ Teoria 2: CORS ============ -->
-
-<section>
-  <h2>Origem = esquema + host + porta</h2>
-  <p class="definicao">Dois URLs têm a mesma origem quando esquema, host e porta coincidem - a tripla que identifica de onde um documento veio.</p>
-  <ul style="font-size:.65em;margin-top:.8em">
-    <li><strong>Origem:</strong> RFC 6454, <em>The Web Origin Concept</em> (Adam Barth, IETF, 2011);</li>
-    <li><code>http://localhost:5173</code> e <code>http://127.0.0.1:8000</code> diferem <strong>duas vezes</strong> - host e porta. Bastaria uma.</li>
+  <ul style="font-size:.58em">
+    <li>Na aba <strong>Network</strong> do DevTools: uma linha do tipo <em>preflight</em> e o <code>POST</code>;</li>
+    <li>Repetir o cadastro mostra <em>Email already registered</em> - o 409 chegou ao usuário. Dessa vez, só o <code>POST</code>: o preflight ficou guardado pelo <code>max-age</code>.</li>
   </ul>
-  <p class="cite">RFC 6454 - The Web Origin Concept, IETF, 2011</p>
-</section>
-
-<section>
-  <h2>A política de mesma origem protege o usuário</h2>
-  <ul style="font-size:.66em">
-    <li><strong>Origem:</strong> introduzida no <strong>Netscape Navigator 2.0</strong> (1995), junto com o JavaScript;</li>
-    <li><strong>A regra:</strong> um script só pode <em>ler</em> respostas da origem de onde veio;</li>
-    <li><strong>O motivo:</strong> sem ela, qualquer página aberta em outra aba leria, com os cookies do usuário, as respostas do banco dele;</li>
-    <li>É uma regra <strong>do navegador, para o navegador</strong> - o <code>curl</code>, o Swagger e um script Python não a consultam.</li>
-  </ul>
-  <p class="cite">MDN Web Docs - Same-origin policy</p>
-</section>
-
-<section>
-  <h2>CORS: o servidor declara, o navegador aplica</h2>
-  <p class="definicao">Cross-Origin Resource Sharing: o mecanismo pelo qual o servidor declara, por headers de resposta, quais origens podem ler suas respostas.</p>
-  <ul style="font-size:.62em;margin-top:.8em">
-    <li><strong>Origem:</strong> especificado por <strong>Anne van Kesteren</strong>; Recomendação W3C em 2014, hoje parte do <em>Fetch Standard</em> da WHATWG;</li>
-    <li>A declaração: <code>Access-Control-Allow-Origin: http://localhost:5173</code>. Sem o header, ou com outra origem, o navegador descarta a resposta - foi o que o erro disse.</li>
-  </ul>
-  <p class="cite">W3C - Cross-Origin Resource Sharing, 2014 · WHATWG - Fetch Standard</p>
-</section>
-
-<section>
-  <h2>Preflight: o OPTIONS que ninguém escreveu</h2>
-  <img src="img/cors-preflight.png" alt="Diagrama de sequência: o navegador envia OPTIONS com Origin e Access-Control-Request-Method, a API responde 200 com Access-Control-Allow-Origin, e só então o POST é enviado" style="width:100%;max-width:760px">
-  <p class="cite">WHATWG - Fetch Standard (CORS protocol)</p>
-</section>
-
-<section>
-  <h2>CORS não é autenticação</h2>
-  <table class="status-tab">
-    <tr><th></th><th>Política de mesma origem</th><th>CORS</th></tr>
-    <tr><td>Quem define</td><td>o navegador</td><td>o servidor, por headers</td></tr>
-    <tr><td>O que faz</td><td>bloqueia leitura entre origens</td><td>libera origens específicas</td></tr>
-    <tr><td>Quem protege</td><td>o usuário do navegador</td><td>(relaxa a proteção com critério)</td></tr>
-    <tr><td>Vale fora do navegador?</td><td>não</td><td>não</td></tr>
-  </table>
-  <ul style="font-size:.6em;margin-top:.8em">
-    <li>Quem protege a API é o <strong>token</strong>; o CORS protege quem usa o navegador contra páginas que não são a nossa;</li>
-    <li>Em produção, a origem do frontend publicado - nunca <code>"*"</code> numa API com token.</li>
-  </ul>
-</section>
-
-<section>
-  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - mesma origem e CORS</span></h2>
-  <ul style="font-size:.8em">
-    <li>Origem = esquema + host + porta (RFC 6454);</li>
-    <li>O navegador não deixa um script ler resposta de outra origem (Netscape, 1995);</li>
-    <li>CORS: o servidor libera origens por header; o navegador obedece (W3C 2014, Fetch Standard);</li>
-    <li>Preflight <code>OPTIONS</code> antes de métodos e headers não triviais;</li>
-    <li>Não vale fora do navegador - não substitui o token.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>O CORSMiddleware envolve todas as rotas</h2>
-  <pre><code class="language-python" data-trim>
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-  </code></pre>
-  <ul style="font-size:.6em">
-    <li>Responde o preflight sozinho e acrescenta os <code>Access-Control-Allow-*</code> em toda resposta a uma origem permitida;</li>
-    <li>No uvicorn: <code>OPTIONS /signup 200</code> seguido de <code>POST /signup 201</code>. Repetir o cadastro mostra <em>Email already registered</em> em vermelho - o 409 chegou ao usuário.</li>
-  </ul>
-  <div class="nota"><code>127.0.0.1:5173</code> em vez de <code>localhost:5173</code> traz o erro de volta: origens diferentes, só uma na lista.</div>
+  <div class="nota">Porta 5173 ocupada? O Vite sobe na 5174, a origem muda e o console mostra <em>"blocked by CORS policy"</em>: é o 400 do <code>curl</code>, agora aplicado pelo navegador.</div>
 </section>
 
 <!-- ============ Teoria 3: o token no navegador ============ -->
@@ -535,12 +871,14 @@ app.add_middleware(
   </ul>
 </section>
 
-<!-- ============ Live 4: login, App e Books ============ -->
+<!-- ============ Live 6: login, App e Books ============ -->
 
 <section>
-  <h2>Login.jsx entrega o token ao pai</h2>
+  <h2>LoginPage.jsx entrega o token ao pai</h2>
   <pre style="font-size:.47em"><code class="language-javascript" data-trim>
-export default function Login({ onLogin, onShowSignup }) {
+import { login } from "../services/authService";
+
+export default function LoginPage({ onLogin, onShowSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -548,18 +886,18 @@ export default function Login({ onLogin, onShowSignup }) {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const data = await request("/login", { method: "POST", body: { email, password } });
-      onLogin(data.access_token);
+      const token = await login(email, password);
+      onLogin(token);
     } catch (err) {
       setError(err.message);
     }
   }
   </code></pre>
-  <p style="font-size:.6em">Mesma anatomia do cadastro; a diferença é que a resposta interessa. O componente <strong>não guarda</strong> o token: guardar e escolher a próxima tela é de quem conhece as telas.</p>
+  <p style="font-size:.6em">Mesma anatomia do cadastro; a diferença é que a resposta interessa. A página <strong>não guarda</strong> o token: guardar e escolher a próxima tela é de quem conhece as telas.</p>
 </section>
 
 <section>
-  <h2>App.jsx: o token decide a tela</h2>
+  <h2>App.jsx: o token decide a página</h2>
   <pre><code class="language-javascript" data-trim>
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -576,12 +914,12 @@ export default function App() {
   }
 
   if (token) {
-    return &lt;Books onLogout={handleLogout} /&gt;;
+    return &lt;BooksPage onLogout={handleLogout} /&gt;;
   }
   if (showSignup) {
-    return &lt;Signup onDone={() =&gt; setShowSignup(false)} /&gt;;
+    return &lt;SignupPage onDone={() =&gt; setShowSignup(false)} /&gt;;
   }
-  return &lt;Login onLogin={handleLogin} onShowSignup={() =&gt; setShowSignup(true)} /&gt;;
+  return &lt;LoginPage onLogin={handleLogin} onShowSignup={() =&gt; setShowSignup(true)} /&gt;;
 }
   </code></pre>
   <ul style="font-size:.56em">
@@ -591,9 +929,61 @@ export default function App() {
 </section>
 
 <section>
-  <h2>Books.jsx: buscar dados quando a tela aparece</h2>
+  <h2>bookService.js: as rotas de livros num lugar só</h2>
   <pre><code class="language-javascript" data-trim>
-export default function Books({ onLogout }) {
+import { request } from "./api";
+
+export function listBooks() {
+  return request("/api/books");
+}
+
+export function createBook(book) {
+  return request("/api/books", { method: "POST", body: book });
+}
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><code>book</code> é o corpo da requisição: <code>name</code>, <code>pages</code> e <code>current_page</code> - a forma que o <code>BookCreate</code> da API espera;</li>
+    <li>A página vai pedir "liste meus livros" e "crie este livro", sem conhecer <code>/api/books</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Componentes desenham o que recebem</h2>
+  <p class="os-label">components/BookForm.jsx</p>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
+export default function BookForm({ form, onChange, onSubmit }) {
+  return (
+    &lt;form onSubmit={onSubmit} className="grid gap-4"&gt;
+      &lt;TextInput label="Book name" name="name"
+                 value={form.name} onChange={onChange} /&gt;
+      ...
+      &lt;Button&gt;Add book&lt;/Button&gt;
+    &lt;/form&gt;
+  );
+}
+  </code></pre>
+  <p class="os-label">components/BookItem.jsx</p>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
+export default function BookItem({ book }) {
+  return (
+    &lt;li&gt;
+      &lt;Card&gt;
+        &lt;strong&gt;{book.name}&lt;/strong&gt;
+      &lt;/Card&gt;
+    &lt;/li&gt;
+  );
+}
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li>Nenhum <code>useState</code>, nenhum service: tudo chega por props; componentes usam componentes (<code>TextInput</code>, <code>Button</code>, <code>Card</code>);</li>
+    <li><code>onChange</code> e <code>onSubmit</code> são <strong>callbacks</strong>: funções da página que o componente chama quando o usuário digita ou envia.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>BooksPage.jsx: buscar dados quando a tela aparece</h2>
+  <pre><code class="language-javascript" data-trim>
+export default function BooksPage({ onLogout }) {
   const [books, setBooks] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
@@ -604,37 +994,36 @@ export default function Books({ onLogout }) {
 
   async function loadBooks() {
     try {
-      setBooks(await request("/api/books"));
+      setBooks(await listBooks());
     } catch (err) {
       setError(err.message);
     }
   }
-
-  function handleChange(event) {
-    setForm({ ...form, [event.target.name]: event.target.value });
-  }
   </code></pre>
-  <ul style="font-size:.56em">
+  <ul style="font-size:.58em">
     <li><code>useEffect(..., [])</code>: roda depois do primeiro desenho, uma vez. Buscar fora do efeito dispararia uma requisição a cada redesenho;</li>
-    <li>Um <code>handleChange</code> para três inputs: o <code>name</code> do input é a chave; <code>{ ...form }</code> cria um objeto novo - só assim o React redesenha.</li>
+    <li>A página guarda o estado e chama o service; o desenho fica nos componentes.</li>
   </ul>
 </section>
 
 <section>
-  <h2>Listar é mapear dados em elementos</h2>
+  <h2>Listar é mapear dados em componentes</h2>
   <pre><code class="language-javascript" data-trim>
-&lt;ul className="space-y-3"&gt;
+&lt;Card&gt;
+  &lt;BookForm form={form} onChange={handleChange} onSubmit={handleSubmit} /&gt;
+&lt;/Card&gt;
+&lt;ErrorMessage text={error} /&gt;
+
+&lt;ul className="grid gap-4"&gt;
   {books.map((book) =&gt; (
-    &lt;li key={book.id} className="rounded border p-3"&gt;
-      &lt;strong&gt;{book.name}&lt;/strong&gt;
-    &lt;/li&gt;
+    &lt;BookItem key={book.id} book={book} /&gt;
   ))}
 &lt;/ul&gt;
   </code></pre>
-  <ul style="font-size:.6em">
-    <li><code>map</code> transforma a lista de dados em lista de elementos; o <code>key</code> é a identidade de cada item - o <code>id</code> do banco serve exatamente para isso;</li>
-    <li>Inputs entregam <strong>texto</strong> mesmo com <code>type="number"</code>: <code>Number(form.pages)</code> antes de enviar;</li>
-    <li>Depois de criar, <code>loadBooks()</code> de novo: a lista vem da API, a fonte da verdade.</li>
+  <ul style="font-size:.56em">
+    <li><code>map</code> transforma a lista de dados em lista de componentes; o <code>key</code> - o <code>id</code> do banco - fica no elemento que o <code>map</code> devolve;</li>
+    <li>Um <code>handleChange</code> para três inputs: o <code>name</code> do input é a chave; <code>{ ...form }</code> cria um objeto novo - só assim o React redesenha;</li>
+    <li>Inputs entregam <strong>texto</strong>: <code>Number(form.pages)</code> antes de enviar. Depois de criar, <code>loadBooks()</code> de novo - a API é a fonte da verdade.</li>
   </ul>
   <div class="nota">Teste: cadastre-se, entre, cadastre dois livros, <strong>F5</strong> - continua logado. No console, <code>localStorage.getItem("token")</code> mostra o JWT; após <em>Log out</em>, <code>null</code>.</div>
 </section>
@@ -654,51 +1043,75 @@ fetch("http://127.0.0.1:8000/api/books/1", {
   </ul>
 </section>
 
-<!-- ============ Live 5: editar, apagar, progresso ============ -->
+<!-- ============ Live 7: editar, apagar, progresso ============ -->
 
 <section>
-  <h2>Editar e apagar com o mesmo formulário</h2>
+  <h2>Editar e apagar: duas ações, dois callbacks</h2>
   <pre><code class="language-javascript" data-trim>
+export function updateBook(id, book) {
+  return request(`/api/books/${id}`, { method: "PUT", body: book });
+}
+
+export function deleteBook(id) {
+  return request(`/api/books/${id}`, { method: "DELETE" });
+}
+  </code></pre>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
+export default function BookItem({ book, onEdit, onDelete }) {
+  ...
+  &lt;Button variant="secondary" onClick={() =&gt; onEdit(book)}&gt;Edit&lt;/Button&gt;
+  &lt;Button variant="danger" onClick={() =&gt; onDelete(book.id)}&gt;Delete&lt;/Button&gt;
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>O service ganha as duas ações; o <code>BookItem</code> avisa a página e não decide nada. A variante <code>danger</code> marca a ação destrutiva;</li>
+    <li><code>onClick={() =&gt; onDelete(book.id)}</code>: a seta adia a chamada para o clique; sem ela, executaria durante o desenho.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>A página decide entre criar e atualizar</h2>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
 const [editingId, setEditingId] = useState(null);
 
 if (editingId === null) {
-  await request("/api/books", { method: "POST", body });
+  await createBook(book);
 } else {
-  await request(`/api/books/${editingId}`, { method: "PUT", body });
+  await updateBook(editingId, book);
 }
 
 function startEditing(book) {
   setEditingId(book.id);
   setForm({ name: book.name, pages: book.pages, current_page: book.current_page });
 }
-
-async function handleDelete(id) {
-  await request(`/api/books/${id}`, { method: "DELETE" });
-  loadBooks();
-}
   </code></pre>
-  <ul style="font-size:.56em">
-    <li><code>editingId</code> nulo é "criando"; com id, "editando" - muda o verbo e a URL, não o formulário. O botão diz <em>Add book</em> ou <em>Save</em>;</li>
-    <li><code>onClick={() =&gt; handleDelete(book.id)}</code>: a seta adia a chamada para o clique; sem ela, executaria durante o desenho.</li>
+  <pre style="font-size:.47em"><code class="language-javascript" data-trim>
+&lt;BookForm form={form} isEditing={editingId !== null}
+          onChange={handleChange} onSubmit={handleSubmit} /&gt;
+&lt;BookItem key={book.id} book={book} onEdit={startEditing} onDelete={handleDelete} /&gt;
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li><code>editingId</code> nulo é "criando"; com id, "editando" - muda a ação do service, não o formulário;</li>
+    <li>O <code>BookForm</code> recebe só <code>isEditing</code> e escreve <em>Add book</em> ou <em>Save</em> no botão; <code>onEdit={startEditing}</code> passa a função, sem chamá-la.</li>
   </ul>
 </section>
 
 <section>
   <h2>O Reading Progress na tela</h2>
   <pre><code class="language-javascript" data-trim>
-&lt;div className="flex justify-between"&gt;
+&lt;div className="flex items-baseline justify-between gap-4"&gt;
   &lt;strong&gt;{book.name}&lt;/strong&gt;
-  &lt;span className="text-sm text-gray-600"&gt;
+  &lt;span className="text-sm text-slate-500"&gt;
     {book.current_page}/{book.pages} pages · {book.progress}%
   &lt;/span&gt;
 &lt;/div&gt;
-&lt;div className="mt-2 h-2 rounded bg-gray-200"&gt;
-  &lt;div className="h-2 rounded bg-green-600" style={{ width: `${book.progress}%` }} /&gt;
+&lt;div className="mt-3 h-2 rounded-full bg-slate-100"&gt;
+  &lt;div className="h-2 rounded-full bg-indigo-600" style={{ width: `${book.progress}%` }} /&gt;
 &lt;/div&gt;
   </code></pre>
-  <ul style="font-size:.6em">
-    <li>Duas <code>div</code>: fundo cinza e barra verde cuja largura é a porcentagem - o único estilo que vem de um dado, não de uma classe;</li>
+  <ul style="font-size:.58em">
+    <li>Duas <code>div</code>: fundo cinza e barra índigo cuja largura é a porcentagem - o único estilo que vem de um dado, não de uma classe;</li>
     <li><code>book.progress</code> veio pronto da API: a tela <strong>não recalcula</strong>. Se a regra mudar, muda no model;</li>
+    <li>A mudança fica inteira no <code>BookItem</code>: mudar o desenho de um livro é mudar o arquivo que desenha um livro;</li>
     <li>Avance a página atual até o total: <strong>100%</strong>, concluído - sem campo de status.</li>
   </ul>
 </section>
@@ -709,19 +1122,20 @@ async function handleDelete(id) {
   <h2>Exercício em sala</h2>
   <ol style="font-size:.68em">
     <li>O token dura duas horas; vencido, a API responde <strong>401</strong> e a tela mostra <em>Invalid or expired token</em> - mas continua na lista;</li>
-    <li>Em <code>Books.jsx</code>, trate o 401: quando <code>err.status === 401</code>, chame <code>onLogout()</code> em vez de mostrar a mensagem;</li>
+    <li>Em <code>pages/BooksPage.jsx</code>, trate o 401: quando <code>err.status === 401</code>, chame <code>onLogout()</code> em vez de mostrar a mensagem;</li>
     <li>Teste sem esperar: no console, <code>localStorage.setItem("token", "abc")</code> e F5 - a aplicação deve voltar sozinha ao login.</li>
   </ol>
-  <div class="nota">O <code>error.status</code> do <code>api.js</code> existe para isso. Atenção: tratar o 401 dentro do próprio <code>api.js</code> quebraria o login com senha errada, que também é 401 - a decisão pertence a quem sabe em que tela está.</div>
+  <div class="nota">O <code>error.status</code> do <code>services/api.js</code> existe para isso. Atenção: tratar o 401 dentro do próprio <code>services/api.js</code> quebraria o login com senha errada, que também é 401 - a decisão pertence a quem sabe em que tela está: a página.</div>
 </section>
 
 <section>
   <h2>Síntese da aula</h2>
   <ul style="font-size:.58em">
     <li>O Book ganhou <code>pages</code> e <code>current_page</code>; o Reading Progress é <strong>dado derivado</strong> - property no model, publicada pelo <code>BookRead</code>, nunca armazenada;</li>
-    <li>Aplicação de página única (Garrett, 2005): um HTML, um programa React que pede dados à API e desenha telas;</li>
-    <li>Componentes como funções de estado - <code>useState</code> para o que muda, <code>useEffect</code> para buscar dados, props para conversar com o pai; Vite serve e empacota, Tailwind estiliza no JSX, npm gerencia como o pip;</li>
-    <li>Duas origens esbarraram na <strong>política de mesma origem</strong> (RFC 6454); o <strong>CORS</strong> liberou a origem do Vite - headers que o servidor declara e o navegador aplica, com o preflight <code>OPTIONS</code> explicando a linha inesperada;</li>
+    <li>Aplicação de página única (Garrett, 2005), servida por outra origem: a <strong>política de mesma origem</strong> (RFC 6454) exigiu que a API declarasse por <strong>CORS</strong> quem pode ler suas respostas - o preflight <code>OPTIONS</code> verificado com o <code>curl</code> antes da primeira tela;</li>
+    <li>Componentes como funções de estado - <code>useState</code> para o que muda, <code>useEffect</code> para buscar dados, props e callbacks para conversar com o pai; Vite serve e empacota, Tailwind estiliza no JSX, npm gerencia como o pip;</li>
+    <li>Separação de responsabilidades (Dijkstra, 1974; Parnas, 1972): <code>services</code> escondem a API, <code>pages</code> guardam o estado de cada tela, <code>components</code> só desenham;</li>
+    <li>Do Bootstrap às bibliotecas sobre o Tailwind, o projeto copia e adapta: <code>Button</code>, <code>TextInput</code>, <code>ErrorMessage</code> e <code>Card</code> concentram a aparência, com rótulo, foco visível e erro anunciado;</li>
     <li>O token vive no <code>localStorage</code> e viaja em <code>Authorization: Bearer</code> (RFC 6750) - custo assumido do XSS, defesa da vida curta;</li>
     <li>O CRUD inteiro roda na tela; a garantia de que cada um só mexe nos próprios livros continua <strong>onde sempre esteve: na API</strong>.</li>
   </ul>
@@ -731,8 +1145,13 @@ async function handleDelete(id) {
   <h2>Referências</h2>
   <ul style="font-size:.5em">
     <li>GARRETT, J. J. <em>Ajax: A New Approach to Web Applications</em>. Adaptive Path, 2005. (aplicações de página única)</li>
+    <li>DIJKSTRA, E. W. <em>On the role of scientific thought</em> (EWD 447), 1974. (separação de responsabilidades)</li>
+    <li>PARNAS, D. L. <em>On the Criteria To Be Used in Decomposing Systems into Modules</em>. Communications of the ACM, v. 15, n. 12, 1972. (ocultação de informação)</li>
     <li>Documentação oficial do React - react.dev (<em>Thinking in React</em>, <em>Describing the UI</em>, <em>Managing State</em>).</li>
-    <li>Documentação oficial do Vite - vite.dev; do Tailwind CSS - tailwindcss.com; do npm - docs.npmjs.com.</li>
+    <li>KOBLENTZ, T. <em>Challenging CSS Best Practices</em>. Smashing Magazine, 2013. (Atomic CSS); WATHAN, A. <em>CSS Utility Classes and "Separation of Concerns"</em>. adamwathan.me, 2017.</li>
+    <li>Bootstrap - getbootstrap.com; Tailwind Plus - tailwindcss.com/plus; Headless UI - headlessui.com; daisyUI - daisyui.com; Flowbite - flowbite.com; shadcn/ui - ui.shadcn.com.</li>
+    <li>W3C WAI. <em>Forms Tutorial: Labeling Controls</em>; W3C. <em>Web Content Accessibility Guidelines (WCAG) 2.1</em>, 2018 (2.4.7 Focus Visible).</li>
+    <li>Documentação oficial do Vite - vite.dev; do Tailwind CSS - tailwindcss.com (<em>Styling with utility classes</em>, <em>Detecting classes in source files</em>); do npm - docs.npmjs.com.</li>
     <li>RFC 6454 - <em>The Web Origin Concept</em>. IETF, 2011. (origem: esquema, host e porta)</li>
     <li>W3C. <em>Cross-Origin Resource Sharing</em>. W3C Recommendation, 2014; WHATWG. <em>Fetch Standard</em> - fetch.spec.whatwg.org.</li>
     <li>RFC 6750 - <em>The OAuth 2.0 Authorization Framework: Bearer Token Usage</em>. IETF, 2012.</li>

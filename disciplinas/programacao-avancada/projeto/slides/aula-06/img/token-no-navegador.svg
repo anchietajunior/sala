@@ -14,8 +14,8 @@
 
   <!-- login -->
   <rect x="60" y="55" width="280" height="56" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
-  <text x="200" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">Login.jsx</text>
-  <text x="200" y="98" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">request("/login", {email, password})</text>
+  <text x="200" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">LoginPage.jsx</text>
+  <text x="200" y="98" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">login(email, password)</text>
   <path d="M 345 83 L 480 83" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
   <rect x="485" y="55" width="255" height="56" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
   <text x="612" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">POST /login</text>
@@ -29,14 +29,14 @@
 
   <!-- cada requisição -->
   <rect x="60" y="220" width="280" height="76" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
-  <text x="200" y="243" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">api.js, em toda requisição</text>
+  <text x="200" y="243" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">services/api.js, em toda requisição</text>
   <text x="200" y="263" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">token = localStorage.getItem("token")</text>
   <text x="200" y="283" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">Authorization: Bearer &lt;token&gt;</text>
   <path d="M 345 258 L 480 258" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
   <rect x="485" y="220" width="255" height="76" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
   <text x="612" y="243" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">get_current_user</text>
   <text x="612" y="263" text-anchor="middle" font-size="12" fill="#333">verifica assinatura e exp</text>
-  <text x="612" y="283" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">200 dados do dono · 401 sem/inválido</text>
+  <text x="612" y="283" text-anchor="middle" font-size="11" font-family="monospace" fill="#333">200 dados do dono · 401 sem/inválido</text>
 
   <!-- rodapé -->
   <text x="400" y="335" text-anchor="middle" font-size="13" fill="#333">Sair = <tspan font-family="monospace">localStorage.removeItem("token")</tspan>: a API não tem sessão para encerrar.</text>

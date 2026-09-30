@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 425" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+    <marker id="setaC" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- App.jsx -->
+  <rect x="40" y="20" width="200" height="56" rx="8" fill="#fff" stroke="#333" stroke-width="2"/>
+  <text x="140" y="44" text-anchor="middle" font-size="15" font-weight="bold" font-family="monospace" fill="#333">App.jsx</text>
+  <text x="140" y="64" text-anchor="middle" font-size="12" fill="#666">escolhe a página pelo token</text>
+  <path d="M 140 76 L 140 124" fill="none" stroke="#555" stroke-width="2" marker-end="url(#setaC)"/>
+
+  <!-- pages -->
+  <rect x="40" y="128" width="200" height="104" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="140" y="152" text-anchor="middle" font-size="15" font-weight="bold" font-family="monospace" fill="#2e6da4">pages/</text>
+  <text x="140" y="174" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">SignupPage · LoginPage</text>
+  <text x="140" y="192" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">BooksPage</text>
+  <text x="140" y="216" text-anchor="middle" font-size="12" fill="#666">estado da tela, ordem das ações</text>
+
+  <!-- components -->
+  <rect x="40" y="284" width="200" height="108" rx="8" fill="#fff" stroke="#2e6da4" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="140" y="306" text-anchor="middle" font-size="15" font-weight="bold" font-family="monospace" fill="#2e6da4">components/</text>
+  <text x="140" y="326" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">Button · TextInput</text>
+  <text x="140" y="342" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">ErrorMessage · Card</text>
+  <text x="140" y="358" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">BookForm · BookItem</text>
+  <text x="140" y="380" text-anchor="middle" font-size="12" fill="#666">só desenham o que recebem</text>
+
+  <path d="M 105 232 L 105 280" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <text x="96" y="262" text-anchor="end" font-size="12" fill="#2e6da4" font-style="italic">props</text>
+  <path d="M 175 284 L 175 236" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <text x="184" y="262" text-anchor="start" font-size="12" fill="#2e6da4" font-style="italic">callbacks</text>
+
+  <!-- services -->
+  <rect x="340" y="128" width="230" height="104" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
+  <text x="455" y="152" text-anchor="middle" font-size="15" font-weight="bold" font-family="monospace" fill="#8a6508">services/</text>
+  <text x="455" y="174" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">authService · bookService</text>
+  <text x="455" y="192" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">api.js: request()</text>
+  <text x="455" y="216" text-anchor="middle" font-size="12" fill="#666">URL, rotas, verbos, formato da resposta</text>
+
+  <path d="M 240 165 L 336 165" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <text x="290" y="157" text-anchor="middle" font-size="12" fill="#8a6508" font-style="italic">chama</text>
+  <path d="M 340 200 L 244 200" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <text x="290" y="218" text-anchor="middle" font-size="12" fill="#8a6508" font-style="italic">devolve</text>
+
+  <!-- API -->
+  <rect x="620" y="128" width="150" height="104" rx="8" fill="#fff" stroke="#333" stroke-width="2"/>
+  <text x="695" y="160" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">API FastAPI</text>
+  <text x="695" y="184" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">127.0.0.1:8000</text>
+  <text x="695" y="206" text-anchor="middle" font-size="12" fill="#666">JSON</text>
+
+  <path d="M 570 165 L 616 165" fill="none" stroke="#555" stroke-width="2" marker-end="url(#setaC)"/>
+  <text x="595" y="157" text-anchor="middle" font-size="12" fill="#555" font-style="italic">fetch</text>
+  <path d="M 620 200 L 574 200" fill="none" stroke="#555" stroke-width="2" marker-end="url(#setaC)"/>
+
+  <!-- legenda -->
+  <text x="340" y="298" font-size="13.5" font-weight="bold" fill="#333">Cada pasta esconde uma decisão:</text>
+  <text x="340" y="322" font-size="13" fill="#333"><tspan font-family="monospace" fill="#8a6508">services</tspan> - como falar com a API</text>
+  <text x="340" y="344" font-size="13" fill="#333"><tspan font-family="monospace" fill="#2e6da4">pages</tspan> - o estado de cada tela</text>
+  <text x="340" y="366" font-size="13" fill="#333"><tspan font-family="monospace" fill="#2e6da4">components</tspan> - como desenhar um pedaço da tela</text>
+  <text x="400" y="416" text-anchor="middle" font-size="12.5" fill="#999">Separação de responsabilidades (Dijkstra, 1974) e ocultação de informação (Parnas, 1972).</text>
+</svg>
