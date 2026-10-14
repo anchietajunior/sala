@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+  </defs>
+
+  <!-- cabeçalhos -->
+  <text x="105" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e6da4">Usuários</text>
+  <text x="345" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6508">Papéis</text>
+  <text x="615" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#2f6f2f">Permissões</text>
+
+  <!-- usuários -->
+  <rect x="35" y="52" width="140" height="40" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="105" y="77" text-anchor="middle" font-size="13" fill="#333">Machado</text>
+  <rect x="35" y="152" width="140" height="40" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="105" y="177" text-anchor="middle" font-size="13" fill="#333">Clarice</text>
+  <rect x="35" y="212" width="140" height="40" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="105" y="237" text-anchor="middle" font-size="13" fill="#333">Cecília</text>
+
+  <!-- papéis -->
+  <rect x="280" y="52" width="130" height="40" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="345" y="77" text-anchor="middle" font-size="13" font-family="monospace" fill="#333">admin</text>
+  <rect x="280" y="182" width="130" height="40" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="345" y="207" text-anchor="middle" font-size="13" font-family="monospace" fill="#333">user</text>
+
+  <!-- usuário → papel -->
+  <path d="M 178 72 L 275 72" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <path d="M 178 172 L 275 198" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <path d="M 178 232 L 275 208" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+
+  <!-- permissões -->
+  <rect x="490" y="42" width="255" height="34" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.8"/>
+  <text x="617" y="64" text-anchor="middle" font-size="12.5" fill="#333">ler, editar e apagar qualquer Book</text>
+  <rect x="490" y="86" width="255" height="34" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.8"/>
+  <text x="617" y="108" text-anchor="middle" font-size="12.5" fill="#333">ver o Admin Dashboard</text>
+  <rect x="490" y="185" width="255" height="34" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.8"/>
+  <text x="617" y="207" text-anchor="middle" font-size="12.5" fill="#333">ler, editar e apagar os <tspan font-weight="bold">próprios</tspan> Books</text>
+
+  <!-- papel → permissão -->
+  <path d="M 413 66 L 485 59" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <path d="M 413 78 L 485 101" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <path d="M 413 202 L 485 202" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+
+  <!-- rodapé -->
+  <text x="400" y="290" text-anchor="middle" font-size="13" fill="#333">Promover alguém é trocar o papel; mudar um papel muda, de uma vez, todos os seus usuários.</text>
+  <text x="400" y="313" text-anchor="middle" font-size="13" fill="#333">"Próprios" não vem do papel: depende da relação <tspan font-family="monospace">book.user_id</tspan> com quem pede.</text>
+  <text x="400" y="342" text-anchor="middle" font-size="12" fill="#999">Ferraiolo e Kuhn, 1992 · Sandhu et al., 1996 · OWASP Authorization Cheat Sheet</text>
+</svg>

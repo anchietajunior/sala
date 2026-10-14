@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 07 - Autorização e controle de acesso baseado em papéis</title>
+<link rel="stylesheet" href="../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../assets/reveal/dist/theme/white.css">
+<link rel="stylesheet" href="../assets/reveal/plugin/highlight/monokai.css">
+<style>
+  .reveal { font-size: 34px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+  .reveal h2 { font-size: 1.35em; }
+  .reveal ul { display: block; }
+  .reveal li { margin: .35em 0; }
+  .reveal pre { box-shadow: none; width: 100%; }
+  .reveal pre code { padding: .8em 1em; border-radius: 6px; max-height: 480px; }
+  .cite { font-size: .45em; color: #999; margin-top: 1.6em; }
+  .duas-colunas { display: flex; gap: 1em; align-items: flex-start; text-align: left; }
+  .duas-colunas > div { flex: 1; min-width: 0; }
+  .os-label { font-size: .55em; font-weight: bold; color: #666; margin: 0 0 .2em .1em; }
+  .nota { font-size: .6em; background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .6em .9em; margin-top: .8em; }
+  .destaque { color: #2e6da4; font-weight: bold; }
+  .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
+  .status-tab { font-size: .7em; border-collapse: collapse; margin: 0 auto; }
+  .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .reveal pre.quebra code { white-space: pre-wrap; }
+  .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
+  .tela { border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ Abertura ============ -->
+
+<section>
+  <h1 style="font-size:1.5em">Autorização e controle de acesso<br>baseado em papéis</h1>
+  <p>Programação Avançada - Aula 07</p>
+  <p style="font-size:.55em"><a href="https://github.com/anchietajunior/readingtracker">https://github.com/anchietajunior/readingtracker</a></p>
+  <p style="font-size:.55em;color:#888">Universidade Unirios</p>
+</section>
+
+<section>
+  <h2>A regra de acesso está escrita quatro vezes</h2>
+  <pre class="quebra"><code class="language-python" data-trim>
+statement = select(models.Book).where(models.Book.user_id == current_user.id)
+
+if book is None or book.user_id != current_user.id:                # read_book
+if stored_book is None or stored_book.user_id != current_user.id:  # update_book
+if book is None or book.user_id != current_user.id:                # delete_book
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O glossário define o <strong>Admin</strong>: lê, edita e apaga os Books de todos os Users e acessa o <strong>Admin Dashboard</strong>, com as quantidades de Users e de Books;</li>
+    <li><strong>Todos os Users são iguais</strong> - a tabela <code>users</code> não registra papel nenhum;</li>
+    <li><strong>A regra está espalhada</strong> - a exceção do Admin exigiria editar quatro lugares, e esquecer um deixa uma rota com a regra antiga.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Objetivos da aula</h2>
+  <ul style="font-size:.66em">
+    <li>Distinguir <strong>autenticação</strong> de <strong>autorização</strong> e situar o <strong>RBAC</strong> a partir da matriz de acesso;</li>
+    <li>Modelar papéis com um enum do Python mapeado para um <code>ENUM</code> do MySQL, com o menor privilégio como padrão;</li>
+    <li>Concentrar a regra de acesso a Books em um método do model e aplicá-la em todas as rotas;</li>
+    <li>Proteger rotas por papel com a dependency <code>require_admin</code> e escolher entre <strong>401, 403 e 404</strong>;</li>
+    <li>Construir o Admin Dashboard em <code>/admin</code> no React - e mostrar que quem protege os dados é a API.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 1: autenticação, autorização e RBAC ============ -->
+
+<section>
+  <h2>Autenticação pergunta quem é; autorização, o que pode</h2>
+  <p class="definicao">Autenticação: o processo de verificar uma alegação de que uma entidade do sistema possui determinado valor de atributo.</p>
+  <p class="definicao">Autorização: uma aprovação concedida a uma entidade do sistema para acessar um recurso do sistema.</p>
+  <ul style="font-size:.62em;margin-top:.6em">
+    <li>Definições da <em>Internet Security Glossary</em> (RFC 4949, R. Shirey, IETF, 2007), em tradução livre;</li>
+    <li>No projeto, o JWT e o <code>get_current_user</code> respondem a primeira pergunta; a segunda ainda não tem resposta no código.</li>
+  </ul>
+  <p class="cite">RFC 4949 - Internet Security Glossary, Version 2, IETF, 2007</p>
+</section>
+
+<section>
+  <h2>Toda requisição passa pelas duas perguntas, nessa ordem</h2>
+  <img src="img/autenticacao-autorizacao.png" alt="Diagrama: a requisição passa pela autenticação (get_current_user, falha responde 401) e depois pela autorização (can_access e require_admin, falha responde 404 para livro sem acesso ou 403 para rota de Admin) até a rota executar com 200" style="width:100%;max-width:820px">
+  <p class="cite">RFC 4949 · RFC 9110</p>
+</section>
+
+<section>
+  <h2>Toda decisão de acesso é uma célula da matriz</h2>
+  <ul style="font-size:.6em">
+    <li><strong>Origem:</strong> Butler Lampson, <em>Protection</em> (1971) - linhas são os <strong>sujeitos</strong> (quem pede), colunas são os <strong>objetos</strong> (o que é pedido), cada célula guarda os <strong>direitos</strong>. Autorizar é consultar uma célula;</li>
+  </ul>
+  <table class="status-tab">
+    <tr><th>sujeito \ objeto</th><th>Book 1 (do Machado)</th><th>Book 2 (da Clarice)</th><th>Admin Dashboard</th></tr>
+    <tr><td>Machado (<code>admin</code>)</td><td>ler, editar, apagar</td><td>ler, editar, apagar</td><td>ver</td></tr>
+    <tr><td>Clarice (<code>user</code>)</td><td>-</td><td>ler, editar, apagar</td><td>-</td></tr>
+  </table>
+  <p style="font-size:.6em;margin-top:.8em">Com milhares de usuários e milhões de objetos, manter célula por célula é inviável: os modelos de controle de acesso <strong>geram</strong> a matriz a partir de regras.</p>
+  <p class="cite">LAMPSON, B. - Protection, 1971</p>
+</section>
+
+<section>
+  <h2>RBAC: a permissão é dada ao papel, não à pessoa</h2>
+  <p class="definicao">No RBAC, permissões são associadas a papéis, e usuários são designados aos papéis apropriados, adquirindo assim as permissões desses papéis.</p>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li><strong>Origem:</strong> David Ferraiolo e Richard Kuhn, <em>Role-Based Access Controls</em> (NIST, 1992) - uma alternativa para organizações civis e comerciais aos modelos do <em>Orange Book</em> (TCSEC, 1985), pensados para o meio militar;</li>
+    <li>A definição acima é de Sandhu, Coyne, Feinstein e Youman (IEEE Computer, 1996), em tradução livre; virou norma em 2004 (ANSI INCITS 359).</li>
+  </ul>
+  <p class="cite">FERRAIOLO, D.; KUHN, R. - 1992 · SANDHU, R. et al. - Role-Based Access Control Models, 1996</p>
+</section>
+
+<section>
+  <h2>Usuários, papéis e permissões no projeto</h2>
+  <img src="img/rbac.png" alt="Diagrama: Machado tem o papel admin, com as permissões de ler, editar e apagar qualquer Book e ver o Admin Dashboard; Clarice e Cecília têm o papel user, com a permissão de ler, editar e apagar os próprios Books" style="width:100%;max-width:820px">
+  <p class="cite">Ferraiolo e Kuhn, 1992 · Sandhu et al., 1996</p>
+</section>
+
+<section>
+  <h2>O papel decide se a relação de dono importa</h2>
+  <ul style="font-size:.66em">
+    <li>"O User acessa os <strong>próprios</strong> livros" não é RBAC: depende da <strong>relação</strong> entre quem pede e o recurso - <code>book.user_id</code>;</li>
+    <li>O OWASP recomenda combinar papéis com atributos e relações (<em>Authorization Cheat Sheet</em>);</li>
+    <li>O sistema é essa combinação: o papel <code>admin</code> dispensa a relação; o papel <code>user</code> a exige.</li>
+  </ul>
+  <div class="nota">Entra um terceiro usuário com o papel <code>user</code>: nenhuma regra nova. A linha dele na matriz é gerada pelo papel e pela relação de dono.</div>
+  <p class="cite">OWASP - Authorization Cheat Sheet, cheatsheetseries.owasp.org</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - autenticação, autorização e RBAC</span></h2>
+  <ul style="font-size:.8em">
+    <li>Autenticação: <em>quem é</em>; autorização: <em>o que pode</em> (RFC 4949);</li>
+    <li>Toda decisão de acesso é uma célula da matriz de Lampson (1971);</li>
+    <li>RBAC: permissões no papel, usuários no papel (Ferraiolo e Kuhn, 1992; Sandhu et al., 1996);</li>
+    <li>No projeto: dois papéis, combinados com a relação de dono.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 1: o papel do User ============ -->
+
+<section>
+  <h2>O papel é um conjunto fechado de valores</h2>
+  <pre><code class="language-python" data-trim>
+import enum
+
+
+class Role(enum.Enum):
+    ADMIN = "admin"
+    USER = "user"
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><strong><code>enum.Enum</code></strong> - biblioteca padrão do Python (PEP 435, Barry Warsaw, Eli Bendersky e Ethan Furman; Python 3.4): só estes dois valores existem;</li>
+    <li>Cada membro tem <strong>nome</strong> (<code>ADMIN</code>, em maiúsculas por ser constante) e <strong>valor</strong> (<code>"admin"</code>);</li>
+    <li>No código compara-se <code>user.role == Role.ADMIN</code> - nunca com uma string solta, que aceitaria <code>"Admin"</code> ou <code>"adm"</code>.</li>
+  </ul>
+  <p class="cite">PEP 435 - Adding an Enum type to the Python standard library, 2013</p>
+</section>
+
+<section>
+  <h2>A coluna: ENUM no MySQL, menor privilégio como padrão</h2>
+  <pre class="quebra"><code class="language-python" data-trim>
+role: Mapped[Role] = mapped_column(
+    Enum(Role, values_callable=lambda roles: [role.value for role in roles]),
+    server_default=Role.USER.value,
+)
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>Enum(Role, ...)</code> é do SQLAlchemy - o <em>tipo da coluna</em>; o <code>enum.Enum</code> do Python define os valores;</li>
+    <li><code>values_callable</code>: o banco guarda o <strong>valor</strong> (<code>'admin'</code>), não o nome do membro (<code>'ADMIN'</code>);</li>
+    <li><code>server_default</code>: o <code>DEFAULT</code> fica no banco - todo <code>INSERT</code> sem papel cria um usuário comum.</li>
+  </ul>
+  <pre><code class="language-sql" data-trim>
+`role` enum('admin','user') NOT NULL DEFAULT 'user'
+  </code></pre>
+  <div class="nota">Antes: <code>DROP TABLE books; DROP TABLE users;</code> - o model ganhou coluna e o <code>create_all</code> não altera tabela existente. Depois: <code>SHOW CREATE TABLE users;</code></div>
+</section>
+
+<section>
+  <h2>O schema de entrada ignora o que não declara</h2>
+  <pre class="quebra"><code class="language-json" data-trim>
+POST /signup
+{"name": "Machado de Assis", "email": "machado@exemplo.com",
+ "password": "segredo123", "role": "admin"}
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li>Resposta <strong>201</strong> - e no banco, <code>SELECT id, email, role FROM users;</code> mostra <code>user</code>;</li>
+    <li>O <code>UserCreate</code> declara só <code>name</code>, <code>email</code> e <code>password</code>; o Pydantic ignora o resto: o schema é a lista do que o cliente <strong>pode</strong> enviar;</li>
+    <li>É a defesa contra o <strong>mass assignment</strong>: copiar para o objeto do banco tudo o que veio na requisição.</li>
+  </ul>
+  <p class="cite">Documentação oficial do Pydantic - docs.pydantic.dev (Models)</p>
+</section>
+
+<section>
+  <h2>Conceder papel não é operação da API</h2>
+  <p class="os-label">Mac e Windows (dentro do cliente mysql)</p>
+  <pre><code class="language-sql" data-trim>
+UPDATE users SET role = 'admin' WHERE email = 'machado@exemplo.com';
+SELECT id, email, role FROM users;
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li>Promover alguém é uma operação administrativa: quem promove é quem tem acesso ao banco;</li>
+    <li><code>UPDATE users SET role = 'root' ...</code> → o MySQL recusa: <em>Data truncated for column 'role'</em>. Fora da lista do <code>ENUM</code>, nenhum valor entra.</li>
+  </ul>
+  <p class="cite">Documentação oficial do MySQL - dev.mysql.com (The ENUM Type)</p>
+</section>
+
+<!-- ============ Teoria 2: princípios e falhas ============ -->
+
+<section>
+  <h2>Três princípios de proteção de Saltzer e Schroeder</h2>
+  <ul style="font-size:.6em">
+    <li><strong>Padrões à prova de falha</strong> (<em>fail-safe defaults</em>): <em>"basear as decisões de acesso em permissão, e não em exclusão"</em> - negar é o padrão; o acesso precisa ser provado;</li>
+    <li><strong>Mediação completa</strong> (<em>complete mediation</em>): <em>"todo acesso a todo objeto deve ser verificado quanto à autoridade"</em> - toda rota que toca um livro, não só a listagem;</li>
+    <li><strong>Menor privilégio</strong> (<em>least privilege</em>): <em>"todo programa e todo usuário do sistema deve operar com o menor conjunto de privilégios necessário para completar o trabalho"</em> - todo cadastro nasce <code>user</code>.</li>
+  </ul>
+  <p style="font-size:.55em">Jerome Saltzer e Michael Schroeder reuniram oito princípios em 1975 - ainda hoje a base dos guias de segurança. Tradução livre.</p>
+  <p class="cite">SALTZER, J.; SCHROEDER, M. - The Protection of Information in Computer Systems, Proceedings of the IEEE, 1975</p>
+</section>
+
+<section>
+  <h2>As falhas de autorização mais encontradas em APIs</h2>
+  <table class="status-tab">
+    <tr><th>OWASP API Security Top 10 (2023)</th><th>No projeto</th></tr>
+    <tr><td><strong>API1 - Broken Object Level Authorization</strong> (BOLA): objeto alheio pelo id</td><td><code>GET /api/books/2</code> com o token de outro User</td></tr>
+    <tr><td><strong>API3 - Broken Object Property Level Authorization</strong>: propriedade que o cliente não deveria controlar</td><td><code>"role": "admin"</code> no corpo do signup</td></tr>
+    <tr><td><strong>API5 - Broken Function Level Authorization</strong> (BFLA): função administrativa por usuário comum</td><td><code>GET /api/admin/stats</code> sem ser Admin</td></tr>
+  </table>
+  <ul style="font-size:.55em;margin-top:.8em">
+    <li>O BOLA é o primeiro da lista desde a primeira edição (2019);</li>
+    <li>O caso que popularizou o <em>mass assignment</em>: em 2012, Egor Homakov o explorou numa aplicação Rails do GitHub e ganhou escrita em um repositório que não era dele.</li>
+  </ul>
+  <p class="cite">OWASP - API Security Top 10, 2023 - owasp.org/API-Security</p>
+</section>
+
+<section>
+  <h2>401, 403 e 404: três situações diferentes</h2>
+  <p class="definicao" style="font-size:.62em">401: a requisição não foi aplicada porque não possui credenciais de autenticação válidas para o recurso. 403: o servidor entendeu a requisição, mas se recusa a atendê-la. Um servidor que deseje "esconder" a existência de um recurso proibido pode, em vez disso, responder 404.</p>
+  <table class="status-tab" style="margin-top:.6em">
+    <tr><th>Situação</th><th>Resposta</th><th>Por quê</th></tr>
+    <tr><td>Sem token, ou token inválido</td><td><strong>401</strong></td><td>a API não sabe quem é</td></tr>
+    <tr><td>User pede livro de outro User</td><td><strong>404</strong></td><td>a existência do livro não se confirma</td></tr>
+    <tr><td>User chama rota administrativa</td><td><strong>403</strong></td><td>a rota é pública no Swagger: não há o que esconder</td></tr>
+  </table>
+  <p class="cite">RFC 9110 - HTTP Semantics, IETF, 2022 (15.5.2 e 15.5.4), tradução livre</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - princípios e falhas</span></h2>
+  <ul style="font-size:.8em">
+    <li>Negar por padrão, verificar todo acesso, dar o menor privilégio (Saltzer e Schroeder, 1975);</li>
+    <li>BOLA, mass assignment e BFLA: objeto, propriedade e função (OWASP, 2023);</li>
+    <li>401 = não sei quem é; 403 = sei e não permito; 404 = não confirmo que existe (RFC 9110).</li>
+  </ul>
+</section>
+
+<!-- ============ Live 2: a regra num lugar só ============ -->
+
+<section>
+  <h2>A regra de acesso vive em um método do User</h2>
+  <pre><code class="language-python" data-trim>
+@property
+def is_admin(self) -> bool:
+    return self.role == Role.ADMIN
+
+def can_access(self, book: "Book") -> bool:
+    return self.is_admin or book.user_id == self.id
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><code>is_admin</code>: property lida como atributo, calculada a partir do papel;</li>
+    <li><code>can_access</code>: a matriz em uma linha - o Admin acessa qualquer livro (papel); os demais, os que têm o próprio id (relação). Só devolve <code>True</code> com permissão explícita;</li>
+    <li><code>"Book"</code> entre aspas: a classe é definida mais abaixo no arquivo (<em>forward reference</em>, PEP 484).</li>
+  </ul>
+  <p class="cite">PEP 484 - Type Hints, 2014 (Forward references)</p>
+</section>
+
+<section>
+  <h2>Toda rota que toca um livro consulta a regra</h2>
+  <pre><code class="language-python" data-trim>
+statement = select(models.Book)
+if not current_user.is_admin:
+    statement = statement.where(models.Book.user_id == current_user.id)
+if name != "":
+    statement = statement.where(models.Book.name.contains(name))
+return session.scalars(statement).all()
+  </code></pre>
+  <pre><code class="language-python" data-trim>
+if book is None or not current_user.can_access(book):
+    raise HTTPException(status_code=404, detail="Book not found")
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>A listagem filtra pelo dono só para quem não é Admin; <code>read_book</code>, <code>update_book</code> e <code>delete_book</code> chamam <code>can_access</code>;</li>
+    <li>O <code>create_book</code> não muda: o dono vem do token - o papel amplia o que o Admin acessa, não em nome de quem ele escreve.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O token diz quem é; o banco diz o que pode</h2>
+  <ul style="font-size:.66em">
+    <li>Machado foi promovido <strong>depois</strong> do login - e o token dele passou a valer como Admin sem novo login;</li>
+    <li>O token carrega o <code>sub</code> (quem é), não o papel: o <code>get_current_user</code> busca o usuário no banco a cada requisição, e o papel vem junto;</li>
+    <li>Rebaixar alguém também vale na hora.</li>
+  </ul>
+  <table class="status-tab">
+    <tr><th>Token</th><th>Requisição</th><th>Resposta</th></tr>
+    <tr><td>Clarice (<code>user</code>)</td><td><code>GET /api/books</code></td><td>só os livros dela</td></tr>
+    <tr><td>Clarice (<code>user</code>)</td><td><code>GET</code> no livro do Machado</td><td><strong>404</strong></td></tr>
+    <tr><td>Machado (<code>admin</code>)</td><td><code>GET /api/books</code></td><td>os livros dos dois</td></tr>
+    <tr><td>Machado (<code>admin</code>)</td><td><code>PUT</code> no livro da Clarice</td><td><strong>200</strong></td></tr>
+  </table>
+</section>
+
+<!-- ============ Live 3: require_admin e as quantidades ============ -->
+
+<section>
+  <h2>require_admin: autorização no nível da função</h2>
+  <pre class="quebra"><code class="language-python" data-trim>
+def require_admin(current_user: models.User = Depends(get_current_user)) -> models.User:
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin role required")
+    return current_user
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li>Uma dependency que depende de outra: sem token, o <code>get_current_user</code> responde 401 antes; com token, a decisão é sobre o papel;</li>
+    <li><strong>403</strong>, não 404: a API sabe quem é e recusa.</li>
+  </ul>
+  <p class="cite">Documentação oficial do FastAPI - fastapi.tiangolo.com (Sub-dependencies)</p>
+</section>
+
+<section>
+  <h2>Um router inteiro protegido de uma vez</h2>
+  <pre><code class="language-python" data-trim>
+router = APIRouter(prefix="/api/admin", tags=["admin"],
+                   dependencies=[Depends(require_admin)])
+
+
+@router.get("/stats", response_model=AdminStats)
+def read_stats(session: Session = Depends(get_session)):
+    users_count = session.scalar(select(func.count(models.User.id)))
+    books_count = session.scalar(select(func.count(models.Book.id)))
+    return AdminStats(users_count=users_count, books_count=books_count)
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>dependencies</code> no router: toda rota do arquivo exige o papel, inclusive as futuras - a mediação completa vira estrutura;</li>
+    <li><code>func.count</code> gera o <code>COUNT(...)</code>; <code>session.scalar</code> devolve o número. O banco conta; nenhuma linha viaja para o Python;</li>
+    <li><code>def</code>: a sessão do SQLAlchemy é bloqueante - a rota roda na threadpool.</li>
+  </ul>
+  <p class="cite">Documentação oficial do FastAPI - Dependencies in path operation decorators · SQLAlchemy - func.count</p>
+</section>
+
+<section>
+  <h2>O login devolve o papel</h2>
+  <div class="duas-colunas">
+    <div>
+      <pre><code class="language-python" data-trim>
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    role: Role
+
+
+class AdminStats(BaseModel):
+    users_count: int
+    books_count: int
+      </code></pre>
+    </div>
+    <div>
+      <table class="status-tab" style="font-size:.55em">
+        <tr><th>Chamada</th><th>Resposta</th></tr>
+        <tr><td><code>POST /login</code> (Machado)</td><td><code>"role": "admin"</code></td></tr>
+        <tr><td><code>/api/admin/stats</code> sem token</td><td><strong>401</strong></td></tr>
+        <tr><td><code>/api/admin/stats</code> Clarice</td><td><strong>403</strong></td></tr>
+        <tr><td><code>/api/admin/stats</code> Machado</td><td><strong>200</strong> <code>users_count</code>, <code>books_count</code></td></tr>
+      </table>
+    </div>
+  </div>
+  <pre class="quebra"><code class="language-python" data-trim>
+return TokenResponse(access_token=create_access_token(user.id), role=user.role)
+  </code></pre>
+  <p style="font-size:.55em">Na resposta JSON, o Pydantic publica o <strong>valor</strong> do enum.</p>
+</section>
+
+<!-- ============ Teoria 3: a interface esconde, a API proíbe ============ -->
+
+<section>
+  <h2>A interface esconde, a API proíbe</h2>
+  <img src="img/interface-e-api.png" alt="Diagrama: no navegador, o localStorage guarda token e papel, o papel decide o que desenhar e o usuário pode alterar tudo; para a API vai só o token, o get_current_user busca o papel no banco e require_admin e can_access decidem a cada requisição: Admin recebe 200, User recebe 403" style="width:100%;max-width:800px">
+  <p class="cite">OWASP - Authorization Cheat Sheet</p>
+</section>
+
+<section>
+  <h2>Por que o papel vai no login, e não dentro do token</h2>
+  <ul style="font-size:.66em">
+    <li>A interface precisa do papel só para decidir o que desenhar - o link e a página <code>/admin</code>;</li>
+    <li>A API <strong>não confia</strong> nele: consulta o banco a cada requisição;</li>
+    <li>Se a API lesse o papel do token, um Admin rebaixado continuaria Admin até o <code>exp</code>;</li>
+    <li>Custo assumido: a <em>interface</em> conhece o papel do momento do login - a mudança aparece na tela depois de sair e entrar. Nas rotas, vale na hora.</li>
+  </ul>
+</section>
+
+<!-- ============ Live 4: o Admin Dashboard no React ============ -->
+
+<section>
+  <h2>O login entrega o token e o papel</h2>
+  <pre><code class="language-javascript" data-trim>
+export async function login(email, password) {
+  const data = await request("/login", { method: "POST", body: { email, password } });
+  return { token: data.access_token, role: data.role };
+}
+  </code></pre>
+  <pre><code class="language-javascript" data-trim>
+const { token, role } = await login(email, password);
+onLogin(token, role);
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O service continua escondendo o formato da resposta da API (<code>access_token</code>);</li>
+    <li><strong>Desestruturação</strong>: extrai as duas propriedades do objeto em duas constantes. No <code>App</code>, o papel segue o caminho do token: <code>localStorage</code> no login, removido no logout.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O endereço e o papel escolhem a página</h2>
+  <pre><code class="language-javascript" data-trim>
+const [role, setRole] = useState(localStorage.getItem("role"));
+
+if (token) {
+  const isAdmin = role === "admin";
+  if (window.location.pathname === "/admin" &amp;&amp; isAdmin) {
+    return &lt;AdminDashboardPage onLogout={handleLogout} /&gt;;
+  }
+  return &lt;BooksPage isAdmin={isAdmin} onLogout={handleLogout} /&gt;;
+}
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><code>window.location.pathname</code>: o caminho do endereço atual. O Vite devolve o mesmo <code>index.html</code> para qualquer caminho - quem interpreta é o <code>App</code>;</li>
+    <li>Sem biblioteca de rotas: quem não é Admin e digita <code>/admin</code> recebe a página de livros.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Link navega; botão executa uma ação</h2>
+  <pre class="quebra"><code class="language-javascript" data-trim>
+export default function TextLink({ href, children }) {
+  return (
+    &lt;a href={href} className="rounded text-sm font-semibold text-indigo-600 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"&gt;
+      {children}
+    &lt;/a&gt;
+  );
+}
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Um <code>&lt;a&gt;</code>: é o que o leitor de tela anuncia como link e o que "abrir em nova aba" respeita; o foco visível segue o <code>Button</code>;</li>
+    <li>A navegação por <code>&lt;a&gt;</code> <strong>recarrega a página</strong>: o <code>App</code> recomeça e lê token e papel do <code>localStorage</code>. Bibliotecas como o React Router trocam de página sem recarregar - com um endereço novo, o link comum basta;</li>
+    <li><code>StatCard</code>: um <code>Card</code> com rótulo e número - composição, como o <code>BookItem</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O Admin Dashboard só exibe o que a API devolve</h2>
+  <pre><code class="language-javascript" data-trim>
+useEffect(() =&gt; {
+  async function loadStats() {
+    try {
+      setStats(await getStats());
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+  loadStats();
+}, []);
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><code>loadStats</code> mora dentro do efeito porque só ele a usa - a forma recomendada para buscar dados. No <code>BooksPage</code>, o <code>loadBooks</code> fica fora porque os handlers também o chamam;</li>
+    <li><code>stats</code> começa <code>null</code>: <code>{stats &amp;&amp; (...)}</code> só desenha os cards quando os números chegam.</li>
+  </ul>
+  <p class="cite">Documentação oficial do React - react.dev (Synchronizing with Effects)</p>
+</section>
+
+<section>
+  <h2>O Admin Dashboard em /admin</h2>
+  <img class="tela" src="img/admin-dashboard.png" alt="Captura da tela Admin Dashboard: link Books, botão Log out e dois cards, Users com o número 2 e Books com o número 3" style="width:100%;max-width:640px">
+  <ul style="font-size:.6em">
+    <li>No <code>BooksPage</code>, o Admin vê o título <em>All books</em> e o link <em>Admin Dashboard</em>: <code>{isAdmin &amp;&amp; &lt;TextLink href="/admin"&gt;...}</code>;</li>
+    <li>Renderização condicional: para quem não é Admin, a expressão vale <code>false</code> e o React não desenha nada.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Papel adulterado no navegador: a tela abre, os dados não</h2>
+  <img class="tela" src="img/admin-dashboard-403.png" alt="Captura da tela Admin Dashboard sem cards, com a mensagem de erro Admin role required" style="width:100%;max-width:640px">
+  <ul style="font-size:.6em">
+    <li>Clarice troca <code>role</code> para <code>admin</code> no <em>Local Storage</em> e recarrega <code>/admin</code>: a página abre;</li>
+    <li>A chamada a <code>/api/admin/stats</code> responde <strong>403</strong> - a página mostra <em>Admin role required</em> e nenhum número;</li>
+    <li>A interface foi enganada; a API, não.</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - o Admin Dashboard</span></h2>
+  <ul style="font-size:.8em">
+    <li>O login entrega token e papel; o <code>App</code> guarda os dois e escolhe a página pelo endereço;</li>
+    <li><code>TextLink</code> navega, <code>StatCard</code> exibe uma quantidade;</li>
+    <li>O papel no navegador decide o que <strong>aparece</strong>; o papel no banco decide o que é <strong>permitido</strong>.</li>
+  </ul>
+</section>
+
+<!-- ============ Exercício e fechamento ============ -->
+
+<section>
+  <h2>Exercício em sala</h2>
+  <ol style="font-size:.68em">
+    <li>Acrescente ao <code>AdminStats</code> o campo <code>finished_books_count</code>: a quantidade de Books concluídos - Reading Progress em 100%;</li>
+    <li>Calcule o número na rota <code>GET /api/admin/stats</code>;</li>
+    <li>Mostre um terceiro <code>StatCard</code> no Admin Dashboard, com o rótulo <em>Finished books</em>.</li>
+  </ol>
+  <div class="nota"><code>progress</code> é uma property do Python, não uma coluna: o banco não a conhece. A consulta precisa de uma condição que o SQL entenda.</div>
+</section>
+
+<section>
+  <h2>Síntese da aula</h2>
+  <ul style="font-size:.56em">
+    <li>Autenticação responde <em>quem é</em>; autorização, <em>o que pode</em> (RFC 4949). Toda decisão é uma célula da matriz de Lampson (1971), e o RBAC a gera a partir de papéis (Ferraiolo e Kuhn, 1992; Sandhu et al., 1996) - no projeto, combinado com a relação de dono;</li>
+    <li>O papel é um enum do Python mapeado para um <code>ENUM</code> do MySQL com <code>DEFAULT 'user'</code>; a API não oferece rota para concedê-lo, e o schema de entrada ignora o que não declara;</li>
+    <li>A regra de acesso a Books vive em <code>User.can_access</code> e toda rota de um livro a consulta - padrão à prova de falha, mediação completa e menor privilégio (Saltzer e Schroeder, 1975);</li>
+    <li>BOLA, mass assignment e BFLA são as falhas que o OWASP mais encontra; 401 = não sei quem é, 403 = sei e não permito, 404 = não confirmo que existe (RFC 9110);</li>
+    <li><code>require_admin</code>, declarado no router, protege todas as rotas administrativas de uma vez;</li>
+    <li>O Admin Dashboard em <code>/admin</code> aparece só para o Admin - mas a tela é conveniência: quem protege os dados é a API, que consulta o papel no banco a cada requisição.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Referências</h2>
+  <ul style="font-size:.5em">
+    <li>RFC 4949 - <em>Internet Security Glossary, Version 2</em>. R. Shirey, IETF, 2007.</li>
+    <li>LAMPSON, B. <em>Protection</em>. 5th Princeton Symposium on Information Sciences and Systems, 1971.</li>
+    <li>FERRAIOLO, D.; KUHN, R. <em>Role-Based Access Controls</em>. 15th National Computer Security Conference, NIST, 1992.</li>
+    <li>SANDHU, R.; COYNE, E.; FEINSTEIN, H.; YOUMAN, C. <em>Role-Based Access Control Models</em>. IEEE Computer, v. 29, n. 2, 1996.</li>
+    <li>ANSI INCITS 359-2004 - <em>Role Based Access Control</em>.</li>
+    <li>SALTZER, J.; SCHROEDER, M. <em>The Protection of Information in Computer Systems</em>. Proceedings of the IEEE, v. 63, n. 9, 1975.</li>
+    <li>OWASP. <em>API Security Top 10</em>, 2023 - owasp.org/API-Security; <em>Authorization Cheat Sheet</em> - cheatsheetseries.owasp.org.</li>
+    <li>RFC 9110 - <em>HTTP Semantics</em>. IETF, 2022.</li>
+    <li>PEP 435 - <em>Adding an Enum type to the Python standard library</em>, 2013; PEP 484 - <em>Type Hints</em>, 2014.</li>
+    <li>Documentação oficial do SQLAlchemy - docs.sqlalchemy.org (<code>Enum</code>, <code>func.count</code>); do FastAPI - fastapi.tiangolo.com (dependências); do Pydantic - docs.pydantic.dev; do MySQL - dev.mysql.com (<em>The ENUM Type</em>); do React - react.dev (<em>Synchronizing with Effects</em>, <em>Conditional Rendering</em>).</li>
+  </ul>
+</section>
+
+</div>
+</div>
+
+<script src="../assets/reveal/dist/reveal.js"></script>
+<script src="../assets/reveal/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    plugins: [ RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+  </defs>
+
+  <text x="200" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e6da4">Navegador (React)</text>
+  <text x="600" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6508">API</text>
+
+  <!-- navegador -->
+  <rect x="40" y="50" width="320" height="70" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="200" y="74" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">localStorage</text>
+  <text x="200" y="98" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">token = "eyJ..."  ·  role = "admin"</text>
+
+  <rect x="40" y="150" width="320" height="70" rx="8" fill="#fff" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="200" y="175" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e6da4">o papel decide o que desenhar</text>
+  <text x="200" y="199" text-anchor="middle" font-size="12" fill="#333">o link e a página /admin</text>
+
+  <rect x="40" y="250" width="320" height="56" rx="8" fill="#fdecea" stroke="#b03a2e" stroke-width="1.6"/>
+  <text x="200" y="274" text-anchor="middle" font-size="12.5" fill="#333">o usuário pode alterar tudo isto</text>
+  <text x="200" y="294" text-anchor="middle" font-size="12" fill="#333">nas ferramentas do desenvolvedor</text>
+
+  <!-- requisição -->
+  <path d="M 363 85 L 437 85" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <text x="400" y="74" text-anchor="middle" font-size="11" fill="#2e6da4">só o token</text>
+
+  <!-- API -->
+  <rect x="440" y="50" width="320" height="70" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="600" y="74" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">get_current_user</text>
+  <text x="600" y="98" text-anchor="middle" font-size="12" fill="#333">busca o User no banco: o papel vem de lá</text>
+
+  <path d="M 600 122 L 600 146" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <rect x="440" y="150" width="320" height="70" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="600" y="175" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">require_admin · can_access</text>
+  <text x="600" y="199" text-anchor="middle" font-size="12" fill="#333">a decisão acontece a cada requisição</text>
+
+  <path d="M 600 222 L 600 246" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <rect x="440" y="250" width="320" height="56" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.6"/>
+  <text x="600" y="274" text-anchor="middle" font-size="12.5" fill="#333">Admin: 200 com os dados</text>
+  <text x="600" y="294" text-anchor="middle" font-size="12.5" fill="#333">User: 403 Admin role required</text>
+
+  <!-- rodapé -->
+  <text x="400" y="350" text-anchor="middle" font-size="14" fill="#333">A interface <tspan font-weight="bold">esconde</tspan> (usabilidade); a API <tspan font-weight="bold">proíbe</tspan> (segurança).</text>
+  <text x="400" y="378" text-anchor="middle" font-size="12" fill="#999">OWASP Authorization Cheat Sheet: validar a permissão em toda requisição, no servidor</text>
+</svg>
