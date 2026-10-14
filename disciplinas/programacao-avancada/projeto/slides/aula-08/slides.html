@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 08 - Testes automatizados</title>
+<link rel="stylesheet" href="../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../assets/reveal/dist/theme/white.css">
+<link rel="stylesheet" href="../assets/reveal/plugin/highlight/monokai.css">
+<style>
+  .reveal { font-size: 34px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+  .reveal h2 { font-size: 1.35em; }
+  .reveal ul { display: block; }
+  .reveal li { margin: .35em 0; }
+  .reveal pre { box-shadow: none; width: 100%; }
+  .reveal pre code { padding: .8em 1em; border-radius: 6px; max-height: 480px; }
+  .cite { font-size: .45em; color: #999; margin-top: 1.6em; }
+  .duas-colunas { display: flex; gap: 1em; align-items: flex-start; text-align: left; }
+  .duas-colunas > div { flex: 1; min-width: 0; }
+  .os-label { font-size: .55em; font-weight: bold; color: #666; margin: 0 0 .2em .1em; }
+  .nota { font-size: .6em; background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .6em .9em; margin-top: .8em; }
+  .destaque { color: #2e6da4; font-weight: bold; }
+  .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
+  .status-tab { font-size: .7em; border-collapse: collapse; margin: 0 auto; }
+  .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .reveal pre.quebra code { white-space: pre-wrap; }
+  .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
+  .etapa { font-size: .45em; font-weight: bold; color: #2e6da4; text-transform: uppercase; letter-spacing: .06em; margin: 0 0 -.4em 0; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ Abertura ============ -->
+
+<section>
+  <h1 style="font-size:1.6em">Testes automatizados</h1>
+  <p>Programação Avançada - Aula 08</p>
+  <p style="font-size:.55em"><a href="https://github.com/anchietajunior/programacao-avancada-6">https://github.com/anchietajunior/programacao-avancada-6</a></p>
+  <p style="font-size:.55em;color:#888">Universidade Unirios</p>
+</section>
+
+<section>
+  <h2>Hoje, quem verifica a aplicação é uma pessoa</h2>
+  <p style="font-size:.62em">Cadastrar dois usuários, fazer login com cada um, colar o token no <em>Authorize</em>, criar livros, tentar o livro do outro, promover um Admin, conferir 401, 403 e 404 - e repetir tudo no React.</p>
+  <ul style="font-size:.66em">
+    <li><strong>É lenta</strong> - meia hora de cliques a cada mudança;</li>
+    <li><strong>Depende de atenção</strong> - o cenário esquecido é o que quebrou;</li>
+    <li><strong>Não se repete</strong> - ninguém refaz tudo a cada linha alterada; uma mudança num lugar quebra outro sem que ninguém perceba.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Objetivos da aula</h2>
+  <ul style="font-size:.64em">
+    <li>Explicar o que é um teste automatizado, por que ele mostra a presença de defeitos e não a ausência, e a estrutura <strong>Arrange-Act-Assert</strong>;</li>
+    <li>Distinguir <strong>caixa preta</strong> de <strong>caixa branca</strong> e os níveis <strong>unidade, integração e aceitação</strong>, situando-os na pirâmide de testes;</li>
+    <li>Escrever testes de unidade e de integração do backend com pytest, fixtures e um banco SQLite em memória;</li>
+    <li>Reproduzir um defeito com um <strong>teste de regressão</strong> antes de corrigi-lo;</li>
+    <li>Escrever testes de componente com Vitest e Testing Library e testes de aceitação de ponta a ponta com Playwright.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 1: o que é um teste automatizado ============ -->
+
+<section>
+  <h2>Testar é procurar defeitos</h2>
+  <p class="definicao">Testar é o processo de executar um programa com a intenção de encontrar erros.</p>
+  <p class="definicao">O teste de programas pode ser usado para mostrar a presença de defeitos, mas nunca para mostrar a sua ausência.</p>
+  <ul style="font-size:.6em;margin-top:.6em">
+    <li>A primeira definição é de Glenford Myers (<em>The Art of Software Testing</em>, 1979); a segunda, de Edsger Dijkstra (<em>Notes on Structured Programming</em>, 1970) - em tradução livre;</li>
+    <li>Uma suíte que passa diz que os cenários escritos funcionam - não que não exista defeito.</li>
+  </ul>
+  <p class="cite">MYERS, G. - 1979 · DIJKSTRA, E. W. - EWD 249, 1970</p>
+</section>
+
+<section>
+  <h2>Teste automatizado: código que verifica código</h2>
+  <ul style="font-size:.64em">
+    <li>Um programa que executa outro programa e compara o resultado obtido com o esperado - roda em segundos, quantas vezes for preciso, sempre igual;</li>
+    <li><strong>A família xUnit:</strong> Kent Beck publicou o SUnit, para Smalltalk (<em>Simple Smalltalk Testing: With Patterns</em>, 1994); com Erich Gamma, o JUnit para Java (1997), que levou o modelo a quase todas as linguagens;</li>
+    <li><strong>pytest</strong> (Holger Krekel, 2004): um teste é uma função cujo nome começa com <code>test_</code>, e a verificação é um <code>assert</code> comum.</li>
+  </ul>
+  <p class="cite">BECK, K. - Simple Smalltalk Testing, 1994 · BECK, K.; GAMMA, E. - Test Infected, 1998 · docs.pytest.org</p>
+</section>
+
+<section>
+  <h2>Arrange, Act, Assert: preparar, agir, verificar</h2>
+  <pre><code class="language-python" data-trim>
+def test_user_lists_only_own_books(client, clarice, machado_admin):
+    create_book(client, machado_admin, name="Dom Casmurro")
+    create_book(client, clarice, name="A Hora da Estrela")
+
+    response = client.get("/api/books", headers=clarice)
+
+    assert [book["name"] for book in response.json()] == ["A Hora da Estrela"]
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><strong>Arrange</strong>: o cenário - dois usuários, um livro de cada;</li>
+    <li><strong>Act</strong>: uma única ação sobre o que se testa;</li>
+    <li><strong>Assert</strong>: o resultado esperado. Uma linha em branco separa as três partes.</li>
+  </ul>
+  <p class="cite">WAKE, B. - 3A: Arrange, Act, Assert, xp123.com, 2001</p>
+</section>
+
+<section>
+  <h2>A pirâmide de testes</h2>
+  <img src="img/piramide-de-testes.png" alt="Pirâmide em três camadas com a suíte da aula: no topo, aceitação de ponta a ponta com Playwright, 2 testes em cerca de 2 segundos; no meio, integração de rotas, schemas, regras e banco com pytest e TestClient, 12 testes em cerca de 5 segundos; na base, unidade de um model, um componente ou um service com pytest e Vitest, 7 mais 5 testes em menos de 1 segundo" style="width:100%;max-width:760px">
+  <p class="cite">COHN, M. - Succeeding with Agile, 2009 · VOCKE, H. - The Practical Test Pyramid, 2018</p>
+</section>
+
+<section>
+  <h2>Por que não testar tudo pela interface</h2>
+  <ul style="font-size:.66em">
+    <li>Mike Cohn (2009): <strong>muitos</strong> testes de unidade na base, alguns no meio, <strong>poucos</strong> pela interface no topo;</li>
+    <li>Os testes do topo são os que mais se parecem com o uso real - e os mais lentos, os que dependem de tudo estar no ar;</li>
+    <li>Quando um teste de ponta a ponta falha, o defeito pode estar na tela, na API, na regra ou no banco. Quando um teste de unidade falha, ele aponta a função.</li>
+  </ul>
+  <p class="cite">VOCKE, H. - The Practical Test Pyramid, martinfowler.com, 2018</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - o que é um teste automatizado</span></h2>
+  <ul style="font-size:.8em">
+    <li>Testar é procurar defeitos (Myers, 1979) - e o teste nunca prova a ausência deles (Dijkstra, 1970);</li>
+    <li>Teste automatizado: código que verifica código; família xUnit e pytest;</li>
+    <li>Arrange, Act, Assert;</li>
+    <li>Pirâmide: muitos de unidade, alguns de integração, poucos de ponta a ponta.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 2: caixa preta, caixa branca, níveis e regressão ============ -->
+
+<section>
+  <h2>Caixa preta e caixa branca</h2>
+  <img src="img/caixa-preta-caixa-branca.png" alt="À esquerda, caixa preta: a requisição POST /api/books com nome só de espaços entra numa caixa escura chamada API e sai 422; os casos saem da especificação, em test_books_api.py. À direita, caixa branca: o código is_admin or book.user_id == self.id com três caminhos - é Admin, True; não é Admin e é o dono, True; nenhum dos dois, False; os casos saem do código, um teste por caminho, em test_models.py" style="width:100%;max-width:760px">
+  <p class="cite">MYERS, G. - The Art of Software Testing, 1979</p>
+</section>
+
+<section>
+  <h2>Três níveis de teste</h2>
+  <table class="status-tab">
+    <tr><th>Nível</th><th>Concentra-se em (ISTQB)</th><th>No projeto</th></tr>
+    <tr><td><strong>Unidade</strong></td><td>componentes individuais de software</td><td><code>Book.progress</code>, <code>User.can_access</code>, <code>BookItem</code>, <code>login</code></td></tr>
+    <tr><td><strong>Integração</strong></td><td>interações entre componentes</td><td>rota + schema + regra + banco, pelo <code>TestClient</code></td></tr>
+    <tr><td><strong>Aceitação</strong></td><td>necessidades do usuário e critérios de aceitação</td><td>os fluxos do glossário num navegador de verdade</td></tr>
+  </table>
+  <p style="font-size:.55em;margin-top:.8em">O ISTQB (<em>International Software Testing Qualifications Board</em>) mantém o glossário de referência da área; definições em tradução livre.</p>
+  <p class="cite">ISTQB - Glossary of Software Testing Terms, glossary.istqb.org</p>
+</section>
+
+<section>
+  <h2>Teste de regressão: o defeito vira teste</h2>
+  <p class="definicao" style="font-size:.66em">Teste repetido depois de uma modificação para garantir que ela não introduziu defeitos nem expôs defeitos nas partes não alteradas do software.</p>
+  <img src="img/regressao-vermelho-verde.png" alt="Ciclo em quatro passos: o defeito, um nome só de espaços aceito com 201; o teste vermelho, assert 201 igual a 422, que reproduz o defeito; a correção, str_strip_whitespace no BookCreate; o teste verde, 19 passed; o teste fica na suíte e falha se o defeito voltar" style="width:100%;max-width:720px">
+  <p class="cite">ISTQB - regression testing, tradução livre · BECK, K. - Test-Driven Development: By Example, 2002</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - como projetar e classificar testes</span></h2>
+  <ul style="font-size:.8em">
+    <li>Caixa preta: casos pela especificação; caixa branca: casos pelos caminhos do código (Myers, 1979);</li>
+    <li>Unidade, integração e aceitação: o que cada nível isola ou junta (ISTQB);</li>
+    <li>Regressão: o teste que reproduz o defeito antes da correção e fica na suíte.</li>
+  </ul>
+</section>
+
+<!-- ============ Etapa 1: backend ============ -->
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>pytest: instalação e configuração</h2>
+  <p class="os-label">Mac e Windows (venv ativo, dentro de projeto/backend)</p>
+  <pre><code class="language-bash" data-trim>
+pip install pytest httpx2
+pip freeze &gt; requirements.txt
+  </code></pre>
+  <p class="os-label">backend/pytest.ini</p>
+  <pre><code class="language-ini" data-trim>
+[pytest]
+testpaths = tests
+pythonpath = .
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><strong>httpx2</strong>: o cliente HTTP que o <code>TestClient</code> do FastAPI usa para chamar a API nos testes;</li>
+    <li><code>testpaths</code>: os testes ficam em <code>tests/</code>; <code>pythonpath</code>: um teste importa <code>models</code> como o <code>main.py</code> faz.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Teste de unidade: o model sozinho</h2>
+  <pre><code class="language-python" data-trim>
+@pytest.mark.parametrize(
+    ("current_page", "pages", "expected_progress"),
+    [(0, 300, 0), (120, 300, 40), (1, 3, 33), (300, 300, 100)],
+)
+def test_progress_is_the_current_page_over_the_total_of_pages(current_page, pages, expected_progress):
+    book = Book(name="Dom Casmurro", pages=pages, current_page=current_page, user_id=1)
+
+    assert book.progress == expected_progress
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>O pytest descobre arquivos <code>test_*.py</code> e funções <code>test_*</code>; o nome é a frase que aparece quando o teste falha;</li>
+    <li><code>parametrize</code>: o mesmo teste roda uma vez para cada linha da tabela de casos;</li>
+    <li>Sem banco e sem HTTP: o <code>Book</code> é um objeto Python comum até entrar numa sessão.</li>
+  </ul>
+  <p class="cite">Documentação oficial do pytest - docs.pytest.org (parametrize)</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Caixa branca: um teste por caminho</h2>
+  <pre><code class="language-python" data-trim>
+def test_admin_can_access_a_book_of_another_user():
+    admin = User(id=1, role=Role.ADMIN)
+    book_of_another_user = Book(user_id=2)
+
+    assert admin.can_access(book_of_another_user)
+
+
+def test_user_cannot_access_a_book_of_another_user():
+    user = User(id=2, role=Role.USER)
+    book_of_another_user = Book(user_id=1)
+
+    assert not user.can_access(book_of_another_user)
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Três testes para os três caminhos de <code>is_admin or book.user_id == self.id</code> - o do meio é <code>test_user_can_access_own_book</code>;</li>
+    <li>Troque o <code>or</code> por <code>and</code> e rode <code>pytest -v</code>: falha o teste do Admin - <code>True and False</code> é <code>False</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Fixture: um banco de teste novo para cada teste</h2>
+  <pre><code class="language-python" data-trim>
+@pytest.fixture
+def engine():
+    test_engine = create_engine("sqlite://", connect_args={"check_same_thread": False},
+                                poolclass=StaticPool)
+    Base.metadata.create_all(test_engine)
+    yield test_engine
+    Base.metadata.drop_all(test_engine)
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li><strong>Fixture</strong> é a injeção de dependência do pytest: o teste declara um parâmetro com o nome dela e o pytest a executa antes; o que vem depois do <code>yield</code> limpa - mesmo se o teste falhar;</li>
+    <li><strong>SQLite em memória</strong> (<code>"sqlite://"</code>): nasce vazio, recebe as tabelas e desaparece no fim do teste. O <code>StaticPool</code> mantém uma conexão só, para todas as sessões verem o mesmo banco;</li>
+    <li>As fixtures ficam em <code>tests/conftest.py</code>, que o pytest carrega sozinho.</li>
+  </ul>
+  <p class="cite">Documentação oficial do pytest - docs.pytest.org (fixtures, conftest.py)</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>dependency_overrides: as rotas usam o banco de teste</h2>
+  <pre><code class="language-python" data-trim>
+@pytest.fixture
+def client(engine):
+    def get_test_session():
+        with Session(engine) as session:
+            yield session
+
+    app.dependency_overrides[get_session] = get_test_session
+    yield TestClient(app)
+    app.dependency_overrides.clear()
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O mesmo mecanismo do <code>Depends</code>, visto pelo outro lado: toda rota que pede <code>get_session</code> recebe a sessão do SQLite - e não percebe a troca;</li>
+    <li>O banco <code>reading_tracker</code> do MySQL nunca recebe dado de teste.</li>
+  </ul>
+  <p class="cite">Documentação oficial do FastAPI - Testing Dependencies with Overrides</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Usuários prontos: uma User e um Admin</h2>
+  <pre><code class="language-python" data-trim>
+@pytest.fixture
+def clarice(client):
+    return signup_and_login(client, "Clarice Lispector", "clarice@exemplo.com")
+
+
+@pytest.fixture
+def machado_admin(client, engine):
+    headers = signup_and_login(client, "Machado de Assis", "machado@exemplo.com")
+    with Session(engine) as session:
+        statement = select(models.User).where(models.User.email == "machado@exemplo.com")
+        machado = session.scalars(statement).one()
+        machado.role = models.Role.ADMIN
+        session.commit()
+    return headers
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Fixtures que dependem de fixtures: <code>clarice</code> pede <code>client</code>, que pede <code>engine</code>;</li>
+    <li><code>signup_and_login</code> cadastra e entra pela própria API e devolve o header com o token; o Admin é promovido direto no banco.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Integração, caixa preta: só o contrato HTTP</h2>
+  <pre><code class="language-python" data-trim>
+def test_user_gets_404_for_a_book_of_another_user(client, clarice, machado_admin):
+    book_of_machado = create_book(client, machado_admin)
+    path = f"/api/books/{book_of_machado['id']}"
+
+    assert client.get(path, headers=clarice).status_code == 404
+    assert client.put(path, json={"name": "x", "pages": 10}, headers=clarice).status_code == 404
+    assert client.delete(path, headers=clarice).status_code == 404
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>O <code>TestClient</code> fala com a aplicação sem rede e sem uvicorn: a requisição atravessa dependências, rota, regra de acesso e banco;</li>
+    <li>O teste não sabe que existe um <code>can_access</code> - só que o livro alheio responde 404.</li>
+  </ul>
+  <p class="cite">Documentação oficial do FastAPI - fastapi.tiangolo.com (Testing)</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>401, 403 e 200 do Admin Dashboard, em testes</h2>
+  <pre><code class="language-python" data-trim>
+def test_stats_are_forbidden_for_a_user(client, clarice):
+    response = client.get("/api/admin/stats", headers=clarice)
+
+    assert response.status_code == 403
+
+
+def test_admin_gets_the_counts_of_users_and_books(client, clarice, machado_admin):
+    client.post("/api/books", json={"name": "Dom Casmurro", "pages": 300}, headers=machado_admin)
+    client.post("/api/books", json={"name": "A Hora da Estrela", "pages": 90}, headers=clarice)
+
+    response = client.get("/api/admin/stats", headers=machado_admin)
+
+    assert response.status_code == 200
+    assert response.json() == {"users_count": 2, "books_count": 2}
+  </code></pre>
+  <div class="nota"><code>pytest -v</code>: 18 testes em poucos segundos - a meia hora de cliques. Importar o <code>main.py</code> executa o <code>create_all</code> no MySQL de desenvolvimento: ele precisa estar no ar, embora nenhum dado de teste chegue a ele.</div>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Um defeito real: nome feito só de espaços</h2>
+  <pre class="quebra"><code class="language-json" data-trim>
+POST /api/books
+{"name": "   ", "pages": 10}
+  </code></pre>
+  <ul style="font-size:.64em">
+    <li>A API responde <strong>201</strong>, e o React mostra um livro sem nome na lista;</li>
+    <li>O <code>min_length=1</code> do <code>BookCreate</code> conta os espaços como caracteres: <code>"   "</code> tem três;</li>
+    <li>Antes de corrigir, o defeito vira um teste que falha.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Vermelho: o teste reproduz o defeito</h2>
+  <pre><code class="language-python" data-trim>
+def test_book_name_made_only_of_spaces_is_rejected(client, clarice):
+    response = client.post("/api/books", json={"name": "   ", "pages": 10}, headers=clarice)
+
+    assert response.status_code == 422
+  </code></pre>
+  <pre><code class="language-plaintext" data-trim>
+FAILED tests/test_books_api.py::test_book_name_made_only_of_spaces_is_rejected
+E       assert 201 == 422
+1 failed, 18 passed
+  </code></pre>
+  <p style="font-size:.6em">O teste falha pelo motivo certo: a API respondeu exatamente o que o Swagger mostrou.</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · Backend</p>
+  <h2>Verde: a correção</h2>
+  <pre><code class="language-python" data-trim>
+class BookCreate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li>O Pydantic remove os espaços das pontas <strong>antes</strong> de validar: <code>"   "</code> vira <code>""</code> e o <code>min_length</code> recusa com 422; <code>"  Dom Casmurro "</code> é gravado como <code>"Dom Casmurro"</code>;</li>
+    <li><code>pytest</code>: <strong>19 passed</strong>. O teste fica na suíte - se alguém remover a configuração, ele falha antes de o defeito chegar a um usuário.</li>
+  </ul>
+  <p class="cite">Documentação oficial do Pydantic - docs.pydantic.dev (str_strip_whitespace)</p>
+</section>
+
+<!-- ============ Teoria 3: testar a interface ============ -->
+
+<section>
+  <h2>Testar a interface pelo que o usuário vê</h2>
+  <p class="definicao">"The more your tests resemble the way your software is used, the more confidence they can give you."</p>
+  <ul style="font-size:.62em;margin-top:.6em">
+    <li>Princípio da Testing Library (Kent C. Dodds, 2018): quanto mais o teste se parece com o uso real, mais confiança ele dá;</li>
+    <li>O teste encontra os elementos como uma pessoa: pelo texto, pelo rótulo do campo, pelo <strong>papel</strong> de acessibilidade (<code>button</code>, <code>heading</code>, <code>link</code>);</li>
+    <li>Classes CSS e estrutura interna mudam sem quebrar o teste.</li>
+  </ul>
+  <p class="cite">DODDS, K. C. - Testing Library, Guiding Principles, testing-library.com</p>
+</section>
+
+<section>
+  <h2>Dublês de teste</h2>
+  <p style="font-size:.62em">Objetos que substituem, durante o teste, um componente real do qual o código testado depende - como o dublê de um ator nas cenas de risco.</p>
+  <table class="status-tab">
+    <tr><th>Tipo</th><th>O que faz</th><th>Na aula</th></tr>
+    <tr><td><em>stub</em></td><td>devolve respostas prontas</td><td>o <code>fetch</code> que responde como a API</td></tr>
+    <tr><td><em>spy</em></td><td>registra como foi chamado</td><td><code>vi.fn()</code> no <code>onDelete</code></td></tr>
+    <tr><td><em>fake</em></td><td>implementação simplificada que funciona</td><td>o SQLite em memória</td></tr>
+    <tr><td><em>mock</em>, <em>dummy</em></td><td>verifica chamadas esperadas; só ocupa o lugar</td><td>-</td></tr>
+  </table>
+  <p class="cite">MESZAROS, G. - xUnit Test Patterns: Refactoring Test Code, 2007</p>
+</section>
+
+<!-- ============ Etapa 2: frontend ============ -->
+
+<section>
+  <p class="etapa">Etapa 2 · Frontend</p>
+  <h2>Vitest: os testes num navegador simulado</h2>
+  <p class="os-label">Mac e Windows (dentro de projeto/frontend)</p>
+  <pre><code class="language-bash" data-trim>
+npm install -D vitest jsdom @testing-library/react @testing-library/dom
+  </code></pre>
+  <pre><code class="language-javascript" data-trim>
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  test: {
+    environment: "jsdom",
+    include: ["src/**/*.test.{js,jsx}"],
+  },
+});
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><strong>Vitest</strong> (2021, equipe do Vite): usa o mesmo pipeline do Vite; <strong>jsdom</strong> simula o DOM dentro do Node;</li>
+    <li>Os testes ficam ao lado do código (<code>BookItem.test.jsx</code>); no <code>package.json</code>, o script <code>"test": "vitest"</code>.</li>
+  </ul>
+  <p class="cite">vitest.dev · testing-library.com</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · Frontend</p>
+  <h2>Teste de componente: o BookItem</h2>
+  <pre><code class="language-javascript" data-trim>
+test("shows the book name and the reading progress", () =&gt; {
+  render(&lt;BookItem book={book} onEdit={vi.fn()} onDelete={vi.fn()} /&gt;);
+
+  expect(screen.getByText("Dom Casmurro")).toBeTruthy();
+  expect(screen.getByText("120/300 pages · 40%")).toBeTruthy();
+});
+
+test("calls onDelete with the book id when Delete is clicked", () =&gt; {
+  const onDelete = vi.fn();
+  render(&lt;BookItem book={book} onEdit={vi.fn()} onDelete={onDelete} /&gt;);
+
+  fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+
+  expect(onDelete).toHaveBeenCalledWith(7);
+});
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li><code>getByText</code> e <code>getByRole</code> lançam erro se não encontram - achar já é parte da verificação;</li>
+    <li><code>vi.fn()</code> é um spy: o <code>BookItem</code> não apaga nada, ele avisa a página - e o teste verifica o aviso, com o id certo.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · Frontend</p>
+  <h2>O fetch trocado por um dublê</h2>
+  <pre><code class="language-javascript" data-trim>
+const fakeFetch = vi.fn().mockResolvedValue(
+  new Response(JSON.stringify({ access_token: "abc", token_type: "bearer", role: "admin" }),
+               { status: 200 }),
+);
+vi.stubGlobal("fetch", fakeFetch);
+
+const result = await login("machado@exemplo.com", "segredo123");
+
+expect(result).toEqual({ token: "abc", role: "admin" });
+const [url, options] = fakeFetch.mock.calls[0];
+expect(url).toBe("http://127.0.0.1:8000/login");
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>O dublê fica na <strong>borda da rede</strong>: <code>login</code>, <code>request</code> e o tratamento de erro rodam de verdade; só a viagem pela rede é simulada;</li>
+    <li><code>npm test -- --run</code>: 5 testes em menos de um segundo, sem backend no ar.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · Frontend</p>
+  <h2>Playwright: um navegador de verdade</h2>
+  <p class="os-label">Mac e Windows (dentro de projeto/frontend)</p>
+  <pre><code class="language-bash" data-trim>
+npm install -D @playwright/test
+npx playwright install chromium
+  </code></pre>
+  <pre><code class="language-javascript" data-trim>
+export default defineConfig({
+  testDir: "e2e",
+  use: {
+    baseURL: "http://localhost:5173",
+  },
+});
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><strong>Playwright</strong> (Microsoft, 2020) conduz o Chromium; o segundo comando baixa o navegador uma única vez;</li>
+    <li>Script <code>"test:e2e": "playwright test"</code>; as pastas <code>test-results</code> e <code>playwright-report</code> vão para o <code>.gitignore</code>.</li>
+  </ul>
+  <p class="cite">Documentação oficial do Playwright - playwright.dev</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · Frontend</p>
+  <h2>Critério de aceitação em código</h2>
+  <pre><code class="language-javascript" data-trim>
+test("a new reader adds a book and follows the reading progress", async ({ page }) =&gt; {
+  await signUpAndLogIn(page);
+
+  await page.getByLabel("Book name").fill("Dom Casmurro");
+  await page.getByLabel("Pages").fill("300");
+  await page.getByRole("button", { name: "Add book" }).click();
+  await expect(page.getByText("0/300 pages · 0%")).toBeVisible();
+
+  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByLabel("Current page").fill("120");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByText("120/300 pages · 40%")).toBeVisible();
+});
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>O nome descreve o que o usuário consegue fazer, nos termos do glossário;</li>
+    <li><code>getByLabel</code> funciona porque o <code>TextInput</code> envolve o input com o <code>&lt;label&gt;</code>: acessibilidade e testabilidade andam juntas.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · Frontend</p>
+  <h2>Esperar pela tela é o que torna o teste confiável</h2>
+  <pre><code class="language-javascript" data-trim>
+const email = `leitor-${crypto.randomUUID()}@exemplo.com`;
+await page.goto("/");
+await page.getByRole("button", { name: "Create an account" }).click();
+await page.getByLabel("Name").fill("Leitor de Teste");
+await page.getByLabel("Email").fill(email);
+await page.getByLabel("Password").fill(password);
+await page.getByRole("button", { name: "Create account" }).click();
+await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li><code>toBeVisible()</code> <strong>espera</strong> o título <em>Log in</em>: sem essa linha, o teste preencheria os campos do cadastro, ainda na tela enquanto a API responde;</li>
+    <li><code>crypto.randomUUID()</code>: um e-mail que não se repete. Com <code>Date.now()</code>, dois testes paralelos geraram o mesmo e-mail - e a API respondeu <strong>500</strong>, não 409, aos dois cadastros simultâneos: um defeito de concorrência ainda em aberto.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · Frontend</p>
+  <h2>Quem não é Admin não chega ao /admin</h2>
+  <pre><code class="language-javascript" data-trim>
+test("a reader who is not an admin does not reach the Admin Dashboard", async ({ page }) =&gt; {
+  await signUpAndLogIn(page);
+  await expect(page.getByRole("heading", { name: "My books" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Admin Dashboard" })).toHaveCount(0);
+
+  await page.goto("/admin");
+
+  await expect(page.getByRole("heading", { name: "My books" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Admin Dashboard" })).toHaveCount(0);
+});
+  </code></pre>
+  <p class="os-label">Com backend e frontend rodando</p>
+  <pre><code class="language-bash" data-trim>
+npm run test:e2e
+npx playwright test --headed
+  </code></pre>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - os testes do frontend</span></h2>
+  <ul style="font-size:.8em">
+    <li>Vitest + Testing Library: componentes e services testados pelo que o usuário vê, num DOM simulado;</li>
+    <li>Dublês na borda da rede: o <code>fetch</code> responde como a API, sem backend;</li>
+    <li>Playwright: os critérios de aceitação num navegador de verdade - e a espera pela tela decide se o teste é confiável.</li>
+  </ul>
+</section>
+
+<!-- ============ Exercício e fechamento ============ -->
+
+<section>
+  <h2>Exercício em sala</h2>
+  <ol style="font-size:.66em">
+    <li><strong>Backend, integração:</strong> em <code>tests/test_books_api.py</code>, o Admin apaga o livro de outro User - o <code>DELETE</code> responde 204 e, depois, o <code>GET</code> do dono no mesmo livro responde 404;</li>
+    <li><strong>Frontend, componente:</strong> crie <code>src/components/StatCard.test.jsx</code> verificando que o <code>StatCard</code> mostra o rótulo e o número que recebe.</li>
+  </ol>
+  <div class="nota">No primeiro, o 204 não basta: o 404 seguinte é a prova de que o livro saiu do banco.</div>
+</section>
+
+<section>
+  <h2>Síntese da aula</h2>
+  <ul style="font-size:.55em">
+    <li>Testar é procurar defeitos (Myers, 1979), e o teste mostra a presença de defeitos, nunca a ausência (Dijkstra, 1970); o teste automatizado é código que verifica código - xUnit (Beck, 1994; Beck e Gamma, 1997), pytest (Krekel, 2004) e a estrutura Arrange-Act-Assert;</li>
+    <li>A pirâmide (Cohn, 2009; Vocke, 2018): muitos de unidade, alguns de integração, poucos de ponta a ponta; caixa preta projeta pela especificação, caixa branca pelos caminhos do código (Myers, 1979); unidade, integração e aceitação são níveis do ISTQB;</li>
+    <li><strong>Backend:</strong> testes de unidade do model sem banco; testes de integração caixa preta pelo <code>TestClient</code>, com SQLite em memória ligado pelo <code>dependency_overrides</code> e fixtures de usuários; um defeito real reproduzido em vermelho e corrigido em verde - o teste de regressão fica na suíte;</li>
+    <li><strong>Frontend:</strong> Vitest e Testing Library testam componentes e services pelo que o usuário vê, com dublês na borda da rede (Meszaros, 2007); Playwright percorre os critérios de aceitação num navegador de verdade.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Referências</h2>
+  <ul style="font-size:.5em">
+    <li>MYERS, G. <em>The Art of Software Testing</em>. Wiley, 1979.</li>
+    <li>DIJKSTRA, E. W. <em>Notes on Structured Programming</em> (EWD 249), 1970.</li>
+    <li>BECK, K. <em>Simple Smalltalk Testing: With Patterns</em>, 1994; BECK, K.; GAMMA, E. <em>Test Infected: Programmers Love Writing Tests</em>. Java Report, 1998.</li>
+    <li>BECK, K. <em>Test-Driven Development: By Example</em>. Addison-Wesley, 2002.</li>
+    <li>WAKE, B. <em>3A - Arrange, Act, Assert</em>. xp123.com, 2001.</li>
+    <li>COHN, M. <em>Succeeding with Agile: Software Development Using Scrum</em>. Addison-Wesley, 2009.</li>
+    <li>VOCKE, H. <em>The Practical Test Pyramid</em>. martinfowler.com, 2018.</li>
+    <li>ISTQB. <em>Glossary of Software Testing Terms</em> - glossary.istqb.org.</li>
+    <li>MESZAROS, G. <em>xUnit Test Patterns: Refactoring Test Code</em>. Addison-Wesley, 2007.</li>
+    <li>DODDS, K. C. Testing Library - testing-library.com (<em>Guiding Principles</em>).</li>
+    <li>Documentação oficial do pytest - docs.pytest.org; do FastAPI - fastapi.tiangolo.com (<em>Testing</em>, <em>Testing Dependencies with Overrides</em>); do SQLAlchemy - docs.sqlalchemy.org; do Pydantic - docs.pydantic.dev; do Vitest - vitest.dev; do Playwright - playwright.dev.</li>
+  </ul>
+</section>
+
+</div>
+</div>
+
+<script src="../assets/reveal/dist/reveal.js"></script>
+<script src="../assets/reveal/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    plugins: [ RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>
