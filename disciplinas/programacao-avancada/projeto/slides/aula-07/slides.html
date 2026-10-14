@@ -27,6 +27,7 @@
   .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
   .reveal pre.quebra code { white-space: pre-wrap; }
   .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
+  .etapa { font-size: .45em; font-weight: bold; color: #2e6da4; text-transform: uppercase; letter-spacing: .06em; margin: 0 0 -.4em 0; }
   .tela { border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
 </style>
 </head>
@@ -58,6 +59,11 @@ if book is None or book.user_id != current_user.id:                # delete_book
     <li><strong>Todos os Users são iguais</strong> - a tabela <code>users</code> não registra papel nenhum;</li>
     <li><strong>A regra está espalhada</strong> - a exceção do Admin exigiria editar quatro lugares, e esquecer um deixa uma rota com a regra antiga.</li>
   </ul>
+</section>
+
+<section>
+  <h2>A autorização se constrói de baixo para cima</h2>
+  <img src="img/camadas-da-autorizacao.png" alt="Diagrama em três camadas, na ordem de construção de baixo para cima: 1, banco de dados, o papel é um dado na coluna users.role com DEFAULT user; 2, backend, a API lê o papel e decide o acesso com can_access, require_admin e as respostas 401, 403 e 404; 3, frontend, a interface mostra o que o papel permite, com o link e a página /admin" style="width:100%;max-width:800px">
 </section>
 
 <section>
@@ -144,6 +150,7 @@ if book is None or book.user_id != current_user.id:                # delete_book
 <!-- ============ Live 1: o papel do User ============ -->
 
 <section>
+  <p class="etapa">Etapa 1 · Banco de dados</p>
   <h2>O papel é um conjunto fechado de valores</h2>
   <pre><code class="language-python" data-trim>
 import enum
@@ -162,6 +169,7 @@ class Role(enum.Enum):
 </section>
 
 <section>
+  <p class="etapa">Etapa 1 · Banco de dados</p>
   <h2>A coluna: ENUM no MySQL, menor privilégio como padrão</h2>
   <pre class="quebra"><code class="language-python" data-trim>
 role: Mapped[Role] = mapped_column(
@@ -181,21 +189,20 @@ role: Mapped[Role] = mapped_column(
 </section>
 
 <section>
-  <h2>O schema de entrada ignora o que não declara</h2>
-  <pre class="quebra"><code class="language-json" data-trim>
-POST /signup
-{"name": "Machado de Assis", "email": "machado@exemplo.com",
- "password": "segredo123", "role": "admin"}
+  <p class="etapa">Etapa 1 · Banco de dados</p>
+  <h2>O banco preenche o papel de quem se cadastra</h2>
+  <pre class="quebra"><code class="language-sql" data-trim>
+INSERT INTO users (name, email, password) VALUES (%(name)s, %(email)s, %(password)s)
   </code></pre>
   <ul style="font-size:.62em">
-    <li>Resposta <strong>201</strong> - e no banco, <code>SELECT id, email, role FROM users;</code> mostra <code>user</code>;</li>
-    <li>O <code>UserCreate</code> declara só <code>name</code>, <code>email</code> e <code>password</code>; o Pydantic ignora o resto: o schema é a lista do que o cliente <strong>pode</strong> enviar;</li>
-    <li>É a defesa contra o <strong>mass assignment</strong>: copiar para o objeto do banco tudo o que veio na requisição.</li>
+    <li>Machado e Clarice se cadastram pelo <code>POST /signup</code> de sempre; o <code>echo</code> do uvicorn mostra o comando enviado: o <code>INSERT</code> <strong>não cita</strong> <code>role</code>;</li>
+    <li><code>SELECT id, email, role FROM users;</code> mostra os dois como <code>user</code> - quem preencheu o papel foi o <code>DEFAULT</code> do banco;</li>
+    <li>O menor privilégio não depende de o código lembrar dele.</li>
   </ul>
-  <p class="cite">Documentação oficial do Pydantic - docs.pydantic.dev (Models)</p>
 </section>
 
 <section>
+  <p class="etapa">Etapa 1 · Banco de dados</p>
   <h2>Conceder papel não é operação da API</h2>
   <p class="os-label">Mac e Windows (dentro do cliente mysql)</p>
   <pre><code class="language-sql" data-trim>
@@ -261,6 +268,23 @@ SELECT id, email, role FROM users;
 <!-- ============ Live 2: a regra num lugar só ============ -->
 
 <section>
+  <p class="etapa">Etapa 2 · Backend</p>
+  <h2>O cadastro ignora o papel enviado pelo cliente</h2>
+  <pre class="quebra"><code class="language-json" data-trim>
+POST /signup
+{"name": "Cecília Meireles", "email": "cecilia@exemplo.com",
+ "password": "segredo123", "role": "admin"}
+  </code></pre>
+  <ul style="font-size:.62em">
+    <li>Resposta <strong>201</strong> - e no banco, <code>SELECT id, email, role FROM users;</code> mostra <code>user</code>;</li>
+    <li>O <code>UserCreate</code> declara só <code>name</code>, <code>email</code> e <code>password</code>; o Pydantic ignora o resto: o schema é a lista do que o cliente <strong>pode</strong> enviar;</li>
+    <li>É a defesa contra o <strong>mass assignment</strong>: copiar para o objeto do banco tudo o que veio na requisição. Nenhuma linha de código mudou - a proteção já estava no contrato de entrada.</li>
+  </ul>
+  <p class="cite">Documentação oficial do Pydantic - docs.pydantic.dev (Models)</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · Backend</p>
   <h2>A regra de acesso vive em um método do User</h2>
   <pre><code class="language-python" data-trim>
 @property
@@ -279,6 +303,7 @@ def can_access(self, book: "Book") -> bool:
 </section>
 
 <section>
+  <p class="etapa">Etapa 2 · Backend</p>
   <h2>Toda rota que toca um livro consulta a regra</h2>
   <pre><code class="language-python" data-trim>
 statement = select(models.Book)
@@ -299,6 +324,7 @@ if book is None or not current_user.can_access(book):
 </section>
 
 <section>
+  <p class="etapa">Etapa 2 · Backend</p>
   <h2>O token diz quem é; o banco diz o que pode</h2>
   <ul style="font-size:.66em">
     <li>Machado foi promovido <strong>depois</strong> do login - e o token dele passou a valer como Admin sem novo login;</li>
@@ -317,6 +343,7 @@ if book is None or not current_user.can_access(book):
 <!-- ============ Live 3: require_admin e as quantidades ============ -->
 
 <section>
+  <p class="etapa">Etapa 2 · Backend</p>
   <h2>require_admin: autorização no nível da função</h2>
   <pre class="quebra"><code class="language-python" data-trim>
 def require_admin(current_user: models.User = Depends(get_current_user)) -> models.User:
@@ -332,6 +359,7 @@ def require_admin(current_user: models.User = Depends(get_current_user)) -> mode
 </section>
 
 <section>
+  <p class="etapa">Etapa 2 · Backend</p>
   <h2>Um router inteiro protegido de uma vez</h2>
   <pre><code class="language-python" data-trim>
 router = APIRouter(prefix="/api/admin", tags=["admin"],
@@ -353,6 +381,7 @@ def read_stats(session: Session = Depends(get_session)):
 </section>
 
 <section>
+  <p class="etapa">Etapa 2 · Backend</p>
   <h2>O login devolve o papel</h2>
   <div class="duas-colunas">
     <div>
@@ -405,6 +434,7 @@ return TokenResponse(access_token=create_access_token(user.id), role=user.role)
 <!-- ============ Live 4: o Admin Dashboard no React ============ -->
 
 <section>
+  <p class="etapa">Etapa 3 · Frontend</p>
   <h2>O login entrega o token e o papel</h2>
   <pre><code class="language-javascript" data-trim>
 export async function login(email, password) {
@@ -423,6 +453,7 @@ onLogin(token, role);
 </section>
 
 <section>
+  <p class="etapa">Etapa 3 · Frontend</p>
   <h2>O endereço e o papel escolhem a página</h2>
   <pre><code class="language-javascript" data-trim>
 const [role, setRole] = useState(localStorage.getItem("role"));
@@ -442,6 +473,7 @@ if (token) {
 </section>
 
 <section>
+  <p class="etapa">Etapa 3 · Frontend</p>
   <h2>Link navega; botão executa uma ação</h2>
   <pre class="quebra"><code class="language-javascript" data-trim>
 export default function TextLink({ href, children }) {
@@ -460,6 +492,7 @@ export default function TextLink({ href, children }) {
 </section>
 
 <section>
+  <p class="etapa">Etapa 3 · Frontend</p>
   <h2>O Admin Dashboard só exibe o que a API devolve</h2>
   <pre><code class="language-javascript" data-trim>
 useEffect(() =&gt; {
@@ -481,6 +514,7 @@ useEffect(() =&gt; {
 </section>
 
 <section>
+  <p class="etapa">Etapa 3 · Frontend</p>
   <h2>O Admin Dashboard em /admin</h2>
   <img class="tela" src="img/admin-dashboard.png" alt="Captura da tela Admin Dashboard: link Books, botão Log out e dois cards, Users com o número 2 e Books com o número 3" style="width:100%;max-width:640px">
   <ul style="font-size:.6em">
@@ -490,6 +524,7 @@ useEffect(() =&gt; {
 </section>
 
 <section>
+  <p class="etapa">Etapa 3 · Frontend</p>
   <h2>Papel adulterado no navegador: a tela abre, os dados não</h2>
   <img class="tela" src="img/admin-dashboard-403.png" alt="Captura da tela Admin Dashboard sem cards, com a mensagem de erro Admin role required" style="width:100%;max-width:640px">
   <ul style="font-size:.6em">
@@ -522,13 +557,12 @@ useEffect(() =&gt; {
 
 <section>
   <h2>Síntese da aula</h2>
-  <ul style="font-size:.56em">
+  <ul style="font-size:.54em">
     <li>Autenticação responde <em>quem é</em>; autorização, <em>o que pode</em> (RFC 4949). Toda decisão é uma célula da matriz de Lampson (1971), e o RBAC a gera a partir de papéis (Ferraiolo e Kuhn, 1992; Sandhu et al., 1996) - no projeto, combinado com a relação de dono;</li>
-    <li>O papel é um enum do Python mapeado para um <code>ENUM</code> do MySQL com <code>DEFAULT 'user'</code>; a API não oferece rota para concedê-lo, e o schema de entrada ignora o que não declara;</li>
-    <li>A regra de acesso a Books vive em <code>User.can_access</code> e toda rota de um livro a consulta - padrão à prova de falha, mediação completa e menor privilégio (Saltzer e Schroeder, 1975);</li>
-    <li>BOLA, mass assignment e BFLA são as falhas que o OWASP mais encontra; 401 = não sei quem é, 403 = sei e não permito, 404 = não confirmo que existe (RFC 9110);</li>
-    <li><code>require_admin</code>, declarado no router, protege todas as rotas administrativas de uma vez;</li>
-    <li>O Admin Dashboard em <code>/admin</code> aparece só para o Admin - mas a tela é conveniência: quem protege os dados é a API, que consulta o papel no banco a cada requisição.</li>
+    <li>A construção vai de baixo para cima: cada camada depende da que está abaixo;</li>
+    <li><strong>Banco de dados:</strong> o papel é um enum do Python mapeado para um <code>ENUM</code> do MySQL com <code>DEFAULT 'user'</code>; conceder o papel de Admin é um <code>UPDATE</code>, fora da API;</li>
+    <li><strong>Backend:</strong> o schema de entrada ignora o que não declara; a regra de acesso a Books vive em <code>User.can_access</code> e toda rota de um livro a consulta - padrão à prova de falha, mediação completa e menor privilégio (Saltzer e Schroeder, 1975); <code>require_admin</code>, declarado no router, protege todas as rotas administrativas; BOLA, mass assignment e BFLA são as falhas que o OWASP mais encontra; 401 = não sei quem é, 403 = sei e não permito, 404 = não confirmo que existe (RFC 9110);</li>
+    <li><strong>Frontend:</strong> o Admin Dashboard em <code>/admin</code> aparece só para o Admin - mas a tela é conveniência: quem protege os dados é a API, que consulta o papel no banco a cada requisição.</li>
   </ul>
 </section>
 
