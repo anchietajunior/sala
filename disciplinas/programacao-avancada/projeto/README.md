@@ -18,6 +18,18 @@ senha? Ajuste para mysql+pymysql://root:SUASENHA@127.0.0.1:3306/reading_tracker
 Mudou um model? Dado de aula é descartável: `DROP TABLE books; DROP TABLE users;`
 no cliente mysql e deixe o `create_all` recriar as tabelas na próxima subida.
 
+## Papéis: User e Admin
+
+Todo cadastro nasce com o papel `user` (coluna `users.role`, um `ENUM('admin','user')`
+com `DEFAULT 'user'`). A API não oferece rota para conceder o papel de Admin: a
+promoção é feita direto no banco, no cliente mysql (Mac e Windows):
+
+    UPDATE users SET role = 'admin' WHERE email = 'machado@exemplo.com';
+
+A API consulta o papel no banco a cada requisição: a promoção vale na hora para as
+rotas. A interface recebe o papel no login - para o link e a página do Admin
+aparecerem, saia e entre de novo.
+
 ## Backend — como rodar
 
     cd backend
@@ -49,8 +61,8 @@ nova origem em `allow_origins`.
     ├── database.py      ← conexão, Base e sessão do ORM
     ├── models.py        ← as tabelas (User, Book)
     ├── schemas.py       ← as classes Pydantic de entrada e saída
-    ├── security.py      ← hash de senha, token JWT e get_current_user
-    └── routers/         ← as rotas de cada recurso (users.py, books.py)
+    ├── security.py      ← hash de senha, token JWT, get_current_user e require_admin
+    └── routers/         ← as rotas de cada recurso (users.py, books.py, admin.py)
 
 ## Estrutura do frontend
 
@@ -61,27 +73,37 @@ nova origem em `allow_origins`.
     └── src/
         ├── main.jsx           ← ponto de entrada: monta o App na div#root
         ├── index.css          ← importa o Tailwind
-        ├── App.jsx            ← componente raiz: o token decide a página e fica no localStorage
+        ├── App.jsx            ← componente raiz: o token, o papel e o endereço decidem a página
         ├── services/          ← conversa com a API: URLs, verbos e formato das respostas
-        │   ├── api.js         ← request(): fetch com JSON, token e tratamento de erro
-        │   ├── authService.js ← signup() e login()
-        │   └── bookService.js ← listBooks(), createBook(), updateBook(), deleteBook()
+        │   ├── api.js          ← request(): fetch com JSON, token e tratamento de erro
+        │   ├── authService.js  ← signup() e login()
+        │   ├── bookService.js  ← listBooks(), createBook(), updateBook(), deleteBook()
+        │   └── adminService.js ← getStats(): as quantidades do Admin Dashboard
         ├── pages/             ← telas inteiras: guardam o estado e chamam os services
-        │   ├── SignupPage.jsx ← cadastro
-        │   ├── LoginPage.jsx  ← login; entrega o token ao App
-        │   └── BooksPage.jsx  ← livros do usuário: listar, criar, editar e apagar
+        │   ├── SignupPage.jsx         ← cadastro
+        │   ├── LoginPage.jsx          ← login; entrega o token e o papel ao App
+        │   ├── BooksPage.jsx          ← livros: listar, criar, editar e apagar
+        │   └── AdminDashboardPage.jsx ← Admin Dashboard (/admin): quantidades de Users e Books
         └── components/        ← pedaços de tela: recebem props, não chamam a API
             ├── Button.jsx       ← botão do sistema, com as variantes primary, secondary e danger
             ├── TextInput.jsx    ← campo com rótulo, borda e foco padronizados
             ├── ErrorMessage.jsx ← mensagem de erro em destaque (role="alert")
             ├── Card.jsx         ← superfície branca que envolve formulários e livros
+            ├── TextLink.jsx     ← link de navegação entre páginas (/admin e /)
             ├── BookForm.jsx     ← formulário de criar ou editar um livro
-            └── BookItem.jsx     ← um livro da lista, com a barra de progresso
+            ├── BookItem.jsx     ← um livro da lista, com a barra de progresso
+            └── StatCard.jsx     ← uma quantidade do Admin Dashboard
 
 Cada pasta tem uma responsabilidade: só os `services` falam com a API, as `pages`
 guardam o estado de cada tela e os `components` desenham o que recebem por props.
-A aparência vive em `Button`, `TextInput`, `ErrorMessage` e `Card`, estilizados com
-classes do Tailwind: as páginas usam esses componentes em vez de repetir classes.
+A aparência vive em `Button`, `TextInput`, `ErrorMessage`, `Card` e `TextLink`,
+estilizados com classes do Tailwind: as páginas usam esses componentes em vez de
+repetir classes.
+
+Não há biblioteca de rotas: o `App.jsx` lê `window.location.pathname` e, para o
+endereço `/admin`, abre o Admin Dashboard - só se o papel recebido no login for
+`admin`. Esconder a página é conveniência da interface; quem protege os dados é a
+API, que responde 403 a quem não é Admin.
 
 ## Endpoints
 
@@ -89,16 +111,18 @@ classes do Tailwind: as páginas usam esses componentes em vez de repetir classe
 | ------ | ---- | ------------ | --------- |
 | GET | /health | — | Verifica se a API está no ar |
 | POST | /signup | — | Cadastra um User (senha guardada como hash); e-mail repetido responde 409 |
-| POST | /login | — | Troca e-mail e senha válidos por um token JWT (credencial inválida responde 401) |
-| GET | /api/books | Bearer | Lista os livros do usuário logado; query param opcional name busca pelo nome |
-| GET | /api/books/{book_id} | Bearer | Um livro do usuário logado pelo id (404 se não existir ou não for dele) |
+| POST | /login | — | Troca e-mail e senha válidos por um token JWT e devolve o `role` do User (credencial inválida responde 401) |
+| GET | /api/books | Bearer | Lista os livros do usuário logado (o Admin recebe os de todos); query param opcional name busca pelo nome |
+| GET | /api/books/{book_id} | Bearer | Um livro pelo id (404 se não existir ou se for de outro User e quem pede não for Admin) |
 | POST | /api/books | Bearer | Cria um livro do usuário logado; corpo `name`, `pages` (> 0) e `current_page` (opcional, ≥ 0 e ≤ pages), validado pelo schema BookCreate |
-| PUT | /api/books/{book_id} | Bearer | Atualiza `name`, `pages` e `current_page` de um livro do usuário logado (404 se não existir ou não for dele) |
-| DELETE | /api/books/{book_id} | Bearer | Remove um livro do usuário logado; responde 204 sem corpo (404 se não existir ou não for dele) |
+| PUT | /api/books/{book_id} | Bearer | Atualiza `name`, `pages` e `current_page` de um livro (404 se não existir ou se for de outro User e quem pede não for Admin) |
+| DELETE | /api/books/{book_id} | Bearer | Remove um livro; responde 204 sem corpo (404 se não existir ou se for de outro User e quem pede não for Admin) |
+| GET | /api/admin/stats | Bearer, Admin | Quantidades de Users e de Books cadastrados (`users_count`, `books_count`); quem não é Admin recebe 403 |
 
 As rotas marcadas com **Bearer** exigem o header `Authorization: Bearer <token>`,
 com o token devolvido pelo `POST /login`. Sem token (ou com token inválido/vencido),
-a resposta é **401**.
+a resposta é **401**. As marcadas com **Admin** exigem ainda o papel `admin`: um User
+autenticado sem esse papel recebe **403**.
 
 Todo livro devolvido pela API traz `progress`: a porcentagem de leitura, calculada
 a partir de `current_page` e `pages` (100 = concluído). É dado derivado - não existe

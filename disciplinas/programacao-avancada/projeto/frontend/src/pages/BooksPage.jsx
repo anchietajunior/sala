@@ -4,14 +4,15 @@ import BookItem from "../components/BookItem";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import ErrorMessage from "../components/ErrorMessage";
+import TextLink from "../components/TextLink";
 import { createBook, deleteBook, listBooks, updateBook } from "../services/bookService";
 
 // Formulário vazio: o estado inicial e o estado após salvar
 const emptyForm = { name: "", pages: "", current_page: "" };
 
-// Tela principal: guarda o estado dos livros do usuário logado e chama a API;
-// o desenho do formulário e de cada livro fica nos componentes
-export default function BooksPage({ onLogout }) {
+// Tela principal: guarda o estado dos livros que o usuário logado acessa e
+// chama a API; o desenho do formulário e de cada livro fica nos componentes
+export default function BooksPage({ isAdmin, onLogout }) {
   const [books, setBooks] = useState([]);
   const [form, setForm] = useState(emptyForm);
   // id do livro em edição; null significa que o formulário cria um livro novo
@@ -81,8 +82,13 @@ export default function BooksPage({ onLogout }) {
   return (
     <main className="mx-auto grid max-w-lg gap-6 px-4 py-10">
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My books</h1>
-        <Button variant="secondary" onClick={onLogout}>Log out</Button>
+        {/* O Admin recebe da API os livros de todos; o título acompanha */}
+        <h1 className="text-2xl font-bold">{isAdmin ? "All books" : "My books"}</h1>
+        <div className="flex items-center gap-4">
+          {/* O link para o Admin Dashboard só aparece para o Admin */}
+          {isAdmin && <TextLink href="/admin">Admin Dashboard</TextLink>}
+          <Button variant="secondary" onClick={onLogout}>Log out</Button>
+        </div>
       </header>
 
       <Card>

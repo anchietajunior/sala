@@ -61,3 +61,11 @@ def get_current_user(
     if user is None:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     return user
+
+
+# Dependency: deixa passar apenas o usuário logado que é Admin
+def require_admin(current_user: models.User = Depends(get_current_user)) -> models.User:
+    # Autenticado, mas sem o papel exigido: 403 — a API sabe quem é e recusa
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin role required")
+    return current_user

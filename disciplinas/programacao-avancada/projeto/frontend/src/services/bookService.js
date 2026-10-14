@@ -1,6 +1,6 @@
 import { request } from "./api";
 
-// Os livros do usuário logado: GET /api/books
+// Os livros que o usuário logado acessa (todos, para o Admin): GET /api/books
 export function listBooks() {
   return request("/api/books");
 }

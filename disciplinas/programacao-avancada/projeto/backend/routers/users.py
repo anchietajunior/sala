@@ -38,4 +38,6 @@ def login(credentials: LoginRequest, session: Session = Depends(get_session)):
     # não entregar a um atacante a lista de quem tem conta
     if user is None or not verify_password(credentials.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
-    return TokenResponse(access_token=create_access_token(user.id))
+    # O papel vai junto do token para a interface; quem autoriza é a API, que
+    # consulta o papel no banco a cada requisição
+    return TokenResponse(access_token=create_access_token(user.id), role=user.role)

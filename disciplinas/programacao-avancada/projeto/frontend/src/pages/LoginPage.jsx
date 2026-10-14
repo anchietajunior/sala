@@ -15,9 +15,9 @@ export default function LoginPage({ onLogin, onShowSignup }) {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const token = await login(email, password);
-      // O token sobe para o App, que o guarda e troca de tela
-      onLogin(token);
+      const { token, role } = await login(email, password);
+      // O token e o papel sobem para o App, que os guarda e troca de tela
+      onLogin(token, role);
     } catch (err) {
       setError(err.message);
     }

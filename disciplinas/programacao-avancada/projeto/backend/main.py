@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import Base, engine
 # Cada recurso da API vive em um router próprio
-from routers import books, users
+from routers import admin, books, users
 
 # Cria no banco as tabelas dos modelos registrados que ainda não existem
 Base.metadata.create_all(engine)
@@ -27,6 +27,7 @@ app.add_middleware(
 # Registra as rotas de cada recurso na aplicação
 app.include_router(users.router)
 app.include_router(books.router)
+app.include_router(admin.router)
 
 
 # Rota GET /health, usada para verificar se a API está no ar (pública)

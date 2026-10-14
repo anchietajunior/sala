@@ -2,6 +2,9 @@
 # e validação que envolve mais de um campo
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
+# O enum de papéis do model: na resposta, o Pydantic publica o valor ('admin')
+from models import Role
+
 
 # Schema de entrada: o corpo aceito ao criar ou atualizar um livro
 class BookCreate(BaseModel):
@@ -59,7 +62,15 @@ class LoginRequest(BaseModel):
     password: str
 
 
-# Schema de saída do login: o token que autentica as próximas requisições
+# Schema de saída do login: o token que autentica as próximas requisições e o
+# papel do usuário, que a interface usa para decidir o que mostrar
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    role: Role
+
+
+# Schema de saída do Admin Dashboard: as quantidades cadastradas no sistema
+class AdminStats(BaseModel):
+    users_count: int
+    books_count: int

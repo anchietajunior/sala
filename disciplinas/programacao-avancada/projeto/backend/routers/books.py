@@ -12,26 +12,28 @@ from security import get_current_user
 router = APIRouter(prefix="/api/books", tags=["books"])
 
 
-# Lista os livros do usuário logado; query param opcional filtra pelo nome
+# Lista os livros que o usuário logado acessa; query param opcional filtra pelo nome
 @router.get("", response_model=list[BookRead])
 def list_books(name: str = "", session: Session = Depends(get_session),
                current_user: models.User = Depends(get_current_user)):
-    # O filtro pelo dono: a FK e o token se encontram nesta linha
-    statement = select(models.Book).where(models.Book.user_id == current_user.id)
+    statement = select(models.Book)
+    # O filtro pelo dono vale para quem não é Admin; o Admin lista todos os livros
+    if not current_user.is_admin:
+        statement = statement.where(models.Book.user_id == current_user.id)
     # Com filtro de nome, só os cujo nome contém o termo (LIKE '%name%')
     if name != "":
         statement = statement.where(models.Book.name.contains(name))
     return session.scalars(statement).all()
 
 
-# Busca um livro do usuário logado pelo id
+# Busca pelo id um livro que o usuário logado pode acessar
 @router.get("/{book_id}", response_model=BookRead)
 def read_book(book_id: int, session: Session = Depends(get_session),
               current_user: models.User = Depends(get_current_user)):
     book = session.get(models.Book, book_id)
-    # Livro inexistente e livro de outro dono respondem o mesmo 404:
+    # Livro inexistente e livro sem acesso respondem o mesmo 404:
     # a API não confirma a existência de recurso que não é seu
-    if book is None or book.user_id != current_user.id:
+    if book is None or not current_user.can_access(book):
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
@@ -49,13 +51,14 @@ def create_book(book: BookCreate, session: Session = Depends(get_session),
     return new_book
 
 
-# Atualiza um livro do usuário logado; PUT substitui a representação inteira
+# Atualiza um livro que o usuário logado pode acessar; PUT substitui a
+# representação inteira
 @router.put("/{book_id}", response_model=BookRead)
 def update_book(book_id: int, book: BookCreate,
                 session: Session = Depends(get_session),
                 current_user: models.User = Depends(get_current_user)):
     stored_book = session.get(models.Book, book_id)
-    if stored_book is None or stored_book.user_id != current_user.id:
+    if stored_book is None or not current_user.can_access(stored_book):
         raise HTTPException(status_code=404, detail="Book not found")
     # A sessão rastreia o objeto: trocar os atributos basta, o commit emite o UPDATE
     stored_book.name = book.name
@@ -66,12 +69,12 @@ def update_book(book_id: int, book: BookCreate,
     return stored_book
 
 
-# Remove um livro do usuário logado; 204 = sucesso sem corpo na resposta
+# Remove um livro que o usuário logado pode acessar; 204 = sucesso sem corpo
 @router.delete("/{book_id}", status_code=204)
 def delete_book(book_id: int, session: Session = Depends(get_session),
                 current_user: models.User = Depends(get_current_user)):
     book = session.get(models.Book, book_id)
-    if book is None or book.user_id != current_user.id:
+    if book is None or not current_user.can_access(book):
         raise HTTPException(status_code=404, detail="Book not found")
     # delete anota a remoção; commit executa o DELETE no banco
     session.delete(book)
