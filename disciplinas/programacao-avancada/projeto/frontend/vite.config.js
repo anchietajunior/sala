@@ -7,4 +7,10 @@ import { defineConfig } from "vite";
 // classes utilitárias encontradas nos componentes
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // Vitest: os testes rodam num navegador simulado (jsdom) e só os arquivos
+  // .test.js e .test.jsx de src/ entram; os de ponta a ponta ficam em e2e/
+  test: {
+    environment: "jsdom",
+    include: ["src/**/*.test.{js,jsx}"],
+  },
 });

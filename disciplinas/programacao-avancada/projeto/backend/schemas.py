@@ -8,6 +8,10 @@ from models import Role
 
 # Schema de entrada: o corpo aceito ao criar ou atualizar um livro
 class BookCreate(BaseModel):
+    # Remove os espaços das pontas antes de validar: "   " vira "" e o min_length
+    # recusa; "  Dom Casmurro " é gravado como "Dom Casmurro"
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     # As regras da coluna valem também na porta da API: nome não-vazio,
     # até 255 caracteres (o String(255) do model) — quem erra recebe 422
     name: str = Field(min_length=1, max_length=255)
