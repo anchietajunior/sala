@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 01 — Início do projeto e frameworks</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 820px; margin: 3rem auto; padding: 0 1.5rem; color: #222; line-height: 1.65; }
+  h1 { font-size: 1.6rem; border-bottom: 2px solid #222; padding-bottom: .4rem; }
+  h2 { font-size: 1.25rem; margin-top: 2.4rem; }
+  h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+  code, pre { font-family: 'SF Mono', Consolas, monospace; background: #f4f2ee; border-radius: 4px; }
+  code { padding: .1rem .35rem; font-size: .9em; }
+  pre { padding: .9rem 1.1rem; overflow-x: auto; font-size: .88em; line-height: 1.5; }
+  .meta { background: #f4f2ee; border-radius: 6px; padding: 1rem 1.3rem; }
+  .meta p { margin: .3rem 0; }
+  .tempo { display: inline-block; background: #222; color: #fff; border-radius: 999px; padding: .1rem .7rem; font-size: .8em; font-family: Consolas, monospace; vertical-align: middle; }
+  .teoria { border-left: 4px solid #2e6da4; padding-left: 1rem; margin: 1.4rem 0; }
+  .codigo { border-left: 4px solid #b8860b; padding-left: 1rem; margin: 1.4rem 0; }
+  .pergunta { background: #eef4fa; border: 1px solid #c5d9ec; border-radius: 6px; padding: .7rem 1rem; font-style: italic; margin: .8rem 0; }
+  .os { font-weight: bold; font-size: .85em; color: #555; margin-bottom: -.5rem; display: block; margin-top: .8rem; }
+  .checkpoint { background: #eef7ee; border: 1px solid #bcd9bc; border-radius: 6px; padding: .8rem 1.1rem; margin: 1.4rem 0; }
+  .atencao { background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .8rem 1.1rem; margin: 1rem 0; font-size: .95em; }
+</style>
+</head>
+<body>
+
+<h1>Aula 01 — Início do projeto e frameworks</h1>
+
+<div class="meta">
+  <p><strong>Duração:</strong> ~2h &nbsp;·&nbsp; <strong>Branch:</strong> <code>aula-01-inicio-do-projeto-e-frameworks</code></p>
+  <p><strong>Temas teóricos:</strong> o que são frameworks [T-1] · modelo cliente-servidor [T-2] · gerenciamento de dependências [T-6]</p>
+  <p><strong>Objetivos — ao final, o aluno consegue:</strong></p>
+  <ul>
+    <li>Descrever o modelo cliente-servidor e apontar quem é cliente e quem é servidor em um acesso real;</li>
+    <li>Explicar o que um framework resolve e a diferença entre framework e biblioteca;</li>
+    <li>Criar um ambiente virtual Python e instalar dependências com pip (Mac e Windows);</li>
+    <li>Registrar dependências em <code>requirements.txt</code> e explicar por que isso importa;</li>
+    <li>Implementar e executar a primeira rota FastAPI, testando-a no navegador.</li>
+  </ul>
+</div>
+
+<h2><span class="tempo">10 min</span> Abertura — o que vamos construir neste semestre</h2>
+
+<p>Apresente a disciplina pelo <em>produto final</em>, não pela ementa: um <strong>Reading Tracker</strong> — sistema web onde cada pessoa cadastra seus livros, envia a capa, registra em que página está e acompanha a porcentagem de leitura. Haverá cadastro, login, área administrativa e até relatório em PDF.</p>
+
+<ul>
+  <li>Mostre um esboço rápido no quadro: telas de login → lista de livros com % → dashboard admin.</li>
+  <li>Explique o método da disciplina: <strong>toda aula evolui o mesmo projeto</strong>. A teoria aparece na hora em que a prática precisa dela.</li>
+  <li>Hoje: a fundação — entender onde o código vai rodar (cliente-servidor), com que ferramenta (framework) e como instalar essa ferramenta direito (dependências).</li>
+</ul>
+
+<h2><span class="tempo">15 min</span> Teoria [T-2] — o modelo cliente-servidor</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong></p>
+<ul>
+  <li>Dois programas conversando pela rede: o <strong>cliente</strong> pede, o <strong>servidor</strong> responde. Nunca o contrário.</li>
+  <li>No nosso projeto: o navegador (e depois o React) é o cliente; o backend FastAPI é o servidor.</li>
+  <li>A conversa tem um idioma: <strong>HTTP</strong> — pedido (request) e resposta (response). Aprofundamos na aula 02.</li>
+  <li>O servidor não sabe quem vai chamar nem quando: ele fica <em>esperando</em> requisições.</li>
+</ul>
+<p><strong>Analogia sugerida:</strong> restaurante — o cliente (mesa) faz o pedido, o garçom (HTTP) leva à cozinha (servidor), a cozinha prepara e devolve o prato (resposta). A mesa não entra na cozinha.</p>
+<div class="pergunta">Para a turma: "Quando vocês abrem o Instagram, o que é cliente e o que é servidor? E quando o feed atualiza sozinho, quem pediu?"</div>
+<div class="pergunta">Para a turma: "O site sai do ar. O problema pode estar no cliente ou no servidor? Como vocês descobririam?"</div>
+</div>
+
+<h2><span class="tempo">15 min</span> Teoria [T-1] — o que é um framework</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong></p>
+<ul>
+  <li>Receber uma requisição HTTP "na unha" significa ler bytes de um socket, interpretar o protocolo, montar a resposta byte a byte. Ninguém escreve isso a cada projeto.</li>
+  <li><strong>Biblioteca:</strong> você chama o código dela quando quiser. <strong>Framework:</strong> ele te chama — você preenche as lacunas (a rota, a regra de negócio) e ele cuida do fluxo. É a <em>inversão de controle</em> ("princípio de Hollywood: não nos ligue, nós ligamos para você").</li>
+  <li>O FastAPI é nosso framework web: recebe a requisição, descobre qual função sua deve responder, converte o retorno em JSON.</li>
+  <li>Frameworks trazem <em>decisões prontas</em> — bom (produtividade, segurança) e ruim (menos liberdade). Essa troca vale quase sempre.</li>
+</ul>
+<div class="pergunta">Para a turma: "Quem controla o <code>main()</code> do nosso programa quando usamos FastAPI? Nós ou ele?" (resposta: ele — nós só declaramos funções e ele decide quando chamá-las)</div>
+</div>
+
+<h2><span class="tempo">15 min</span> Teoria [T-6] — dependências e ambientes virtuais</h2>
+
+<div class="teoria">
+<p><strong>Pontos a explicar:</strong></p>
+<ul>
+  <li>FastAPI é uma <strong>biblioteca de terceiros</strong>: não vem com o Python. Alguém escreveu, publicou no <strong>PyPI</strong>, e o <code>pip</code> baixa de lá.</li>
+  <li>Problema: projetos diferentes na mesma máquina podem exigir versões diferentes da mesma biblioteca. Solução: <strong>ambiente virtual</strong> (venv) — uma "caixa de ferramentas" isolada por projeto.</li>
+  <li><code>requirements.txt</code> é a lista de compras do projeto: qualquer pessoa (ou servidor) reproduz o ambiente com um comando.</li>
+  <li>Versões têm significado (semver: MAJOR.MINOR.PATCH) — mencionar de passagem, sem aprofundar.</li>
+</ul>
+<div class="pergunta">Para a turma: "Vocês entregam o trabalho e na máquina do professor não roda. O que pode ter de diferente entre as duas máquinas?"</div>
+</div>
+
+<h2><span class="tempo">35 min</span> Live-coding — do zero à primeira rota</h2>
+
+<div class="codigo">
+<h3>Passo 1 — criar a pasta do backend e o ambiente virtual</h3>
+<p><em>Por quê:</em> isolar as dependências deste projeto das do resto da máquina.</p>
+
+<span class="os">Mac</span>
+<pre>mkdir -p projeto/backend
+cd projeto/backend
+python3 -m venv .venv
+source .venv/bin/activate</pre>
+
+<span class="os">Windows (PowerShell)</span>
+<pre>mkdir projeto\backend
+cd projeto\backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1</pre>
+
+<p>Mostre o <code>(.venv)</code> aparecendo no prompt — é o sinal de que a caixa de ferramentas está aberta. Peça para todos confirmarem antes de seguir.</p>
+
+<div class="atencao">Se o Windows bloquear a ativação ("execution policy"), rode uma vez: <code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code> e abra o PowerShell de novo.</div>
+
+<h3>Passo 2 — instalar o framework e o servidor</h3>
+<p><em>Por quê:</em> FastAPI é o framework; uvicorn é o servidor web que o executa (a distinção fica clara na aula 02).</p>
+
+<span class="os">Mac e Windows (iguais, com o venv ativo)</span>
+<pre>pip install fastapi uvicorn</pre>
+
+<h3>Passo 3 — registrar as dependências</h3>
+<p><em>Por quê:</em> sem isso, o projeto só roda na sua máquina.</p>
+
+<pre>pip freeze > requirements.txt</pre>
+
+<p>Abra o arquivo e mostre: as bibliotecas que instalamos <em>e</em> as que vieram junto (dependências das dependências). Explique que um colega reproduziria tudo com <code>pip install -r requirements.txt</code>.</p>
+
+<h3>Passo 4 — a primeira rota</h3>
+<p><em>Por quê:</em> aqui o framework aparece em ação — declaramos uma função e ele cuida de todo o HTTP.</p>
+
+<p>Criar <code>main.py</code> dentro de <code>projeto/backend</code>:</p>
+
+<pre>from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Reading Tracker API"}</pre>
+
+<p>Digite devagar e explique linha a linha: importamos o framework, criamos a aplicação, e o <em>decorator</em> <code>@app.get("/")</code> diz ao FastAPI "quando chegar um GET na raiz, chame esta função". O dicionário Python vira JSON automaticamente — trabalho do framework.</p>
+
+<h3>Passo 5 — subir o servidor</h3>
+
+<span class="os">Mac e Windows (iguais, com o venv ativo)</span>
+<pre>uvicorn main:app --reload</pre>
+
+<p>Explique a sintaxe: <code>main</code> é o arquivo, <code>app</code> é a variável dentro dele. O <code>--reload</code> reinicia o servidor a cada mudança no código — só para desenvolvimento.</p>
+
+<h3>Passo 6 — versionar o início do projeto</h3>
+<p><em>Por quê:</em> o <code>.venv</code> é reconstruível e enorme — nunca vai para o repositório; o <code>requirements.txt</code> é o que se versiona.</p>
+
+<p>Criar <code>.gitignore</code> em <code>projeto/backend</code>:</p>
+<pre>.venv/
+__pycache__/</pre>
+
+<p>Criar <code>README.md</code> em <code>projeto/</code> (em pt-BR — código em inglês, documentação em português) com o mínimo para alguém rodar o que existe hoje, mais a <strong>Tabela de Dependências</strong> espelhando o <code>requirements.txt</code>:</p>
+<pre># Reading Tracker
+
+Projeto da disciplina Programação Avançada: um rastreador de leituras
+construído com FastAPI e React.
+
+## Backend — como rodar
+
+    cd backend
+    python3 -m venv .venv          # Windows: python -m venv .venv
+    source .venv/bin/activate      # Windows: .venv\Scripts\Activate.ps1
+    pip install -r requirements.txt
+    uvicorn main:app --reload
+
+Abra http://127.0.0.1:8000
+
+## Tabela de Dependências
+
+| Nome | Utilidade | Versão |
+| ---- | --------- | ------ |
+| fastapi | Framework web: rotas, validação e documentação automática | 0.139.2 |
+| uvicorn | Servidor web que executa a aplicação | 0.51.0 |
+| ... (uma linha por entrada do requirements.txt) | | |
+
+Instalamos diretamente apenas **fastapi** e **uvicorn**; as demais
+vieram como dependências delas.</pre>
+
+<div class="atencao">A tabela completa tem uma linha por pacote do <code>requirements.txt</code> — não digite em sala: cole a versão pronta do repositório e gaste o tempo <em>lendo</em> a utilidade de cada pacote com a turma (reforça o tema de dependências das dependências).</div>
+</div>
+
+<div class="checkpoint">
+<strong>Checkpoint — como saber que funcionou:</strong>
+<ul>
+  <li>Navegador em <code>http://127.0.0.1:8000</code> mostra <code>{"message": "Welcome to the Reading Tracker API"}</code>.</li>
+  <li>Com o servidor rodando, mude o texto da mensagem, salve e recarregue a página — a turma vê o <code>--reload</code> agir.</li>
+  <li><em>Teaser:</em> abra <code>http://127.0.0.1:8000/docs</code> por 30 segundos: "o framework documentou nossa API sozinho — semana que vem exploramos isso". Não aprofunde.</li>
+</ul>
+</div>
+
+<h2><span class="tempo">15 min</span> Exercício em sala</h2>
+
+<p>Individual, com o que acabou de ser visto:</p>
+
+<ol>
+  <li>Criar uma rota <code>GET /status</code> que responde <code>{"status": "ok"}</code>.</li>
+  <li>Criar uma rota <code>GET /about</code> que responde um JSON com <code>project</code> (nome do projeto) e <code>author</code> (nome do aluno).</li>
+  <li>Testar as duas no navegador.</li>
+</ol>
+
+<p><strong>Gabarito (para o professor):</strong></p>
+<pre>@app.get("/status")
+def read_status():
+    return {"status": "ok"}
+
+
+@app.get("/about")
+def read_about():
+    return {"project": "Reading Tracker", "author": "Student Name"}</pre>
+
+<p>Circule pela sala: os erros clássicos serão venv desativado (<code>ModuleNotFoundError: fastapi</code>) e esquecer de salvar o arquivo.</p>
+
+<h2><span class="tempo">5 min</span> Fechamento</h2>
+
+<ul>
+  <li><strong>Síntese:</strong> cliente pede, servidor responde; o framework cuida do HTTP para nós; o venv + <code>requirements.txt</code> tornam o projeto reproduzível.</li>
+  <li><strong>Gancho para a aula 02:</strong> "Hoje digitamos um endereço e apareceu um JSON. Mas o que acontece <em>entre</em> uma coisa e outra? Como o navegador achou o servidor? O que exatamente viajou pela rede? Semana que vem, dissecamos essa viagem — incluindo o DNS e o papel real do uvicorn."</li>
+</ul>
+
+</body>
+</html>
