@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 360"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="360" fill="#fff"/>
+  <text x="350" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 6 — valores = malloc(3 * sizeof(int))</text>
+  <rect x="40" y="150" width="210" height="50" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <line x1="134.5" y1="150" x2="134.5" y2="200" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="87.25" y="181" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">valores</text>
+  <text x="192.25" y="182" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5000</text>
+  <rect x="300" y="90" width="370" height="190" fill="none" stroke="#5a7a9a" stroke-width="1.5" stroke-dasharray="8,5" rx="10"/>
+  <text x="485.0" y="112" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">memória alocada dinamicamente</text>
+  <rect x="345" y="148" width="95" height="54" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="392.5" y="183" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <text x="392.5" y="224" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5000</text>
+  <rect x="440" y="148" width="95" height="54" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <text x="487.5" y="183" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="487.5" y="224" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5004</text>
+  <rect x="535" y="148" width="95" height="54" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <text x="582.5" y="183" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="582.5" y="224" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5008</text>
+  <path d="M 250 175 L 343 175" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="331,170 343,175 331,180" fill="#2c5d8a"/>
+  <text x="485" y="262" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">três inteiros, sem nome próprio</text>
+  <line x1="80" y1="310" x2="620" y2="310" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="336" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">a região só é alcançada pelo endereço guardado em valores</text>
+
+</svg>

@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 07 — Listas Encadeadas, Pilhas e Filas | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal h3 code {
+            font-size: 0.8em;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .formula {
+            font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.9em;
+            color: #222;
+            background: #f7f9fc;
+            border: 1px solid #cfd6dd;
+            border-radius: 6px;
+            padding: 14px 22px;
+            display: inline-block;
+            margin: 0.4em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 07</p>
+            <h1>Listas Encadeadas, Pilhas e Filas</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                O nó · a lista · LIFO · FIFO
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — uma única peça, o nó, e três formas de usá-la.
+            </p>
+        </section>
+
+        <!-- ============================ BLOCO 1 — CONCEITO ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>A caça ao tesouro</h3>
+                <p style="text-align: left;">A primeira pista fica num lugar combinado. Cada pista diz apenas onde está a seguinte.</p>
+                <p style="text-align: left;">As pistas podem estar espalhadas pela casa, em qualquer ordem física — e ainda assim formam uma sequência.</p>
+                <blockquote>Para chegar à quinta pista, não há atalho: é preciso passar pelas quatro primeiras.</blockquote>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>Lista encadeada</h3>
+                <p style="text-align: left;">Uma <span class="destaque">lista encadeada</span> (<em>linked list</em>) é uma sequência de <span class="destaque">nós</span>.</p>
+                <ul>
+                    <li>Cada nó guarda um <strong>valor</strong> e a indicação de onde está o <strong>próximo</strong> nó.</li>
+                    <li>O primeiro nó é alcançado por uma referência externa: o <strong>início</strong> da lista.</li>
+                    <li>O último nó registra que não existe próximo.</li>
+                </ul>
+                <p class="nota-rodape">Cormen et al. chamam a estrutura de lista ligada — <em>Algoritmos: Teoria e Prática</em>, cap. 10, seção 10.2.</p>
+            </section>
+            <section>
+                <h3>Vetor e lista: a organização física</h3>
+                <p style="text-align: left;">As duas estruturas guardam sequências. A diferença está em onde os elementos ficam na memória.</p>
+                <div class="duas-colunas">
+                    <div>
+                        <p style="text-align: left;"><strong>Vetor</strong></p>
+                        <p style="text-align: left;">Elementos em posições vizinhas. O elemento de índice <em>i</em> é localizado por um cálculo.</p>
+                    </div>
+                    <div>
+                        <p style="text-align: left;"><strong>Lista encadeada</strong></p>
+                        <p style="text-align: left;">Nós em qualquer lugar. A ordem é dada pelas ligações. Cresce um nó de cada vez.</p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>As quatro operações da lista</h3>
+                <p style="text-align: left;">Toda operação sobre a lista começa pelo início e segue as ligações.</p>
+                <ul>
+                    <li><span class="destaque">Percorrer</span> (<em>traverse</em>) — visitar os nós do primeiro ao último.</li>
+                    <li><span class="destaque">Buscar</span> (<em>search</em>) — encontrar o nó que contém um valor.</li>
+                    <li><span class="destaque">Inserir</span> (<em>insert</em>) — acrescentar um nó no início ou no fim.</li>
+                    <li><span class="destaque">Remover</span> (<em>delete</em>) — retirar um nó e religar os vizinhos.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Restringir o acesso</h3>
+                <p style="text-align: left;">Duas estruturas muito usadas surgem quando se <strong>restringe</strong> onde a lista recebe e perde elementos.</p>
+                <p style="text-align: left;">Ambas são <span class="destaque">conjuntos dinâmicos</span>: coleções que crescem e diminuem durante a execução do programa.</p>
+                <blockquote>Nelas, quem sai não é escolhido por quem usa a estrutura. É predeterminado pela regra de acesso.</blockquote>
+            </section>
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, Cormen et al. definem pilhas e filas exatamente assim: conjuntos dinâmicos em que o elemento
+                            removido é predeterminado. Na pilha, sai o inserido mais recentemente. Na fila, sai o que está
+                            no conjunto há mais tempo.
+                    <cite>Cormen et al., <em>Algoritmos: Teoria e Prática</em>, cap. 10, seção 10.1</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Pilha — LIFO</h3>
+                <p style="text-align: left;">A <span class="destaque">pilha</span> (<em>stack</em>) insere e remove sempre na mesma extremidade: o <strong>topo</strong>.</p>
+                <p style="text-align: left;">A política chama-se <span class="destaque">LIFO</span> (<em>Last-In, First-Out</em>): o último a entrar é o primeiro a sair.</p>
+                <ul>
+                    <li><strong>empilhar</strong> (<em>push</em>) · <strong>desempilhar</strong> (<em>pop</em>)</li>
+                    <li><strong>consultar o topo</strong> · <strong>vazia</strong></li>
+                </ul>
+            </section>
+            <section>
+                <h3>Fila — FIFO</h3>
+                <p style="text-align: left;">A <span class="destaque">fila</span> (<em>queue</em>) insere no <strong>fim</strong> e remove no <strong>início</strong>, também chamado frente.</p>
+                <p style="text-align: left;">A política chama-se <span class="destaque">FIFO</span> (<em>First-In, First-Out</em>): o primeiro a entrar é o primeiro a sair.</p>
+                <ul>
+                    <li><strong>enfileirar</strong> (<em>enqueue</em>) · <strong>desenfileirar</strong> (<em>dequeue</em>)</li>
+                    <li><strong>consultar a frente</strong> · <strong>vazia</strong></li>
+                </ul>
+            </section>
+            <section>
+                <h3>A restrição é deliberada</h3>
+                <p style="text-align: left;">Pilha e fila <strong>não</strong> permitem ler o terceiro elemento, inserir no meio ou remover um elemento qualquer.</p>
+                <blockquote>Limitar o acesso às extremidades faz cada operação custar um número fixo de passos — e a ordem de saída fica garantida pela própria estrutura.</blockquote>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>Endereço e ponteiro</h3>
+                <p style="text-align: left;">A memória é uma sequência de posições numeradas. O número de cada posição é o seu <span class="destaque">endereço</span>.</p>
+                <p style="text-align: left;">Um <span class="destaque">ponteiro</span> é uma variável que guarda um endereço: a indicação de onde o dado está.</p>
+<pre><code class="language-c">int idade = 19;
+int* ponteiro = &amp;idade;   /* &amp; obtem o endereco de idade */
+*ponteiro = 20;           /* * acessa o conteudo no endereco: idade vale 20 */</code></pre>
+            </section>
+            <section>
+                <h3>NULL: endereço nenhum</h3>
+                <p style="text-align: left;">Um ponteiro precisa de um valor especial que indique a ausência de endereço.</p>
+                <blockquote>Em C, esse valor é <code>NULL</code>. É ele que marca o fim de uma cadeia de nós.</blockquote>
+                <p class="nota-rodape">No pseudocódigo de Cormen et al., o mesmo papel é feito pelo valor NIL.</p>
+            </section>
+            <section>
+                <h3>O registro: <code>struct</code></h3>
+                <p style="text-align: left;">Um <span class="destaque">registro</span> agrupa variáveis relacionadas, chamadas <strong>campos</strong>. O nó é um registro com dois campos.</p>
+<pre><code class="language-c">typedef struct No {
+    int valor;            /* o dado armazenado */
+    struct No* proximo;   /* o endereco do no seguinte, ou NULL */
+} No;</code></pre>
+                <p style="text-align: left;">O campo <code>proximo</code> aponta para um registro do <strong>mesmo tipo</strong>. Essa autorreferência permite encadear nós.</p>
+            </section>
+            <section>
+                <h3>O operador <code>-&gt;</code></h3>
+                <p style="text-align: left;">Com um ponteiro <code>p</code> para um nó, o operador <code>-&gt;</code> alcança os campos do nó apontado.</p>
+<pre><code class="language-c">p-&gt;valor     /* o valor do no apontado por p */
+p-&gt;proximo   /* o endereco do no seguinte */</code></pre>
+                <p class="nota-rodape"><code>typedef</code> apenas dá o nome curto <code>No</code> ao tipo <code>struct No</code>.</p>
+            </section>
+            <section>
+                <h3>Autorreferência: um endereço, não um nó</h3>
+                <p style="text-align: left;">O campo <code>proximo</code> precisa ser um <strong>ponteiro</strong>. Um nó que contivesse outro nó inteiro teria tamanho infinito.</p>
+                <img class="diagrama" src="img/02_autorreferencia.svg" alt="À esquerda, um nó que contém outro nó inteiro, sem fim, rejeitado pelo compilador; à direita, um nó cujo campo proximo guarda apenas o endereço de outro nó">
+            </section>
+            <section>
+                <h3>O nó na memória</h3>
+                <p style="text-align: left;">Observe o campo <code>proximo</code> do nó 10: ele guarda um número — o endereço do nó 20.</p>
+                <img class="diagrama" src="img/01_no_anatomia.svg" alt="O nó 10, no endereço 2040, tem o campo proximo igual a 3172, que é o endereço do nó 20; o nó 20 tem proximo NULL">
+            </section>
+            <section>
+                <h3>Alocação dinâmica: <code>malloc</code> e <code>free</code></h3>
+                <p style="text-align: left;">O número de nós só é conhecido durante a execução. Cada nó é reservado quando necessário e devolvido quando deixa de ser.</p>
+<pre><code class="language-c">No* novo = malloc(sizeof(No));  /* reserva espaco para um no */
+if (novo == NULL) {             /* a reserva pode falhar */
+    printf("erro: memoria insuficiente\n");
+    exit(1);
+}
+free(novo);                     /* devolve o espaco */</code></pre>
+            </section>
+            <section>
+                <h3>Ponteiro suspenso</h3>
+                <p style="text-align: left;">Depois do <code>free</code>, o endereço não pode mais ser usado. Um ponteiro que ainda o guarda é um <span class="destaque">ponteiro suspenso</span> (<em>dangling pointer</em>).</p>
+<pre><code class="language-c">free(p);
+printf("%d", p-&gt;valor);   /* ERRADO: p aponta para memoria ja devolvida */</code></pre>
+                <p style="text-align: left;">O erro nem sempre se manifesta no momento em que ocorre. Por isso a ordem das linhas importa em toda remoção.</p>
+            </section>
+            <section>
+                <h3>Ligar nós manualmente</h3>
+                <p style="text-align: left;">Um nó recém-criado não está ligado a nada. A ligação é uma atribuição: copiar o endereço de um nó para o <code>proximo</code> de outro.</p>
+<pre><code class="language-c">No* primeiro = criar_no(10);
+No* segundo = criar_no(20);
+No* terceiro = criar_no(30);
+primeiro-&gt;proximo = segundo;    /* o 10 passa a guardar o endereco do 20 */
+segundo-&gt;proximo = terceiro;    /* o 20 passa a guardar o endereco do 30 */</code></pre>
+                <p class="nota-rodape"><code>criar_no</code> reserva o nó com <code>malloc</code> e deixa <code>proximo</code> em <code>NULL</code>; ela aparece no programa completo.</p>
+            </section>
+            <section>
+                <h3>A ligação, atribuição por atribuição</h3>
+                <p style="text-align: left;">Acompanhe as três linhas da figura: nós soltos, depois uma ligação, depois a segunda. Ao final, os três formam uma <span class="destaque">cadeia</span>.</p>
+                <img class="diagrama" src="img/03_ligar_nos.svg" alt="Três nós soltos com proximo NULL; depois o 10 aponta para o 20; depois o 20 aponta para o 30">
+            </section>
+            <section>
+                <h3>Seguir as ligações</h3>
+                <p style="text-align: left;">Cada <code>-&gt;proximo</code> avança um nó. A partir do primeiro, a cadeia inteira é alcançável.</p>
+<pre><code class="language-c">primeiro-&gt;proximo-&gt;valor             /* 20 */
+primeiro-&gt;proximo-&gt;proximo-&gt;valor    /* 30 */</code></pre>
+                <blockquote>O endereço do primeiro nó é a única porta de entrada da cadeia. Perdido esse endereço, nenhum ponteiro leva mais aos nós.</blockquote>
+            </section>
+            <section>
+                <h3>A cadeia</h3>
+                <p style="text-align: left;">Compare: no vetor, <code>v[3]</code> sai de um cálculo; na lista, o quarto nó só é alcançado passando pelos três primeiros.</p>
+                <img class="diagrama" src="img/04_vetor_versus_lista.svg" alt="Vetor com 5, 10, 20 e 30 em endereços vizinhos; lista com os mesmos valores em nós espalhados, ligados por setas">
+            </section>
+            <section>
+                <h3>Um <code>free</code> para cada <code>malloc</code></h3>
+                <p style="text-align: left;">Cada nó foi reservado por um <code>malloc</code> próprio e precisa de um <code>free</code> próprio.</p>
+                <p style="text-align: left;">Liberar só o primeiro deixa os demais ocupando memória, sem nenhum ponteiro até eles: é um <span class="destaque">vazamento de memória</span> (<em>memory leak</em>).</p>
+                <blockquote>Num programa que executa por muito tempo, os vazamentos se acumulam até esgotar a memória.</blockquote>
+            </section>
+            <section>
+                <h3>Liberar a cadeia: guardar o seguinte primeiro</h3>
+                <p style="text-align: left;">A liberação percorre a cadeia. O endereço do próximo nó é guardado <strong>antes</strong> do <code>free</code>, porque depois dele <code>atual-&gt;proximo</code> não pode mais ser lido.</p>
+<pre><code class="language-c">void liberar_cadeia(No* primeiro) {
+    No* atual = primeiro;
+    while (atual != NULL) {
+        No* seguinte = atual-&gt;proximo;   /* 1: guarda o endereco do proximo no */
+        free(atual);                     /* 2: devolve o no atual */
+        atual = seguinte;                /* 3: avanca pelo endereco guardado */
+    }
+}</code></pre>
+            </section>
+            <section>
+                <h3>A liberação, volta a volta</h3>
+                <p style="text-align: left;">Em cada volta, <code>seguinte</code> guarda o próximo nó, o atual é liberado e <code>atual</code> avança. Custo: <span class="destaque">O(n)</span>, um <code>free</code> por nó.</p>
+                <img class="diagrama" src="img/05_liberar_cadeia.svg" alt="Três voltas do laço sobre a cadeia 10, 20, 30: a cada volta, seguinte guarda o próximo nó e o nó atual é liberado">
+            </section>
+            <section>
+                <h3>Os ponteiros externos</h3>
+                <p style="text-align: left;">A cadeia só é alcançável por um ponteiro de fora dela. As três estruturas diferem exatamente nesse ponto.</p>
+                <ul>
+                    <li><strong>Lista</strong> — guarda <code>inicio</code>, o primeiro nó.</li>
+                    <li><strong>Pilha</strong> — guarda <code>topo</code>, que é o primeiro nó da cadeia.</li>
+                    <li><strong>Fila</strong> — guarda <code>inicio</code> e <code>fim</code>: sai pelo primeiro, entra depois do último.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Por que o topo fica no início da cadeia</h3>
+                <p style="text-align: left;">No início da cadeia, inserir e remover custam um número fixo de passos.</p>
+                <p style="text-align: left;">No fim, remover exigiria achar o <strong>penúltimo</strong> nó — e ele só é alcançado percorrendo a cadeia inteira.</p>
+                <blockquote>Pelo mesmo motivo, a fila remove pelo início e insere pelo fim — nunca o contrário.</blockquote>
+            </section>
+            <section>
+                <h3>Percorrer a lista</h3>
+                <p style="text-align: left;">O ponteiro auxiliar <code>atual</code> começa no primeiro nó e avança pelo campo <code>proximo</code> até encontrar <code>NULL</code>.</p>
+<pre><code class="language-c">No* atual = lista-&gt;inicio;
+while (atual != NULL) {
+    printf("%d ", atual-&gt;valor);
+    atual = atual-&gt;proximo;   /* avanca para o no seguinte */
+}</code></pre>
+                <p style="text-align: left;">Custo: <span class="destaque">O(n)</span> — lê-se "cresce no ritmo do número de nós".</p>
+            </section>
+            <section>
+                <h3>Buscar: a ordem do teste importa</h3>
+                <p style="text-align: left;">A busca é um percurso que para no primeiro nó com o valor procurado.</p>
+<pre><code class="language-c">while (atual != NULL &amp;&amp; atual-&gt;valor != valor) {
+    atual = atual-&gt;proximo;
+}</code></pre>
+                <p style="text-align: left;">Primeiro se confirma que <code>atual</code> existe; só depois se lê <code>atual-&gt;valor</code>. O <code>&amp;&amp;</code> para na primeira condição falsa.</p>
+            </section>
+            <section>
+                <h3>Inserir no início: dois passos</h3>
+                <p style="text-align: left;">Dois passos, nesta ordem. Invertida, o endereço do antigo primeiro se perderia — e toda a cadeia com ele.</p>
+<pre><code class="language-c">novo-&gt;proximo = lista-&gt;inicio;   /* 1: o novo aponta para o antigo primeiro */
+lista-&gt;inicio = novo;            /* 2: o novo passa a ser o primeiro */</code></pre>
+                <p style="text-align: left;">Funciona com a lista vazia: o novo nó recebe <code>NULL</code>. Custo: <span class="destaque">O(1)</span>, um número fixo de passos.</p>
+            </section>
+            <section>
+                <h3>Inserir no fim sem o ponteiro <code>fim</code></h3>
+                <p style="text-align: left;">A lista só conhece o primeiro nó. Para achar o último, é preciso caminhar até o nó cujo <code>proximo</code> é <code>NULL</code>.</p>
+<pre><code class="language-c">No* ultimo = lista-&gt;inicio;
+while (ultimo-&gt;proximo != NULL) {
+    ultimo = ultimo-&gt;proximo;
+}
+ultimo-&gt;proximo = novo;</code></pre>
+                <p style="text-align: left;">A caminhada visita todos os nós: custo <span class="destaque">O(n)</span>.</p>
+            </section>
+            <section>
+                <h3>Remover: dois ponteiros lado a lado</h3>
+                <p style="text-align: left;">Para desligar um nó, é o campo <code>proximo</code> do nó <strong>anterior</strong> que precisa mudar.</p>
+                <p style="text-align: left;">Por isso a busca avança com dois ponteiros: <code>anterior</code> e <code>atual</code>, sempre vizinhos.</p>
+<pre><code class="language-c">while (atual != NULL &amp;&amp; atual-&gt;valor != valor) {
+    anterior = atual;
+    atual = atual-&gt;proximo;
+}</code></pre>
+            </section>
+            <section>
+                <h3>Remover: religar antes de liberar</h3>
+                <p style="text-align: left;">Dois casos. O nó removido é o primeiro, ou está depois de algum outro.</p>
+<pre><code class="language-c">if (anterior == NULL) {
+    lista-&gt;inicio = atual-&gt;proximo;     /* era o primeiro: inicio avanca */
+} else {
+    anterior-&gt;proximo = atual-&gt;proximo; /* o anterior pula o removido */
+}
+free(atual);                            /* so depois de religar */</code></pre>
+                <p style="text-align: left;">Custo: <span class="destaque">O(n)</span>, dominado pela busca. A religação em si é O(1).</p>
+            </section>
+            <section>
+                <h3>Pilha: empilhar e desempilhar</h3>
+                <p style="text-align: left;">As duas operações atuam no primeiro nó da cadeia, apontado por <code>topo</code>.</p>
+                <ul>
+                    <li><strong>Empilhar</strong> — os mesmos dois passos de inserir no início. O(1).</li>
+                    <li><strong>Desempilhar</strong> — lê o valor do topo, faz <code>topo</code> descer e libera o nó. O(1).</li>
+                    <li><strong>Vazia</strong> — testa <code>topo == NULL</code>. O(1).</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Desempilhar: a ordem do <code>free</code></h3>
+                <p style="text-align: left;">O topo desce <strong>antes</strong> da liberação. Na ordem inversa, <code>topo</code> se tornaria um ponteiro suspenso.</p>
+<pre><code class="language-c">No* removido = pilha-&gt;topo;
+int valor = removido-&gt;valor;
+pilha-&gt;topo = removido-&gt;proximo;   /* 1: o topo desce */
+free(removido);                    /* 2: so entao o no e' liberado */</code></pre>
+            </section>
+            <section>
+                <h3>Fila: enfileirar</h3>
+                <p style="text-align: left;">O novo nó será o último, então nasce com <code>proximo = NULL</code>. Há dois casos.</p>
+                <ul>
+                    <li><strong>Fila vazia</strong> — o nó é o primeiro e o último: <code>inicio</code> aponta para ele.</li>
+                    <li><strong>Fila com elementos</strong> — o antigo último se liga ao novo: <code>fim-&gt;proximo = novo</code>.</li>
+                </ul>
+                <p style="text-align: left;">Nos dois casos, <code>fim</code> passa a apontar para o novo nó. Custo: <span class="destaque">O(1)</span>.</p>
+            </section>
+            <section>
+                <h3>Fila: o caso especial ao esvaziar</h3>
+                <p style="text-align: left;">Desenfileirar faz <code>inicio</code> avançar. Se ele fica <code>NULL</code>, a fila esvaziou — e <code>fim</code> precisa acompanhar.</p>
+<pre><code class="language-c">fila-&gt;inicio = removido-&gt;proximo;
+if (fila-&gt;inicio == NULL) {
+    fila-&gt;fim = NULL;   /* fim ainda apontava para o no que sera liberado */
+}
+free(removido);</code></pre>
+                <p style="text-align: left;">É o único caso especial da fila. Custo: <span class="destaque">O(1)</span>.</p>
+            </section>
+            <section>
+                <h3>Invariantes</h3>
+                <p style="text-align: left;">Uma <span class="destaque">invariante</span> é uma propriedade que vale antes e depois de toda operação.</p>
+                <ul>
+                    <li><strong>Lista</strong> — vazia exatamente quando <code>inicio</code> é <code>NULL</code>.</li>
+                    <li><strong>Pilha</strong> — vazia exatamente quando <code>topo</code> é <code>NULL</code>.</li>
+                    <li><strong>Fila</strong> — <code>inicio</code> e <code>fim</code> são <code>NULL</code> ao mesmo tempo, ou nenhum dos dois é.</li>
+                </ul>
+                <p class="nota-rodape">A invariante da fila é a que a linha <code>fila-&gt;fim = NULL</code> protege.</p>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>TAD: o contrato da estrutura</h3>
+                <p style="text-align: left;">Um <span class="destaque">TAD</span> (Tipo Abstrato de Dados) define uma estrutura pelo que ela promete, não por como é construída.</p>
+                <ul>
+                    <li>as <strong>operações</strong> que oferece;</li>
+                    <li>os <strong>axiomas</strong> — igualdades que essas operações sempre satisfazem.</li>
+                </ul>
+                <p style="text-align: left;">A mesma pilha pode ser feita com vetor ou com lista encadeada. O contrato não muda.</p>
+                <p class="nota-rodape">Veloso &amp; Pereira, capítulo de tipos abstratos de dados.</p>
+            </section>
+            <section>
+                <h3>O contrato da pilha</h3>
+                <p style="text-align: left;">Dois axiomas capturam a política LIFO. Primeiro em palavras, depois na forma curta.</p>
+                <ul>
+                    <li>Logo depois de empilhar <em>x</em>, o topo é <em>x</em>: <span class="formula">topo(empilhar(P, x)) = x</span></li>
+                    <li>Desempilhar desfaz o último empilhar: <span class="formula">desempilhar(empilhar(P, x)) = P</span></li>
+                </ul>
+                <p class="nota-rodape">O TAD completo, com os seis axiomas, está no material escrito da aula.</p>
+            </section>
+            <section>
+                <h3>O contrato da fila</h3>
+                <p style="text-align: left;">Na fila, quem chega não muda a frente — a não ser que a fila estivesse vazia.</p>
+                <ul>
+                    <li>Fila vazia: depois de enfileirar <em>x</em>, a frente é <em>x</em>.</li>
+                    <li>Fila com elementos: <span class="formula">frente(enfileirar(F, x)) = frente(F)</span></li>
+                </ul>
+                <blockquote>Lê-se: o recém-chegado espera a sua vez. Quem chegou antes sai antes.</blockquote>
+                <p class="nota-rodape">O TAD completo da fila está no material escrito da aula.</p>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>O que O(1) e O(n) significam</h3>
+                <p style="text-align: left;">A análise conta passos em função de <em>n</em>, o número de elementos armazenados.</p>
+                <ul>
+                    <li><span class="destaque">O(1)</span> — um número fixo de passos, que não depende de <em>n</em>.</li>
+                    <li><span class="destaque">O(n)</span> — passos proporcionais a <em>n</em>: dobrar os elementos dobra o trabalho no pior caso.</li>
+                </ul>
+                <p class="nota-rodape">Toscani &amp; Veloso, <em>Complexidade de Algoritmos</em>; Cormen et al., cap. 10.</p>
+            </section>
+            <section>
+                <h3>Vetor × lista: acessar e buscar</h3>
+                <p style="text-align: left;">A lista perde o acesso direto por posição. Na busca por valor, as duas empatam.</p>
+                <table>
+                    <tr><th>Operação</th><th>Vetor</th><th>Lista encadeada</th></tr>
+                    <tr><td>Acessar a posição <em>i</em></td><td><strong>O(1)</strong></td><td>O(n)</td></tr>
+                    <tr><td>Buscar um valor</td><td>O(n)</td><td>O(n)</td></tr>
+                </table>
+            </section>
+            <section>
+                <h3>Vetor × lista: inserir e remover</h3>
+                <p style="text-align: left;">Nas extremidades, a lista não desloca nenhum elemento. O vetor precisa mover todos os elementos para abrir ou fechar espaço no início.</p>
+                <table>
+                    <tr><th>Operação</th><th>Vetor</th><th>Lista encadeada</th></tr>
+                    <tr><td>Inserir no início</td><td>O(n)</td><td><strong>O(1)</strong></td></tr>
+                    <tr><td>Inserir no fim</td><td>O(1)*</td><td>O(n) sem <code>fim</code> · <strong>O(1)</strong> com <code>fim</code></td></tr>
+                    <tr><td>Remover do início</td><td>O(n)</td><td><strong>O(1)</strong></td></tr>
+                </table>
+                <p class="nota-rodape">* Enquanto houver espaço reservado. Esgotado o espaço, é preciso reservar um vetor maior e copiar tudo.</p>
+            </section>
+            <section>
+                <h3>Pilha e fila: tudo em O(1)</h3>
+                <p style="text-align: left;">Como pilha e fila só operam nas extremidades, todas as operações ficam em tempo constante.</p>
+                <table>
+                    <tr><th>Operação</th><th>Pilha</th><th>Fila</th></tr>
+                    <tr><td>Inserir</td><td><code>empilhar</code> — O(1)</td><td><code>enfileirar</code> — O(1)</td></tr>
+                    <tr><td>Remover</td><td><code>desempilhar</code> — O(1)</td><td><code>desenfileirar</code> — O(1)</td></tr>
+                    <tr><td>Consultar</td><td><code>topo</code> — O(1)</td><td><code>frente</code> — O(1)</td></tr>
+                    <tr><td>Vazia</td><td>O(1)</td><td>O(1)</td></tr>
+                </table>
+            </section>
+            <section>
+                <h3>O custo em memória</h3>
+                <p style="text-align: left;">O tempo constante da lista tem um custo em espaço e em número de reservas de memória.</p>
+                <ul>
+                    <li>Cada nó carrega um ponteiro além do valor — 8 bytes em computadores de 64 bits.</li>
+                    <li>Cada inserção faz uma chamada a <code>malloc</code>; o vetor faz uma reserva só.</li>
+                </ul>
+                <p class="nota-rodape">Cormen et al. implementam pilha e fila com vetores de capacidade fixa (seção 10.1). Aqui a cadeia dispensa essa capacidade.</p>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde a pilha aparece</h3>
+                <p style="text-align: left;">Sempre que o mais recente deve ser tratado primeiro, há uma pilha.</p>
+                <ul>
+                    <li><strong>Desfazer</strong> (Ctrl+Z) em editores.</li>
+                    <li><strong>Botão voltar</strong> do navegador.</li>
+                    <li><strong>Verificação de parênteses</strong> em compiladores e editores de código.</li>
+                    <li><strong>Chamadas de função</strong>: a chamada mais recente termina primeiro.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Onde a fila e a lista aparecem</h3>
+                <p style="text-align: left;">A fila atende por ordem de chegada; a lista permite inserir e remover em qualquer ponto.</p>
+                <ul>
+                    <li><strong>Fila de impressão</strong> e <strong>atendimento por senha</strong>.</li>
+                    <li><strong>Teclas digitadas</strong> aguardando, em ordem, a leitura pelo programa.</li>
+                    <li><strong>Listas de reprodução</strong> e <strong>carrinhos de compra</strong> — listas encadeadas.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Variantes da representação</h3>
+                <p style="text-align: left;">A mesma ideia de nó admite outras formas, cada uma com uma vantagem.</p>
+                <ul>
+                    <li><strong>Duplamente encadeada</strong> — cada nó também aponta o anterior.</li>
+                    <li><strong>Circular</strong> — o último aponta de volta para o primeiro.</li>
+                    <li><strong>Com sentinela</strong> — um nó fictício elimina os casos especiais das extremidades.</li>
+                    <li><strong>Fila dupla</strong> (<em>deque</em>) — insere e remove nas duas pontas.</li>
+                </ul>
+                <p class="nota-rodape">A sentinela é apresentada por Cormen et al. na seção 10.2.</p>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 2 — VISUALIZAÇÃO ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização</h2>
+                <p style="text-align: left;">O mesmo programa do bloco de código, passo a passo: primeiro a lista, depois a pilha, depois a fila. O símbolo ∅ indica <code>NULL</code>.</p>
+            </section>
+            <section>
+                <h3>Passo 1 — <code>lista_criar()</code></h3>
+                <p style="text-align: left;">A lista nasce sem nenhum nó. O único estado é o ponteiro <code>inicio</code>.</p>
+                <img class="diagrama" src="img/06_lista_criar.svg" alt="Lista vazia: o ponteiro inicio vale NULL e não há nenhum nó">
+            </section>
+            <section>
+                <h3>Passo 2 — <code>lista_inserir_no_fim(lista, 10)</code></h3>
+                <p style="text-align: left;">Com a lista vazia, o novo nó é o primeiro e o último ao mesmo tempo. Só <code>inicio</code> muda.</p>
+                <img class="diagrama" src="img/07_inserir_fim_10.svg" alt="O ponteiro inicio aponta para o nó 10, cujo proximo é NULL">
+            </section>
+            <section>
+                <h3>Passo 3 — <code>lista_inserir_no_fim(lista, 20)</code></h3>
+                <p style="text-align: left;">O auxiliar <code>ultimo</code> para no nó cujo <code>proximo</code> é <code>NULL</code> — aqui, o 10 — e o liga ao novo nó.</p>
+                <img class="diagrama" src="img/08_inserir_fim_20.svg" alt="O ponteiro ultimo está no nó 10, que passa a apontar para o novo nó 20">
+            </section>
+            <section>
+                <h3>Passo 4 — <code>lista_inserir_no_inicio(lista, 5)</code></h3>
+                <p style="text-align: left;">Siga os números: primeiro o novo nó aponta para o 10; só depois <code>inicio</code> aponta para o novo nó.</p>
+                <img class="diagrama" src="img/09_inserir_inicio_5.svg" alt="Inserção no início em dois passos numerados: o nó 5 aponta para o 10, depois inicio aponta para o 5">
+            </section>
+            <section>
+                <h3>Passo 5 — <code>lista_inserir_no_fim(lista, 30)</code></h3>
+                <p style="text-align: left;">Agora a caminhada aparece: <code>ultimo</code> visita 5, 10 e 20 antes de ligar o 20 ao 30.</p>
+                <img class="diagrama" src="img/10_inserir_fim_30.svg" alt="O ponteiro ultimo visita os nós 5, 10 e 20 antes de ligar o 20 ao novo nó 30">
+            </section>
+            <section>
+                <h3>Passo 6 — <code>lista_buscar(lista, 20)</code></h3>
+                <p style="text-align: left;">Três comparações até o valor aparecer. A busca só lê: nenhum ponteiro da lista muda.</p>
+                <img class="diagrama" src="img/11_buscar_20.svg" alt="Busca pelo 20: as comparações com 5 e 10 falham, a comparação com 20 encontra o nó">
+                <p class="nota-rodape">Uma busca por 99 visitaria os quatro nós e devolveria NULL.</p>
+            </section>
+            <section>
+                <h3>Passo 7 — <code>lista_remover(lista, 20)</code></h3>
+                <p style="text-align: left;">O 10, apontado por <code>anterior</code>, passa a apontar para o 30. Só então o 20 é liberado.</p>
+                <img class="diagrama" src="img/12_remover_20.svg" alt="Remoção do nó 20: o nó 10 passa a apontar para o 30 e o nó 20 é liberado com free">
+            </section>
+            <section>
+                <h3>Passo 8 — <code>lista_remover(lista, 5)</code></h3>
+                <p style="text-align: left;">O valor está no primeiro nó e <code>anterior</code> é <code>NULL</code>. Quem avança é o próprio <code>inicio</code>.</p>
+                <img class="diagrama" src="img/13_remover_5.svg" alt="Remoção do primeiro nó: inicio avança para o 10 e o nó 5 é liberado">
+            </section>
+            <section>
+                <h3>Passo 9 — <code>pilha_empilhar(pilha, 30)</code></h3>
+                <p style="text-align: left;">A cadeia está na vertical, com o topo em cima. São os mesmos dois passos de inserir no início.</p>
+                <img class="diagrama" src="img/14_pilha_empilhar_30.svg" alt="Pilha com 20 e 10; empilhar 30: o novo nó aponta para o 20 e topo passa a apontar para o 30">
+            </section>
+            <section>
+                <h3>Passo 10 — <code>pilha_desempilhar(pilha)</code></h3>
+                <p style="text-align: left;">O 30 é devolvido. O <code>topo</code> desce para o 20 antes do <code>free</code>.</p>
+                <img class="diagrama" src="img/15_pilha_desempilhar.svg" alt="Desempilhar: topo desce do 30 para o 20, o valor 30 é devolvido e o nó 30 é liberado">
+            </section>
+            <section>
+                <h3>Passo 11 — <code>fila_enfileirar(fila, 30)</code></h3>
+                <p style="text-align: left;">O antigo último se liga ao novo nó, e <code>fim</code> avança. Nenhum nó foi percorrido.</p>
+                <img class="diagrama" src="img/16_fila_enfileirar_30.svg" alt="Fila com 10 e 20; o 20 passa a apontar para o novo nó 30 e fim avança para o 30">
+            </section>
+            <section>
+                <h3>Passo 12 — <code>fila_desenfileirar(fila)</code></h3>
+                <p style="text-align: left;">Sai o 10, o primeiro que entrou. O ponteiro <code>fim</code> não muda: ainda há elementos.</p>
+                <img class="diagrama" src="img/17_fila_desenfileirar.svg" alt="Desenfileirar: inicio avança do 10 para o 20 e o nó 10 é liberado; fim continua no 30">
+            </section>
+            <section>
+                <h3>Passo 13 — <code>fila_desenfileirar(fila)</code> — o último elemento</h3>
+                <p style="text-align: left;">Depois de sair o 20, resta só o 30. Ao removê-lo, <code>inicio</code> e <code>fim</code> precisam passar a valer <code>NULL</code>.</p>
+                <img class="diagrama" style="max-height: 440px;" src="img/18_fila_esvazia.svg" alt="Fila com um só nó: ao desenfileirar, inicio e fim passam a valer NULL e o nó 30 é liberado">
+            </section>
+            <section>
+                <h3>Passo 14 — esvaziar a pilha e a fila</h3>
+                <p style="text-align: left;">A mesma entrada — 10, 20, 30 — produz saídas opostas nas duas estruturas.</p>
+                <img class="diagrama" style="max-height: 440px;" src="img/19_lifo_fifo.svg" alt="Pilha devolve 30, 20, 10; fila devolve 10, 20, 30">
+                <p class="nota-rodape">É exatamente o que o programa do bloco de código imprime.</p>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 3 — PROBLEMA MOTIVADOR ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Problema motivador</h2>
+                <blockquote>Como um editor de texto sabe o que desfazer, uma alteração de cada vez, quando você pressiona Ctrl+Z repetidas vezes?</blockquote>
+            </section>
+            <section>
+                <h3>Desfazer é LIFO</h3>
+                <p style="text-align: left;">O editor registra cada alteração. O primeiro Ctrl+Z desfaz a mais recente; o segundo, a anterior a ela.</p>
+                <blockquote>A ordem de desfazer é o inverso da ordem de fazer. Cada alteração é <strong>empilhada</strong>; cada Ctrl+Z <strong>desempilha</strong>.</blockquote>
+            </section>
+            <section>
+                <h3>Por que uma cadeia de nós</h3>
+                <p style="text-align: left;">O editor não sabe quantas alterações a pessoa fará: dez ou dez mil.</p>
+                <ul>
+                    <li>Um vetor exigiria um limite, ou copiar tudo para um vetor maior ao atingi-lo.</li>
+                    <li>A cadeia cresce um nó por alteração, com empilhar e desempilhar em O(1).</li>
+                </ul>
+            </section>
+            <section>
+                <h3>A impressora compartilhada é FIFO</h3>
+                <p style="text-align: left;">Documentos chegam em momentos imprevisíveis e devem sair por ordem de chegada.</p>
+                <p style="text-align: left;">Cada documento é <strong>enfileirado</strong> no fim. Ao terminar um trabalho, a impressora <strong>desenfileira</strong> o da frente.</p>
+                <blockquote>Nenhum documento é impresso antes de outro enviado mais cedo.</blockquote>
+            </section>
+            <section>
+                <h3>A estrutura garante a ordem</h3>
+                <p style="text-align: left;">Nos dois casos, quem usa a estrutura não precisa procurar nada.</p>
+                <ul>
+                    <li>O editor não procura "qual foi a última alteração".</li>
+                    <li>A impressora não compara horários de envio.</li>
+                </ul>
+                <p style="text-align: left;">A regra de acesso da pilha e da fila faz esse trabalho.</p>
+            </section>
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, o botão voltar do navegador usa a mesma ideia do Ctrl+Z. Cada página visitada é empilhada;
+                            voltar desempilha a página atual e mostra a que ficou no topo. Reparem: a página mais recente
+                            é sempre a primeira a sair.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 4 — CÓDIGO EM C ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Código em C</h2>
+            </section>
+            <section>
+                <h3>Um único arquivo: <code>listas_pilhas_filas.c</code></h3>
+                <p style="text-align: left;">O programa inteiro cabe num arquivo, lido de cima a baixo.</p>
+                <blockquote>Primeiro o nó e duas funções compartilhadas; depois a lista, a pilha e a fila; por fim, a <code>main()</code> demonstrativa.</blockquote>
+            </section>
+            <section>
+                <h3>Mapa das funções</h3>
+                <p style="text-align: left;">Cada operação estudada tem uma função própria no arquivo.</p>
+                <table>
+                    <tr><th>Estrutura</th><th>Funções</th><th>Custo</th></tr>
+                    <tr><td>Lista</td><td><code>lista_inserir_no_inicio</code></td><td>O(1)</td></tr>
+                    <tr><td>Lista</td><td><code>lista_inserir_no_fim</code> · <code>lista_buscar</code> · <code>lista_remover</code></td><td>O(n)</td></tr>
+                    <tr><td>Pilha</td><td><code>pilha_empilhar</code> · <code>pilha_desempilhar</code> · <code>pilha_consultar_topo</code></td><td>O(1)</td></tr>
+                    <tr><td>Fila</td><td><code>fila_enfileirar</code> · <code>fila_desenfileirar</code> · <code>fila_consultar_frente</code></td><td>O(1)</td></tr>
+                </table>
+            </section>
+            <section>
+                <h3>O nó e <code>criar_no</code></h3>
+                <p style="text-align: left;"><code>criar_no</code> concentra o <code>malloc</code> e o tratamento de falha. As três estruturas a usam.</p>
+<pre><code class="language-c">// Cada no guarda um valor e o endereco do no seguinte.
+// O campo proximo e' um ponteiro para outro No: e' ele que encadeia os nos.
+typedef struct No {
+    int valor;
+    struct No* proximo;
+} No;
+
+// Reserva memoria para um novo no, ainda desligado de qualquer outro.
+No* criar_no(int valor) {
+    No* novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo-&gt;valor = valor;
+    novo-&gt;proximo = NULL;
+    return novo;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>liberar_cadeia</code></h3>
+                <p style="text-align: left;">Os três <code>destruir</code> chamam esta função. Repare onde o endereço do seguinte é guardado.</p>
+<pre><code class="language-c">// Devolve ao sistema a memoria de todos os nos, do primeiro ate o fim da cadeia.
+void liberar_cadeia(No* primeiro) {
+    No* atual = primeiro;
+    while (atual != NULL) {
+        // Guardamos o endereco do seguinte ANTES do free: depois dele,
+        // o campo atual-&gt;proximo nao pode mais ser lido.
+        No* seguinte = atual-&gt;proximo;
+        free(atual);
+        atual = seguinte;
+    }
+}</code></pre>
+            </section>
+            <section>
+                <h3>A lista: registro e criação</h3>
+                <p style="text-align: left;">A lista guarda só o primeiro nó. Criar a lista é pôr <code>NULL</code> em <code>inicio</code>.</p>
+<pre><code class="language-c">// A lista conhece apenas o endereco do primeiro no; o resto se alcanca
+// seguindo os campos proximo.
+typedef struct Lista {
+    No* inicio;
+} Lista;
+
+// Cria uma lista vazia: inicio NULL significa "nenhum no".
+Lista* lista_criar(void) {
+    Lista* lista = malloc(sizeof(Lista));
+    if (lista == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    lista-&gt;inicio = NULL;
+    return lista;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>lista_inserir_no_inicio</code></h3>
+                <p style="text-align: left;">Os dois passos numerados do diagrama, exatamente nesta ordem.</p>
+<pre><code class="language-c">// Verdadeiro (1) se a lista nao tem nenhum no.
+int lista_vazia(Lista* lista) {
+    return lista-&gt;inicio == NULL;
+}
+
+// Insere um valor antes do primeiro no. Custo O(1): nao depende do tamanho.
+void lista_inserir_no_inicio(Lista* lista, int valor) {
+    No* novo = criar_no(valor);
+    // Passo 1: o novo no aponta para quem era o primeiro (NULL se a lista
+    // estava vazia — por isso este caso nao precisa de tratamento especial).
+    novo-&gt;proximo = lista-&gt;inicio;
+    // Passo 2: o novo no passa a ser o primeiro.
+    lista-&gt;inicio = novo;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>lista_inserir_no_fim</code></h3>
+                <p style="text-align: left;">O caso da lista vazia encerra a função logo no início. O outro caso caminha até o último nó.</p>
+<pre><code class="language-c">// Insere um valor depois do ultimo no. Custo O(n): e' preciso caminhar ate o fim.
+void lista_inserir_no_fim(Lista* lista, int valor) {
+    No* novo = criar_no(valor);
+    if (lista_vazia(lista)) {
+        // Sem nenhum no, o novo e' ao mesmo tempo o primeiro e o ultimo.
+        lista-&gt;inicio = novo;
+        return;
+    }
+    // A lista so guarda o primeiro no. Para achar o ultimo, caminhamos
+    // ate encontrar o no cujo proximo e' NULL.
+    No* ultimo = lista-&gt;inicio;
+    while (ultimo-&gt;proximo != NULL) {
+        ultimo = ultimo-&gt;proximo;
+    }
+    ultimo-&gt;proximo = novo;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>lista_buscar</code></h3>
+                <p style="text-align: left;">Um percurso que para cedo. Devolve o endereço do nó encontrado, ou <code>NULL</code>.</p>
+<pre><code class="language-c">// Devolve o endereco do primeiro no com o valor procurado, ou NULL se nao houver.
+No* lista_buscar(Lista* lista, int valor) {
+    No* atual = lista-&gt;inicio;
+    // A ordem das condicoes importa: primeiro confirmamos que atual existe,
+    // so depois lemos atual-&gt;valor. O &amp;&amp; para na primeira condicao falsa.
+    while (atual != NULL &amp;&amp; atual-&gt;valor != valor) {
+        atual = atual-&gt;proximo;
+    }
+    return atual;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>lista_remover</code>: a busca</h3>
+                <p style="text-align: left;">A função mais longa do arquivo. A primeira parte é a busca com os dois ponteiros vizinhos.</p>
+<pre><code class="language-c">int lista_remover(Lista* lista, int valor) {
+    // Caminhamos com dois ponteiros lado a lado: para desligar atual da
+    // cadeia, e' o campo proximo do no ANTERIOR que precisa mudar.
+    No* anterior = NULL;
+    No* atual = lista-&gt;inicio;
+    while (atual != NULL &amp;&amp; atual-&gt;valor != valor) {
+        anterior = atual;
+        atual = atual-&gt;proximo;
+    }
+    ...</code></pre>
+            </section>
+            <section>
+                <h3><code>lista_remover</code>: religar e liberar</h3>
+                <p style="text-align: left;">A segunda parte decide entre os três desfechos: valor ausente, primeiro nó ou nó depois de outro.</p>
+<pre><code class="language-c">    ...
+    if (atual == NULL) {
+        return 0;  // percorremos a lista inteira sem encontrar o valor
+    }
+    if (anterior == NULL) {
+        // O no removido era o primeiro: quem muda e' o ponteiro inicio.
+        lista-&gt;inicio = atual-&gt;proximo;
+    } else {
+        // O anterior "pula" o no removido e passa a apontar para o seguinte.
+        anterior-&gt;proximo = atual-&gt;proximo;
+    }
+    // So liberamos depois de religar a cadeia: nenhum ponteiro da lista
+    // aponta mais para este no.
+    free(atual);
+    return 1;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>lista_imprimir</code> e <code>lista_destruir</code></h3>
+                <p style="text-align: left;">Mais um percurso, agora para mostrar os valores. Destruir delega a <code>liberar_cadeia</code>.</p>
+<pre><code class="language-c">// Mostra os valores do primeiro ao ultimo no, no formato [5, 10, 30].
+void lista_imprimir(Lista* lista) {
+    printf("[");
+    No* atual = lista-&gt;inicio;
+    while (atual != NULL) {
+        printf("%d", atual-&gt;valor);
+        if (atual-&gt;proximo != NULL) {
+            printf(", ");
+        }
+        atual = atual-&gt;proximo;
+    }
+    printf("]\n");
+}
+
+void lista_destruir(Lista* lista) {
+    liberar_cadeia(lista-&gt;inicio);
+    free(lista);
+}</code></pre>
+            </section>
+            <section>
+                <h3>A pilha: registro e <code>pilha_empilhar</code></h3>
+                <p style="text-align: left;">Um só ponteiro, <code>topo</code>. Empilhar repete os passos de inserir no início.</p>
+<pre><code class="language-c">// Toda operacao da pilha acontece numa unica ponta da cadeia, o topo.
+// Por isso basta um ponteiro, que faz o papel do inicio da lista.
+typedef struct Pilha {
+    No* topo;
+} Pilha;
+
+// Coloca um valor no topo. Sao os mesmos dois passos de inserir no inicio da lista.
+void pilha_empilhar(Pilha* pilha, int valor) {
+    No* novo = criar_no(valor);
+    novo-&gt;proximo = pilha-&gt;topo;  // o novo no fica "em cima" do antigo topo
+    pilha-&gt;topo = novo;           // e passa a ser o topo
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>pilha_desempilhar</code></h3>
+                <p style="text-align: left;">A pré-condição é verificada antes de tudo. Depois, o topo desce e só então o nó é liberado.</p>
+<pre><code class="language-c">int pilha_desempilhar(Pilha* pilha) {
+    if (pilha_vazia(pilha)) {
+        printf("erro: pilha vazia\n");
+        exit(1);
+    }
+    No* removido = pilha-&gt;topo;
+    int valor = removido-&gt;valor;
+    // Primeiro o topo desce para o no de baixo; so depois liberamos o removido.
+    // Na ordem inversa, topo ficaria apontando para memoria ja devolvida.
+    pilha-&gt;topo = removido-&gt;proximo;
+    free(removido);
+    return valor;
+}</code></pre>
+            </section>
+            <section>
+                <h3>A fila: registro e <code>fila_enfileirar</code></h3>
+                <p style="text-align: left;">Dois ponteiros externos. Enfileirar trata a fila vazia e a fila com elementos.</p>
+<pre><code class="language-c">// A fila usa as duas pontas da cadeia: sai pelo inicio e entra pelo fim.
+// Guardar o fim evita percorrer a cadeia inteira a cada insercao.
+typedef struct Fila {
+    No* inicio;  // o proximo elemento a sair
+    No* fim;     // o ultimo elemento que entrou
+} Fila;
+
+void fila_enfileirar(Fila* fila, int valor) {
+    No* novo = criar_no(valor);
+    if (fila_vazia(fila)) {
+        // O unico no da fila e' ao mesmo tempo o primeiro e o ultimo.
+        fila-&gt;inicio = novo;
+    } else {
+        // O antigo ultimo passa a apontar para o novo no.
+        fila-&gt;fim-&gt;proximo = novo;
+    }
+    fila-&gt;fim = novo;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>fila_desenfileirar</code></h3>
+                <p style="text-align: left;">Procure a linha que só executa quando a fila esvazia.</p>
+<pre><code class="language-c">int fila_desenfileirar(Fila* fila) {
+    if (fila_vazia(fila)) {
+        printf("erro: fila vazia\n");
+        exit(1);
+    }
+    No* removido = fila-&gt;inicio;
+    int valor = removido-&gt;valor;
+    fila-&gt;inicio = removido-&gt;proximo;  // o segundo da fila passa a ser o primeiro
+    if (fila-&gt;inicio == NULL) {
+        // A fila esvaziou. O fim ainda aponta para o no que vamos liberar;
+        // se nao virar NULL, o proximo enfileirar escreveria em memoria devolvida.
+        fila-&gt;fim = NULL;
+    }
+    free(removido);
+    return valor;
+}</code></pre>
+            </section>
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, apaguem a linha <code>fila-&gt;fim = NULL</code> e executem o programa: a saída continua idêntica.
+                            O defeito só aparece se alguém enfileirar depois que a fila esvaziou — nesse caso, o programa escreve
+                            num nó que já foi liberado. Erros de ponteiro raramente se manifestam no momento em que são cometidos.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3><code>main</code>: montar a lista</h3>
+                <p style="text-align: left;">Três inserções no fim e uma no início produzem <code>[5, 10, 20, 30]</code>.</p>
+<pre><code class="language-c">printf("== Lista encadeada ==\n");
+Lista* lista = lista_criar();
+lista_inserir_no_fim(lista, 10);
+lista_inserir_no_fim(lista, 20);
+lista_inserir_no_inicio(lista, 5);
+lista_inserir_no_fim(lista, 30);
+printf("Lista montada: ");
+lista_imprimir(lista);</code></pre>
+            </section>
+            <section>
+                <h3><code>main</code>: buscar e remover</h3>
+                <p style="text-align: left;">Uma busca que encontra, outra que não encontra, e os dois casos de remoção.</p>
+<pre><code class="language-c">if (lista_buscar(lista, 20) != NULL) {
+    printf("Buscar 20: encontrado\n");
+} else {
+    printf("Buscar 20: nao encontrado\n");
+}
+if (lista_buscar(lista, 99) != NULL) {
+    printf("Buscar 99: encontrado\n");
+} else {
+    printf("Buscar 99: nao encontrado\n");
+}
+
+lista_remover(lista, 20);
+printf("Depois de remover 20: ");
+lista_imprimir(lista);
+lista_remover(lista, 5);
+printf("Depois de remover 5: ");
+lista_imprimir(lista);
+lista_destruir(lista);</code></pre>
+            </section>
+            <section>
+                <h3><code>main</code>: a pilha</h3>
+                <p style="text-align: left;">Empilha 10, 20 e 30, consulta o topo e desempilha até esvaziar.</p>
+<pre><code class="language-c">printf("\n== Pilha (LIFO) ==\n");
+Pilha* pilha = pilha_criar();
+pilha_empilhar(pilha, 10);
+pilha_empilhar(pilha, 20);
+pilha_empilhar(pilha, 30);
+printf("Topo: %d\n", pilha_consultar_topo(pilha));
+printf("Desempilhando:");
+while (!pilha_vazia(pilha)) {
+    printf(" %d", pilha_desempilhar(pilha));
+}
+printf("\n");
+pilha_destruir(pilha);</code></pre>
+            </section>
+            <section>
+                <h3><code>main</code>: a fila</h3>
+                <p style="text-align: left;">Os mesmos valores, agora numa fila. Só a estrutura mudou.</p>
+<pre><code class="language-c">printf("\n== Fila (FIFO) ==\n");
+Fila* fila = fila_criar();
+fila_enfileirar(fila, 10);
+fila_enfileirar(fila, 20);
+fila_enfileirar(fila, 30);
+printf("Frente: %d\n", fila_consultar_frente(fila));
+printf("Desenfileirando:");
+while (!fila_vazia(fila)) {
+    printf(" %d", fila_desenfileirar(fila));
+}
+printf("\n");
+fila_destruir(fila);</code></pre>
+            </section>
+            <section>
+                <h3>Compilação e execução</h3>
+                <p style="text-align: left;">Um arquivo só: a compilação é um único comando. As opções <code>-Wall -Wextra</code> pedem todos os avisos.</p>
+<pre><code class="language-bash">gcc -Wall -Wextra -o listas_pilhas_filas listas_pilhas_filas.c
+./listas_pilhas_filas</code></pre>
+            </section>
+            <section>
+                <h3>A saída esperada</h3>
+                <p style="text-align: left;">Compare a última linha da pilha com a última linha da fila.</p>
+<pre><code class="language-plaintext">== Lista encadeada ==
+Lista montada: [5, 10, 20, 30]
+Buscar 20: encontrado
+Buscar 99: nao encontrado
+Depois de remover 20: [5, 10, 30]
+Depois de remover 5: [10, 30]
+
+== Pilha (LIFO) ==
+Topo: 30
+Desempilhando: 30 20 10
+
+== Fila (FIFO) ==
+Frente: 10
+Desenfileirando: 10 20 30</code></pre>
+            </section>
+            <section>
+                <h3>A saída prova as políticas</h3>
+                <p style="text-align: left;">A saída é a prova empírica das duas regras de acesso.</p>
+                <ul>
+                    <li><strong>Pilha</strong> — entram 10, 20, 30; saem 30, 20, 10. LIFO.</li>
+                    <li><strong>Fila</strong> — entram 10, 20, 30; saem 10, 20, 30. FIFO.</li>
+                    <li><strong>Lista</strong> — o 5 entrou por último, mas ficou na frente: foi inserido no início.</li>
+                </ul>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 5 — REFERÊNCIAS ============================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.72em;">
+                <li><strong>Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.</strong> — <em>Algoritmos: Teoria e Prática</em>. Cap. 10, <em>Estruturas de dados elementares</em>: seção 10.1 (pilhas e filas) e seção 10.2 (listas ligadas e sentinelas).</li>
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em Linguagem C</em>. LTC, 2023. Capítulos de listas, pilhas e filas.</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C — Uma Abordagem Didática</em>. Saraiva, 2016. Tipos abstratos de dados e listas.</li>
+                <li><strong>Toscani, L. V.; Veloso, P. A. S.</strong> — <em>Complexidade de Algoritmos</em>. Bookman, 2012. A notação O(·).</li>
+                <li><strong>Schildt, H.</strong> — <em>C Completo e Total</em>. Makron Books, 1997. Ponteiros, estruturas e alocação dinâmica.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.65em; color: #666;">
+                <li>Wirth — <em>Algoritmos e Estruturas de Dados</em> — estruturas de dados dinâmicas.</li>
+                <li>Damas — <em>Linguagem C</em> — ponteiros e estruturas em profundidade.</li>
+                <li>Forouzan &amp; Gilbert — <em>Data Structures: a pseudocode approach with C++</em> — contraste em pseudocódigo.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Listas, Pilhas e Filas</h1>
+            <h2>Perguntas</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Uma peça — o nó —, ponteiros externos mantidos consistentes e duas regras de acesso: LIFO e FIFO.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

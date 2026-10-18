@@ -32,6 +32,10 @@
             letter-spacing: normal;
         }
 
+        .reveal h3 code {
+            font-size: 0.8em;
+        }
+
         .reveal .slides section.capa h1 {
             font-size: 2.4em;
             margin-bottom: 0.2em;
@@ -68,34 +72,16 @@
             display: block;
         }
 
-        .reveal .resposta {
-            margin-top: 0.5em;
-            padding: 8px 14px;
-            border-left: 3px solid var(--cor-destaque);
+        .reveal .formula {
+            font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.9em;
+            color: #222;
             background: #f7f9fc;
-            font-size: 0.7em;
-            color: #333;
-            line-height: 1.5;
-            text-align: left;
-        }
-        .reveal .resposta strong {
-            color: var(--cor-destaque);
-        }
-        .reveal .resposta ol,
-        .reveal .resposta ul {
-            margin: 0.4em 0 0.2em 0;
-            padding-left: 1.6em;
-            display: block;
-        }
-        .reveal .resposta li {
-            margin-bottom: 0.25em;
-        }
-        .reveal .resposta code {
-            font-size: 0.95em;
-        }
-        .reveal .resposta pre {
-            font-size: 0.85em;
-            margin: 0.3em 0;
+            border: 1px solid #cfd6dd;
+            border-radius: 6px;
+            padding: 14px 22px;
+            display: inline-block;
+            margin: 0.4em 0;
         }
 
         .reveal .destaque {
@@ -285,31 +271,11 @@
         </section>
 
         <!-- ============================================================ -->
-        <!-- BLOCO 4 — ANALOGIAS                                           -->
+        <!-- BLOCO 4 — CÓDIGO EM C (apenas aula de implementação)         -->
         <!-- ============================================================ -->
         <section>
             <section>
                 <p class="titulo-bloco">Bloco 4</p>
-                <h2>Analogias</h2>
-            </section>
-
-            <section>
-                <h3>Analogia 1</h3>
-                <!-- ... -->
-            </section>
-
-            <section>
-                <h3>Analogia 2</h3>
-                <!-- ... -->
-            </section>
-        </section>
-
-        <!-- ============================================================ -->
-        <!-- BLOCO 5 — CÓDIGO EM C (apenas aula de implementação)         -->
-        <!-- ============================================================ -->
-        <section>
-            <section>
-                <p class="titulo-bloco">Bloco 5</p>
                 <h2>Código em C</h2>
             </section>
 
@@ -325,30 +291,7 @@
         </section>
 
         <!-- ============================================================ -->
-        <!-- BLOCO 6 — EXERCÍCIOS                                          -->
-        <!-- ============================================================ -->
-        <section>
-            <section>
-                <p class="titulo-bloco">Bloco 6</p>
-                <h2>Exercícios práticos</h2>
-            </section>
-
-            <section>
-                <h3>Exercício 1 — título curto</h3>
-                <p style="text-align: left; font-size: 0.78em;">
-                    <enunciado resumido>
-                </p>
-                <div class="resposta fragment fade-in">
-                    <strong>Resposta:</strong>
-                    <!-- conteúdo da resposta mínima -->
-                </div>
-            </section>
-
-            <!-- ... demais exercícios ... -->
-        </section>
-
-        <!-- ============================================================ -->
-        <!-- BLOCO 7 — REFERÊNCIAS                                         -->
+        <!-- BLOCO 5 — REFERÊNCIAS                                         -->
         <!-- ============================================================ -->
         <section>
             <h2>Referências</h2>

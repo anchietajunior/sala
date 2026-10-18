@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 305"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="305" fill="#ffffff"/>
+  <text x="350.0" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 6 — lista_buscar(lista, 20)</text>
+  <text x="95.0" y="75" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600" xml:space="preserve">inicio</text><path d="M 95.0 82 L 95.0 105.0" fill="none" stroke="#2c5d8a" stroke-width="2.2"/><polygon points="95.0,113.0 100.5,101.0 89.5,101.0" fill="#2c5d8a"/>
+  <text x="435.0" y="75" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">atual</text><path d="M 435.0 82 L 435.0 105.0" fill="none" stroke="#5a7a9a" stroke-width="2.2"/><polygon points="435.0,113.0 440.5,101.0 429.5,101.0" fill="#5a7a9a"/>
+  <rect x="35.0" y="115" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="115.0" y1="115" x2="115.0" y2="175" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="75.0" y="153" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">5</text>
+  <circle cx="135.0" cy="145" r="4" fill="#2c5d8a"/>
+  <path d="M 135.0 145 L 196.0 145.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="204.0,145.0 192.0,139.5 192.0,150.5" fill="#2c5d8a"/>
+  <rect x="205.0" y="115" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="285.0" y1="115" x2="285.0" y2="175" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="245.0" y="153" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <circle cx="305.0" cy="145" r="4" fill="#2c5d8a"/>
+  <path d="M 305.0 145 L 366.0 145.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="374.0,145.0 362.0,139.5 362.0,150.5" fill="#2c5d8a"/>
+  <rect x="375.0" y="115" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" stroke-dasharray="7,4" rx="4"/>
+  <line x1="455.0" y1="115" x2="455.0" y2="175" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="415.0" y="153" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <circle cx="475.0" cy="145" r="4" fill="#2c5d8a"/>
+  <path d="M 475.0 145 L 536.0 145.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="544.0,145.0 532.0,139.5 532.0,150.5" fill="#2c5d8a"/>
+  <rect x="545.0" y="115" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="625.0" y1="115" x2="625.0" y2="175" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="585.0" y="153" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <text x="645.0" y="152" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <text x="95.0" y="205" text-anchor="middle" font-size="15" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">5 ≠ 20</text>
+  <text x="265.0" y="205" text-anchor="middle" font-size="15" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10 ≠ 20</text>
+  <text x="435.0" y="205" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20 = 20 ✓</text>
+  <text x="605.0" y="205" text-anchor="middle" font-size="14" fill="#888" font-style="italic" xml:space="preserve">não visitado</text>
+  <line x1="60" y1="245" x2="640" y2="245" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350.0" y="271" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">três comparações · a busca devolve o endereço do nó 20</text>
+  <text x="350.0" y="293" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">a busca só lê: nenhum ponteiro da lista muda</text>
+</svg>

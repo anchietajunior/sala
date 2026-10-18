@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 310"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="310" fill="#ffffff"/>
+  <text x="350.0" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">O nó: um registro com dois campos</text>
+  <rect x="30" y="90" width="260" height="120" fill="#f7f9fc" stroke="#cfd6dd" rx="6"/>
+  <text x="46" y="122" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">typedef struct No {</text>
+  <text x="46" y="146" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">    int valor;</text>
+  <text x="46" y="170" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">    struct No* proximo;</text>
+  <text x="46" y="194" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">} No;</text>
+  <text x="390" y="100" text-anchor="middle" font-size="14" fill="#888" xml:space="preserve">endereço 2040</text>
+  <text x="590" y="100" text-anchor="middle" font-size="14" fill="#888" xml:space="preserve">endereço 3172</text>
+  <rect x="330" y="120" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="410" y1="120" x2="410" y2="180" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="370" y="158" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <text x="430" y="156" text-anchor="middle" font-size="14" fill="#2c5d8a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">3172</text>
+  <path d="M 451 150 L 521.0 150.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="529.0,150.0 517.0,144.5 517.0,155.5" fill="#2c5d8a"/>
+  <rect x="530" y="120" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="610" y1="120" x2="610" y2="180" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="570" y="158" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <text x="630" y="157" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <text x="370" y="205" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">valor</text>
+  <text x="430" y="205" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">proximo</text>
+  <line x1="370" y1="182" x2="370" y2="190" stroke="#5a7a9a" stroke-width="1.5"/>
+  <line x1="430" y1="182" x2="430" y2="190" stroke="#5a7a9a" stroke-width="1.5"/>
+  <line x1="60" y1="250" x2="640" y2="250" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350.0" y="276" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">o campo proximo guarda um endereço — o do nó seguinte; a seta é o desenho desse endereço</text>
+  <text x="350.0" y="298" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">endereços ilustrativos · ∅ indica NULL: não há próximo, a cadeia termina</text>
+</svg>

@@ -4,12 +4,12 @@ Materiais didáticos da disciplina **Algoritmos e Estruturas de Dados** da gradu
 
 Cada aula vive em sua própria pasta (`aulaNN_tema/`) e contém:
 
-- O conteúdo escrito em Markdown (`aulaNN_tema.md`) — referência completa para o aluno, com os blocos pedagógicos da disciplina (conceito em camadas progressivas, visualização gráfica, problema motivador, analogias, exercícios e referências; aulas de implementação adicionam o bloco de código em C).
+- O conteúdo escrito em Markdown (`aulaNN_tema.md`) — referência completa para o aluno, com os blocos pedagógicos da disciplina (conceito em camadas progressivas, visualização gráfica, problema motivador e referências; aulas de implementação adicionam o bloco de código em C). As aulas 01–04, 06 e 08–11 trazem também analogias e exercícios.
 - A apresentação em Reveal.js (`apresentacao.html`) — usada em sala, com tema claro e transições suaves.
 - Diagramas em SVG (`img/`) — visualizações reaproveitadas tanto no `.md` quanto nos slides.
 - Em aulas de implementação: um único arquivo `.c` autossuficiente ao lado do `.md` (sem `.h` — modularização é tema de aula futura).
 
-A bibliografia segue a ementa oficial da disciplina: **Backes — Algoritmos e Estruturas de Dados em Linguagem C**, **Veloso & Pereira — Estruturas de Dados em C: Uma Abordagem Didática**, **Toscani & Veloso — Complexidade de Algoritmos** e **Schildt — C Completo e Total** como básica; **Wirth**, **Damas**, **Azevedo**, **Forouzan & Gilbert**, **Ford & Topp** e **Jamsa & Klander** como complementar.
+O livro-texto da disciplina é **Cormen, Leiserson, Rivest & Stein — Algoritmos: Teoria e Prática**. A bibliografia da ementa completa a referência: **Backes — Algoritmos e Estruturas de Dados em Linguagem C**, **Veloso & Pereira — Estruturas de Dados em C: Uma Abordagem Didática**, **Toscani & Veloso — Complexidade de Algoritmos** e **Schildt — C Completo e Total** como básica; **Wirth**, **Damas**, **Azevedo**, **Forouzan & Gilbert**, **Ford & Topp** e **Jamsa & Klander** como complementar.
 
 ## Aulas
 
@@ -19,7 +19,9 @@ A bibliografia segue a ementa oficial da disciplina: **Backes — Algoritmos e E
 | 02 | Análise de Complexidade na Prática: Busca Linear e Busca Binária | Implementação | [aula02_complexidade/aula02_complexidade.md](aula02_complexidade/aula02_complexidade.md) | [aula02_complexidade/apresentacao.html](aula02_complexidade/apresentacao.html) |
 | 03 | Funções e Recursão (anatomia, parâmetros, retorno, fatorial e Fibonacci) | Conceitual | [aula03_funcoes_recursao/aula03_funcoes_recursao.md](aula03_funcoes_recursao/aula03_funcoes_recursao.md) | [aula03_funcoes_recursao/apresentacao.html](aula03_funcoes_recursao/apresentacao.html) |
 | 04 | Ordenação: Bubble Sort, Merge Sort e Quick Sort | Implementação | [aula04_ordenacao/aula04_ordenacao.md](aula04_ordenacao/aula04_ordenacao.md) | [aula04_ordenacao/apresentacao.html](aula04_ordenacao/apresentacao.html) |
+| 05 | Ponteiros e Structs (endereço, passagem por referência, `malloc`/`free`, struct e `->`) | Implementação | [aula05_ponteiros_structs/aula05_ponteiros_structs.md](aula05_ponteiros_structs/aula05_ponteiros_structs.md) | [aula05_ponteiros_structs/apresentacao.html](aula05_ponteiros_structs/apresentacao.html) |
 | 06 | Matriz (alocação dinâmica com ponteiro duplo) | Implementação | [aula06_matriz/aula06_matriz.md](aula06_matriz/aula06_matriz.md) | [aula06_matriz/apresentacao.html](aula06_matriz/apresentacao.html) |
+| 07 | Listas Encadeadas, Pilhas (LIFO) e Filas (FIFO) | Implementação | [aula07_listas_pilhas_filas/aula07_listas_pilhas_filas.md](aula07_listas_pilhas_filas/aula07_listas_pilhas_filas.md) | [aula07_listas_pilhas_filas/apresentacao.html](aula07_listas_pilhas_filas/apresentacao.html) |
 | 08 | Listas Encadeadas (FIFO/LIFO, duplas, circulares) | Conceitual | [aula08_listas_encadeadas/aula08_listas_encadeadas.md](aula08_listas_encadeadas/aula08_listas_encadeadas.md) | [aula08_listas_encadeadas/apresentacao.html](aula08_listas_encadeadas/apresentacao.html) |
 | 09 | Fila (Queue) | Implementação | [aula09_fila/aula09_fila.md](aula09_fila/aula09_fila.md) | [aula09_fila/apresentacao.html](aula09_fila/apresentacao.html) |
 | 10 | Pilha (Stack) | Implementação | [aula10_pilha/aula10_pilha.md](aula10_pilha/aula10_pilha.md) | [aula10_pilha/apresentacao.html](aula10_pilha/apresentacao.html) |
@@ -31,6 +33,6 @@ A bibliografia segue a ementa oficial da disciplina: **Backes — Algoritmos e E
 - **Numeração**: pastas com dois dígitos (`aula02_`, `aula03_`, ...).
 - **Diagramas**: SVG é o padrão da disciplina (paleta institucional `#2c5d8a` / `#5a7a9a` / `#cfd6dd` / `#f7f9fc` / `#e8f0f8`).
 - **Apresentações**: Reveal.js 5.x, tema `white`, transição `fade`, capa fixa "Algoritmos e Estruturas de dados / Unirios".
-- **Exercícios**: ordem crescente de dificuldade implícita (sem rótulos), apenas 1 desafio por aula (o último), e cada exercício acompanha "Resposta mínima aceitável".
+- **Exercícios** (aulas 01–04, 06 e 08–11): ordem crescente de dificuldade implícita (sem rótulos), apenas 1 desafio por aula (o último), e cada exercício acompanha "Resposta mínima aceitável".
 
 > Este README é atualizado a cada nova aula adicionada à disciplina.

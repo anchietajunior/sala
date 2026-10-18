@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 395"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="395" fill="#fff"/>
+  <text x="350" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 10 — aluno_aplicar_bonus(&amp;aluno, 1.5)</text>
+  <rect x="30" y="56" width="640" height="130" fill="none" stroke="#cfd6dd" stroke-width="1.5" rx="8"/>
+  <text x="44" y="80" text-anchor="start" font-size="15" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-weight="600">main</text>
+  <rect x="170" y="110" width="360" height="56" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <text x="230.0" y="100" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">matricula</text>
+  <text x="230.0" y="145" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">101</text>
+  <line x1="290" y1="110" x2="290" y2="166" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="350.0" y="100" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">turma</text>
+  <text x="350.0" y="145" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">'A'</text>
+  <line x1="410" y1="110" x2="410" y2="166" stroke="#5a7a9a" stroke-width="1.5"/>
+  <rect x="413" y="113" width="114" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="3"/>
+  <text x="470.0" y="100" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">nota</text>
+  <text x="470.0" y="145" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">9.5</text>
+  <text x="155" y="144" text-anchor="end" font-size="14" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">6000</text>
+  <rect x="30" y="210" width="640" height="110" fill="none" stroke="#cfd6dd" stroke-width="1.5" rx="8"/>
+  <text x="44" y="234" text-anchor="start" font-size="15" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-weight="600">aluno_aplicar_bonus</text>
+  <rect x="290" y="250" width="200" height="50" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <line x1="380.0" y1="250" x2="380.0" y2="300" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="335.0" y="281" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">aluno</text>
+  <text x="435.0" y="282" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">6000</text>
+  <rect x="515" y="250" width="140" height="50" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <line x1="578.0" y1="250" x2="578.0" y2="300" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="546.5" y="281" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">bonus</text>
+  <text x="616.5" y="282" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1.5</text>
+  <path d="M 457 250 L 457 168" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="452,180 457,168 462,180" fill="#2c5d8a"/>
+  <text x="467" y="202" text-anchor="start" font-size="14" fill="#2c5d8a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">aluno-&gt;nota</text>
+  <line x1="80" y1="345" x2="620" y2="345" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="371" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">a função recebe um único endereço, e não os três campos</text>
+
+</svg>

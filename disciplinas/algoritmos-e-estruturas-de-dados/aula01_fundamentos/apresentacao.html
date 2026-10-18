@@ -263,7 +263,7 @@
                 <blockquote>
                     Computar <strong>é</strong> executar um algoritmo.
                 </blockquote>
-                <p class="nota-rodape">Artigo <em>On Computable Numbers</em>, 1936 — todo computador é uma encarnação dessa máquina.</p>
+                <p class="nota-rodape">Artigo <em>On Computable Numbers</em>, 1936 — todo computador moderno implementa esse modelo.</p>
             </section>
 
             <!-- Slide do Eddy — Alan Kay -->
@@ -295,7 +295,7 @@
                 <p style="text-align: left;">
                     <strong>Estrutura de dados</strong> (<em>data structure</em>):
                     o arranjo dos dados na memória + as operações permitidas,
-                    projetado para tornar certos acessos <span class="destaque">baratos</span>.
+                    projetado para que certos acessos tenham <span class="destaque">baixo custo</span>.
                 </p>
                 <p class="nota-rodape" style="text-align: left;">
                     Ver o capítulo introdutório de Backes; Veloso &amp; Pereira, capítulo de abertura.
@@ -321,7 +321,7 @@
                 <ul style="font-size: 0.82em;">
                     <li><strong>Não é código-fonte</strong> — o de Euclides tem 2.300 anos; C tem ~50</li>
                     <li><strong>Não aceita ambiguidade</strong> — "tempere a gosto" não é passo de algoritmo</li>
-                    <li><strong>Não roda para sempre</strong> — sem terminar, não é algoritmo</li>
+                    <li><strong>Não executa indefinidamente</strong> — sem terminar, não é algoritmo</li>
                 </ul>
             </section>
 
@@ -344,7 +344,7 @@
             <section>
                 <h3>A ferramenta: a linguagem C</h3>
                 <p style="text-align: left;">
-                    Para escrever algoritmos de verdade, precisamos de uma linguagem.
+                    Para escrever algoritmos executáveis, precisamos de uma linguagem de programação.
                     A nossa é o <strong>C</strong> — criado por <strong>Dennis Ritchie</strong>,
                     nos Laboratórios Bell, no início dos anos 1970, para escrever o
                     <strong>UNIX</strong>.
@@ -354,7 +354,7 @@
                     ideal para <span class="destaque">enxergar o custo</span>.
                 </blockquote>
                 <p class="nota-rodape" style="text-align: left;">
-                    Meio século depois, C segue em toda parte: o núcleo do Linux e o
+                    Meio século depois, C continua amplamente usado: o núcleo do Linux e o
                     interpretador do Python são escritos em C.
                 </p>
             </section>
@@ -371,10 +371,10 @@ char   letra  = 'A';     /* um unico caractere        */</code></pre>
             </section>
 
             <section>
-                <h3>Funções: a cara de um algoritmo</h3>
+                <h3>Funções: a forma de um algoritmo em C</h3>
                 <p style="text-align: left; font-size: 0.85em;">
                     Um bloco nomeado que recebe <strong>entradas</strong> e devolve uma
-                    <strong>saída</strong> — soa familiar?
+                    <strong>saída</strong> — a mesma estrutura de um algoritmo.
                 </p>
                 <pre><code class="language-c">int soma(int a, int b) {
     return a + b;
@@ -403,7 +403,7 @@ char   letra  = 'A';     /* um unico caractere        */</code></pre>
             <section>
                 <h3>Repetindo: <code>while</code> e <code>for</code></h3>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Repetir enquanto uma condição valer — o coração de quase todo algoritmo:
+                    Repetir enquanto uma condição for verdadeira — estrutura presente em quase todo algoritmo:
                 </p>
                 <div class="duas-colunas">
                     <div>
@@ -422,14 +422,14 @@ while (i &lt; 5) {
                     </div>
                 </div>
                 <p class="nota-rodape" style="text-align: left;">
-                    Ambos imprimem 0 1 2 3 4 — o <code>for</code> empacota início, condição e avanço.
+                    Ambos imprimem 0 1 2 3 4 — o <code>for</code> reúne, em uma linha, a inicialização, a condição e o incremento.
                 </p>
             </section>
 
             <section>
                 <h3>A primeira estrutura: lista sequencial</h3>
                 <p style="text-align: left;">
-                    Nosso primeiro jeito de organizar dados: uma fileira de elementos
+                    A primeira forma de organizar dados: uma sequência de elementos
                     <strong>do mesmo tipo</strong>, lado a lado, cada um com um número —
                     o <strong>índice</strong>.
                 </p>
@@ -453,8 +453,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     Acesso direto: <code>notas[3]</code> custa o mesmo com 5 ou 5 milhões de posições.
                 </p>
                 <p class="nota-rodape" style="text-align: left;">
-                    O preço: tamanho fixo, e inserir no meio empurra todos os seguintes —
-                    limitação que motivará as listas encadeadas, aulas adiante.
+                    Limitações: o tamanho é fixo, e inserir no meio exige deslocar todos os elementos seguintes uma posição.
                 </p>
             </section>
 
@@ -468,7 +467,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <ul style="font-size: 0.8em;">
                     <li><strong>mesmo tipo</strong> → toda posição ocupa o mesmo espaço</li>
                     <li><strong>consecutivas</strong> → sem buracos entre os elementos</li>
-                    <li><strong>índice a partir de 0</strong> → amarra cada número a uma posição</li>
+                    <li><strong>índice a partir de 0</strong> → associa cada número a uma posição</li>
                 </ul>
             </section>
 
@@ -476,16 +475,13 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <h3>O array de C não é o array de Python</h3>
                 <p style="text-align: left; font-size: 0.85em;">
                     Em <strong>Python</strong> e <strong>JavaScript</strong>, um "array" mistura
-                    tipos (<code>[1, "dois", 3.0]</code>), cresce e encolhe sozinho — comodidade
-                    que guarda controle extra e, por dentro, <strong>referências</strong> a valores
-                    espalhados.
+                    tipos (<code>[1, "dois", 3.0]</code>), ajusta o próprio tamanho automaticamente — conveniência que exige dados de controle adicionais e armazena, internamente, <strong>referências</strong> a valores espalhados.
                 </p>
                 <blockquote style="font-size: 0.8em;">
-                    O array de C é o osso nu: <span class="destaque">tamanho fixo, um tipo,
-                    valores de fato lado a lado</span> — e sem rede de proteção.
+                    O array de C é a forma elementar: <span class="destaque">tamanho fixo, um só tipo, valores de fato lado a lado</span> — e a linguagem não verifica se o índice está dentro dos limites.
                 </blockquote>
                 <p class="nota-rodape" style="text-align: left;">
-                    As estruturas "espertas" de Python e JS são construídas em cima de arrays simples como este.
+                    As estruturas flexíveis de Python e JavaScript são implementadas sobre arrays simples como este.
                 </p>
             </section>
 
@@ -505,8 +501,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             <section>
                 <h3>Do índice ao endereço: a conta</h3>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Com base em 1000 e <code>int</code> de 4 bytes, o índice vira endereço por
-                    uma conta só:
+                    Com base em 1000 e <code>int</code> de 4 bytes, o índice é convertido em endereço por um único cálculo:
                 </p>
                 <p><span class="formula">endereço de notas[i] = base + i × tamanho</span></p>
                 <blockquote style="font-size: 0.8em;">
@@ -514,7 +509,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     uma multiplicação e uma soma, seja <code>i</code> = 3 ou 3 milhões.
                 </blockquote>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Aqui nasce o <strong>O(1)</strong> do acesso por índice — e o motivo de o
+                    Esse cálculo explica o <strong>O(1)</strong> do acesso por índice — e o motivo de o
                     índice começar em <strong>0</strong>: o primeiro fica no próprio endereço-base.
                 </p>
             </section>
@@ -524,47 +519,45 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <p style="text-align: left;">
                     <strong>RADAR</strong>, num vetor de caracteres, se lê igual de trás
                     para a frente — é um <strong>palíndromo</strong>. Como um computador
-                    decide isso? Dois jeitos:
+                    decide isso? Dois algoritmos possíveis:
                 </p>
                 <ul style="font-size: 0.85em;">
-                    <li><strong>Cópia invertida</strong> — inverte a palavra e compara as duas: gasta uma cópia inteira</li>
-                    <li><strong>Duas pontas</strong> — compara primeira × última e caminha para o centro: não gasta nada</li>
+                    <li><strong>Cópia invertida</strong> — inverte a palavra e compara as duas: exige memória para uma cópia inteira</li>
+                    <li><strong>Duas pontas</strong> — compara primeira × última e avança para o centro: usa apenas dois índices</li>
                 </ul>
                 <blockquote style="font-size: 0.8em;">
-                    Mesma resposta, custos diferentes — <span class="destaque">a ideia determina o custo</span>.
+                    Mesma resposta, custos diferentes — <span class="destaque">o custo é propriedade do algoritmo, não do problema</span>.
                 </blockquote>
             </section>
 
             <section>
-                <h3>Dois lados da mesma moeda</h3>
+                <h3>Algoritmo e estrutura dependem um do outro</h3>
                 <p style="text-align: left;">
                     As duas pontas <strong>só funcionam</strong> porque o vetor dá acesso
                     direto à última letra. Se as letras chegassem uma a uma, seria preciso
                     guardar tudo antes.
                 </p>
                 <blockquote style="font-size: 0.8em;">
-                    Não existe organização perfeita — existe a certa para a pergunta:
-                    <span class="destaque">"o que você quer que seja barato?"</span>
+                    Não existe organização ideal para tudo: a escolha depende de <span class="destaque">quais operações precisam ter baixo custo</span>.
                 </blockquote>
             </section>
 
             <section>
                 <h3>Propriedades que sempre valem</h3>
-                <p style="text-align: left;">Três verdades que acompanham a disciplina inteira:</p>
+                <p style="text-align: left;">Três propriedades válidas em toda a disciplina:</p>
                 <ul style="font-size: 0.8em;">
                     <li>✅ Algoritmo correto funciona para <strong>toda</strong> entrada válida — não só as fáceis</li>
                     <li>✅ O custo é do <strong>algoritmo</strong>, não da máquina — trocar de computador não muda os passos</li>
-                    <li>✅ A estrutura de dados <strong>precede</strong> o algoritmo — dados desorganizados limitam tudo</li>
+                    <li>✅ A estrutura de dados <strong>precede</strong> o algoritmo — a organização dos dados determina quais algoritmos são possíveis</li>
                 </ul>
             </section>
 
             <!-- ----- CAMADA 4 — DEFINIÇÃO FORMAL E NOTAÇÃO ----- -->
             <section>
                 <p class="titulo-bloco">Camada 4</p>
-                <h3>Uma garantia poderosa</h3>
+                <h3>Independência da máquina</h3>
                 <p style="text-align: left;">
-                    Turing provou que <strong>a máquina não importa</strong> — o que conta
-                    é a sequência de passos.
+                    Turing mostrou que os computadores são equivalentes quanto ao que podem calcular — o que conta é a <strong>sequência de passos</strong>.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
                     Consequência prática: para medir um algoritmo, basta
@@ -597,7 +590,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     para uma entrada de tamanho n. Qual é o ritmo?
                 </p>
                 <ul style="font-size: 0.85em;">
-                    <li>o <strong>+ 5</strong> vira detalhe quando n cresce</li>
+                    <li>o <strong>+ 5</strong> torna-se desprezível quando n cresce</li>
                     <li>o <strong>3×</strong> muda a velocidade, não o ritmo</li>
                 </ul>
                 <blockquote style="font-size: 0.8em;">
@@ -613,8 +606,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     <li><strong>Espaço</strong> — quanta memória <em>adicional</em>, em função de n</li>
                 </ul>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Rápido e guloso em memória, ou econômico e lento —
-                    mais um <em>trade-off</em>.
+                    Um algoritmo rápido pode exigir mais memória; um econômico, mais tempo — um compromisso (<em>trade-off</em>).
                 </p>
             </section>
 
@@ -623,7 +615,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <p class="titulo-bloco">Camada 5</p>
                 <h3>As classes de crescimento</h3>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Da mais lenta para a mais explosiva — passos aproximados para n = 1.000:
+                    Do crescimento mais lento para o mais rápido — passos aproximados para n = 1.000:
                 </p>
                 <table>
                     <thead>
@@ -641,7 +633,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             </section>
 
             <section>
-                <h3>O hardware não salva</h3>
+                <h3>Máquina mais rápida não muda a classe</h3>
                 <p style="text-align: left;">
                     Máquina de 100 milhões de passos/segundo, entrada de n = 1.000.000:
                 </p>
@@ -650,7 +642,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     <li>algoritmo O(n²) → <strong>~10.000 segundos ≈ 3 horas</strong></li>
                 </ul>
                 <blockquote style="font-size: 0.8em;">
-                    Um computador 10× mais rápido só <em>adia</em> o problema quadrático.
+                    Um computador 10× mais rápido divide o tempo por 10, mas o crescimento continua quadrático.
                 </blockquote>
             </section>
 
@@ -675,10 +667,10 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <p style="text-align: left; font-size: 0.85em;">Cada estrutura da disciplina é uma resposta de custo diferente:</p>
                 <ul style="font-size: 0.78em;">
                     <li><strong>Listas encadeadas</strong> — inserir no início O(1); buscar O(n)</li>
-                    <li><strong>Pilhas e filas</strong> — tudo O(1); a restrição é o preço</li>
+                    <li><strong>Pilhas e filas</strong> — operações O(1), em troca de acesso restrito</li>
                     <li><strong>Árvores de busca</strong> — descartam metade dos candidatos a cada passo</li>
                     <li><strong>Tabelas hash</strong> — O(1) no caso médio</li>
-                    <li><strong>Ordenação</strong> — a jornada de O(n²) até O(n log n)</li>
+                    <li><strong>Ordenação</strong> — algoritmos de O(n²) a O(n log n)</li>
                 </ul>
                 <p class="nota-rodape" style="text-align: left;">
                     Algoritmos de busca (linear e binária) ganham capítulo próprio adiante.
@@ -709,7 +701,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <h2>Visualização gráfica</h2>
                 <p style="font-size: 0.8em; color: #666;">
                     Seis diagramas: o transformador, a equação, a lista sequencial,
-                    o índice virando endereço, dois algoritmos em disputa e as curvas de custo.
+                    a conversão do índice em endereço, dois algoritmos comparados e as curvas de custo.
                 </p>
             </section>
 
@@ -756,7 +748,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                 <h3>Dois algoritmos, um problema</h3>
                 <p style="text-align: left; font-size: 0.8em;">
                     A mesma palavra, dois caminhos: a cópia gasta memória;
-                    as duas pontas caminham para o centro sem gastar nada.
+                    as duas pontas avançam para o centro usando apenas dois índices.
                 </p>
                 <img class="diagrama" src="img/05_palindromo_dois_algoritmos.svg"
                      alt="Verificação de palíndromo por cópia invertida contra algoritmo das duas pontas">
@@ -765,8 +757,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             <section>
                 <h3>As curvas de crescimento</h3>
                 <p style="text-align: left; font-size: 0.8em;">
-                    As classes da tabela desenhadas juntas: no começo andam próximas —
-                    depois a quadrática dispara.
+                    As classes da tabela desenhadas juntas: para n pequeno ficam próximas; à medida que n cresce, a quadrática se afasta das demais.
                 </p>
                 <img class="diagrama" src="img/06_curvas_crescimento.svg"
                      alt="Curvas de crescimento das classes O(1), O(log n), O(n), O(n log n), O(n²)">
@@ -787,32 +778,31 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             </section>
 
             <section>
-                <h3>Não há mágica — há uma corrente de algoritmos</h3>
+                <h3>Cada resposta é uma cadeia de algoritmos</h3>
                 <p style="text-align: left; font-size: 0.85em;">Para <strong>cada palavra</strong> da resposta:</p>
                 <ul style="font-size: 0.78em;">
-                    <li><strong>tokenização</strong> — fatiar o texto em pedaços</li>
+                    <li><strong>tokenização</strong> — dividir o texto em unidades menores (<em>tokens</em>)</li>
                     <li><strong>álgebra linear</strong> — bilhões de multiplicações otimizadas</li>
                     <li><strong>atenção</strong> — decidir que trechos da conversa pesam mais</li>
                     <li><strong>amostragem</strong> — escolher a próxima palavra</li>
                 </ul>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Um elo com custo descontrolado e a resposta <strong>não chega nunca</strong>.
+                    Se um único elo tiver custo alto demais, a resposta <strong>não é produzida em tempo útil</strong>.
                 </p>
             </section>
 
             <section>
-                <h3>A complexidade moldou o produto</h3>
+                <h3>A complexidade determinou os limites</h3>
                 <p style="text-align: left;">
                     Os algoritmos de atenção originais custam tempo <strong>quadrático</strong>
                     no tamanho do texto — dobrar a conversa quadruplica o trabalho.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Por isso as primeiras IAs tinham memória curta. Alargar esse limite
+                    Por isso as primeiras IAs aceitavam apenas textos curtos. Alargar esse limite
                     exigiu <strong>algoritmos melhores</strong>, não só máquinas maiores.
                 </p>
                 <blockquote style="font-size: 0.75em;">
-                    Quem entende o custo dos algoritmos entende por que a tecnologia
-                    tem a forma que tem.
+                    O custo dos algoritmos explica os limites práticos dos sistemas computacionais.
                 </blockquote>
             </section>
 
@@ -823,8 +813,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     <li><strong>GPS</strong> — caminho mínimo que descarta quase todas as rotas <em>sem examiná-las</em></li>
                 </ul>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Décimos de segundo em vez de horas — sempre a mesma razão:
-                    <span class="destaque">uma ideia melhor</span>.
+                    Décimos de segundo em vez de horas — nos dois casos, graças a <span class="destaque">um algoritmo de menor complexidade</span>.
                 </p>
             </section>
 
@@ -837,10 +826,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, o algoritmo de Euclides tem mais de 2.300 anos e continua
-                            em serviço: ele roda dentro dos sistemas de criptografia que
-                            protegem suas conversas hoje. O hardware passa, a ideia fica —
-                            um bom algoritmo não envelhece.
+                            Turma, o algoritmo de Euclides tem mais de 2.300 anos e continua em uso: ele é executado nos sistemas de criptografia que protegem suas conversas hoje. As máquinas mudam; um algoritmo correto permanece válido.
                         </p>
                     </div>
                 </div>
@@ -863,7 +849,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                     a estrutura de dados.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
-                    A mesma receita numa despensa organizada sai em metade do tempo.
+                    A mesma receita, numa despensa organizada, é preparada em metade do tempo.
                     A receita não mudou — <span class="destaque">a organização dos dados
                     mudou o custo</span>.
                 </p>
@@ -929,7 +915,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
                             Turma, antes de resolver o próximo exercício, façam um palpite:
                             quantas comparações as duas pontas precisam para decidir que
                             RADAR é palíndromo? E para uma palavra de 1.000 letras?
-                            Anotem o chute, executem o passo a passo e confiram quem acertou.
+                            Anotem a estimativa, executem o passo a passo e confiram quem acertou.
                         </p>
                     </div>
                 </div>
@@ -959,7 +945,7 @@ char palavra[] = "radar";   /* palavra = vetor de char */</code></pre>
             </section>
 
             <section>
-                <h3>Exercício 2 — Desafio: Two Sum</h3>
+                <h3>Exercício 2 — Desafio: soma de dois</h3>
                 <p style="text-align: left; font-size: 0.7em;">
                     Dado um vetor e um <strong>alvo</strong>, achar <strong>duas posições</strong>
                     cujos valores somam o alvo. Testando todos os pares com laços aninhados:

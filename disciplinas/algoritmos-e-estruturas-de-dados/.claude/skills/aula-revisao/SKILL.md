@@ -30,7 +30,7 @@ Se o `.md` ainda **não existir**, não é caso desta skill — use `aula-conteu
 
 Antes de começar, **sempre**:
 
-1. Leia `CLAUDE.md` na raiz — é a fonte de verdade da disciplina. Boa parte dos critérios de revisão existe para **fazer cumprir** regras do `CLAUDE.md` (não supor conhecimento prévio, definir cada termo no primeiro uso, vocabulário canônico, uma ideia por slide).
+1. Leia `CLAUDE.md` na raiz — é a fonte de verdade da disciplina. Boa parte dos critérios de revisão existe para **fazer cumprir** regras do `CLAUDE.md` (não supor conhecimento prévio, definir cada termo no primeiro uso, registro acadêmico sem jargão, uma ideia por slide).
 2. Leia o `aulaNN_tema/aulaNN_tema.md` inteiro, de ponta a ponta, **antes** de editar qualquer coisa. A revisão de conexão lógica só funciona com o texto todo na cabeça.
 3. Se existir `aulaNN_tema/apresentacao.html`, leia-a também — ela será revisada com a mesma lente e precisa terminar **consistente** com o `.md`.
 
@@ -66,7 +66,7 @@ Aplique os ajustes com `Edit`, do começo ao fim do arquivo:
 - **Religar** tópicos desconexos: adicionar a linha-ponte, ou mover o tópico para onde ele se conecta, ou remover se for órfão sem função na aula.
 - **Desamarrar** referências a outras aulas: trocar a remissão pela explicação completa quando o conceito é necessário aqui, ou cortar o trecho quando não é. Uma frase que só existe para situar o aluno na sequência da disciplina sai inteira.
 
-**Preserve o contrato didático.** Nunca remova um bloco ou camada obrigatória, um exercício com sua "Resposta mínima aceitável", ou uma citação inline da bibliografia. Se um trecho parece excessivo mas é exigido pela estrutura, mantenha e, se couber, aperte a redação.
+**Preserve o contrato didático.** Nunca remova um bloco ou camada obrigatória, nem uma citação inline da bibliografia. Se um trecho parece excessivo mas é exigido pela estrutura, mantenha e, se couber, aperte a redação.
 
 ### 4. Manter a apresentação consistente
 
@@ -82,7 +82,7 @@ Ao terminar, reporte um **resumo agrupado pelos cinco critérios**: o que foi co
 ## Regras inegociáveis (resumo)
 
 - **Revisar, não reescrever a aula.** A skill melhora o texto existente; não troca a abordagem nem reordena blocos inteiros sem necessidade.
-- **O contrato didático vence.** Não sacrificar regras do `CLAUDE.md` em nome de "enxugar": blocos/camadas obrigatórios, definição de cada termo no primeiro uso, exercícios com resposta mínima, citação inline da bibliografia — tudo permanece.
+- **O contrato didático vence.** Não sacrificar regras do `CLAUDE.md` em nome de "enxugar": blocos/camadas obrigatórios, definição de cada termo no primeiro uso, citação inline da bibliografia — tudo permanece.
 - **Correção padrão de item obscuro é explicar, não apagar.** Só remover quando o item de fato não serve à aula.
 - **Contexto excessivo se corta inteiro.** Meia-digressão é pior que nenhuma.
 - **Início de novo assunto não é desconexão.** Poupe blocos, camadas e viradas previstas — exija deles apenas a frase de transição.

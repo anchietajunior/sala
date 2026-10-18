@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 665"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="665" fill="#ffffff"/>
+  <text x="350.0" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">liberar_cadeia(primeiro): um free para cada nó</text>
+  <text x="60" y="78" text-anchor="start" font-size="15" fill="#222" xml:space="preserve">volta 1: seguinte guarda o 20; o 10 é liberado</text>
+  <text x="180.0" y="110" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">atual</text><path d="M 180.0 117 L 180.0 140.0" fill="none" stroke="#5a7a9a" stroke-width="2.2"/><polygon points="180.0,148.0 185.5,136.0 174.5,136.0" fill="#5a7a9a"/>
+  <text x="350.0" y="110" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600" xml:space="preserve">seguinte</text><path d="M 350.0 117 L 350.0 140.0" fill="none" stroke="#2c5d8a" stroke-width="2.2"/><polygon points="350.0,148.0 355.5,136.0 344.5,136.0" fill="#2c5d8a"/>
+  <rect x="120.0" y="150" width="120" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <line x1="200.0" y1="150" x2="200.0" y2="210" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="160.0" y="188" text-anchor="middle" font-size="22" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <line x1="208.0" y1="158" x2="232.0" y2="202" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="232.0" y1="158" x2="208.0" y2="202" stroke="#b54040" stroke-width="2.5"/>
+  <path d="M 220.0 180 L 281.0 180.0" fill="none" stroke="#cfd6dd" stroke-width="2.5" stroke-dasharray="6,4"/><polygon points="289.0,180.0 277.0,174.5 277.0,185.5" fill="#cfd6dd"/>
+  <rect x="290.0" y="150" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="370.0" y1="150" x2="370.0" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="330.0" y="188" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <circle cx="390.0" cy="180" r="4" fill="#2c5d8a"/>
+  <path d="M 390.0 180 L 451.0 180.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="459.0,180.0 447.0,174.5 447.0,185.5" fill="#2c5d8a"/>
+  <rect x="460.0" y="150" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="540.0" y1="150" x2="540.0" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="500.0" y="188" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <text x="560.0" y="187" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <text x="60" y="248" text-anchor="start" font-size="15" fill="#222" xml:space="preserve">volta 2: seguinte guarda o 30; o 20 é liberado</text>
+  <text x="350.0" y="280" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">atual</text><path d="M 350.0 287 L 350.0 310.0" fill="none" stroke="#5a7a9a" stroke-width="2.2"/><polygon points="350.0,318.0 355.5,306.0 344.5,306.0" fill="#5a7a9a"/>
+  <text x="520.0" y="280" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600" xml:space="preserve">seguinte</text><path d="M 520.0 287 L 520.0 310.0" fill="none" stroke="#2c5d8a" stroke-width="2.2"/><polygon points="520.0,318.0 525.5,306.0 514.5,306.0" fill="#2c5d8a"/>
+  <rect x="120.0" y="320" width="120" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <line x1="200.0" y1="320" x2="200.0" y2="380" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="160.0" y="358" text-anchor="middle" font-size="22" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <line x1="208.0" y1="328" x2="232.0" y2="372" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="232.0" y1="328" x2="208.0" y2="372" stroke="#b54040" stroke-width="2.5"/>
+  <path d="M 220.0 350 L 281.0 350.0" fill="none" stroke="#cfd6dd" stroke-width="2.5" stroke-dasharray="6,4"/><polygon points="289.0,350.0 277.0,344.5 277.0,355.5" fill="#cfd6dd"/>
+  <rect x="290.0" y="320" width="120" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <line x1="370.0" y1="320" x2="370.0" y2="380" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="330.0" y="358" text-anchor="middle" font-size="22" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <line x1="378.0" y1="328" x2="402.0" y2="372" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="402.0" y1="328" x2="378.0" y2="372" stroke="#b54040" stroke-width="2.5"/>
+  <path d="M 390.0 350 L 451.0 350.0" fill="none" stroke="#cfd6dd" stroke-width="2.5" stroke-dasharray="6,4"/><polygon points="459.0,350.0 447.0,344.5 447.0,355.5" fill="#cfd6dd"/>
+  <rect x="460.0" y="320" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="540.0" y1="320" x2="540.0" y2="380" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="500.0" y="358" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <text x="560.0" y="357" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <text x="60" y="418" text-anchor="start" font-size="15" fill="#222" xml:space="preserve">volta 3: seguinte recebe NULL; o 30 é liberado e o laço termina</text>
+  <text x="520.0" y="450" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">atual</text><path d="M 520.0 457 L 520.0 480.0" fill="none" stroke="#5a7a9a" stroke-width="2.2"/><polygon points="520.0,488.0 525.5,476.0 514.5,476.0" fill="#5a7a9a"/>
+  <text x="520.0" y="574" text-anchor="middle" font-size="14" fill="#2c5d8a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">seguinte = NULL</text>
+  <rect x="120.0" y="490" width="120" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <line x1="200.0" y1="490" x2="200.0" y2="550" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="160.0" y="528" text-anchor="middle" font-size="22" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <line x1="208.0" y1="498" x2="232.0" y2="542" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="232.0" y1="498" x2="208.0" y2="542" stroke="#b54040" stroke-width="2.5"/>
+  <path d="M 220.0 520 L 281.0 520.0" fill="none" stroke="#cfd6dd" stroke-width="2.5" stroke-dasharray="6,4"/><polygon points="289.0,520.0 277.0,514.5 277.0,525.5" fill="#cfd6dd"/>
+  <rect x="290.0" y="490" width="120" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <line x1="370.0" y1="490" x2="370.0" y2="550" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="330.0" y="528" text-anchor="middle" font-size="22" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <line x1="378.0" y1="498" x2="402.0" y2="542" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="402.0" y1="498" x2="378.0" y2="542" stroke="#b54040" stroke-width="2.5"/>
+  <path d="M 390.0 520 L 451.0 520.0" fill="none" stroke="#cfd6dd" stroke-width="2.5" stroke-dasharray="6,4"/><polygon points="459.0,520.0 447.0,514.5 447.0,525.5" fill="#cfd6dd"/>
+  <rect x="460.0" y="490" width="120" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <line x1="540.0" y1="490" x2="540.0" y2="550" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="500.0" y="528" text-anchor="middle" font-size="22" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <line x1="548.0" y1="498" x2="572.0" y2="542" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="572.0" y1="498" x2="548.0" y2="542" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="60" y1="605" x2="640" y2="605" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350.0" y="631" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">sem guardar seguinte antes do free, o endereço do próximo nó estaria em memória devolvida</text>
+  <text x="350.0" y="653" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">liberar só o primeiro nó deixaria os outros inalcançáveis: vazamento de memória</text>
+</svg>

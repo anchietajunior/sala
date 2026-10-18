@@ -179,7 +179,7 @@
                 FIFO · primeira implementação concreta em C
             </p>
             <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
-                Aula <strong>de implementação</strong> — código, header e <code>main</code> executável.
+                Aula <strong>de implementação</strong> — código em C completo, com <code>main</code> executável.
             </p>
         </section>
 
@@ -193,10 +193,10 @@
                 <h3>Introdução</h3>
                 <p style="text-align: left;">
                     Imagine uma <span class="destaque">fila do banco</span>. Quem chega
-                    entra atrás de todo mundo; quem é atendido sai pela frente.
+                    entra atrás de todos os que já aguardam; quem é atendido sai pela frente.
                 </p>
                 <p style="text-align: left; margin-top: 0.8em;">
-                    Ninguém fura, ninguém é atendido fora de ordem.
+                    Ninguém ultrapassa quem chegou antes; ninguém é atendido fora da ordem de chegada.
                 </p>
                 <blockquote>
                     A regra inviolável: <strong>quem chegou primeiro, sai primeiro</strong>.
@@ -241,7 +241,7 @@
                     <li><code>vazia</code> — testa se tem elementos.</li>
                 </ul>
                 <blockquote>
-                    Não dá para olhar o terceiro, nem remover o último, nem inserir no meio.
+                    Nenhuma operação consulta o terceiro elemento, remove o último ou insere no meio.
                 </blockquote>
             </section>
 
@@ -289,7 +289,7 @@
 
             <section>
                 <p class="titulo-bloco">Camada 3</p>
-                <h3>Os dois ponteiros que tornam tudo eficiente</h3>
+                <h3>Os dois ponteiros externos da Fila</h3>
                 <p style="text-align: left;">
                     Para inserir <strong>e</strong> remover em O(1), guardamos um ponteiro em cada extremidade:
                 </p>
@@ -326,14 +326,15 @@
             <section>
                 <h3>A armadilha do último elemento</h3>
                 <p style="text-align: left;">
-                    Se ao avançar, <code>inicio</code> virar <code>NULL</code>...
+                    Se, ao avançar, <code>inicio</code> passar a valer <code>NULL</code>...
                 </p>
                 <blockquote>
-                    ...o <code>fim</code> também precisa virar <code>NULL</code>,
+                    ...o <code>fim</code> também precisa receber <code>NULL</code>,
                     <strong>explicitamente</strong>.
                 </blockquote>
                 <p class="nota-rodape">
-                    Esquecer = <em>dangling pointer</em> garantido.
+                    Sem essa atribuição, <code>fim</code> aponta para memória já liberada:
+                    um <strong>ponteiro suspenso</strong> (<em>dangling pointer</em>).
                 </p>
             </section>
 
@@ -368,7 +369,7 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             </section>
 
             <section>
-                <h3>Axiomas — coração do FIFO</h3>
+                <h3>Axiomas — a especificação formal do FIFO</h3>
                 <p style="text-align: left; font-size: 0.82em;">
                     Os axiomas <strong>definem o comportamento</strong> da Fila combinando
                     as operações entre si — sem dizer como elas são implementadas. Repare
@@ -426,8 +427,8 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                 <h3>Análise — comparando representações</h3>
                 <p style="text-align: left; font-size: 0.78em;">
                     A mesma TAD pode ser implementada de <strong>cinco formas</strong>
-                    diferentes. A tabela mostra que <strong>todas as três encadeadas</strong>
-                    entregam O(1) em tudo; as duas com vetor têm comportamentos diferentes
+                    diferentes. A tabela mostra que <strong>as três encadeadas</strong>
+                    executam todas as operações em O(1); as duas com vetor têm comportamentos diferentes
                     para <code>desenfileirar</code>, e custos diferentes em capacidade.
                 </p>
                 <table style="font-size: 0.62em;">
@@ -459,26 +460,26 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             <section>
                 <h3>Encadeada × vetor — vantagens e custos</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    Indo além da tabela, vejamos o trade-off concreto entre as duas
-                    famílias de representação: a encadeada cresce sob demanda, mas paga
-                    o "preço do ponteiro"; o vetor é mais econômico, mas tem capacidade
-                    fixa ou paga <code>realloc</code>.
+                    Além da tabela, cada família de representação tem vantagens e custos:
+                    a encadeada cresce sob demanda, mas gasta memória com um ponteiro por
+                    nó; o vetor é mais econômico, mas tem capacidade fixa ou exige
+                    <code>realloc</code>.
                 </p>
                 <div class="duas-colunas">
                     <div>
                         <h4 style="color: #2a7;">Vantagens da encadeada</h4>
                         <ul style="font-size: 0.72em;">
                             <li>Cresce/diminui sob demanda.</li>
-                            <li>Sem <em>overflow</em> individual — múltiplas filas dividem o pool de memória livre.</li>
+                            <li>Sem estouro de capacidade (<em>overflow</em>) — várias filas compartilham a mesma memória livre.</li>
                             <li>Sem deslocamento de elementos.</li>
                         </ul>
                     </div>
                     <div>
                         <h4 style="color: #b54;">Custos</h4>
                         <ul style="font-size: 0.72em;">
-                            <li><em>Overhead</em> de ponteiro por nó (8 B em 64 bits).</li>
+                            <li>Custo adicional (<em>overhead</em>) de um ponteiro por nó (8 bytes em 64 bits).</li>
                             <li>Cada nó: 1 chamada a <code>malloc</code>/<code>free</code>.</li>
-                            <li>Tempo do sistema acumula em filas com milhões de operações.</li>
+                            <li>O tempo dessas chamadas se acumula em filas com milhões de operações.</li>
                         </ul>
                     </div>
                 </div>
@@ -489,9 +490,9 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                 <p class="titulo-bloco">Camada 6</p>
                 <h3>As três implementações desta aula</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    Para que a TAD fique <strong>concreta de verdade</strong>, esta aula
-                    traz não uma, mas <strong>três implementações</strong> em C lado a lado —
-                    todas entregam o mesmo contrato, todas em O(1). O que muda entre elas
+                    Para tornar o TAD <strong>concreto</strong>, esta aula apresenta
+                    <strong>três implementações</strong> em C — todas cumprem o mesmo
+                    contrato, com todas as operações em O(1). O que muda entre elas
                     é como os ponteiros são organizados internamente.
                 </p>
                 <ul style="text-align: left; font-size: 0.78em;">
@@ -521,9 +522,8 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             <section>
                 <h3>Outras variantes (não implementadas aqui)</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    Além das três implementações desta aula, a "família" da Fila se
-                    estende em <strong>outras direções</strong> — algumas aparecerão em
-                    aulas futuras, outras ficam como referência para quem quiser explorar.
+                    Além das três implementações desta aula, a Fila admite
+                    <strong>outras variantes</strong>, registradas aqui como referência.
                 </p>
                 <ul style="text-align: left; font-size: 0.8em;">
                     <li>
@@ -535,8 +535,8 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                         — generaliza Fila e Pilha; apoia-se em lista dupla.
                     </li>
                     <li>
-                        <span class="destaque">Fila de prioridade</span> — relaxa o
-                        FIFO; saída segue uma chave. Implementação canônica:
+                        <span class="destaque">Fila de prioridade</span> — não segue o
+                        FIFO: sai primeiro o elemento de maior prioridade, segundo uma chave. Implementação canônica:
                         <em>heap binário</em>.
                     </li>
                 </ul>
@@ -545,10 +545,9 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             <section>
                 <h3>Onde Fila reaparece</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    A Fila não fica restrita a esta aula — ela <strong>volta em
-                    contextos muito diferentes</strong>, da próxima aula até sistemas
-                    distribuídos do mundo real. O padrão é sempre o mesmo: ordem temporal
-                    de chegada precisa ser preservada.
+                    A Fila <strong>aparece em contextos muito diferentes</strong>, de
+                    algoritmos em grafos a sistemas distribuídos. O padrão é sempre o
+                    mesmo: a ordem temporal de chegada precisa ser preservada.
                 </p>
                 <ul style="text-align: left; font-size: 0.78em;">
                     <li>
@@ -560,7 +559,8 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                         largura exige Fila por construção.
                     </li>
                     <li>
-                        <span class="destaque">Escalonadores FCFS</span> em SOs.
+                        <span class="destaque">Escalonadores por ordem de chegada</span> (FCFS)
+                        em sistemas operacionais.
                     </li>
                     <li>
                         <span class="destaque">Filas de mensagens distribuídas</span>
@@ -614,7 +614,7 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             <section>
                 <h3>Passo 4 — enfileirar(30)</h3>
                 <p style="text-align: left; font-size: 0.78em;">
-                    Terceira inserção, mesma receita. A cadeia agora é
+                    Terceira inserção, mesmo procedimento. A cadeia agora é
                     <strong>10 → 20 → 30 → NULL</strong>; <code>inicio</code> continua
                     em 10, <code>fim</code> avança para 30.
                 </p>
@@ -643,7 +643,7 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             <section>
                 <h3>Passo 7 — desenfileirar() remove 20</h3>
                 <p style="text-align: left; font-size: 0.78em;">
-                    Mesma receita do passo anterior: <code>inicio</code> avança para 30,
+                    Mesmo procedimento do passo anterior: <code>inicio</code> avança para 30,
                     20 é liberado. Sobrou um único nó — e <strong>os dois ponteiros voltam
                     a apontar para o mesmo</strong>.
                 </p>
@@ -658,9 +658,9 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                 <p style="text-align: left; font-size: 0.78em;">
                     Mesma Fila, mesmas operações — mas agora <strong>cada nó tem dois
                     ponteiros</strong>: <code>anterior</code> (tracejado) e
-                    <code>proximo</code> (cheio). Útil quando, no futuro, virar Deque.
+                    <code>proximo</code> (cheio). Útil quando a estrutura for estendida para um Deque.
                 </p>
-                <img class="diagrama" src="img/08_dupla.svg" alt="Fila com 3 nós cada um com prev (tracejado) e next (cheio); inicio à esquerda, fim à direita">
+                <img class="diagrama" src="img/08_dupla.svg" alt="Fila com 3 nós, cada um com os ponteiros anterior (prev, tracejado) e proximo (next, cheio); inicio à esquerda, fim à direita">
                 <p class="nota-rodape">
                     Cada nó passa a ter dois ponteiros — base natural para Deque.
                 </p>
@@ -697,8 +697,8 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                     Dezenas de alunos, uma única impressora. Todas as requisições chegam quase ao mesmo tempo.
                 </p>
                 <ul style="text-align: left; font-size: 0.85em;">
-                    <li>Sem ordenação: aluno azarado nunca recebe o trabalho.</li>
-                    <li>Recusar todas menos uma: tentativa eterna até dar certo.</li>
+                    <li>Sem ordem definida: a requisição de um aluno pode ser adiada indefinidamente.</li>
+                    <li>Recusar todas menos uma: os demais reenviam repetidamente até serem aceitos.</li>
                 </ul>
                 <blockquote>
                     Solução: toda requisição entra em uma <strong>Fila</strong>.
@@ -720,8 +720,8 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                         recebe mais rápido do que encaminha, os pacotes vão para uma fila.
                     </li>
                     <li>
-                        <span class="destaque">Escalonadores FCFS</span> — processos pedem CPU; o SO
-                        atende em ordem de chegada.
+                        <span class="destaque">Escalonadores de processos</span> — o sistema operacional
+                        concede o processador na ordem de chegada (FCFS).
                     </li>
                     <li>
                         <span class="destaque">Filas distribuídas</span> (RabbitMQ, AWS SQS, Kafka) —
@@ -742,10 +742,10 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, toda vez que você manda uma mensagem no WhatsApp sem
-                            sinal, ela vai para uma Fila no seu próprio aparelho —
-                            quando o sinal volta, as mensagens são enviadas exatamente
-                            na ordem em que foram digitadas. FIFO puro, ali no seu bolso.
+                            Turma, uma mensagem enviada no WhatsApp sem sinal é
+                            armazenada em uma Fila no próprio aparelho — quando o sinal
+                            volta, as mensagens são transmitidas exatamente na ordem em
+                            que foram digitadas: a política FIFO em um sistema de uso cotidiano.
                         </p>
                     </div>
                 </div>
@@ -775,14 +775,14 @@ vazia(Fila)                -&gt; Booleano</code></pre>
             <section>
                 <h3>WhatsApp sem internet</h3>
                 <p style="text-align: left;">
-                    Você manda 5 mensagens em sequência sem sinal. Elas ficam <strong>enfileiradas</strong>
+                    Você envia 5 mensagens em sequência sem sinal. Elas ficam <strong>enfileiradas</strong>
                     no aparelho na ordem em que foram digitadas.
                 </p>
                 <p style="text-align: left;">
-                    Quando o sinal volta, o app envia uma a uma <strong>na ordem original</strong> —
+                    Quando o sinal volta, o aplicativo envia uma a uma <strong>na ordem original</strong> —
                     não a última primeiro, não em ordem aleatória.
                 </p>
-                <blockquote>FIFO puro.</blockquote>
+                <blockquote>Política FIFO: a primeira mensagem digitada é a primeira enviada.</blockquote>
             </section>
         </section>
 
@@ -811,7 +811,7 @@ vazia(Fila)                -&gt; Booleano</code></pre>
                     <code>proximo</code>; a Fila mantém <code>inicio</code> e <code>fim</code>.
                 </p>
                 <blockquote style="font-size: 0.78em;">
-                    Cada implementação vive em <strong>um único arquivo <code>.c</code></strong>
+                    Cada implementação está em <strong>um único arquivo <code>.c</code></strong>
                     autossuficiente. Separar em <code>fila.h</code> + <code>fila.c</code>
                     é tema da aula futura sobre organização de projetos em C.
                 </blockquote>
@@ -850,7 +850,7 @@ Fila* criar(void) {
             <section>
                 <h3><code>fila.c</code> — <code>vazia</code>, <code>frente</code> e <code>destruir</code></h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    As <strong>três funções "fáceis"</strong>: <code>vazia</code> é um teste
+                    As <strong>três funções mais simples</strong>: <code>vazia</code> é um teste
                     de uma linha, <code>frente</code> só lê o valor sem alterar nada, e
                     <code>destruir</code> percorre a lista da frente ao fim liberando cada nó.
                 </p>
@@ -885,7 +885,7 @@ void destruir(Fila* f) {
             <section>
                 <h3><code>fila.c</code> — <code>enfileirar</code> e <code>desenfileirar</code></h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    O <strong>coração</strong> da Fila: as duas operações que modificam a
+                    As <strong>operações centrais</strong> da Fila: as duas que modificam a
                     estrutura. Note os dois cuidados destacados — o <code>if (vazia)</code>
                     em <code>enfileirar</code> e o "<code>fim = NULL</code>" condicional em
                     <code>desenfileirar</code>, ambos discutidos na Camada 3.
@@ -960,7 +960,7 @@ void enfileirar(Fila* f, int valor) {
                 <p style="text-align: left; font-size: 0.82em;">
                     O <code>desenfileirar</code> da versão dupla repete a lógica da simples
                     e <strong>acrescenta uma linha</strong>: depois que o novo <code>inicio</code>
-                    é definido, ele precisa zerar o próprio <code>anterior</code> —
+                    é definido, ele precisa atribuir <code>NULL</code> ao próprio <code>anterior</code> —
                     afinal, agora não há mais ninguém antes dele.
                 </p>
                 <pre><code class="language-c">int desenfileirar(Fila* f) {
@@ -977,7 +977,7 @@ void enfileirar(Fila* f, int valor) {
     return valor;
 }</code></pre>
                 <p class="nota-rodape">
-                    Mesma lógica da versão simples + cuidado de zerar o
+                    Mesma lógica da versão simples, com o cuidado de atribuir <code>NULL</code> ao
                     <code>anterior</code> do novo <code>inicio</code>.
                 </p>
             </section>
@@ -1027,8 +1027,8 @@ void enfileirar(Fila* f, int valor) {
                 <p style="text-align: left; font-size: 0.82em;">
                     Para desenfileirar na circular, primeiro localizamos a frente via
                     <code>fim-&gt;proximo</code>. Depois há <strong>dois casos</strong>:
-                    se ela coincide com o <code>fim</code> a fila tinha um só elemento
-                    e zera-se tudo; caso contrário, religa-se a lista pulando o nó removido.
+                    se ela coincide com o <code>fim</code>, a fila tinha um só elemento
+                    e <code>fim</code> recebe <code>NULL</code>; caso contrário, religa-se a lista pulando o nó removido.
                 </p>
                 <pre><code class="language-c">int desenfileirar(Fila* f) {
     if (vazia(f)) { printf("erro: vazia\n"); exit(1); }
@@ -1052,11 +1052,11 @@ void enfileirar(Fila* f, int valor) {
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, repare a beleza da versão circular: como o anel
-                            faz o último apontar de volta ao primeiro, basta um
-                            ponteiro externo (<code>fim</code>) para acessar tudo.
-                            Menos estado, menos sincronização entre ponteiros, menos
-                            classes de bug.
+                            Turma, na versão circular o anel faz o último nó apontar
+                            de volta ao primeiro, e um único ponteiro externo
+                            (<code>fim</code>) dá acesso às duas extremidades.
+                            Com menos ponteiros para manter consistentes, há menos
+                            pontos em que um erro pode ocorrer.
                             <cite>Tenenbaum, cap. 5 — Listas circulares</cite>
                         </p>
                     </div>
@@ -1068,8 +1068,7 @@ void enfileirar(Fila* f, int valor) {
                 <h3>Compilando as três implementações</h3>
                 <p style="text-align: left; font-size: 0.82em;">
                     Cada implementação está em <strong>seu próprio arquivo
-                    autossuficiente</strong> — três compilações independentes, três
-                    binários separados. O ponto-chave vem logo abaixo: as três produzem
+                    autossuficiente</strong> — três compilações independentes, três executáveis separados. O ponto-chave vem logo abaixo: as três produzem
                     <strong>exatamente a mesma saída</strong>.
                 </p>
                 <pre><code class="language-bash">gcc -Wall -Wextra -o fila_demo          fila.c
@@ -1089,8 +1088,8 @@ Desenfileirando: 10 20 30</code></pre>
             <section>
                 <h3>O ponto central das três implementações</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    Aqui está a <strong>moral desta aula</strong>: três representações
-                    internas radicalmente diferentes entregam o mesmo comportamento
+                    Este é o <strong>resultado central desta aula</strong>: três representações
+                    internas diferentes produzem o mesmo comportamento
                     externo. É exatamente o que um TAD promete — e por isso o cliente
                     pode trocar uma versão pela outra sem alterar uma linha da
                     <code>main</code>.
@@ -1118,7 +1117,7 @@ Desenfileirando: 10 20 30</code></pre>
             </section>
 
             <section>
-                <h3>Exercício 1 — trace na mão</h3>
+                <h3>Exercício 1 — simulação manual</h3>
                 <p style="text-align: left; font-size: 0.78em;">
                     Fila inicial vazia. Sequência:
                     <code>enf(7)</code>, <code>enf(3)</code>, <code>enf(11)</code>,
@@ -1202,7 +1201,7 @@ Desenfileirando: 10 20 30</code></pre>
             <h1>Próxima aula</h1>
             <h2>Aula 04 — Pilha</h2>
             <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
-                A outra face da moeda: LIFO sobre lista encadeada.
+                Política LIFO (último a entrar, primeiro a sair) sobre lista encadeada.
             </p>
         </section>
 

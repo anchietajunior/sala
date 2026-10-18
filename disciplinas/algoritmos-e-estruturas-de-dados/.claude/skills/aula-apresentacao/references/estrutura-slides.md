@@ -73,7 +73,7 @@ Texto **literal** desta forma em todas as aulas.
 
 1. **Slides das 6 camadas**. Cada camada tipicamente ocupa **1 a 3 slides**, conforme tamanho do conteúdo no `.md`. Comece cada camada com `<p class="titulo-bloco">Camada N</p>` seguido de `<h3>Nome da camada</h3>`.
 
-   - **Camada 1** — 1 slide. Texto coloquial + blockquote com a frase essencial.
+   - **Camada 1** — 1 slide. Texto simples, em registro formal, + blockquote com a frase essencial.
    - **Camada 2** — 1–2 slides. Definição + operações em bullet.
    - **Camada 3** — 2–4 slides. Sub-divida em "ponteiros / estado externo", "operações em detalhe", "invariantes".
    - **Camada 4** — 2–3 slides. Um para o TAD (com `<pre><code class="language-c">...</code></pre>`), um para axiomas em bullet, um para a tupla. Quando a camada 4 do `.md` for matemática (definição formal, notação assintótica), **não transplantar a definição para o slide** — ver seção *Matemática nos slides* adiante.
@@ -113,18 +113,7 @@ Texto **literal** desta forma em todas as aulas.
 
 ---
 
-## Bloco 4 — Analogias
-
-`<section>` pai com:
-
-1. Slide de abertura do bloco.
-2. **1 slide por analogia** (1 ou 2 no total).
-
-Aqui o Eddy é opcional — pode aparecer se tiver curiosidade histórica relacionada à analogia.
-
----
-
-## Bloco 5 — Código em C *(somente em aulas de implementação)*
+## Bloco 4 — Código em C *(somente em aulas de implementação)*
 
 `<section>` pai com:
 
@@ -144,38 +133,7 @@ Aqui o Eddy é opcional — pode aparecer se tiver curiosidade histórica relaci
 
 ---
 
-## Bloco 6 — Exercício Prático
-
-> **Regra fixa da disciplina: a apresentação traz SEMPRE apenas 1 exercício** — e ele é o **exercício de implementação**: colocar de pé, em C, a estrutura ou o algoritmo que a aula acabou de mostrar. Em aula conceitual, onde não há código, o exercício é executar o algoritmo **na mão** (trace).
->
-> Os outros exercícios do `.md` (que continua com 3–5, incluindo o desafio) **não viram slide**. O slide é o que a turma faz em sala; o `.md` é o material de estudo.
-
-`<section>` pai com:
-
-1. Slide de abertura, anunciando o exercício único.
-2. Opcional: **Slide do Eddy**, **provocando** antes da tentativa ("Turma, antes de escrever qualquer linha, prevejam no papel quantas comparações..."). Nunca dá a resposta.
-3. **O slide do exercício**:
-
-   ```html
-   <section>
-       <h3>Exercício — implemente <o quê></h3>
-       <p style="text-align: left; font-size: 0.78em;">
-           <enunciado: o que escrever, sobre quais dados, e como testar>
-       </p>
-       <div class="resposta fragment fade-in">
-           <strong>Resposta mínima aceitável:</strong>
-           <critério objetivo de aceitação — saída esperada, contagens, comportamento>
-       </div>
-   </section>
-   ```
-
-   A classe `fragment fade-in` faz a resposta aparecer **apenas após clique** — o professor faz a turma tentar primeiro.
-
-   A "Resposta mínima aceitável" do slide deve ser **verificável**: saída esperada, contagens concretas, ou o comportamento que prova que funcionou. Não é a solução comentada — é o critério pelo qual o aluno sabe que acertou.
-
----
-
-## Bloco 7 — Referências
+## Bloco 5 — Referências
 
 **1 único slide**, sem verticais. Lista a bibliografia base + complementares.
 
@@ -326,7 +284,6 @@ O título "Representação interna como tupla" colado na fórmula. O aluno vê a
    - **Depois da ideia em português** — o slide diz a ideia em prosa primeiro; a fórmula aparece como resumo, nunca como apresentação.
    - **Com leitura em linguagem natural ao lado** — "lê-se: cresce no ritmo de n".
 4. **A definição formal completa é remetida ao material escrito** — use `<p class="nota-rodape">A definição matemática completa está no material escrito da aula.</p>`.
-5. **Exercícios formais do `.md`** viram enunciado em linguagem de gente no slide ("encontre um multiplicador que cubra...", "explique por que nenhum multiplicador basta..."); a resposta pode conter a expressão curta.
 
 ### Exemplo ruim — definição transplantada do `.md`
 
@@ -362,7 +319,7 @@ A aula é projetada em sala. Aluno em sala lê o slide em 5–10 segundos e volt
 
 1. **Uma ideia por slide.** Se o rascunho tem 2 ou 3 ideias, **fatie em 2 ou 3 slides** (todos dentro da mesma `<section>` pai do bloco). Cada slide carrega um único ponto que o professor destaca de viva voz.
 
-2. **Voz que conversa, não que disserta.** Frases curtas. Linguagem do dia a dia. Sem subordinação pesada (*"e isso faz com que, por sua vez, ..."*). Quando der para usar bullet curto em vez de parágrafo, prefira bullet.
+2. **Texto direto e formal, não dissertativo.** Frases curtas, com o vocabulário da disciplina. Simples não é informal: nada de gíria, bordão ou expressão de palco (regra *Registro acadêmico, sem jargão* do `CLAUDE.md`). Sem subordinação pesada (*"e isso faz com que, por sua vez, ..."*). Quando der para usar bullet curto em vez de parágrafo, prefira bullet.
 
 3. **Texto enxuto.** Limite prático para o corpo do slide:
    - **Prosa pura**: até ~40 palavras.
@@ -393,8 +350,8 @@ Três ideias empilhadas: (a) caso médio é bom; (b) caso ordenado degenera; (c)
 <section>
     <h3>E se inserirmos em ordem?</h3>
     <p>Insira 1, 2, 3, 4, 5 numa BST vazia. <strong>Cada novo vai à direita</strong>
-    do anterior — a árvore vira uma fila vertical.</p>
-    <blockquote>Altura = <em>n</em>. Busca volta a O(<em>n</em>). Perdemos tudo.</blockquote>
+    do anterior — a árvore degenera em uma cadeia vertical.</p>
+    <blockquote>Altura = <em>n</em>. A busca volta a custar O(<em>n</em>) e a vantagem da árvore desaparece.</blockquote>
 </section>
 
 <section>
@@ -402,8 +359,7 @@ Três ideias empilhadas: (a) caso médio é bom; (b) caso ordenado degenera; (c)
     <p>Árvores <strong>balanceadas</strong> fazem pequenas rotações depois de
     cada inserção para manter a altura próxima de log <em>n</em> —
     <strong>sempre</strong>, não só na média.</p>
-    <p class="nota-rodape">As mais conhecidas: AVL e rubro-negra. Implementação
-    fica para a aula dedicada.</p>
+    <p class="nota-rodape">As mais conhecidas: AVL e rubro-negra.</p>
 </section>
 
 <section class="eddy-slide">

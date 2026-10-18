@@ -171,7 +171,7 @@
                 Delegar uma tarefa · delegar a si mesmo
             </p>
             <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
-                Aula <strong>conceitual</strong> — o que uma função é por dentro,
+                Aula <strong>conceitual</strong> — como uma função funciona internamente,
                 e o que acontece quando ela chama a si mesma.
             </p>
         </section>
@@ -206,7 +206,7 @@
                     devolve um valor de saída.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Em C, <strong>tudo</strong> é função — inclusive a <code>main</code>.
+                    Em C, todo código executável fica dentro de <strong>funções</strong> — inclusive a <code>main</code>.
                 </p>
                 <p class="nota-rodape" style="text-align: left;">
                     A literatura também usa sub-rotina, subprograma e procedimento para a mesma ideia.
@@ -214,7 +214,7 @@
             </section>
 
             <section>
-                <h3>Quatro palavras dão conta de qualquer função</h3>
+                <h3>Quatro termos descrevem qualquer função</h3>
                 <p style="text-align: left;">
                     Esse é o vocabulário para falar de função sem ambiguidade.
                 </p>
@@ -236,7 +236,7 @@
                     mesma sobre uma entrada <strong>menor</strong> — e se organiza em dois casos:
                 </p>
                 <ul style="font-size: 0.82em;">
-                    <li><strong>Caso base</strong> — entrada tão pequena que a resposta sai direto.</li>
+                    <li><strong>Caso base</strong> — entrada tão pequena que a resposta é imediata, sem nova chamada.</li>
                     <li><strong>Caso recursivo</strong> — reduz o problema e delega o resto a si mesma.</li>
                 </ul>
             </section>
@@ -244,12 +244,12 @@
             <section>
                 <h3>O que uma função <em>não</em> é</h3>
                 <p style="text-align: left;">
-                    Três mal-entendidos que vale desarmar já:
+                    Três equívocos comuns a evitar:
                 </p>
                 <ul style="font-size: 0.8em;">
                     <li>Não é <strong>atalho de escrita</strong> — é um contrato: dados estes parâmetros, este resultado.</li>
-                    <li>Não <strong>guarda estado</strong> — cada chamada nasce e morre nela mesma.</li>
-                    <li>Não <strong>enxerga</strong> as variáveis de quem chamou.</li>
+                    <li>Não <strong>conserva valores</strong> entre chamadas — suas variáveis deixam de existir quando a chamada termina.</li>
+                    <li>Não <strong>tem acesso</strong> às variáveis de quem chamou.</li>
                 </ul>
             </section>
 
@@ -277,13 +277,13 @@
                 <p class="titulo-bloco">Camada 3</p>
                 <h3>Por que não deixar tudo dentro da <code>main</code>?</h3>
                 <p style="text-align: left;">
-                    Um programa funciona igual com tudo dentro da <code>main</code>.
+                    Um programa pode ser escrito inteiramente dentro da <code>main</code>.
                     Três razões justificam separar mesmo assim:
                 </p>
                 <ul style="font-size: 0.8em;">
                     <li><strong>Nomear</strong> — <code>busca_binaria(v, 8, 55)</code> diz o que faz. O laço não diz.</li>
                     <li><strong>Reusar</strong> — sem função, seriam quatro cópias do mesmo laço.</li>
-                    <li><strong>Isolar</strong> — o defeito mora em 12 linhas, não em 300.</li>
+                    <li><strong>Isolar</strong> — um defeito fica restrito a 12 linhas, não a 300.</li>
                 </ul>
             </section>
 
@@ -291,7 +291,7 @@
                 <h3>Abstração — usar sem saber como funciona</h3>
                 <p style="text-align: left;">
                     Quem chama <code>busca_binaria</code> precisa saber <strong>o que ela devolve</strong> —
-                    nunca como ela faz por dentro. Essa separação tem nome:
+                    nunca como ela é implementada. Essa separação tem nome:
                     <span class="destaque">abstração</span>.
                 </p>
                 <blockquote>
@@ -321,20 +321,17 @@ int soma(int a, int b) {
             <section>
                 <h3>O <code>return</code> faz duas coisas</h3>
                 <p style="text-align: left;">
-                    Ele devolve <strong>um único valor</strong> — e <strong>encerra a função na hora</strong>.
+                    Ele devolve <strong>um único valor</strong> — e <strong>encerra a função imediatamente</strong>.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
-                    É por isso que uma busca pode dar <code>return i</code> de dentro
-                    do <code>for</code>: achou, acabou,
-                    o laço nem termina.
+                    É por isso que uma busca pode executar <code>return i</code> dentro do <code>for</code>: ao encontrar o valor, a função termina sem completar o laço.
                 </p>
             </section>
 
             <section>
                 <h3>Parâmetro e argumento não são a mesma coisa</h3>
                 <p style="text-align: left;">
-                    A distinção parece formalidade — até perguntarmos <strong>o que exatamente
-                    viaja</strong> de um para o outro.
+                    A distinção parece formalidade — até perguntarmos <strong>o que exatamente é transmitido</strong> de um para o outro.
                 </p>
                 <ul style="font-size: 0.82em;">
                     <li><strong>Parâmetro</strong> — o nome declarado na assinatura: <code>a</code>, <code>b</code>.</li>
@@ -343,10 +340,10 @@ int soma(int a, int b) {
             </section>
 
             <section>
-                <h3>O que viaja é uma cópia</h3>
+                <h3>O que se transmite é uma cópia</h3>
                 <p style="text-align: left;">
                     Em C, o parâmetro é uma variável <strong>nova</strong>, iniciada com o valor do
-                    argumento. Mexer nela não toca no original — chama-se
+                    argumento. Alterá-la não modifica o original — chama-se
                     <span class="destaque">passagem por valor</span>.
                 </p>
                 <pre><code class="language-c" data-trim>
@@ -365,7 +362,7 @@ printf("%d", n);        /* imprime 10, nao 20 */
                 <p style="text-align: left;">
                     Parâmetros e variáveis declaradas no corpo são
                     <span class="destaque">variáveis locais</span>. O trecho onde um nome existe
-                    é o seu <span class="destaque">escopo</span> — e ele acaba na chave da função.
+                    é o seu <span class="destaque">escopo</span> — e ele termina na chave que fecha a função.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
                     Por isso o <code>i</code> de <code>busca_linear</code> e o <code>i</code> de
@@ -377,8 +374,7 @@ printf("%d", n);        /* imprime 10, nao 20 */
                 <h3>Então por que o vetor muda?</h3>
                 <p style="text-align: left;">
                     Uma função que recebe um vetor e escreve nele <strong>altera</strong> o vetor
-                    de quem chamou. A regra não foi quebrada: um vetor é uma fileira de posições
-                    vizinhas na memória, e o que veio por cópia foi só <strong>onde a fileira começa</strong>.
+                    de quem chamou. A passagem por valor continua valendo: um vetor ocupa posições vizinhas na memória, e o que foi copiado é apenas <strong>a posição onde ele começa</strong>.
                 </p>
                 <blockquote>
                     Valores simples são copiados. Vetores, não.
@@ -391,7 +387,7 @@ printf("%d", n);        /* imprime 10, nao 20 */
             <section>
                 <h3>Fatorial: o problema contém a si mesmo</h3>
                 <p style="text-align: left;">
-                    Com a mecânica da chamada na mão, voltemos à função que chama a si mesma.
+                    Compreendida a mecânica da chamada, voltemos à função que chama a si mesma.
                     <code>4! = 4 × 3 × 2 × 1 = 24</code> — mas <code>3 × 2 × 1</code> é
                     exatamente <code>3!</code>.
                 </p>
@@ -399,8 +395,7 @@ printf("%d", n);        /* imprime 10, nao 20 */
                     4! = 4 × 3!
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Dentro do problema mora uma versão menor <strong>dele mesmo</strong>.
-                    É disso que a recursão vive.
+                    O problema contém uma versão menor <strong>de si mesmo</strong> — é essa propriedade que a recursão explora.
                 </p>
             </section>
 
@@ -481,10 +476,8 @@ volta — agora cada chamada multiplica
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, aquela mensagem de erro <em>stack overflow</em> que vocês já viram
-                            é exatamente esta pilha estourando. Recursão sem caso base — ou com caso
-                            base que nunca é alcançado — empilha chamadas até acabar a memória
-                            reservada para elas. O nome do site mais famoso de programação vem daí.
+                            Turma, a mensagem de erro <em>stack overflow</em> (estouro de pilha) que vocês já viram indica exatamente isto: a pilha de chamadas excedeu seu limite. Recursão sem caso base — ou com caso
+                            base que nunca é alcançado — acumula chamadas até esgotar a memória reservada para elas. O nome de um conhecido site de perguntas sobre programação vem daí.
                         </p>
                     </div>
                 </div>
@@ -507,7 +500,7 @@ int fibonacci(int n) {
 }
                 </code></pre>
                 <p class="nota-rodape" style="text-align: left;">
-                    A função está correta. O problema é outro — e aparece no próximo slide.
+                    A função está correta; o problema está no custo, analisado a seguir.
                 </p>
             </section>
 
@@ -519,7 +512,7 @@ int fibonacci(int n) {
                     dobra de largura a cada nível.
                 </p>
                 <blockquote>
-                    Pior: a árvore recalcula. Em <code>fibonacci(5)</code>, o termo
+                    Além disso, a árvore repete cálculos. Em <code>fibonacci(5)</code>, o termo
                     <code>fib(2)</code> é computado do zero <strong>três vezes</strong>.
                 </blockquote>
             </section>
@@ -530,20 +523,17 @@ int fibonacci(int n) {
                 <h3>A função da matemática e a da programação</h3>
                 <p style="text-align: left;">
                     Em matemática, uma função associa a cada entrada exatamente uma saída.
-                    A função da programação foi batizada por analogia — e
-                    <code>fatorial(4) = 24</code> tem o mesmo sentido nos dois mundos.
+                    A função da programação recebeu esse nome por analogia — e <code>fatorial(4) = 24</code> tem o mesmo sentido nas duas áreas.
                 </p>
                 <blockquote>
-                    Só que a analogia não fecha: em C, a função pode fazer coisas
-                    <strong>além</strong> de devolver seu valor.
+                    A analogia, porém, é incompleta: em C, a função pode produzir efeitos <strong>além</strong> de devolver seu valor.
                 </blockquote>
             </section>
 
             <section>
                 <h3>Efeito colateral e função pura</h3>
                 <p style="text-align: left;">
-                    Imprimir na tela, alterar um vetor recebido — qualquer coisa observável
-                    fora do retorno é um <span class="destaque">efeito colateral</span>.
+                    Imprimir na tela, alterar um vetor recebido — qualquer efeito observável além do valor de retorno é um <span class="destaque">efeito colateral</span>.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
                     Sem nenhum deles, e devolvendo sempre o mesmo para os mesmos argumentos,
@@ -573,8 +563,7 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
             <section>
                 <h3>Isso não é circular?</h3>
                 <p style="text-align: left;">
-                    Definir uma coisa usando ela mesma parece truque. Não é — desde que
-                    duas condições valham:
+                    Definir um conceito em termos de si mesmo é válido desde que duas condições valham:
                 </p>
                 <ul style="font-size: 0.82em;">
                     <li>Existe ao menos um caso resolvido <strong>diretamente</strong>.</li>
@@ -594,8 +583,7 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
                     E <code>fatorial(0)</code> está correto por definição.
                 </p>
                 <blockquote>
-                    Pronto: a função está correta para todo <code>n</code>. São o mesmo
-                    movimento, escrito de duas maneiras.
+                    Logo, a função está correta para todo <code>n</code>: recursão e indução são o mesmo raciocínio, escrito de duas maneiras.
                 </blockquote>
             </section>
 
@@ -605,20 +593,17 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
                 <h3>A novidade desta aula é o espaço</h3>
                 <p style="text-align: left;">
                     Um algoritmo que só usa duas ou três variáveis auxiliares gasta O(1) de
-                    memória adicional. O fatorial recursivo gasta <strong>O(n)</strong> — sem
-                    alocar nada: são as <code>n+1</code> chamadas pendentes ocupando lugar.
+                    memória adicional. O fatorial recursivo gasta <strong>O(n)</strong> — sem reservar memória explicitamente: são as <code>n+1</code> chamadas pendentes ocupando memória.
                 </p>
                 <blockquote>
-                    E esse custo tem teto: recursão funda demais esgota a memória
-                    disponível e derruba o programa.
+                    Esse custo tem limite: recursão muito profunda esgota a memória disponível e interrompe o programa.
                 </blockquote>
             </section>
 
             <section>
                 <h3>As duas recursões lado a lado</h3>
                 <p style="text-align: left;">
-                    Mesma técnica, custos de mundos diferentes. Olhe a última coluna:
-                    é ela que separa as duas.
+                    Mesma técnica, custos de ordens de grandeza diferentes. Observe a última coluna: é ela que distingue as duas.
                 </p>
                 <table>
                     <tr><th>Algoritmo</th><th>Tempo</th><th>Espaço</th><th>Chamadas (n = 30)</th></tr>
@@ -631,7 +616,7 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
             </section>
 
             <section>
-                <h3>O preço do Fibonacci recursivo</h3>
+                <h3>O custo do Fibonacci recursivo</h3>
                 <p style="text-align: left;">
                     Números reais, numa máquina que execute cem milhões de passos por segundo.
                 </p>
@@ -648,10 +633,10 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
             </section>
 
             <section>
-                <h3>O vilão não é a recursão</h3>
+                <h3>A causa do custo não é a recursão</h3>
                 <p style="text-align: left;">
-                    O Fibonacci é catastrófico porque <strong>recalcula</strong>, não porque
-                    é recursivo. O fatorial, recursivo do mesmo jeito, não repete nada —
+                    O Fibonacci tem custo exponencial porque <strong>recalcula</strong>, não porque
+                    é recursivo. O fatorial, igualmente recursivo, não repete nada —
                     e custa O(n).
                 </p>
                 <blockquote>
@@ -669,10 +654,9 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, e o defeito do Fibonacci tem conserto sem abandonar a recursão:
+                            Turma, o defeito do Fibonacci pode ser corrigido sem abandonar a recursão:
                             basta a função anotar cada resultado já calculado e consultar a anotação
-                            antes de recalcular. Chama-se <em>memoização</em>, derruba o custo de
-                            exponencial para linear, e é a porta de entrada da programação dinâmica.
+                            antes de recalcular. Chama-se <em>memoização</em>, reduz o custo de exponencial para linear e é a base da técnica chamada programação dinâmica.
                         </p>
                     </div>
                 </div>
@@ -683,11 +667,11 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
                 <p class="titulo-bloco">Camada 6</p>
                 <h3>Onde a recursão aparece</h3>
                 <p style="text-align: left;">
-                    A recursão não é curiosidade acadêmica — ela sustenta:
+                    A recursão fundamenta estruturas e algoritmos centrais:
                 </p>
                 <ul style="font-size: 0.78em;">
                     <li><strong>Ordenação eficiente</strong> — merge sort e quicksort ordenam duas metades menores.</li>
-                    <li><strong>Árvores</strong> — uma raiz com duas árvores menores penduradas.</li>
+                    <li><strong>Árvores</strong> — uma raiz ligada a duas árvores menores.</li>
                     <li><strong>Busca binária</strong> — descartar metade a cada passo é dividir e conquistar.</li>
                     <li><strong>Listas encadeadas</strong> — um nó seguido de uma lista.</li>
                     <li><strong>Algoritmo de Euclides</strong> — o máximo divisor comum, em duas linhas.</li>
@@ -791,22 +775,21 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
                 <h3>A estrutura se define por si mesma</h3>
                 <p style="text-align: left;">
                     Uma pasta contém arquivos <strong>e pastas</strong>. Cada uma dessas
-                    contém arquivos e mais pastas. Sem limite anunciado.
+                    contém arquivos e mais pastas. Sem limite fixo de níveis.
                 </p>
                 <p style="text-align: left; font-size: 0.85em;">
-                    Igualzinho ao fatorial: o problema contém uma versão menor de si mesmo.
+                    Como no fatorial: o problema contém uma versão menor de si mesmo.
                 </p>
             </section>
 
             <section>
-                <h3>Com laços, não dá</h3>
+                <h3>Com laços, não é possível</h3>
                 <p style="text-align: left;">
                     Um <code>for</code> percorre a pasta principal. Para entrar nas subpastas,
                     um segundo <code>for</code>. Para as subpastas delas, um terceiro.
                 </p>
                 <blockquote>
-                    Cada nível exige um laço <strong>escrito no código</strong> — e o número
-                    de níveis só se conhece quando o programa roda.
+                    Cada nível exige um laço <strong>escrito no código</strong> — e o número de níveis só é conhecido durante a execução.
                 </blockquote>
                 <p class="nota-rodape" style="text-align: left;">
                     Sete <code>for</code> aninhados funcionam para sete níveis e falham no oitavo.
@@ -816,8 +799,7 @@ F(n) = F(n - 1) + F(n - 2)         caso recursivo
             <section>
                 <h3>Com recursão, seis linhas bastam</h3>
                 <p style="text-align: left; font-size: 0.85em;">
-                    O algoritmo não conta níveis — ele só sabe repartir. A profundidade
-                    que o programador não conhecia vira profundidade da pilha de chamadas.
+                    O algoritmo não conta níveis: apenas reparte a tarefa. A profundidade desconhecida pelo programador torna-se a profundidade da pilha de chamadas.
                 </p>
                 <pre><code data-trim>
 void listar(Pasta p) {
@@ -829,7 +811,7 @@ void listar(Pasta p) {
 }
                 </code></pre>
                 <p class="nota-rodape" style="text-align: left;">
-                    O caso base nem precisa de <code>if</code>: pasta só com arquivos não gera chamada.
+                    O caso base dispensa um <code>if</code> explícito: uma pasta só com arquivos não gera nova chamada.
                 </p>
             </section>
 
@@ -865,14 +847,14 @@ void listar(Pasta p) {
                 <h3>1. A empresa e a delegação</h3>
                 <p style="text-align: left; font-size: 0.9em;">
                     Você entrega o que o funcionário precisa e recebe o resultado. Não pergunta
-                    como foi feito — entre vocês existe um <strong>combinado</strong>, que é a assinatura.
+                    como foi feito — entre vocês existe um <strong>acordo</strong>, que é a assinatura.
                 </p>
                 <p style="text-align: left; font-size: 0.82em;">
                     Você não entrega o documento original: entrega uma <strong>fotocópia</strong>.
-                    Ele rabisca à vontade, o seu original fica intacto.
+                    Ele pode anotar livremente na cópia; o seu original permanece intacto.
                 </p>
                 <p class="nota-rodape" style="text-align: left;">
-                    E enquanto ele trabalha, você fica parado — a chamada pendente.
+                    E enquanto ele trabalha, você aguarda — é a chamada pendente.
                 </p>
             </section>
 

@@ -227,7 +227,7 @@
                     <li><span class="destaque">Merge sort</span> — divide em duas metades, ordena
                         cada uma e <strong>intercala</strong> as duas.</li>
                     <li><span class="destaque">Quick sort</span> — escolhe um <strong>pivô</strong>
-                        e joga os menores para um lado, os maiores para o outro.</li>
+                        e coloca os menores de um lado e os maiores do outro.</li>
                 </ul>
             </section>
             <section>
@@ -238,8 +238,7 @@
                     tipo</strong> e combinando os resultados.
                 </p>
                 <blockquote>
-                    O bubble sort não é dessa família — ele ataca o vetor inteiro de uma vez,
-                    repetidas vezes.
+                    O bubble sort não é dessa família — ele percorre o vetor inteiro a cada passagem, sem dividi-lo em partes menores.
                 </blockquote>
             </section>
         <section class="eddy-slide">
@@ -251,9 +250,8 @@
                     <strong class="eddy-nome">Eddy</strong>
                     <p class="eddy-fala">
                         Turma, tanto Backes quanto Veloso e Pereira apresentam primeiro os métodos
-                        elementares e só depois os de divisão e conquista. A ordem não é acidental:
-                        é olhando o bubble sort custar caro que a gente entende por que valeu a pena
-                        inventar os outros dois.
+                        elementares e só depois os de divisão e conquista. A ordem não é acidental: é o custo elevado do bubble sort que justifica a
+                        criação dos outros dois.
                         <cite>Backes, capítulo de métodos de ordenação · Veloso &amp; Pereira, capítulo de ordenação</cite>
                     </p>
                 </div>
@@ -268,13 +266,13 @@
                 </p>
                 <p style="text-align: left;">
                     O que importa aqui: ler <code>v[0]</code> ou <code>v[7]</code> custa
-                    <strong>o mesmo</strong>. Ninguém precisa passar pelos anteriores.
+                    <strong>o mesmo</strong>. Não é preciso percorrer as posições anteriores.
                 </p>
             </section>
             <section>
                 <h3>A troca precisa de uma terceira variável</h3>
                 <p style="text-align: left;">
-                    Parece detalhe, mas é onde quase todo mundo erra na primeira vez.
+                    Trocar dois elementos de posição exige três atribuições e uma variável auxiliar.
                 </p>
                 <pre><code class="language-c" data-trim data-noescape>
 int guardado = vetor[i];   /* sem esta linha, o valor de vetor[i] se perde */
@@ -294,7 +292,7 @@ vetor[j] = guardado;
                     uma versão menor do mesmo problema. Isso é <span class="destaque">recursão</span>.
                 </p>
                 <blockquote>
-                    Para não repetir para sempre, toda recursão precisa de um
+                    Para que as chamadas terminem, toda recursão precisa de um
                     <strong>caso base</strong>. Aqui ele é sempre o mesmo: um trecho de zero ou
                     um elemento já está ordenado.
                 </blockquote>
@@ -306,8 +304,9 @@ vetor[j] = guardado;
                     cada elemento com o vizinho da direita e trocando quando o da esquerda é maior.
                 </p>
                 <blockquote>
-                    Toda passagem termina com o <strong>maior elemento ainda solto</strong> na
-                    última posição. Ele vence todas as comparações e é arrastado até a borda.
+                    Toda passagem termina com o <strong>maior elemento ainda não
+                    posicionado</strong> na última posição disponível: por ser maior que cada
+                    vizinho, ele é trocado em todas as comparações.
                 </blockquote>
                 <p style="text-align: left; font-size: 0.8em;">
                     Logo, depois da passagem <em>i</em> as <em>i</em> últimas posições estão
@@ -321,7 +320,7 @@ vetor[j] = guardado;
                     mais nenhum par de vizinhos fora de ordem — o vetor está ordenado.
                 </p>
                 <blockquote>
-                    Uma linha de código a mais. Num vetor que já chega ordenado, o custo cai de
+                    O teste exige apenas uma variável indicadora. Num vetor já ordenado, o custo cai de
                     <strong>O(n²)</strong> para <strong>O(n)</strong>.
                 </blockquote>
                 <p style="text-align: left; font-size: 0.8em;">Lê-se: de "cresce no ritmo de n ao
@@ -330,12 +329,12 @@ vetor[j] = guardado;
             <section>
                 <h3>Merge sort — a pergunta é outra</h3>
                 <p style="text-align: left;">
-                    Em vez de "como conserto este vetor?", o merge sort pergunta:
-                    <strong>"como junto duas partes que já estão certas?"</strong>
+                    Em vez de corrigir o vetor posição a posição, o merge sort resolve outro
+                    problema: <strong>combinar duas partes que já estão ordenadas</strong>.
                 </p>
                 <p style="text-align: left;">
-                    Junta-se dois montes de cartas já arrumados: olha a de cima de cada monte,
-                    pega a menor, repete. É a <span class="destaque">intercalação</span>.
+                    Para juntar dois montes de cartas já ordenados, compara-se a carta do topo de
+                    cada monte, retira-se a menor e repete-se o processo. É a <span class="destaque">intercalação</span>.
                 </p>
             </section>
             <section>
@@ -348,8 +347,7 @@ vetor[j] = guardado;
                         <em>n</em> elementos custa menos de <em>n</em> comparações: é
                         <span class="destaque">O(n)</span>.</li>
                     <li>Ela lê dos dois trechos ao mesmo tempo, então precisa escrever em um
-                        <span class="destaque">vetor auxiliar</span>. Essa é a memória que o merge
-                        sort cobra.</li>
+                        <span class="destaque">vetor auxiliar</span>. Essa é a memória adicional que o merge sort exige.</li>
                 </ul>
             </section>
             <section>
@@ -362,22 +360,23 @@ vetor[j] = guardado;
                     intercale as duas.
                 </blockquote>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Repare <strong>onde mora o trabalho</strong>: a ida só divide, sem comparar
-                    nada. Toda a ordenação acontece na volta.
+                    Observe <strong>onde ocorre o trabalho</strong>: as chamadas recursivas apenas
+                    dividem, sem comparar nada. Toda a ordenação acontece no retorno, durante as
+                    intercalações.
                 </p>
             </section>
             <section>
-                <h3>Por que dá n log n</h3>
+                <h3>Por que o custo é n log n</h3>
                 <p style="text-align: left;">
                     A divisão pela metade cria <strong>níveis</strong>: um trecho de <em>n</em>,
                     depois dois de <em>n</em>/2, depois quatro de <em>n</em>/4.
                 </p>
                 <ul style="font-size: 0.8em;">
                     <li>Cada nível percorre os <em>n</em> elementos uma vez — custo <em>n</em>.</li>
-                    <li>O número de níveis é quantas vezes dá para dividir <em>n</em> por 2 até
+                    <li>O número de níveis é quantas vezes é possível dividir <em>n</em> por 2 até
                         chegar a 1 — isso é o <strong>logaritmo de n na base 2</strong>.</li>
                 </ul>
-                <p><span class="destaque">n níveis × n por nível → O(n log n)</span></p>
+                <p><span class="destaque">log n níveis × n por nível → O(n log n)</span></p>
                 <p style="text-align: left; font-size: 0.75em;">Lê-se: "cresce no ritmo de n vezes
                     o log de n". E vale sempre — a divisão não depende dos valores.</p>
             </section>
@@ -396,11 +395,11 @@ vetor[j] = guardado;
             <section>
                 <h3>A posição definitiva</h3>
                 <p style="text-align: left;">
-                    É a afirmação mais forte de todo o algoritmo — e ela vale sempre.
+                    É a propriedade que garante a correção do quick sort, e vale para qualquer entrada.
                 </p>
                 <blockquote>
                     Terminado o particionamento, o pivô está <strong>exatamente</strong> onde
-                    estará no vetor ordenado. Nenhuma chamada seguinte precisa tocá-lo.
+                    estará no vetor ordenado. Nenhuma chamada seguinte precisa movê-lo.
                 </blockquote>
                 <p style="text-align: left; font-size: 0.8em;">
                     O motivo: a posição final de um elemento depende só de <strong>quantos são
@@ -408,9 +407,9 @@ vetor[j] = guardado;
                 </p>
             </section>
             <section>
-                <h3>Tudo depende de onde o pivô cai</h3>
+                <h3>Tudo depende da posição do pivô</h3>
                 <p style="text-align: left;">
-                    Aqui está a força e a fraqueza do quick sort, no mesmo lugar.
+                    O custo do quick sort é determinado pelo tamanho dos dois lados que cada partição produz.
                 </p>
                 <ul style="font-size: 0.8em;">
                     <li>Pivô perto do <strong>meio dos valores</strong>: dois lados de tamanho
@@ -444,7 +443,7 @@ vetor[j] = guardado;
                 <p class="titulo-bloco">Camada 4</p>
                 <h3>O problema, dito com precisão</h3>
                 <p style="text-align: left;">
-                    Ordenar não é só "sair em ordem". A definição cobra duas coisas ao mesmo tempo.
+                    Ordenar não é apenas produzir uma saída em ordem. A definição exige duas condições simultâneas.
                 </p>
                 <pre><code class="language-c" data-trim data-noescape>
 Entrada: uma sequencia de n numeros   A  = (a1, a2, ..., an)
@@ -453,7 +452,7 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
 </code></pre>
                 <p style="text-align: left; font-size: 0.8em;">
                     Devolver <code>(1, 2, 3)</code> para a entrada <code>(3, 3, 1)</code> está
-                    <strong>errado</strong>: está em ordem, mas perdeu um 3 e inventou um 2.
+                    <strong>errado</strong>: está em ordem, mas não é uma reordenação da entrada, pois perdeu um 3 e acrescentou um 2.
                 </p>
             </section>
             <section>
@@ -467,14 +466,14 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
                     entrega os de mesma nota <strong>ainda em ordem alfabética</strong>.
                 </p>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Bubble e merge são estáveis. Quick <strong>não</strong> é — uma troca pode
-                    arremessar um elemento por cima de outros iguais.
+                    Bubble e merge são estáveis. Quick <strong>não</strong> é — uma troca pode levar um elemento para além de outros de chave igual, invertendo
+                    a ordem entre eles.
                 </p>
             </section>
             <section>
                 <h3>Quanta memória extra</h3>
                 <p style="text-align: left;">
-                    Um algoritmo é <span class="destaque">in-place</span> quando usa memória
+                    Um algoritmo ordena <span class="destaque">no próprio vetor</span> (<em>in-place</em>) quando usa memória
                     adicional constante — o mesmo tanto para dez ou dez milhões de elementos.
                 </p>
                 <ul style="font-size: 0.8em;">
@@ -504,8 +503,8 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
                     desta aula —, a resposta é <strong>não</strong>. E isso é um teorema.
                 </p>
                 <blockquote>
-                    O merge sort não é apenas bom: ele é o <strong>melhor possível</strong> nessa
-                    classe. Ninguém vai vencê-lo por uma classe inteira de complexidade.
+                    O merge sort atinge esse limite: nenhum algoritmo que ordena por comparações tem
+                    pior caso de ordem <strong>menor que n log n</strong>.
                 </blockquote>
             </section>
         <section class="eddy-slide">
@@ -516,7 +515,7 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
                 <div class="eddy-balao">
                     <strong class="eddy-nome">Eddy</strong>
                     <p class="eddy-fala">
-                        Turma, esse limite não é chute de quem testou muito: é contagem. Uma sequência
+                        Turma, esse limite não é uma observação experimental: é consequência de uma contagem. Uma sequência
                         de <em>n</em> elementos admite um número enorme de ordens possíveis, e cada
                         comparação só separa esses casos em dois grupos. Não há como isolar a ordem
                         certa com menos comparações do que isso.
@@ -566,14 +565,14 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
             <section>
                 <h3>Então por que usar o quick sort?</h3>
                 <p style="text-align: left;">
-                    Ele tem o pior caso mais feio da tabela — e mesmo assim costuma ser o mais
-                    <strong>rápido</strong> na prática. A tabela esconde por quê.
+                    Seu pior caso, O(n²), empata com o do bubble sort — e mesmo assim ele costuma
+                    ser o mais <strong>rápido</strong> na prática. A tabela não mostra o motivo.
                 </p>
                 <ul style="font-size: 0.8em;">
                     <li>A notação descarta constantes. As do quick sort são <strong>pequenas</strong>:
                         ele não aloca nada e não copia para lugar nenhum.</li>
-                    <li>O merge sort paga, a cada nível, uma alocação e uma cópia de ida e volta —
-                        trabalho que o O(n log n) não mostra, mas o relógio mostra.</li>
+                    <li>O merge sort executa, a cada nível, uma alocação e cópias entre o vetor e o
+                    auxiliar — custo que o O(n log n) omite, mas que aparece no tempo medido.</li>
                 </ul>
             </section>
             <section>
@@ -584,25 +583,24 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
                 </p>
                 <ul style="font-size: 0.8em;">
                     <li>Preciso de tempo <strong>garantido</strong> no pior caso → merge sort.</li>
-                    <li>Memória apertada → quick sort ou bubble sort.</li>
-                    <li>Vetor pequeno ou quase ordenado → bubble sort e parentes.</li>
+                    <li>Memória escassa → quick sort ou bubble sort.</li>
+                    <li>Vetor pequeno ou quase ordenado → bubble sort e outros métodos elementares.</li>
                 </ul>
                 <p style="text-align: left; font-size: 0.75em;">
                     Ordenar um milhão de inteiros com merge sort exige um vetor auxiliar de um
-                    milhão de inteiros — memória que pode simplesmente não existir.
+                    milhão de inteiros — memória que pode não estar disponível.
                 </p>
             </section>
             <section>
                 <p class="titulo-bloco">Camada 6</p>
                 <h3>Onde ordenação aparece</h3>
                 <p style="text-align: left;">
-                    Quase sempre sem se anunciar como ordenação.
+                    Em geral, como etapa interna de outra tarefa.
                 </p>
                 <ul style="font-size: 0.78em;">
                     <li><code>ORDER BY</code> em bancos de dados.</li>
-                    <li>Produtos por preço, rankings, placares, feeds.</li>
-                    <li><strong>Ordenar para procurar rápido</strong> — em vetor ordenado dá para
-                        descartar metade dos candidatos a cada comparação.</li>
+                    <li>Produtos por preço, classificações, placares, publicações por data.</li>
+                    <li><strong>Ordenar para procurar rápido</strong> — em vetor ordenado é possível descartar metade dos candidatos a cada comparação.</li>
                     <li><strong>Detectar duplicatas</strong> — depois de ordenar, os repetidos
                         ficam vizinhos.</li>
                     <li>Mediana e percentis: é o elemento do meio do vetor ordenado.</li>
@@ -611,18 +609,17 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
             <section>
                 <h3>Os vizinhos e as variantes</h3>
                 <p style="text-align: left;">
-                    A família é grande, e os três desta aula têm parentes próximos que vale
-                    reconhecer pelo nome.
+                    Os três algoritmos desta aula têm variantes conhecidas, que convém reconhecer
+                    pelo nome.
                 </p>
                 <ul style="font-size: 0.75em;">
-                    <li><strong>Selection sort</strong> — pega o menor e põe na primeira posição,
-                        e repete. O mínimo de trocas possível.</li>
+                    <li><strong>Selection sort</strong> — seleciona o menor, coloca-o na primeira posição e repete no restante. O mínimo de trocas possível.</li>
                     <li><strong>Insertion sort</strong> — insere cada novo elemento no lugar certo
-                        entre os já arrumados. É como a maioria ordena cartas na mão.</li>
-                    <li><strong>Mediana de três</strong> — escolhe o pivô olhando três elementos,
+                        entre os já ordenados. É como a maioria ordena cartas na mão.</li>
+                    <li><strong>Mediana de três</strong> — escolhe como pivô o valor intermediário entre três elementos,
                         e o pior caso do quick sort deixa de ser alcançado por vetores ordenados.</li>
                     <li><strong>Merge externo</strong> — ordena arquivos maiores que a memória
-                        disponível, intercalando pedaços lidos do disco.</li>
+                        disponível, intercalando blocos lidos do disco.</li>
                 </ul>
             </section>
         </section>
@@ -644,20 +641,20 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
             </section>
             <section>
                 <h3>Passo 2 — bubble sort, a operação elementar</h3>
-                <p style="text-align: left; font-size: 0.8em;">Repare que só <strong>vizinhos</strong> se comparam: o 7 nunca é comparado direto com o 6 do fim.</p>
+                <p style="text-align: left; font-size: 0.8em;">Repare que só <strong>vizinhos</strong> se comparam: o 7 nunca é comparado diretamente com o 6 do fim.</p>
                 <img class="diagrama" src="img/02_bubble_comparacao.svg" alt="Comparação entre as duas primeiras posições, 7 e 3, e a troca resultante">
             </section>
             <section>
                 <h3>Passo 3 — bubble sort, a primeira passagem</h3>
-                <p style="text-align: left; font-size: 0.8em;">Acompanhe o 9: ele é encontrado na terceira caixa e vai sendo empurrado, uma troca de cada vez, até o fim.</p>
+                <p style="text-align: left; font-size: 0.8em;">Acompanhe o 9: ele está na terceira posição e é deslocado, uma troca por vez, até a última.</p>
                 <img class="diagrama" src="img/03_bubble_passagem.svg" alt="Sete comparações ao longo do vetor e o 9 chegando à última posição">
             <p class="nota-rodape">Sete comparações · a última posição fica resolvida e a próxima passagem já pode ignorá-la.</p>
             </section>
             <section>
                 <h3>Passo 4 — merge sort, a divisão</h3>
-                <p style="text-align: left; font-size: 0.8em;">Conte os degraus: são <strong>três</strong> divisões até sobrarem trechos de um elemento — e 8 dividido por 2 três vezes chega a 1.</p>
+                <p style="text-align: left; font-size: 0.8em;">Conte os níveis: são <strong>três</strong> divisões até sobrarem trechos de um elemento — e 8 dividido por 2 três vezes chega a 1.</p>
                 <img class="diagrama" src="img/04_merge_divisao.svg" alt="Árvore de divisão do vetor em metades sucessivas até oito trechos de um elemento">
-            <p class="nota-rodape">Nenhuma comparação aconteceu ainda. A ida apenas divide.</p>
+            <p class="nota-rodape">Nenhuma comparação aconteceu ainda: a divisão apenas separa.</p>
             </section>
             <section>
                 <h3>Passo 5 — merge sort, a intercalação</h3>
@@ -666,18 +663,18 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
             </section>
             <section>
                 <h3>Passo 6 — quick sort, o particionamento</h3>
-                <p style="text-align: left; font-size: 0.8em;">Uma varredura só, e o 6 já está no lugar definitivo dele. Os dois lados ainda estão bagunçados — e tudo bem.</p>
+                <p style="text-align: left; font-size: 0.8em;">Uma única varredura coloca o 6 na posição definitiva. Os dois lados ainda estão desordenados; cada um será particionado na sua vez.</p>
                 <img class="diagrama" src="img/06_quick_particao.svg" alt="Vetor antes e depois do particionamento em torno do pivô 6">
             </section>
             <section>
                 <h3>Passo 7 — quick sort, a recursão</h3>
-                <p style="text-align: left; font-size: 0.8em;">Diferente do merge sort, os trechos <strong>não</strong> têm tamanhos iguais: eles dependem de onde o pivô caiu.</p>
+                <p style="text-align: left; font-size: 0.8em;">Diferente do merge sort, os trechos <strong>não</strong> têm tamanhos iguais: eles dependem da posição final do pivô.</p>
                 <img class="diagrama" src="img/07_quick_recursao.svg" alt="Árvore de chamadas do quick sort com os pivôs 6, 2, 9, 3 e 7">
             <p class="nota-rodape">Bastaram cinco particionamentos: três trechos tinham um só elemento e pararam no caso base.</p>
             </section>
             <section>
                 <h3>Passo 8 — as três contagens</h3>
-                <p style="text-align: left; font-size: 0.8em;">Mesmo vetor, mesmo resultado, três custos. Guarde a comparação — ela muda de figura quando n cresce.</p>
+                <p style="text-align: left; font-size: 0.8em;">Mesmo vetor, mesmo resultado, três custos. Com n = 8 a diferença é pequena; ela aumenta rapidamente conforme n cresce.</p>
                 <img class="diagrama" src="img/08_comparacao_final.svg" alt="Gráfico de barras comparando 27, 17 e 14 comparações">
             </section>
         </section>
@@ -705,25 +702,25 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
                         <strong>seis milésimos de segundo</strong>.</li>
                 </ul>
                 <blockquote>
-                    A diferença entre a página que responde e a página que trava não está no
-                    servidor. Está na escolha do algoritmo.
+                    A diferença no tempo de resposta não se deve ao servidor, e sim à classe de
+                    complexidade do algoritmo escolhido.
                 </blockquote>
             </section>
 
             <section>
                 <h3>Ordenar uma vez, consultar muitas</h3>
                 <p style="text-align: left;">
-                    Este é o motivo mais comum de ordenar alguma coisa — e ele não aparece na
-                    tela de ninguém.
+                    Este é o uso mais comum da ordenação, embora não seja visível para quem usa o
+                    sistema.
                 </p>
                 <ul style="font-size: 0.8em;">
                     <li>Vetor desordenado: achar um elemento exige olhar um a um.</li>
-                    <li>Vetor ordenado: dá para comparar com o do meio e <strong>descartar
+                    <li>Vetor ordenado: é possível comparar com o do meio e <strong>descartar
                         metade</strong> de uma vez. Dezesseis comparações para os mesmos
                         quarenta mil.</li>
                 </ul>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Ordenar custa caro <strong>uma vez</strong>. A busca fica barata para sempre.
+                    O custo da ordenação ocorre <strong>uma única vez</strong>; todas as buscas seguintes passam a exigir poucas comparações.
                 </p>
             </section>
 
@@ -750,10 +747,10 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
                 <div class="eddy-balao">
                     <strong class="eddy-nome">Eddy</strong>
                     <p class="eddy-fala">
-                        Turma, o quick sort tem dono e data: foi criado por Tony Hoare no fim dos anos 1950,
+                        Turma, o quick sort foi criado por Tony Hoare no fim dos anos 1950,
                         quando ele era estudante e precisava ordenar palavras para um projeto de tradução
-                        automática do russo. O nome não é marketing — na época, ordenar rápido era
-                        literalmente o problema que ele tinha na mesa.
+                        automática do russo. O nome descreve o objetivo: ordenar rapidamente era o problema concreto
+                        daquele projeto.
                     </p>
                 </div>
             </div>
@@ -774,12 +771,13 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
                     Passe para o par seguinte e repita até o fim do leque.
                 </p>
                 <p style="text-align: left;">
-                    Uma varredura nunca ordena de primeira — mas sempre empurra a maior carta para
-                    a ponta. Quando uma varredura passa <strong>sem nenhuma troca</strong>, acabou.
+                    Uma varredura raramente ordena o leque inteiro, mas sempre leva a maior carta
+                    para a extremidade. Quando uma varredura termina <strong>sem nenhuma
+                    troca</strong>, o leque está ordenado.
                 </p>
                 <p style="text-align: left; font-size: 0.78em;">
-                    A analogia mostra até o defeito: uma carta pequena na ponta direita precisa de
-                    uma varredura inteira para andar <strong>uma</strong> posição.
+                    A analogia também evidencia a limitação: uma carta pequena na extremidade
+                    direita avança apenas <strong>uma</strong> posição a cada varredura.
                 </p>
             </section>
 
@@ -799,17 +797,16 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
             <section>
                 <h3>A mesma dupla, outra estratégia</h3>
                 <p style="text-align: left;">
-                    Agora elas nem dividem em quantidades iguais. Pegam uma prova qualquer, de
+                    Agora elas não dividem em quantidades iguais. Escolhem uma prova qualquer, de
                     nota 6, e separam a pilha em "abaixo de 6" e "acima de 6".
                 </p>
                 <p style="text-align: left;">
-                    A prova de nota 6 já vai para o lugar exato dela e nunca mais é tocada. Cada
+                    A prova de nota 6 vai para sua posição definitiva e não é mais movida. Cada
                     uma leva um monte e repete lá dentro. Isso é o
                     <span class="destaque">quick sort</span>.
                 </p>
                 <blockquote>
-                    E o risco aparece na analogia: se a prova escolhida for a de maior nota, um
-                    monte fica com tudo e o outro fica vazio. O trabalho não foi repartido.
+                    E o risco aparece na analogia: se a prova escolhida for a de maior nota, um monte recebe todas as outras provas e o outro fica vazio. O trabalho não foi repartido.
                 </blockquote>
             </section>
         </section>
@@ -824,7 +821,7 @@ Saida:   uma REORDENACAO da mesma     A' = (a'1, a'2, ..., a'n)
             <section>
                 <h3>Um único arquivo: <code>ordenacao.c</code></h3>
                 <p style="text-align: left;">
-                    Tudo vive no mesmo lugar — os <code>#include</code>, os contadores, os três
+                    Tudo está no mesmo arquivo — os <code>#include</code>, os contadores, os três
                     algoritmos e a <code>main()</code>.
                 </p>
                 <blockquote>
@@ -939,8 +936,8 @@ void intercalar(int vetor[], int inicio, int meio, int fim) {
             <section>
                 <h3>Intercalar — o que sobrou</h3>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Uma das metades acaba antes. O resto da outra já está ordenado e é maior que
-                    tudo — vai direto, <strong>sem comparação nenhuma</strong>.
+                    Uma das metades acaba antes. O restante da outra já está ordenado e é maior ou igual a tudo o que foi
+                    copiado; por isso é copiado <strong>sem nenhuma comparação</strong>.
                 </p>
 <pre><code class="language-c" data-trim data-noescape>
     /* Uma das metades acabou antes da outra. O que sobrou na outra ja esta
@@ -996,7 +993,7 @@ void merge_sort(int vetor[], int inicio, int fim) {
                 <h3>Particionar</h3>
                 <p style="text-align: left; font-size: 0.8em;">
                     A variável <code>menor</code> é a fronteira: até ela, já se sabe que tudo é
-                    menor ou igual ao pivô. Ela nasce em <code>inicio - 1</code> porque a região
+                    menor ou igual ao pivô. Ela começa em <code>inicio - 1</code> porque a região
                     começa vazia.
                 </p>
 <pre><code class="language-c" data-trim data-noescape>
@@ -1032,8 +1029,8 @@ int particionar(int vetor[], int inicio, int fim) {
             <section>
                 <h3>Quick sort</h3>
                 <p style="text-align: left; font-size: 0.8em;">
-                    Compare com o merge sort: aqui o trabalho acontece <strong>na ida</strong>,
-                    dentro de <code>particionar</code>. A volta não faz nada.
+                    Compare com o merge sort: aqui o trabalho acontece <strong>antes das chamadas recursivas</strong>, dentro
+                    de <code>particionar</code>. O retorno não faz nada.
                 </p>
 <pre><code class="language-c" data-trim data-noescape>
 void quick_sort(int vetor[], int inicio, int fim) {
@@ -1071,7 +1068,7 @@ Vetor original: [7, 3, 9, 1, 5, 8, 2, 6]
 </code></pre>
                 <p style="text-align: left; font-size: 0.78em;">
                     A passagem 6 não troca nada e o algoritmo para ali. Sem a parada antecipada,
-                    faria a sétima passagem à toa.
+                    faria uma sétima passagem desnecessária.
                 </p>
             </section>
 
@@ -1093,15 +1090,14 @@ Vetor original: [7, 3, 9, 1, 5, 8, 2, 6]
   17 comparacoes, 24 copias de volta do auxiliar para o vetor
 </code></pre>
                 <p style="text-align: left; font-size: 0.78em;">
-                    Nada foi comparado na descida. Toda comparação aconteceu na subida.
+                    Nada foi comparado durante as divisões. Toda comparação aconteceu no retorno das chamadas, nas intercalações.
                 </p>
             </section>
 
             <section>
                 <h3>A saída — quick sort</h3>
                 <p style="text-align: left; font-size: 0.8em;">
-                    O pivô 6 da primeira linha fica na posição 4 até o fim do programa — a posição
-                    definitiva, exatamente como prometido.
+                    O pivô 6 da primeira linha fica na posição 4 até o fim do programa — a posição definitiva, como garante o particionamento.
                 </p>
                 <pre><code data-trim data-noescape>
 [3] Quick sort
@@ -1126,11 +1122,11 @@ Resumo para n = 8
                 <div class="eddy-balao">
                     <strong class="eddy-nome">Eddy</strong>
                     <p class="eddy-fala">
-                        Turma, atenção a uma armadilha do <code>particionar</code>: o pivô é sempre o
+                        Turma, atenção a uma limitação do <code>particionar</code>: o pivô é sempre o
                         <strong>último</strong> elemento do trecho. Isso é simples de escrever, mas
                         significa que um vetor <strong>já ordenado</strong> é o pior caso do quick sort —
-                        cada partição deixa um lado vazio. O algoritmo mais rápido da aula vira o mais
-                        lento justamente na entrada que parecia mais fácil.
+                        cada partição deixa um lado vazio. O algoritmo mais rápido da aula passa a custar O(n²) justamente na entrada
+                        que parecia mais fácil.
                     </p>
                 </div>
             </div>
@@ -1156,9 +1152,9 @@ Resumo para n = 8
                     <p class="eddy-fala">
                         Turma, antes de escrever qualquer linha: em cada um dos três algoritmos existe
                         <strong>uma</strong> comparação que decide o que é "estar na ordem certa".
-                        Encontrem essas três linhas primeiro. Depois disso o exercício vira quase
-                        mecânico — e se mexerem em qualquer outra coisa, é sinal de que acharam a
-                        linha errada.
+                        Encontrem essas três linhas primeiro. Identificadas essas linhas, o exercício se reduz a inverter um operador em
+                        cada uma; qualquer alteração em outra linha indica que a comparação
+                        escolhida está errada.
                     </p>
                 </div>
             </div>

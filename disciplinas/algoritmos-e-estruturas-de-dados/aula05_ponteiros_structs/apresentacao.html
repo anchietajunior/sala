@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 05 — Ponteiros e Structs | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal h3 code {
+            font-size: 0.8em;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .formula {
+            font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.9em;
+            color: #222;
+            background: #f7f9fc;
+            border: 1px solid #cfd6dd;
+            border-radius: 6px;
+            padding: 14px 22px;
+            display: inline-block;
+            margin: 0.4em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 05</p>
+            <h1>Ponteiros e Structs</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                Endereço · indireção · alocação dinâmica · registros
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — onde um dado está e como um dado composto se organiza.
+            </p>
+        </section>
+
+        <!-- ============================ BLOCO 1 — CONCEITO ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>O guarda-volumes</h3>
+                <p style="text-align: left;">Um guarda-volumes tem milhares de armários, cada um com um número na porta.
+                Para que um colega busque algo, basta dizer o <strong>número do armário</strong>:
+                com ele, o colega abre, olha e até troca o que está lá dentro.</p>
+                <blockquote>A aula gira em torno de duas ideias: <strong>anotar onde uma coisa está</strong>
+                e <strong>agrupar várias informações numa ficha só</strong>.</blockquote>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>Memória e endereço</h3>
+                <p style="text-align: left;">A <span class="destaque">memória</span> do computador é uma longa sequência de posições.
+                Cada posição é identificada por um número inteiro, o seu <span class="destaque">endereço</span> (<em>address</em>).</p>
+                <blockquote>Endereço é para a memória o que o número da porta é para o armário.</blockquote>
+            </section>
+            <section>
+                <h3>As quatro características de uma variável</h3>
+                <p style="text-align: left;">Uma <span class="destaque">variável</span> é um nome que o programa dá a uma região da memória. Toda variável tem:</p>
+                <ul>
+                    <li>um <strong>nome</strong> — <code>idade</code>;</li>
+                    <li>um <strong>tipo</strong> — <code>int</code>;</li>
+                    <li>um <strong>valor</strong> — <code>19</code>;</li>
+                    <li>um <strong>endereço</strong> — a posição onde o valor está guardado.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>O operador <code>&amp;</code></h3>
+                <p style="text-align: left;">O <span class="destaque">operador de endereço</span> <code>&amp;</code>, aplicado a uma variável, devolve a posição onde ela está.</p>
+                <pre><code class="language-c">&amp;idade   /* o endereco de idade, e nao o valor 19 */</code></pre>
+            </section>
+            <section>
+                <h3>Ponteiro</h3>
+                <p style="text-align: left;">Um <span class="destaque">ponteiro</span> (<em>pointer</em>) é uma variável cujo valor é um endereço.</p>
+                <pre><code class="language-c">int *p;       /* p e um ponteiro para int */
+p = &amp;idade;   /* p passa a guardar o endereco de idade */</code></pre>
+                <p style="text-align: left;">Diz-se então que <code>p</code> <strong>aponta para</strong> <code>idade</code>.</p>
+            </section>
+            <section>
+                <h3>O operador <code>*</code></h3>
+                <p style="text-align: left;">O <span class="destaque">operador de indireção</span> <code>*</code>, também chamado de <strong>desreferência</strong>,
+                dá acesso à variável apontada — sem usar o nome dela.</p>
+                <pre><code class="language-c">*p = 20;   /* escreve 20 em idade, passando pelo ponteiro */</code></pre>
+            </section>
+            <section>
+                <h3><code>NULL</code>: o ponteiro que não aponta</h3>
+                <p style="text-align: left;">Um ponteiro que não aponta para variável nenhuma recebe o valor especial
+                <span class="destaque">NULL</span>.</p>
+                <p style="text-align: left;">Ele marca <strong>ausência</strong>, e pode ser testado antes de qualquer acesso: <code>if (p == NULL)</code>.</p>
+            </section>
+            <section>
+                <h3>Struct: vários dados sob um nome</h3>
+                <p style="text-align: left;">Uma <span class="destaque">struct</span> (estrutura, também chamada <strong>registro</strong>)
+                agrupa variáveis de tipos possivelmente diferentes, chamadas <span class="destaque">campos</span>.</p>
+                <p style="text-align: left;">Um <code>Aluno</code> pode reunir uma matrícula (<code>int</code>), uma turma (<code>char</code>) e uma nota (<code>double</code>).</p>
+            </section>
+            <section>
+                <h3>Ponto e seta</h3>
+                <p style="text-align: left;">Dois operadores dão acesso aos campos, conforme a forma de acesso ao registro:</p>
+                <ul>
+                    <li>o registro em si — <strong>ponto</strong>: <code>aluno.nota</code>;</li>
+                    <li>um ponteiro para o registro — <strong>seta</strong>: <code>pa-&gt;nota</code>.</li>
+                </ul>
+            </section>
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, o livro-texto usa o mesmo vocabulário. Nas convenções de pseudocódigo, Cormen e coautores
+                            organizam os dados em <strong>objetos</strong> com <strong>atributos</strong>, tratam a variável que
+                            representa um objeto como um <strong>ponteiro</strong> e chamam de <strong>NIL</strong> o ponteiro
+                            que não se refere a nada. Em C: objeto é struct, atributo é campo, NIL é <code>NULL</code> — e o
+                            <code>x.nota</code> do livro corresponde a <code>x-&gt;nota</code>, porque lá <code>x</code> já é um ponteiro.
+                            <cite>Cormen et al., Algoritmos: Teoria e Prática, cap. 2 — convenções de pseudocódigo</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>O que um ponteiro <strong>não</strong> oferece</h3>
+                <p style="text-align: left;">A economia do ponteiro é deliberada:</p>
+                <ul>
+                    <li>não guarda o valor, só o lugar onde ele está;</li>
+                    <li>não garante que o endereço ainda seja válido.</li>
+                </ul>
+                <blockquote>Por ser só um endereço, é pequeno, rápido de copiar e dá acesso a um dado sem copiá-lo.</blockquote>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>Declarar, apontar, acessar</h3>
+                <p style="text-align: left;">Três linhas resumem todo o uso de um ponteiro.</p>
+                <pre><code class="language-c">int idade = 19;
+int *p = &amp;idade;   /* p guarda o endereco de idade */
+*p = 20;           /* escreve 20 na variavel apontada */</code></pre>
+                <p class="nota-rodape">Nos diagramas, os endereços são ilustrativos: os reais são números grandes, que mudam a cada execução.</p>
+            </section>
+            <section>
+                <h3>O <code>*</code> tem dois papéis</h3>
+                <p style="text-align: left;">O mesmo símbolo muda de sentido conforme a posição em que aparece.</p>
+                <ul>
+                    <li>Na <strong>declaração</strong> <code>int *p</code>: "p é um ponteiro para <code>int</code>".</li>
+                    <li>Numa <strong>expressão</strong> <code>*p = 20</code>: "a variável cujo endereço está em p".</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Ponteiro suspenso</h3>
+                <p style="text-align: left;">Um <span class="destaque">ponteiro suspenso</span> (<em>dangling pointer</em>) ainda guarda um endereço,
+                mas o conteúdo ali <strong>já não pertence ao programa</strong> — por exemplo, porque foi devolvido com <code>free</code>.</p>
+                <pre><code class="language-c">free(p);    /* devolve a memoria */
+p = NULL;   /* p passa a dizer, explicitamente, que nao aponta para nada */</code></pre>
+            </section>
+            <section>
+                <h3>Passagem por valor</h3>
+                <p style="text-align: left;">Em C, toda chamada <strong>copia</strong> os argumentos para os parâmetros. Por isso esta função não troca nada:</p>
+                <pre><code class="language-c">// Recebe COPIAS dos valores de quem chamou. Trocar x e y aqui dentro
+// nao altera as variaveis originais.
+void trocar_por_valor(int x, int y) {
+    int guardado = x;
+    x = y;
+    y = guardado;
+}</code></pre>
+            </section>
+            <section>
+                <h3>Passagem por referência</h3>
+                <p style="text-align: left;">Para alterar variáveis de quem chama, a função recebe os <strong>endereços</strong> delas e escreve por eles.</p>
+                <pre><code class="language-c">// Recebe os ENDERECOS das variaveis de quem chamou. Escrevendo em *x e *y,
+// a funcao altera as variaveis originais.
+void trocar(int *x, int *y) {
+    int guardado = *x;
+    *x = *y;
+    *y = guardado;
+}</code></pre>
+                <p style="text-align: left;">A chamada é <code>trocar(&amp;a, &amp;b)</code>: copia-se o endereço, e pelo endereço chega-se à variável original.</p>
+            </section>
+            <section>
+                <h3>Alocação dinâmica com <code>malloc</code></h3>
+                <p style="text-align: left;">Quando a quantidade de dados só é conhecida na execução, <code>malloc</code> reserva uma região e devolve o endereço do início.</p>
+                <pre><code class="language-c">int *valores = malloc(quantidade * sizeof(int));
+if (valores == NULL) {
+    printf("erro: memoria insuficiente\n");
+    exit(1);
+}</code></pre>
+            </section>
+            <section>
+                <h3>Dois cuidados com <code>malloc</code></h3>
+                <p style="text-align: left;">Cada parte do trecho anterior tem um motivo.</p>
+                <ul>
+                    <li>O tamanho vem de <code>sizeof</code>, que informa quantos bytes um tipo ocupa.</li>
+                    <li>O resultado é testado: sem memória, <code>malloc</code> devolve <code>NULL</code>.</li>
+                </ul>
+                <p class="nota-rodape">A região não tem nome: só é alcançada pelo endereço guardado no ponteiro.</p>
+            </section>
+            <section>
+                <h3><code>free</code>: exatamente uma vez</h3>
+                <p style="text-align: left;">Toda região obtida com <code>malloc</code> é devolvida com <code>free</code> <strong>exatamente uma vez</strong>.</p>
+                <ul>
+                    <li>Nenhuma vez: <span class="destaque">vazamento de memória</span> (<em>memory leak</em>).</li>
+                    <li>Uso depois do <code>free</code>: erro grave, que corrompe dados.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Declarando uma struct</h3>
+                <p style="text-align: left;">A declaração descreve o <strong>formato</strong> do registro; o <code>typedef</code> cria o apelido <code>Aluno</code>.</p>
+                <pre><code class="language-c">typedef struct Aluno {
+    int matricula;
+    char turma;
+    double nota;
+} Aluno;</code></pre>
+                <p style="text-align: left;">Cada campo é acessado com o ponto: <code>aluno.matricula = 101;</code></p>
+            </section>
+            <section>
+                <h3>Ponteiro para struct</h3>
+                <p style="text-align: left;">Com <code>Aluno *pa = &amp;aluno;</code>, há duas formas equivalentes de acessar um campo do registro apontado.</p>
+                <pre><code class="language-c">(*pa).nota   /* parenteses obrigatorios: o ponto vem antes do * */
+pa-&gt;nota     /* a forma abreviada, mais legivel */</code></pre>
+            </section>
+            <section>
+                <h3>Uma função que altera um registro</h3>
+                <p style="text-align: left;">Recebendo o endereço, a função altera o registro original — e não uma cópia dele.</p>
+                <pre><code class="language-c">// Recebe o ENDERECO do aluno, para que a alteracao valha no registro
+// original de quem chamou, e nao numa copia.
+void aluno_aplicar_bonus(Aluno *aluno, double bonus) {
+    aluno-&gt;nota = aluno-&gt;nota + bonus;
+}</code></pre>
+            </section>
+            <section>
+                <h3>Struct criada com <code>malloc</code></h3>
+                <p style="text-align: left;">Uma <strong>função de criação</strong> reserva o registro, preenche os campos e devolve o endereço.</p>
+                <pre><code class="language-c">// Cria um Aluno em memoria alocada dinamicamente. Diferente de uma variavel
+// declarada dentro da funcao, esse registro continua existindo depois
+// que a funcao termina, ate que alguem chame free.
+Aluno *aluno_criar(int matricula, char turma, double nota) {
+    Aluno *novo = malloc(sizeof(Aluno));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo-&gt;matricula = matricula;
+    novo-&gt;turma = turma;
+    novo-&gt;nota = nota;
+    return novo;
+}</code></pre>
+                <p class="nota-rodape">Quem recebe o endereço passa a ser responsável pelo <code>free</code>.</p>
+            </section>
+            <section>
+                <h3>Regras que devem sempre valer</h3>
+                <p style="text-align: left;">Quatro regras protegem o programa de todos os erros desta aula:</p>
+                <ul>
+                    <li>todo ponteiro vale <code>NULL</code> ou aponta para algo que ainda pertence ao programa;</li>
+                    <li>só se desreferencia um ponteiro diferente de <code>NULL</code>;</li>
+                    <li>todo <code>malloc</code> é testado e devolvido com <code>free</code> uma única vez;</li>
+                    <li>depois de <code>free(p)</code>, <code>p</code> recebe <code>NULL</code>.</li>
+                </ul>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>A regra central da indireção</h3>
+                <p style="text-align: left;">Tomar o endereço de uma variável e em seguida acessar esse endereço devolve a própria variável.</p>
+                <p><span class="formula">*(&amp;x) = x</span></p>
+                <p style="text-align: left;">Lê-se: "o conteúdo do endereço de x é x". É por isso que <code>*p = 20</code> altera <code>idade</code> quando <code>p = &amp;idade</code>.</p>
+            </section>
+            <section>
+                <h3>Os dois erros clássicos</h3>
+                <p style="text-align: left;">Duas regras do modelo não descrevem resultados, e sim erros:</p>
+                <ul>
+                    <li>acessar <code>*p</code> quando <code>p</code> vale <code>NULL</code>;</li>
+                    <li>acessar <code>*p</code> depois de <code>free(p)</code>.</li>
+                </ul>
+                <p class="nota-rodape">As regras completas estão no material escrito da aula.</p>
+            </section>
+            <section>
+                <h3>A struct como tupla</h3>
+                <p style="text-align: left;">Matematicamente, um registro é uma <strong>tupla</strong>: uma sequência ordenada de valores, um por campo.</p>
+                <p><span class="formula">(101, 'A', 7.5)</span></p>
+                <p style="text-align: left;">Acessar <code>aluno.nota</code> é escolher o terceiro componente; e <code>p-&gt;nota</code> é o mesmo que <code>(*p).nota</code>.</p>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>Tudo o que passa por endereço custa O(1)</h3>
+                <p style="text-align: left;">Um único cálculo de endereço e um único acesso, qualquer que seja o tamanho dos dados.</p>
+                <table>
+                    <tr><th>Operação</th><th>Tempo</th></tr>
+                    <tr><td><code>&amp;x</code>, <code>*p</code>, <code>p-&gt;campo</code></td><td><strong>O(1)</strong></td></tr>
+                    <tr><td>passar um ponteiro a uma função</td><td><strong>O(1)</strong></td></tr>
+                    <tr><td>passar uma struct de <em>k</em> campos por valor</td><td>O(<em>k</em>)</td></tr>
+                </table>
+                <p class="nota-rodape">O(1) lê-se "custo constante"; O(k), "cresce no ritmo do número de campos".</p>
+            </section>
+            <section>
+                <h3>E o espaço?</h3>
+                <p style="text-align: left;">O que a análise registra para a alocação dinâmica é a memória ocupada.</p>
+                <ul>
+                    <li><code>malloc(n * sizeof(int))</code> reserva memória proporcional a <em>n</em>: O(<em>n</em>).</li>
+                    <li>Um ponteiro ocupa espaço constante — tipicamente 8 bytes — qualquer que seja o dado apontado.</li>
+                </ul>
+            </section>
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde ponteiros e structs aparecem</h3>
+                <p style="text-align: left;">Quase todo programa C que vai além do básico depende deles.</p>
+                <ul>
+                    <li><code>scanf("%d", &amp;idade)</code> — o endereço da variável a preencher.</li>
+                    <li>Funções que devolvem mais de um resultado, por endereços recebidos.</li>
+                    <li>Arquivos: <code>fopen</code> devolve um ponteiro para uma struct <code>FILE</code>.</li>
+                    <li>Dados de tamanho conhecido só na execução, alocados com <code>malloc</code>.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Variantes do ponteiro</h3>
+                <p style="text-align: left;">Duas variações do ponteiro simples, aqui apenas sinalizadas:</p>
+                <ul>
+                    <li><code>int **</code> — ponteiro para ponteiro: guarda o endereço de outro ponteiro;</li>
+                    <li><code>void *</code> — endereço sem tipo, o que <code>malloc</code> devolve.</li>
+                </ul>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 2 — VISUALIZAÇÃO ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização</h2>
+                <p style="text-align: left;">Os passos seguem o programa da aula, na ordem em que ele executa. Os endereços são ilustrativos.</p>
+            </section>
+            <section>
+                <h3>Passo 1 — <code>int idade = 19</code></h3>
+                <p style="text-align: left;">Observe as quatro características da variável: nome, tipo, valor e endereço.</p>
+                <img class="diagrama" src="img/01_variavel_na_memoria.svg" alt="Coluna de posições de memória com endereços 1000 a 1012; a posição 1004 tem o nome idade e guarda 19">
+            </section>
+            <section>
+                <h3>Passo 2 — <code>int *p = &amp;idade</code></h3>
+                <p style="text-align: left;">O ponteiro também ocupa uma posição, mas o que ele guarda é um endereço — o de <code>idade</code>.</p>
+                <img class="diagrama" src="img/02_ponteiro_aponta.svg" alt="O ponteiro p, na posição 1008, guarda o número 1004; uma seta sai de p e chega a idade">
+            </section>
+            <section>
+                <h3>Passo 3 — <code>*p = 20</code></h3>
+                <p style="text-align: left;">A escrita segue a seta e muda <code>idade</code>; o ponteiro em si não muda.</p>
+                <img class="diagrama" src="img/03_escrita_pelo_ponteiro.svg" alt="A escrita *p = 20 segue a seta de p e troca o conteúdo de idade de 19 para 20; p continua guardando 1004">
+            </section>
+            <section>
+                <h3>Passo 4 — <code>trocar_por_valor(a, b)</code></h3>
+                <p style="text-align: left;">Compare os dois quadros: a função trocou as <strong>cópias</strong>, e <code>a</code> e <code>b</code> ficaram como estavam.</p>
+                <img class="diagrama" src="img/04_troca_por_valor.svg" alt="À esquerda, as variáveis a = 3 e b = 8 do programa; à direita, os parâmetros x e y da função, cópias que terminam trocadas; a e b não mudam">
+            </section>
+            <section>
+                <h3>Passo 5 — <code>trocar(&amp;a, &amp;b)</code></h3>
+                <p style="text-align: left;">Agora os parâmetros guardam endereços, e as escritas seguem as setas até as variáveis originais.</p>
+                <img class="diagrama" src="img/05_troca_por_referencia.svg" alt="Os parâmetros x e y guardam os endereços de a e b; setas levam de x até a e de y até b; a passa a valer 8 e b passa a valer 3">
+            </section>
+            <section>
+                <h3>Passo 6 — <code>valores = malloc(3 * sizeof(int))</code></h3>
+                <p style="text-align: left;">A região reservada não tem nome: o único caminho até ela é o endereço guardado em <code>valores</code>.</p>
+                <img class="diagrama" src="img/06_malloc.svg" alt="O ponteiro valores aponta para uma região de três inteiros com 10, 20 e 30, marcada como memória alocada dinamicamente">
+            </section>
+            <section>
+                <h3>Passo 7 — <code>free(valores); valores = NULL</code></h3>
+                <p style="text-align: left;">Os dois lados mostram a mesma região devolvida; só o da direita deixa o ponteiro em estado seguro.</p>
+                <img class="diagrama" src="img/07_free.svg" alt="À esquerda, só com free: a região aparece tracejada e liberada, mas a seta de valores continua chegando a ela, formando um ponteiro suspenso; à direita, com free e valores = NULL, não há mais seta">
+            </section>
+            <section>
+                <h3>Passo 8 — <code>Aluno aluno</code></h3>
+                <p style="text-align: left;">Os campos ficam juntos, sob um único nome, e cada um é alcançado pelo operador ponto.</p>
+                <img class="diagrama" src="img/08_struct_na_memoria.svg" alt="Um registro aluno com três campos lado a lado — matricula 101, turma A e nota 7.5 — guardados juntos na memória">
+            </section>
+            <section>
+                <h3>Passo 9 — <code>Aluno *pa = &amp;aluno; pa-&gt;nota = 8.0</code></h3>
+                <p style="text-align: left;">O ponteiro aponta para o registro inteiro; a seta escolhe, dentro dele, o campo <code>nota</code>.</p>
+                <img class="diagrama" src="img/09_ponteiro_para_struct.svg" alt="O ponteiro pa aponta para o registro aluno; a escrita pa->nota = 8.0 altera o campo nota de 7.5 para 8.0">
+            </section>
+            <section>
+                <h3>Passo 10 — <code>aluno_aplicar_bonus(&amp;aluno, 1.5)</code></h3>
+                <p style="text-align: left;">A função recebeu um único endereço e, por ele, alterou a nota do registro original.</p>
+                <img class="diagrama" src="img/10_funcao_recebe_struct.svg" alt="O parâmetro aluno da função guarda o endereço do registro do programa; pela seta, a função soma 1.5 à nota, que passa de 8.0 para 9.5">
+            </section>
+            <section>
+                <h3>Passo 11 — <code>novo = aluno_criar(102, 'B', 6.0)</code></h3>
+                <p style="text-align: left;">O registro permanece na memória alocada dinamicamente até que <code>free(novo)</code> o devolva.</p>
+                <img class="diagrama" style="max-height: 440px;" src="img/11_struct_dinamica.svg" alt="O ponteiro novo aponta para um registro na memória alocada dinamicamente, com matricula 102, turma B e nota 7.0 depois do bônus">
+                <p class="nota-rodape">Depois do <code>free</code>, <code>novo = NULL</code> impede que o endereço antigo seja usado.</p>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 3 — PROBLEMA MOTIVADOR ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Problema motivador</h2>
+                <blockquote>Como o <code>scanf</code> consegue guardar o número digitado dentro da minha variável?</blockquote>
+            </section>
+            <section>
+                <h3>Sem o <code>&amp;</code>, o <code>scanf</code> recebe uma cópia</h3>
+                <p style="text-align: left;">Se a chamada fosse <code>scanf("%d", idade)</code>, a função receberia
+                só uma <strong>cópia</strong> do valor atual de <code>idade</code>.</p>
+                <p style="text-align: left;">O número digitado ficaria nessa cópia — e se perderia no fim da chamada.</p>
+            </section>
+            <section>
+                <h3>Com o <code>&amp;</code>, o <code>scanf</code> escreve na variável</h3>
+                <p style="text-align: left;">Com <code>&amp;idade</code>, a função recebe o <strong>endereço</strong> e escreve diretamente na variável,
+                como <code>trocar(&amp;a, &amp;b)</code>.</p>
+                <blockquote><code>printf("%d", idade)</code> dispensa o <code>&amp;</code>: para apenas <strong>ler</strong>, uma cópia basta.</blockquote>
+            </section>
+            <section>
+                <h3>O cadastro de alunos</h3>
+                <p style="text-align: left;">Um cadastro escolar guarda dados de tipos diferentes por aluno e não sabe, de antemão, quantos alunos haverá.</p>
+                <ul>
+                    <li>a <strong>struct</strong> agrupa os dados de cada aluno;</li>
+                    <li><code>malloc</code> cria cada registro quando ele é necessário;</li>
+                    <li>funções recebem o <strong>endereço</strong> e alteram sem copiar;</li>
+                    <li><code>free</code> devolve o que deixou de ser útil.</li>
+                </ul>
+            </section>
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, toda vez que vocês abrirem um arquivo em C com <code>fopen</code>, vão receber um
+                            <code>FILE *</code>: um ponteiro para uma struct que a própria biblioteca preenche. Nenhuma função
+                            de leitura ou escrita recebe o arquivo em si — todas recebem esse endereço.
+                            <cite>Schildt, C Completo e Total, capítulo de entrada e saída em arquivos</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 4 — CÓDIGO EM C ============================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Código em C</h2>
+            </section>
+            <section>
+                <h3>Um único arquivo: <code>ponteiros_structs.c</code></h3>
+                <p style="text-align: left;">Cada função <code>demonstrar_...</code> isola um conceito da aula, na ordem da visualização.</p>
+                <blockquote>Tudo está em um único arquivo — <code>#include</code>s, struct, funções e <code>main()</code> —
+                para que o programa seja lido de cima a baixo, sem saltar entre arquivos.</blockquote>
+            </section>
+            <section>
+                <h3>A struct <code>Aluno</code></h3>
+                <p style="text-align: left;">O tipo usado nas demonstrações: um registro que agrupa três campos de tipos diferentes.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Um Aluno agrupa, sob um unico nome, dados de tipos diferentes.
+typedef struct Aluno {
+    int matricula;
+    char turma;
+    double nota;
+} Aluno;</code></pre>
+            </section>
+            <section>
+                <h3>As duas trocas</h3>
+                <p style="text-align: left;">As duas formas de passar argumentos: cópias dos valores ou os endereços das variáveis.</p>
+                <pre><code class="language-c">// Recebe COPIAS dos valores de quem chamou. Trocar x e y aqui dentro
+// nao altera as variaveis originais.
+void trocar_por_valor(int x, int y) {
+    int guardado = x;
+    x = y;
+    y = guardado;
+}
+
+// Recebe os ENDERECOS das variaveis de quem chamou. Escrevendo em *x e *y,
+// a funcao altera as variaveis originais.
+void trocar(int *x, int *y) {
+    int guardado = *x;
+    *x = *y;
+    *y = guardado;
+}</code></pre>
+            </section>
+            <section>
+                <h3>Ler e alterar um registro</h3>
+                <p style="text-align: left;">Para ler, uma cópia basta; para alterar, a função precisa do endereço.</p>
+                <pre><code class="language-c">// Recebe uma COPIA do aluno: basta para ler os campos, nao para altera-los.
+void aluno_imprimir(Aluno aluno) {
+    printf("matricula %d, turma %c, nota %.1f\n",
+           aluno.matricula, aluno.turma, aluno.nota);
+}
+
+// Recebe o ENDERECO do aluno, para que a alteracao valha no registro
+// original de quem chamou, e nao numa copia.
+void aluno_aplicar_bonus(Aluno *aluno, double bonus) {
+    aluno-&gt;nota = aluno-&gt;nota + bonus;
+}</code></pre>
+            </section>
+            <section>
+                <h3>Criar um registro: <code>aluno_criar</code></h3>
+                <p style="text-align: left;">Para criar um registro que continua existindo depois que a função termina, <code>malloc</code>.</p>
+                <pre><code class="language-c">// Cria um Aluno em memoria alocada dinamicamente. Diferente de uma variavel
+// declarada dentro da funcao, esse registro continua existindo depois
+// que a funcao termina, ate que alguem chame free.
+Aluno *aluno_criar(int matricula, char turma, double nota) {
+    Aluno *novo = malloc(sizeof(Aluno));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo-&gt;matricula = matricula;
+    novo-&gt;turma = turma;
+    novo-&gt;nota = nota;
+    return novo;
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>demonstrar_ponteiro</code> e <code>demonstrar_troca</code></h3>
+                <p style="text-align: left;">Endereço, indireção e as duas trocas — os passos 1 a 5 da visualização.</p>
+                <pre><code class="language-c">// Um ponteiro guarda o endereco de outra variavel e, por ele,
+// e possivel ler e alterar essa variavel.
+void demonstrar_ponteiro(void) {
+    int idade = 19;
+    int *p = &amp;idade;   // p recebe o endereco de idade
+
+    printf("idade = %d, *p = %d\n", idade, *p);
+    printf("p == &amp;idade vale %d\n", p == &amp;idade);
+
+    *p = 20;           // escreve na variavel idade passando pelo ponteiro
+    printf("depois de *p = 20, idade = %d\n", idade);
+}
+
+// So a versao que recebe enderecos consegue trocar os valores de a e b.
+void demonstrar_troca(void) {
+    int a = 3;
+    int b = 8;
+
+    trocar_por_valor(a, b);
+    printf("depois de trocar_por_valor(a, b): a = %d, b = %d\n", a, b);
+
+    trocar(&amp;a, &amp;b);
+    printf("depois de trocar(&amp;a, &amp;b): a = %d, b = %d\n", a, b);
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>demonstrar_alocacao</code></h3>
+                <p style="text-align: left;">O ciclo completo da memória dinâmica: pedir, testar, usar, devolver — os passos 6 e 7.</p>
+                <pre><code class="language-c">// A quantidade de valores so e conhecida durante a execucao, entao a
+// memoria e pedida com malloc e devolvida com free.
+void demonstrar_alocacao(int quantidade) {
+    int *valores = malloc(quantidade * sizeof(int));
+    if (valores == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+
+    for (int i = 0; i &lt; quantidade; i++) {
+        valores[i] = (i + 1) * 10;
+    }
+    printf("valores alocados:");
+    for (int i = 0; i &lt; quantidade; i++) {
+        printf(" %d", valores[i]);
+    }
+    printf("\n");
+
+    free(valores);    // devolve a memoria; o conteudo deixa de ser nosso
+    valores = NULL;   // assim valores nao guarda mais um endereco invalido
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>demonstrar_struct</code></h3>
+                <p style="text-align: left;">O mesmo registro acessado pelo ponto, pela seta e por uma função — os passos 8 a 10.</p>
+                <pre><code class="language-c">// Campos acessados pelo ponto, pelo ponteiro com seta e por uma funcao
+// que recebe o endereco do registro.
+void demonstrar_struct(void) {
+    Aluno aluno;
+    aluno.matricula = 101;
+    aluno.turma = 'A';
+    aluno.nota = 7.5;
+    aluno_imprimir(aluno);
+
+    Aluno *pa = &amp;aluno;
+    pa-&gt;nota = 8.0;    // o mesmo que (*pa).nota = 8.0
+    aluno_imprimir(aluno);
+
+    aluno_aplicar_bonus(&amp;aluno, 1.5);
+    aluno_imprimir(aluno);
+}</code></pre>
+            </section>
+            <section>
+                <h3><code>demonstrar_struct_dinamica</code></h3>
+                <p style="text-align: left;">Um registro criado com <code>aluno_criar</code>, alterado pela seta e liberado — o passo 11.</p>
+                <pre><code class="language-c">// Um aluno criado dinamicamente existe ate que free o devolva.
+void demonstrar_struct_dinamica(void) {
+    Aluno *novo = aluno_criar(102, 'B', 6.0);
+    aluno_aplicar_bonus(novo, 1.0);
+    aluno_imprimir(*novo);
+
+    free(novo);       // devolve o registro criado por aluno_criar
+    novo = NULL;
+}</code></pre>
+            </section>
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, repare na última linha de <code>demonstrar_struct_dinamica</code>. Depois de
+                            <code>free(novo)</code>, escrever <code>novo-&gt;nota = 10.0</code> ainda compila — mas escreve numa
+                            região que já foi devolvida. Com <code>novo = NULL</code>, o mesmo erro deixa de ser silencioso:
+                            o programa normalmente é interrompido imediatamente, no ponto exato do problema.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>A <code>main</code></h3>
+                <p style="text-align: left;">A <code>main()</code> só chama as demonstrações, na ordem da aula.</p>
+                <pre><code class="language-c">int main(void) {
+    printf("== Ponteiro ==\n");
+    demonstrar_ponteiro();
+
+    printf("\n== Passagem por valor e por referencia ==\n");
+    demonstrar_troca();
+
+    printf("\n== Alocacao dinamica ==\n");
+    demonstrar_alocacao(3);
+
+    printf("\n== Struct ==\n");
+    demonstrar_struct();
+
+    printf("\n== Struct alocada dinamicamente ==\n");
+    demonstrar_struct_dinamica();
+
+    return 0;
+}</code></pre>
+            </section>
+            <section>
+                <h3>Compilando e executando</h3>
+                <p style="text-align: left;">Os avisos do compilador ficam ativados com <code>-Wall -Wextra</code>; o programa deve compilar sem nenhum.</p>
+                <pre><code class="language-bash">gcc -Wall -Wextra -o ponteiros_structs ponteiros_structs.c
+./ponteiros_structs</code></pre>
+            </section>
+            <section>
+                <h3>A saída esperada</h3>
+                <p style="text-align: left;">A comparação <code>p == &amp;idade</code> imprime <code>1</code>: em C, verdadeiro vale 1.</p>
+                <pre><code class="language-plaintext">== Ponteiro ==
+idade = 19, *p = 19
+p == &amp;idade vale 1
+depois de *p = 20, idade = 20
+
+== Passagem por valor e por referencia ==
+depois de trocar_por_valor(a, b): a = 3, b = 8
+depois de trocar(&amp;a, &amp;b): a = 8, b = 3
+
+== Alocacao dinamica ==
+valores alocados: 10 20 30
+
+== Struct ==
+matricula 101, turma A, nota 7.5
+matricula 101, turma A, nota 8.0
+matricula 101, turma A, nota 9.5
+
+== Struct alocada dinamicamente ==
+matricula 102, turma B, nota 7.0</code></pre>
+            </section>
+            <section>
+                <h3>Conferindo a memória</h3>
+                <p style="text-align: left;">O próprio compilador instrumenta o programa para detectar acessos inválidos durante a execução.</p>
+                <pre><code class="language-bash">gcc -Wall -Wextra -g -fsanitize=address -o ponteiros_structs ponteiros_structs.c
+./ponteiros_structs</code></pre>
+                <p style="text-align: left;">Mesma saída e nenhum relatório de erro: nenhum acesso inválido aconteceu.</p>
+            </section>
+        </section>
+
+        <!-- ============================ BLOCO 5 — REFERÊNCIAS ============================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.72em;">
+                <li><strong>Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.</strong> — <em>Algoritmos: Teoria e Prática</em>.
+                    Cap. 2, convenções de pseudocódigo: objetos, atributos, ponteiros e NIL. Cap. 10, <em>Estruturas de dados elementares</em>.</li>
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em Linguagem C</em>. LTC, 2023.
+                    Capítulos de ponteiros, alocação dinâmica e estruturas.</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C: uma abordagem didática</em>. Saraiva, 2016.
+                    Trechos sobre ponteiros e registros.</li>
+                <li><strong>Toscani, L. V.; Veloso, P. A. S.</strong> — <em>Complexidade de Algoritmos</em>. Bookman, 2012.
+                    Capítulo introdutório de análise.</li>
+                <li><strong>Schildt, H.</strong> — <em>C Completo e Total</em>. Makron Books, 1997.
+                    Capítulos de ponteiros, de estruturas e de alocação dinâmica.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.65em; color: #666;">
+                <li>Damas — <em>Linguagem C</em> — ponteiros e estruturas em profundidade.</li>
+                <li>Wirth — <em>Algoritmos e Estruturas de Dados</em> — o registro como tipo estruturado.</li>
+                <li>Jamsa &amp; Klander — <em>Programando em C/C++: a bíblia</em> — exemplos curtos de C.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Ponteiros e Structs</h1>
+            <h2>Perguntas</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                O ponteiro diz onde o dado está; a struct diz como ele se organiza.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

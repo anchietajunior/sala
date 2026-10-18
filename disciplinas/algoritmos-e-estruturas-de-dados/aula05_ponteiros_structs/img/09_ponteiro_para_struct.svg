@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 310"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="310" fill="#fff"/>
+  <text x="350" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 9 — Aluno *pa = &amp;aluno; pa-&gt;nota = 8.0</text>
+  <rect x="60" y="130" width="150" height="50" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <line x1="127.5" y1="130" x2="127.5" y2="180" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="93.75" y="161" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">pa</text>
+  <text x="168.75" y="162" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">6000</text>
+  <rect x="270" y="130" width="360" height="56" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <text x="330.0" y="120" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">matricula</text>
+  <text x="330.0" y="165" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">101</text>
+  <line x1="390" y1="130" x2="390" y2="186" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="450.0" y="120" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">turma</text>
+  <text x="450.0" y="165" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">'A'</text>
+  <line x1="510" y1="130" x2="510" y2="186" stroke="#5a7a9a" stroke-width="1.5"/>
+  <rect x="513" y="133" width="114" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="3"/>
+  <text x="570.0" y="120" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">nota</text>
+  <text x="570.0" y="165" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">8.0</text>
+  <path d="M 210 158 L 268 158" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="256,153 268,158 256,163" fill="#2c5d8a"/>
+  <text x="570" y="212" text-anchor="middle" font-size="15" fill="#2c5d8a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-weight="600">pa-&gt;nota = 8.0</text>
+  <text x="570" y="232" text-anchor="middle" font-size="14" fill="#888" font-style="italic">(era 7.5)</text>
+  <line x1="80" y1="260" x2="620" y2="260" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="286" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">pa-&gt;nota é o mesmo que (*pa).nota</text>
+
+</svg>

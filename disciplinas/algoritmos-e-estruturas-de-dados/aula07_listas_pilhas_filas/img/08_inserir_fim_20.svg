@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 330"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="330" fill="#ffffff"/>
+  <text x="350.0" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 3 — lista_inserir_no_fim(lista, 20)</text>
+  <text x="250.0" y="70" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600" xml:space="preserve">inicio</text><path d="M 250.0 77 L 250.0 100.0" fill="none" stroke="#2c5d8a" stroke-width="2.2"/><polygon points="250.0,108.0 255.5,96.0 244.5,96.0" fill="#2c5d8a"/>
+  <rect x="190.0" y="110" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="270.0" y1="110" x2="270.0" y2="170" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="230.0" y="148" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <circle cx="290.0" cy="140" r="4" fill="#2c5d8a"/>
+  <path d="M 290.0 140 L 381.0 140.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="389.0,140.0 377.0,134.5 377.0,145.5" fill="#2c5d8a"/>
+  <rect x="390.0" y="110" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3" rx="4"/>
+  <line x1="470.0" y1="110" x2="470.0" y2="170" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="430.0" y="148" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <text x="490.0" y="147" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <path d="M 250.0 204 L 250.0 180.0" fill="none" stroke="#5a7a9a" stroke-width="2.2"/><polygon points="250.0,172.0 244.5,184.0 255.5,184.0" fill="#5a7a9a"/><text x="250.0" y="224" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">ultimo</text>
+  <line x1="60" y1="270" x2="640" y2="270" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350.0" y="296" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">ultimo parte de inicio e para no nó cujo proximo é NULL — aqui, o próprio 10</text>
+  <text x="350.0" y="318" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">o campo proximo do 10 passa a guardar o endereço do novo nó 20</text>
+</svg>

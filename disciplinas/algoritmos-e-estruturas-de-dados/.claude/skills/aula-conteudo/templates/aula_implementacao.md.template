@@ -8,7 +8,7 @@
 
 ### Camada 1 — Introdução
 
-<Parágrafo curto, totalmente coloquial, com analogia concreta. Termina apontando a propriedade essencial em prosa, ainda sem nomeá-la tecnicamente.>
+<Parágrafo curto, em linguagem simples e formal, com analogia concreta. Termina apontando a propriedade essencial em prosa, ainda sem nomeá-la tecnicamente.>
 
 ### Camada 2 — Definição informal com vocabulário básico
 
@@ -176,17 +176,7 @@ A própria implementação admite variantes: <2–3 variantes apenas sinalizadas
 
 ---
 
-## 4. Analogias
-
-**1. <Título curto da primeira analogia>.**
-<Parágrafo descrevendo a analogia em detalhe, espelhando elementos da estrutura/algoritmo.>
-
-**2. <Título curto da segunda analogia>.**
-<Parágrafo descrevendo a segunda analogia, com ângulo diferente da primeira.>
-
----
-
-## 5. Código em C
+## 4. Código em C
 
 <Frase introdutória curta sobre características do código — ex.: "Note como o código é mais curto que o da Fila — menos casos especiais, menos invariantes, mesma legibilidade.">
 
@@ -221,50 +211,7 @@ Saída esperada:
 
 ---
 
-## 6. Exercícios Práticos
-
-**Exercício 1 — Trace na mão.**
-<Sequência de operações sobre estado inicial. Pedir o estado e o retorno a cada passo.>
-
-*Critério de aceitação*: <N estados + retornos. Estado final esperado: <X>.>
-
-> **Resposta mínima aceitável**
->
-> | Operação | Estado | Retorno |
-> |----------|--------|---------|
-> | ...      | ...    | ...     |
-
-**Exercício 2 — <Título>.**
-<Adicionar uma função simples ao `<tema>.c`.>
-
-*Critério de aceitação*: <onde a função fica, como é chamada, saída esperada>.
-
-> **Resposta mínima aceitável**
->
-> ```c
-> // codigo enxuto da funcao
-> ```
-
-**Exercício 3 — <Título>.** (opcional)
-
-<...>
-
-**Exercício 4 — <Título>.** (opcional)
-
-<...>
-
-**Exercício 5 — Desafio: <Título>.**
-<Extensão ampla — combinar o que a própria aula deu, ou exigir raciocínio mais profundo.>
-
-*Critério de aceitação*: <condição>.
-
-> **Resposta mínima aceitável**
->
-> <esboço da resposta — não é única, mas é o gabarito mínimo>.
-
----
-
-## 7. Referências
+## 5. Referências
 
 - **Backes, A. R.** — *Algoritmos e Estruturas de Dados em Linguagem C*. Rio de Janeiro: LTC, 2023. Capítulo X, *"<Nome do capítulo>"*, <descrição da relevância em uma frase>.
 - **Veloso, P.; Pereira, S. do L.** — *Estruturas de Dados em C — Uma Abordagem Didática*. São Paulo: Saraiva, 2016. Capítulo Y, *"<Nome do capítulo>"*. <Descrição em uma frase>.

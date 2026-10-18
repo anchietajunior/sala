@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 360"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="360" fill="#fff"/>
+  <text x="350" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 3 — *p = 20</text>
+  <text x="226" y="62" text-anchor="end" font-size="14" fill="#888" font-style="italic">endereço</text>
+  <text x="290.0" y="62" text-anchor="middle" font-size="14" fill="#888" font-style="italic">nome</text>
+  <text x="400.0" y="62" text-anchor="middle" font-size="14" fill="#888" font-style="italic">valor</text>
+  <text x="226" y="104" text-anchor="end" font-size="15" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1000</text>
+  <rect x="240" y="70" width="220" height="56" fill="#fff" stroke="#cfd6dd" stroke-width="1.5"/>
+  <text x="350.0" y="104" text-anchor="middle" font-size="14" fill="#888" font-style="italic">livre</text>
+  <text x="226" y="160" text-anchor="end" font-size="15" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1004</text>
+  <rect x="240" y="126" width="220" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <line x1="340" y1="126" x2="340" y2="182" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="290.0" y="160" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">idade</text>
+  <text x="400.0" y="161" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="226" y="216" text-anchor="end" font-size="15" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1008</text>
+  <rect x="240" y="182" width="220" height="56" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <line x1="340" y1="182" x2="340" y2="238" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="290.0" y="216" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">p</text>
+  <text x="400.0" y="217" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1004</text>
+  <text x="226" y="272" text-anchor="end" font-size="15" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1012</text>
+  <rect x="240" y="238" width="220" height="56" fill="#fff" stroke="#cfd6dd" stroke-width="1.5"/>
+  <text x="350.0" y="272" text-anchor="middle" font-size="14" fill="#888" font-style="italic">livre</text>
+  <path d="M 460 210.0 L 520 210.0 L 520 154.0 L 462 154.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="474,149.0 462,154.0 474,159.0" fill="#2c5d8a"/>
+  <text x="530" y="150.0" text-anchor="start" font-size="15" fill="#2c5d8a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-weight="600">*p = 20</text>
+  <text x="530" y="170.0" text-anchor="start" font-size="14" fill="#2c5d8a" font-style="italic">escreve aqui</text>
+  <text x="530" y="190.0" text-anchor="start" font-size="14" fill="#888" font-style="italic">(era 19)</text>
+  <line x1="80" y1="310" x2="620" y2="310" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="336" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">a escrita segue a seta · p continua guardando 1004</text>
+
+</svg>

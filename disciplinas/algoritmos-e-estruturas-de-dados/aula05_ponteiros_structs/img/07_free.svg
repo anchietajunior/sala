@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="400" fill="#fff"/>
+  <text x="350" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 7 — free(valores); valores = NULL</text>
+  <text x="175" y="72" text-anchor="middle" font-size="15" fill="#b54040" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-weight="600">só free(valores)</text>
+  <text x="525" y="72" text-anchor="middle" font-size="15" fill="#2c5d8a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-weight="600">free + valores = NULL</text>
+  <line x1="350" y1="56" x2="350" y2="330" stroke="#cfd6dd" stroke-width="1"/>
+  <rect x="80" y="92" width="190" height="50" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <line x1="165.5" y1="92" x2="165.5" y2="142" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="122.75" y="123" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">valores</text>
+  <text x="217.75" y="124" text-anchor="middle" font-size="19" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5000</text>
+  <rect x="30" y="200" width="290" height="130" fill="none" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="8,5" rx="10"/>
+  <text x="175.0" y="222" text-anchor="middle" font-size="14" fill="#cfd6dd" font-style="italic">região devolvida</text>
+  <rect x="55" y="236" width="80" height="54" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <text x="95.0" y="271" text-anchor="middle" font-size="20" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <text x="95.0" y="312" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5000</text>
+  <rect x="135" y="236" width="80" height="54" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <text x="175.0" y="271" text-anchor="middle" font-size="20" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="175.0" y="312" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5004</text>
+  <rect x="215" y="236" width="80" height="54" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <text x="255.0" y="271" text-anchor="middle" font-size="20" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="255.0" y="312" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5008</text>
+  <line x1="286" y1="238" x2="308" y2="260" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="286" y1="260" x2="308" y2="238" stroke="#b54040" stroke-width="2.5"/>
+  <path d="M 95 142 L 95 234" fill="none" stroke="#b54040" stroke-width="2.5" stroke-dasharray="6,4"/>
+  <polygon points="90,222 95,234 100,222" fill="#b54040"/>
+  <text x="106" y="180" text-anchor="start" font-size="14" fill="#b54040" font-style="italic">ponteiro suspenso</text>
+  <rect x="430" y="92" width="190" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <line x1="515.5" y1="92" x2="515.5" y2="142" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="472.75" y="123" text-anchor="middle" font-size="15" fill="#5a7a9a" font-style="italic">valores</text>
+  <text x="567.75" y="124" text-anchor="middle" font-size="19" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">∅ NULL</text>
+  <rect x="380" y="200" width="290" height="130" fill="none" stroke="#cfd6dd" stroke-width="1.5" stroke-dasharray="8,5" rx="10"/>
+  <text x="525.0" y="222" text-anchor="middle" font-size="14" fill="#cfd6dd" font-style="italic">região devolvida</text>
+  <rect x="405" y="236" width="80" height="54" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <text x="445.0" y="271" text-anchor="middle" font-size="20" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <text x="445.0" y="312" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5000</text>
+  <rect x="485" y="236" width="80" height="54" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <text x="525.0" y="271" text-anchor="middle" font-size="20" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="525.0" y="312" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5004</text>
+  <rect x="565" y="236" width="80" height="54" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <text x="605.0" y="271" text-anchor="middle" font-size="20" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="605.0" y="312" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5008</text>
+  <line x1="636" y1="238" x2="658" y2="260" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="636" y1="260" x2="658" y2="238" stroke="#b54040" stroke-width="2.5"/>
+  <text x="525" y="180" text-anchor="middle" font-size="14" fill="#2c5d8a" font-style="italic">sem seta: nada a acessar</text>
+  <line x1="80" y1="350" x2="620" y2="350" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="376" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">depois de free, o conteúdo não pertence mais ao programa</text>
+
+</svg>

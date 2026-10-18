@@ -1,0 +1,8 @@
+// Worker sem código: só serve os arquivos estáticos de dist/, montada por "make dist".
+{
+  "name": "faculdade-aed",
+  "compatibility_date": "2026-09-28",
+  "assets": {
+    "directory": "./dist"
+  }
+}

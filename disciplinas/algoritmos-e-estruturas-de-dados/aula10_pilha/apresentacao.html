@@ -168,11 +168,11 @@
             <p class="titulo-bloco">Aula 04</p>
             <h1>Pilha</h1>
             <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
-                LIFO · o gêmeo da Fila
+                LIFO · último a entrar, primeiro a sair
             </p>
             <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
-                Aula <strong>de implementação</strong> — mesma família da Fila,
-                política oposta, código <em>ainda mais simples</em>.
+                Aula <strong>de implementação</strong> — lista encadeada com política
+                de acesso oposta à da Fila e um único ponteiro externo.
             </p>
         </section>
 
@@ -190,9 +190,9 @@
                     precisa de uma pega <strong>a do topo</strong>, nunca a do meio nem a do fundo.
                 </p>
                 <blockquote>
-                    Toda a ideia é essa: <em>"só vejo e só mexo no topo"</em> —
-                    a última coisa a entrar é a primeira a sair, e o que está
-                    embaixo só fica acessível depois que tudo em cima foi retirado.
+                    Princípio: <em>todo acesso ocorre no topo</em> —
+                    o último elemento a entrar é o primeiro a sair, e os de
+                    baixo só ficam acessíveis depois que os de cima são retirados.
                 </blockquote>
                 <p class="nota-rodape">
                     Essa restrição extremamente simples define a estrutura chamada
@@ -226,7 +226,7 @@
             <section>
                 <h3>As operações</h3>
                 <p style="text-align: left;">
-                    Quatro operações — todas no <strong>topo</strong>, nenhuma "anda" pela estrutura.
+                    Quatro operações — todas no <strong>topo</strong>, nenhuma percorre a estrutura.
                 </p>
                 <ul style="text-align: left; font-size: 0.85em;">
                     <li><span class="destaque">empilhar</span> (<em>push</em>) — coloca no topo.</li>
@@ -235,7 +235,7 @@
                     <li><span class="destaque">vazia</span> — testa se tem elementos.</li>
                 </ul>
                 <blockquote style="font-size: 0.82em;">
-                    A restrição é a feature.
+                    A restrição de acesso não é uma limitação: é ela que define a Pilha e garante a ordem LIFO.
                 </blockquote>
             </section>
 
@@ -277,10 +277,11 @@
             <section>
                 <h3>Consequência: sem casos especiais</h3>
                 <p style="text-align: left;">
-                    <code>desempilhar</code> faz <code>topo = topo-&gt;proximo</code> e pronto.
+                    <code>desempilhar</code> apenas executa <code>topo = topo-&gt;proximo</code>.
                 </p>
                 <blockquote>
-                    Se virar <code>NULL</code>, a pilha esvaziou. <strong>Sem armadilha.</strong>
+                    Se <code>topo</code> passar a valer <code>NULL</code>, a pilha ficou vazia —
+                    <strong>nenhum outro ponteiro precisa ser corrigido</strong>.
                 </blockquote>
             </section>
 
@@ -302,7 +303,7 @@
                     <strong>só depois</strong> chame <code>free</code>.
                 </p>
                 <blockquote>
-                    Inverter cria <em>dangling pointer</em>: <code>topo</code> apontando para
+                    Inverter a ordem cria um <strong>ponteiro suspenso</strong> (<em>dangling pointer</em>): <code>topo</code> apontando para
                     memória liberada.
                 </blockquote>
             </section>
@@ -311,8 +312,8 @@
                 <h3>Invariantes — sempre verdadeiras</h3>
                 <p style="text-align: left; font-size: 0.82em;">
                     Invariantes são <strong>propriedades que valem sempre</strong>, antes e
-                    depois de qualquer operação. Servem como "ponto fixo" para raciocinar
-                    sobre o código — se uma delas for violada, tem bug.
+                    depois de qualquer operação. Servem de referência para raciocinar
+                    sobre o código — se uma delas for violada, a implementação contém um erro.
                 </p>
                 <ul style="text-align: left;">
                     <li>
@@ -352,12 +353,12 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             </section>
 
             <section>
-                <h3>Axiomas — coração do LIFO</h3>
+                <h3>Axiomas — a especificação formal do LIFO</h3>
                 <p style="text-align: left; font-size: 0.82em;">
                     Os axiomas <strong>definem o comportamento</strong> da Pilha combinando
                     as operações entre si — sem dizer como elas são implementadas. Repare
-                    em <strong>A4</strong>: é ele que captura, em uma linha, toda a essência
-                    do <strong>LIFO</strong>.
+                    em <strong>A4</strong>: é ele que expressa, em uma linha, a propriedade
+                    <strong>LIFO</strong>.
                 </p>
                 <ul style="text-align: left; font-size: 0.8em;">
                     <li><strong>A1</strong>. <code>vazia(criar()) = verdadeiro</code></li>
@@ -373,7 +374,8 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                 <blockquote style="font-size: 0.78em;">
                     Compare com a Fila:
                     <code>desenfileirar(enfileirar(F, x)) = enfileirar(desenfileirar(F), x)</code>
-                    — lá o <code>x</code> "passa por dentro" da remoção. Aqui, ele simplesmente sai.
+                    — lá a remoção retira outro elemento e o <code>x</code> permanece. Aqui, o próprio
+                    <code>x</code> é removido.
                 </blockquote>
             </section>
 
@@ -425,7 +427,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                 <p class="titulo-bloco">Camada 5</p>
                 <h3>Análise — operações principais</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    Como nenhuma operação da Pilha percorre a estrutura — todas mexem só no
+                    Como nenhuma operação da Pilha percorre a estrutura — todas atuam apenas no
                     topo —, todas custam <strong>O(1)</strong>. Lado a lado, comparamos as
                     duas representações mais comuns; a única diferença prática aparece no
                     <code>empilhar</code> com vetor, quando há <code>realloc</code>.
@@ -457,7 +459,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             <section>
                 <h3>Vetor × lista — escolha de engenharia</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    As duas representações entregam <strong>a mesma TAD</strong> com a mesma
+                    As duas representações implementam <strong>o mesmo TAD</strong> com a mesma
                     complexidade. A escolha entre elas é de <strong>engenharia</strong>:
                     troca de capacidade fixa por flexibilidade, troca de memória contígua
                     por nó alocado um a um. Compare lado a lado:
@@ -469,7 +471,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                             <li>Uma única alocação.</li>
                             <li>Mais econômico em memória.</li>
                             <li>Acesso muito rápido.</li>
-                            <li><strong>Capacidade fixa</strong> ou paga <code>realloc</code>.</li>
+                            <li><strong>Capacidade fixa</strong> ou exige <code>realloc</code>.</li>
                         </ul>
                     </div>
                     <div>
@@ -484,7 +486,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                 </div>
                 <p class="nota-rodape">
                     Esta aula implementa a versão encadeada — mais simples, tamanho dinâmico.
-                    O custo de ponteiros é o "preço do ponteiro" da Aula 02.
+                    O custo é um ponteiro adicional por nó.
                 </p>
             </section>
 
@@ -493,18 +495,18 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                 <p class="titulo-bloco">Camada 6</p>
                 <h3>Onde a Pilha aparece</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    A Pilha não é só um exercício acadêmico — ela está
-                    <strong>por baixo de coisas que você usa todo dia</strong>. Em todos
+                    A Pilha é a estrutura <strong>subjacente a mecanismos de uso
+                    cotidiano</strong>. Em todos
                     os casos abaixo, o padrão é o mesmo: cada ação empilha algo; cada
                     "desfazer/voltar" desempilha.
                 </p>
                 <ul style="text-align: left; font-size: 0.78em;">
                     <li>
-                        <span class="destaque">Pilha de chamadas</span> — toda função empilha
-                        um <em>frame</em>; <code>return</code> desempilha.
+                        <span class="destaque">Pilha de chamadas</span> — toda chamada de função empilha
+                        um registro de ativação (<em>frame</em>); <code>return</code> desempilha.
                     </li>
                     <li>
-                        <span class="destaque">Ctrl+Z</span> — cada ação executada vira entrada
+                        <span class="destaque">Ctrl+Z</span> — cada ação executada é
                         empilhada; cada desfazer desempilha.
                     </li>
                     <li>
@@ -592,7 +594,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             <section>
                 <h3>Passo 4 — empilhar(30)</h3>
                 <p style="text-align: left; font-size: 0.78em;">
-                    Terceira inserção, mesma receita. A Pilha agora tem três nós; o
+                    Terceira inserção, mesmo procedimento. A Pilha agora tem três nós; o
                     <strong>caminho de cima para baixo</strong> é 30 → 20 → 10 → NULL.
                 </p>
                 <img class="diagrama" src="img/04_empilhar_30.svg" alt="Pilha com três nós: topo em 30; 30 → 20 → 10 → NULL">
@@ -611,7 +613,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             <section>
                 <h3>Passo 6 — desempilhar() remove 30</h3>
                 <p style="text-align: left; font-size: 0.78em;">
-                    <code>topo</code> "afunda" para o próximo (20), o nó 30 é liberado, e
+                    <code>topo</code> passa para o próximo nó (20), o nó 30 é liberado, e
                     a Pilha encolhe um nível — em <strong>O(1)</strong>, sem percorrer nada.
                 </p>
                 <img class="diagrama" src="img/06_desempilhar.svg" alt="Pilha com dois nós (20, 10): topo agora em 20; nó 30 liberado">
@@ -620,9 +622,9 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             <section>
                 <h3>Passo 7 — desempilhar() remove 20</h3>
                 <p style="text-align: left; font-size: 0.78em;">
-                    Mesma receita do passo anterior — <code>topo</code> afunda mais uma
-                    vez, agora para o 10. Repare que continua tudo igual: nenhum caso
-                    especial mesmo quando a Pilha vai ficando rasa.
+                    Mesmo procedimento do passo anterior — <code>topo</code> passa
+                    para o 10. Nenhum caso especial surge, mesmo quando resta
+                    um único elemento.
                 </p>
                 <img class="diagrama" src="img/07_desempilhar_2.svg" alt="Pilha com um nó (10): topo aponta para 10; 10 aponta para NULL">
                 <p class="nota-rodape">
@@ -641,7 +643,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             <section>
                 <h3>Como o Ctrl+Z funciona?</h3>
                 <p style="text-align: left;">
-                    Ctrl+Z desfaz a <strong>última</strong> ação. De novo, a penúltima. De novo, a antepenúltima.
+                    Ctrl+Z desfaz a <strong>última</strong> ação; acionado outra vez, a penúltima; depois, a antepenúltima.
                 </p>
                 <p style="text-align: left; margin-top: 0.6em;">
                     Como o editor sabe? Mantém uma <span class="destaque">Pilha de ações</span>:
@@ -652,7 +654,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                     <li>Ctrl+Y (refazer) → segunda pilha que recebe o desfeito.</li>
                 </ul>
                 <blockquote style="font-size: 0.78em;">
-                    Uma Fila aqui seria desastrosa: começaria desfazendo a <em>primeira</em>
+                    Uma Fila aqui produziria a ordem errada: desfaria primeiro a <em>primeira</em>
                     ação ("abrir o arquivo"), não a mais recente.
                 </blockquote>
             </section>
@@ -670,7 +672,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                     Cada <code>return</code> <strong>desempilha</strong> e devolve o controle
                     a quem chamou.
                 </p>
-                <p class="nota-rodape">É <em>literalmente</em> uma Pilha — o nome não é coincidência.</p>
+                <p class="nota-rodape">A estrutura segue a política LIFO: a última função chamada é a primeira a retornar.</p>
             </section>
 
             <section class="eddy-slide">
@@ -681,12 +683,11 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, a <em>stack overflow</em> que vocês já viram
-                            em mensagens de erro é exatamente <strong>essa</strong>
-                            pilha de chamadas estourando: cada chamada empilha
-                            um <em>frame</em>, e quando há recursão sem caso
-                            base a pilha cresce sem parar até esgotar a região
-                            de memória reservada para ela.
+                            Turma, o erro <em>stack overflow</em> (estouro de pilha)
+                            ocorre <strong>nessa</strong> pilha de chamadas: cada chamada
+                            empilha um registro de ativação, e uma recursão sem
+                            caso base empilha registros até esgotar a região
+                            de memória reservada para a pilha.
                         </p>
                     </div>
                 </div>
@@ -710,7 +711,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                     A pilha cresce por cima quando vêm novas; encolhe pelo topo quando saem.
                     Você nunca vê a do meio.
                 </p>
-                <blockquote>LIFO literal.</blockquote>
+                <blockquote>Política LIFO: a última bandeja colocada é a primeira retirada.</blockquote>
             </section>
 
             <section>
@@ -722,7 +723,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
                     Quando vai lavar → começa pelo <strong>topo</strong> (o último colocado).
                 </p>
                 <blockquote>
-                    Última coisa suja, primeira coisa limpa.
+                    O último prato colocado é o primeiro lavado — política LIFO.
                 </blockquote>
             </section>
         </section>
@@ -740,7 +741,7 @@ vazia(Pilha)             -&gt; Booleano</code></pre>
             <section>
                 <h3>Um único arquivo: <code>pilha.c</code></h3>
                 <p style="text-align: left;">
-                    Tudo num lugar só: <code>#include</code>s, structs, funções e <code>main()</code>.
+                    O arquivo reúne <code>#include</code>s, structs, funções e <code>main()</code>.
                 </p>
                 <blockquote style="font-size: 0.78em;">
                     Em uma aula futura sobre <strong>organização de projetos em C</strong>,
@@ -813,7 +814,7 @@ Pilha* pilha_criar(void) {
                 <h3><code>pilha_desempilhar</code></h3>
                 <p style="text-align: left; font-size: 0.82em;">
                     Desempilhar segue o caminho inverso: guarda o nó do topo, lê o valor
-                    dele, faz <code>topo</code> "afundar" para o próximo, e só então libera
+                    dele, faz <code>topo</code> passar para o próximo nó, e só então libera
                     o nó antigo. <strong>A ordem dessas duas últimas etapas importa</strong> —
                     veja a armadilha que o Eddy comenta a seguir.
                 </p>
@@ -888,9 +889,9 @@ void pilha_destruir(Pilha* p) {
             <section>
                 <h3><code>main()</code> — programa demonstrativo</h3>
                 <p style="text-align: left; font-size: 0.82em;">
-                    Para fechar: uma <code>main</code> que <strong>exercita o ciclo
+                    Para fechar: uma <code>main</code> que <strong>executa o ciclo
                     completo</strong> — cria, empilha três valores, consulta o topo,
-                    desempilha um, e libera tudo. É a "prova de fogo" da TAD.
+                    desempilha um, e libera tudo. Ela verifica, na prática, o contrato do TAD.
                 </p>
                 <pre><code class="language-c">int main(void) {
     Pilha* p = pilha_criar();
@@ -944,7 +945,7 @@ Desempilhando: 30 20 10</code></pre>
             </section>
 
             <section>
-                <h3>Exercício 1 — trace na mão</h3>
+                <h3>Exercício 1 — simulação manual</h3>
                 <p style="text-align: left; font-size: 0.78em;">
                     Pilha vazia. Sequência:
                     <code>emp(7)</code>, <code>emp(3)</code>, <code>emp(11)</code>,

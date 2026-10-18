@@ -1,6 +1,6 @@
 # Regras do código C didático
 
-Aplicam-se **apenas a aulas de implementação** (bloco 5). Existem para que o aluno — que está vendo C pela primeira vez — consiga **ler o `.c` de cima a baixo** sem esbarrar em conceitos não ensinados.
+Aplicam-se **apenas a aulas de implementação** (bloco 4). Existem para que o aluno — que está vendo C pela primeira vez — consiga **ler o `.c` de cima a baixo** sem esbarrar em conceitos não ensinados.
 
 ## Organização
 

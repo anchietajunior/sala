@@ -194,19 +194,19 @@
                 <p class="titulo-bloco">Camada 1</p>
                 <h3>Introdução</h3>
                 <p style="text-align: left;">
-                    Você precisa guardar uma sequência que <strong>muda o tempo todo</strong>:
-                    cresce, encolhe, e você não sabe quantos elementos vai ter ao final.
+                    Considere uma sequência que <strong>muda continuamente</strong>:
+                    cresce, diminui, e o número final de elementos é desconhecido.
                 </p>
                 <p style="text-align: left; margin-top: 0.8em;">
-                    Não dá para reservar um espaço gigante "por garantia".
-                    Não dá para correr o risco de ficar sem espaço no meio do caminho.
+                    Reservar de antemão uma área muito grande desperdiça memória.
+                    Reservar uma área pequena arrisca esgotar o espaço durante a execução.
                 </p>
                 <blockquote>
-                    Solução intuitiva: guarde cada coisa em seu próprio lugarzinho separado,
-                    e faça com que cada lugarzinho <strong>saiba onde está o próximo</strong>.
+                    Solução intuitiva: guardar cada elemento em uma área própria da memória
+                    e fazer com que cada área <strong>registre onde está a próxima</strong>.
                 </blockquote>
                 <p class="nota-rodape">
-                    Essa ideia, formalizada, vira a <strong>lista encadeada</strong>.
+                    Essa ideia, formalizada, define a <strong>lista encadeada</strong>.
                 </p>
             </section>
 
@@ -271,12 +271,12 @@
                 </p>
                 <ul style="text-align: left; font-size: 0.82em; margin-top: 0.8em;">
                     <li>Lista vazia → <code>inicio = NULL</code>.</li>
-                    <li>Sem o <code>inicio</code>, a lista inteira fica perdida na memória.</li>
+                    <li>Sem o <code>inicio</code>, nenhum nó da lista pode mais ser alcançado.</li>
                 </ul>
             </section>
 
             <section>
-                <h3>Lista × vetor — como vem a ordem</h3>
+                <h3>Lista × vetor — o que define a ordem</h3>
                 <ul style="text-align: left; font-size: 0.85em;">
                     <li>
                         <strong>Vetor</strong> — ordem dada pelos
@@ -288,7 +288,7 @@
                     </li>
                 </ul>
                 <blockquote>
-                    A ordem está nas ligações, não na vizinhança.
+                    Na lista, a ordem é dada pelas ligações, não pela posição dos nós na memória.
                 </blockquote>
             </section>
 
@@ -298,7 +298,7 @@
                 <h3>O nó — unidade de construção</h3>
                 <p style="text-align: left;">
                     Lista, pilha, fila, árvore, grafo, tabela hash com encadeamento
-                    — todas elas são, no fundo,
+                    — todas elas são
                     <span class="destaque">conjuntos de nós ligados por ponteiros</span>.
                 </p>
                 <p style="text-align: left; margin-top: 0.8em;">
@@ -365,11 +365,10 @@
                     <div class="eddy-balao">
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
-                            Turma, ao entender o nó da lista simples vocês já
-                            terão boa parte do mapa mental para lista dupla,
-                            árvore binária e grafo — basta ajustar o número e
-                            o significado dos ponteiros. Esse é o motivo de
-                            tantas estruturas serem chamadas, em conjunto, de
+                            Turma, o nó da lista simples é a base da lista dupla,
+                            da árvore binária e do grafo, que diferem apenas no
+                            número e no significado dos ponteiros. Por isso essas
+                            estruturas são chamadas, em conjunto, de
                             <em>estruturas baseadas em nó</em>.
                         </p>
                     </div>
@@ -421,7 +420,7 @@
                     </li>
                     <li>
                         Lista com mil elementos → <strong>~mil chamadas a
-                        <code>malloc</code></strong> ao longo da vida.
+                        <code>malloc</code></strong> durante a execução.
                     </li>
                 </ul>
             </section>
@@ -442,24 +441,24 @@
             <section>
                 <h3>O erro mais comum</h3>
                 <blockquote>
-                    Tentar percorrer a partir de <code>NULL</code> =
-                    <em>segmentation fault</em> quase certa.
+                    Acessar um campo por meio de um ponteiro <code>NULL</code> quase sempre
+                    encerra o programa com falha de segmentação (<em>segmentation fault</em>).
                 </blockquote>
             </section>
 
             <section>
-                <h3>Tópicos importantes — preço do ponteiro &amp; identidade</h3>
+                <h3>Tópicos importantes — custo do ponteiro &amp; identidade</h3>
                 <div class="duas-colunas">
                     <div>
-                        <h4 style="color: #2c5d8a;">Preço do ponteiro</h4>
+                        <h4 style="color: #2c5d8a;">Custo do ponteiro</h4>
                         <ul style="font-size: 0.74em;">
                             <li>Cada ponteiro: <strong>8 bytes</strong> em sistemas de 64 bits.</li>
                             <li>
-                                Nó com um <code>int</code> (4 B) paga
-                                <em>mais</em> em ligação do que em dado.
+                                Nó com um <code>int</code> (4 B) ocupa
+                                <em>mais</em> memória na ligação do que no dado.
                             </li>
                             <li>
-                                Custo só pesa em listas grandes com elementos pequenos.
+                                O custo só é relevante em listas grandes com elementos pequenos.
                             </li>
                         </ul>
                     </div>
@@ -545,7 +544,7 @@
             <section>
                 <h3>Ordenadas × não ordenadas</h3>
                 <p style="text-align: left;">
-                    Decisão <span class="destaque">ortogonal</span> às variantes
+                    Decisão <span class="destaque">independente</span> das variantes
                     estruturais — vale para simples, dupla ou circular.
                 </p>
                 <ul style="text-align: left; font-size: 0.78em;">
@@ -556,12 +555,12 @@
                     </li>
                     <li>
                         <span class="destaque">Não ordenada</span> — nós entram
-                        em ordem arbitrária; inserção é mais barata.
+                        em ordem arbitrária; a inserção tem custo menor.
                     </li>
                 </ul>
                 <p class="nota-rodape">
-                    Escolha guiada pela <em>operação dominante</em>: lista
-                    ordenada paga custo na inserção para ganhar na busca.
+                    Escolha guiada pela <em>operação dominante</em>: a lista
+                    ordenada aumenta o custo da inserção para reduzir o da busca.
                 </p>
             </section>
 
@@ -620,8 +619,8 @@
                 <p style="text-align: left;">
                     Definida a estrutura, listamos as <strong>cinco operações
                     canônicas</strong> sobre a lista simples — com suas assinaturas
-                    e pré-condições. É o "contrato" mínimo que qualquer cliente da
-                    lista pode invocar.
+                    e pré-condições. É o "contrato" mínimo que qualquer programa que
+                    use a lista pode invocar.
                 </p>
                 <p style="font-size: 0.7em; color: #666; text-align: left;">
                     Cormen et al. (cap. 10.2): <code>LIST-SEARCH</code>,
@@ -685,8 +684,8 @@
                 <p class="titulo-bloco">Camada 5</p>
                 <h3>Análise — operações principais</h3>
                 <p style="text-align: left;">
-                    Em <strong>negrito</strong>: onde a lista ganha do vetor — e vice-versa
-                    no acesso ao k-ésimo.
+                    Em <strong>negrito</strong>: onde a lista tem custo menor que o vetor — e o
+                    inverso no acesso ao k-ésimo.
                 </p>
                 <p style="font-size: 0.65em; color: #666;">
                     <strong>O(...)</strong> = "ordem de"; <strong>O(1)</strong> = tempo constante;
@@ -723,26 +722,26 @@
             <section>
                 <h3>A nuance que separa O(1) de O(n)</h3>
                 <p style="text-align: left;">
-                    Inserção e remoção são <strong>extremamente rápidas</strong>
+                    Inserção e remoção custam <strong>O(1)</strong>
                     quando o local da operação <em>já é conhecido</em> — basta
                     reajustar ponteiros locais.
                 </p>
                 <p style="text-align: left; margin-top: 0.8em;">
                     Quando é preciso <strong>buscar</strong> o elemento antes,
-                    o tempo da busca <strong>domina</strong> e a operação cai para O(n).
+                    o tempo da busca <strong>domina</strong> e a operação passa a custar O(n).
                 </p>
                 <blockquote style="font-size: 0.8em;">
-                    "Deletar o primeiro nó" → O(1).<br>
-                    "Deletar o nó cuja chave é 42" → O(n).
+                    "Remover o primeiro nó" → O(1).<br>
+                    "Remover o nó cuja chave é 42" → O(n).
                 </blockquote>
             </section>
 
             <section>
                 <h3>Vantagens e custos</h3>
                 <p style="text-align: left;">
-                    Resumindo a tabela em prosa: a lista compra <strong>flexibilidade
-                    dinâmica</strong> ao preço de <strong>perder acesso aleatório</strong>
-                    e pagar <em>overhead</em> de ponteiro por nó. Cada linha das duas
+                    Em síntese: a lista obtém <strong>flexibilidade
+                    dinâmica</strong> em troca da <strong>perda do acesso aleatório</strong>
+                    e de um custo adicional (<em>overhead</em>) de um ponteiro por nó. Cada linha das duas
                     colunas explicita uma dessas trocas.
                 </p>
                 <div class="duas-colunas">
@@ -758,13 +757,13 @@
                         <h4 style="color: #b54;">Custos</h4>
                         <ul style="font-size: 0.76em;">
                             <li>Sem acesso aleatório (k-ésimo em O(n)).</li>
-                            <li><strong>Overhead</strong> de ponteiro por nó (8 bytes em 64 bits).</li>
+                            <li><strong>Custo adicional</strong> de um ponteiro por nó (8 bytes em 64 bits).</li>
                             <li>Cada nó é uma alocação individual com <code>malloc</code>.</li>
                         </ul>
                     </div>
                 </div>
                 <p class="nota-rodape">
-                    A escolha entre vetor e lista depende do padrão de uso — não é dogmática.
+                    A escolha entre vetor e lista depende das operações mais frequentes na aplicação.
                 </p>
             </section>
 
@@ -773,9 +772,8 @@
                 <p class="titulo-bloco">Camada 6</p>
                 <h3>Onde reaparece no curso</h3>
                 <p style="text-align: left;">
-                    A lista encadeada não é só uma estrutura — é a <strong>peça base</strong>
-                    sobre a qual quase tudo que vem depois é construído. Veja em que
-                    aulas e em que aplicações reais ela retorna como protagonista.
+                    A lista encadeada é a <strong>base</strong> de outras estruturas
+                    de dados e aparece em diversas aplicações reais.
                 </p>
                 <ul style="text-align: left; font-size: 0.78em;">
                     <li>
@@ -789,11 +787,11 @@
                     </li>
                     <li>
                         <span class="destaque">Listas duplas</span> — editores de texto,
-                        histórico de browsers, árvores com referência ao pai.
+                        histórico de navegadores, árvores com referência ao pai.
                     </li>
                     <li>
-                        <span class="destaque">Listas circulares</span> — escalonadores
-                        round-robin, <em>playlists</em> em loop, algoritmo de Josephus.
+                        <span class="destaque">Listas circulares</span> — revezamento
+                        circular (<em>round-robin</em>), listas de reprodução repetidas, problema de Josephus.
                     </li>
                 </ul>
             </section>
@@ -843,9 +841,9 @@
             <section>
                 <h3>Passo 2 — variantes: dupla e circular</h3>
                 <p style="text-align: left;">
-                    Mesmo nó, mesma ideia — só muda como os ponteiros se ligam. Na
-                    dupla, cada nó "olha para os dois lados". Na circular, o último
-                    fecha o anel apontando de volta para o primeiro, eliminando o
+                    O nó é o mesmo; muda apenas a forma como os ponteiros se ligam. Na
+                    dupla, cada nó guarda o endereço do anterior e do seguinte. Na circular,
+                    o último aponta de volta para o primeiro, eliminando o
                     <code>NULL</code> terminal.
                 </p>
                 <img class="diagrama" src="img/02_dupla_e_circular.svg"
@@ -855,10 +853,10 @@
             <section>
                 <h3>Passo 3 — FIFO e LIFO sobre a mesma estrutura</h3>
                 <p style="text-align: left;">
-                    A mesma lista simples vira <strong>Fila</strong> ou
-                    <strong>Pilha</strong> só pela <em>política de acesso</em> aplicada:
-                    se entra de um lado e sai do outro, FIFO; se entra e sai pelo
-                    mesmo lado, LIFO.
+                    A mesma lista simples funciona como <strong>Fila</strong> ou
+                    <strong>Pilha</strong> conforme a <em>política de acesso</em>:
+                    inserção e remoção em extremidades opostas, FIFO; na mesma
+                    extremidade, LIFO.
                 </p>
                 <img class="diagrama" src="img/03_fifo_lifo.svg"
                      alt="FIFO (Fila): sai pela frente, entra atrás. LIFO (Pilha): entra e sai pelo topo">
@@ -876,9 +874,9 @@
             </section>
 
             <section>
-                <h3>O sistema de mensageria</h3>
+                <h3>Um sistema de mensagens</h3>
                 <p style="text-align: left;">
-                    Mensagens chegam o tempo todo, são entregues e removidas;
+                    Mensagens chegam continuamente, são entregues e removidas;
                     o número total <span class="destaque">varia muito</span>:
                     de 0 a milhares ao longo do dia.
                 </p>
@@ -893,8 +891,8 @@
                     Reserva 10.000 posições na inicialização.
                 </p>
                 <ul style="text-align: left; font-size: 0.85em;">
-                    <li>🔴 Em pico: lota → recusa mensagens.</li>
-                    <li>🔴 Em calmaria: 9.900 posições vazias ocupando memória.</li>
+                    <li>🔴 Em horário de pico: o vetor enche → mensagens recusadas.</li>
+                    <li>🔴 Com pouco movimento: 9.900 posições vazias ocupando memória.</li>
                 </ul>
             </section>
 
@@ -902,7 +900,7 @@
                 <h3>Tentativa 2 — vetor que cresce (<code>realloc</code>)</h3>
                 <ul style="text-align: left; font-size: 0.85em;">
                     <li>🟡 Cada <code>realloc</code> pode <strong>copiar tudo</strong> para
-                        uma nova região contígua → O(n) que congela o sistema.</li>
+                        uma nova região contígua → O(n), com o atendimento suspenso durante a cópia.</li>
                     <li>🔴 Remover da frente exige <strong>deslocar</strong> todas as outras
                         → outro O(n).</li>
                 </ul>
@@ -914,11 +912,11 @@
                     <li>✅ Cada mensagem é um <strong>nó</strong> alocado individualmente.</li>
                     <li>✅ Inserir no fim com ponteiro <code>fim</code>: <strong>O(1)</strong>.</li>
                     <li>✅ Remover da frente: <strong>O(1)</strong>.</li>
-                    <li>✅ Memória <strong>exata</strong>; sem cópias massivas; sem limite estático.</li>
+                    <li>✅ Memória <strong>exata</strong>; sem cópias do conjunto inteiro; sem limite estático.</li>
                 </ul>
                 <p class="nota-rodape">
-                    É exatamente esse padrão FIFO que filas de impressão, buffers de pacotes
-                    e sistemas de mensageria usam. Para LIFO, o exemplo análogo é a
+                    É exatamente esse padrão FIFO que filas de impressão, filas de pacotes de rede
+                    e sistemas de mensagens usam. Para LIFO, o exemplo análogo é a
                     pilha de chamadas de função.
                 </p>
             </section>
@@ -932,7 +930,7 @@
                         <strong class="eddy-nome">Eddy</strong>
                         <p class="eddy-fala">
                             Turma, listas encadeadas resolvem problemas como
-                            histórico de undo em editores, gerenciamento da fila de
+                            o histórico do comando desfazer em editores, gerenciamento da fila de
                             processos prontos no kernel do Linux e a própria pilha
                             de chamadas que o C usa para executar funções.
                         </p>
@@ -969,11 +967,11 @@
                 <h3>Pilha de provas para corrigir</h3>
                 <p style="text-align: left;">
                     O professor coloca cada prova <span class="destaque">em cima</span>
-                    da última. Ao corrigir, <strong>pega a do topo</strong> — a última colocada.
+                    da última. Ao corrigir, <strong>retira a do topo</strong> — a última colocada.
                 </p>
                 <p style="text-align: left; margin-top: 0.8em;">
-                    A pilha cresce e encolhe pelo <strong>mesmo lado</strong>. Não há esforço
-                    para acessar o meio: você não acessa o meio.
+                    A pilha cresce e diminui pelo <strong>mesmo lado</strong>. O acesso ao
+                    meio não é permitido: só o topo é consultado ou removido.
                 </p>
                 <blockquote>
                     Lista simplesmente encadeada operada como <strong>LIFO</strong> = Pilha.
@@ -1000,11 +998,11 @@
                     ou <strong>circular</strong> e justifique em 1 linha:
                 </p>
                 <ul style="text-align: left; font-size: 0.78em;">
-                    <li>a) Histórico de comandos do shell (setas ↑ ↓).</li>
-                    <li>b) <em>Playlist</em> em modo "repetir tudo".</li>
-                    <li>c) Buffer FIFO: insere atrás, remove na frente.</li>
-                    <li>d) Cursor de editor caminhando ← →.</li>
-                    <li>e) Escalonamento <em>round-robin</em> de processos.</li>
+                    <li>a) Histórico de comandos do terminal (setas ↑ ↓).</li>
+                    <li>b) Lista de reprodução em modo "repetir tudo".</li>
+                    <li>c) Fila de espera FIFO: insere atrás, remove na frente.</li>
+                    <li>d) Cursor de editor que se move ← →.</li>
+                    <li>e) Revezamento circular (<em>round-robin</em>) de processos.</li>
                 </ul>
                 <div class="resposta fragment fade-in">
                     <strong>Resposta:</strong>
@@ -1012,7 +1010,7 @@
                         <li>a) <strong>Dupla</strong> — navegação em dois sentidos.</li>
                         <li>b) <strong>Circular</strong> — sem fim explícito.</li>
                         <li>c) <strong>Simples</strong> com <code>inicio</code> e <code>fim</code> — pontas em O(1).</li>
-                        <li>d) <strong>Dupla</strong> — caminhar para a esquerda exige <code>anterior</code>.</li>
+                        <li>d) <strong>Dupla</strong> — mover para a esquerda exige <code>anterior</code>.</li>
                         <li>e) <strong>Circular</strong> — rotação cíclica natural.</li>
                     </ul>
                 </div>
@@ -1027,15 +1025,15 @@
                     <li>a) Tabela de notas — acesso por matrícula.</li>
                     <li>b) Tarefas pendentes — inserção/remoção nas pontas.</li>
                     <li>c) Histórico de Ctrl+Z — só topo.</li>
-                    <li>d) 10 M de pontos com <em>uma única passada</em> sequencial.</li>
+                    <li>d) 10 milhões de pontos lidos em <em>um único percurso</em> sequencial.</li>
                 </ul>
                 <div class="resposta fragment fade-in">
                     <strong>Resposta:</strong>
                     <ul>
                         <li>a) <strong>Vetor</strong> — acesso por índice O(1) vs O(n) na lista.</li>
-                        <li>b) <strong>Lista</strong> — pontas em O(1); vetor pagaria deslocamento O(n).</li>
+                        <li>b) <strong>Lista</strong> — pontas em O(1); no vetor, o deslocamento custaria O(n).</li>
                         <li>c) <strong>Lista</strong> (Pilha) ou vetor dinâmico — ambos O(1) amortizado.</li>
-                        <li>d) <strong>Vetor</strong> — uma única alocação contígua; lista exigiria 10 M de <code>malloc</code> + ~80 MB só de ponteiros.</li>
+                        <li>d) <strong>Vetor</strong> — uma única alocação contígua; a lista exigiria 10 milhões de chamadas a <code>malloc</code> e ~80 MB apenas em ponteiros.</li>
                     </ul>
                 </div>
             </section>

@@ -1,6 +1,6 @@
 # Aula NN — <Tema Conceitual>
 
-> **Tipo desta aula**: conceitual. <Frase curta situando o conceito no mapa da disciplina — ex.: "Análise de complexidade é o vocabulário que usaremos para comparar implementações nas próximas aulas". Aulas conceituais têm 6 blocos (sem bloco de Código em C); a notação formal necessária aos exercícios é inlinerada no próprio enunciado.>
+> **Tipo desta aula**: conceitual. <Frase curta dizendo o que o conceito permite fazer — ex.: "Análise de complexidade é o vocabulário para comparar implementações pelo custo". Aulas conceituais têm 4 blocos (sem bloco de Código em C).>
 
 ---
 
@@ -8,7 +8,7 @@
 
 ### Camada 1 — Introdução
 
-<Parágrafo curto, completamente coloquial.>
+<Parágrafo curto, em linguagem simples e formal.>
 
 ### Camada 2 — Definição informal com vocabulário básico
 
@@ -54,52 +54,7 @@
 
 ---
 
-## 4. Analogias
-
-**1. <Título da primeira analogia>.**
-<Parágrafo.>
-
-**2. <Título da segunda analogia>.** (opcional)
-<Parágrafo.>
-
----
-
-## 5. Exercícios Práticos
-
-<3–5 exercícios em ordem crescente de dificuldade. **Não rotular** com "fácil/médio/difícil". Apenas 1 desafio, sempre o último.>
-
-**Exercício 1 — <Título>.**
-<Enunciado. Tipicamente identificar o conceito no cotidiano, ou aplicar uma definição.>
-
-*Critério de aceitação*: <condição>.
-
-> **Resposta mínima aceitável**
->
-> <Resposta direta + axioma/critério aplicado em uma linha.>
-
-**Exercício 2 — <Título>.**
-<Enunciado.>
-
-*Critério de aceitação*: <condição>.
-
-> **Resposta mínima aceitável**
->
-> <Resposta enxuta.>
-
-<...>
-
-**Exercício 5 — Desafio: <Título>.**
-<Extensão ampla — provar por axiomas, escrever um TAD curto, comparar dois conceitos.>
-
-*Critério de aceitação*: <condição>.
-
-> **Resposta mínima aceitável**
->
-> <Esboço da resposta-gabarito.>
-
----
-
-## 6. Referências
+## 4. Referências
 
 - **Backes, A. R.** — *Algoritmos e Estruturas de Dados em Linguagem C*. Rio de Janeiro: LTC, 2023. Capítulo X, *"<Nome>"*, <relevância>.
 - **Veloso, P.; Pereira, S. do L.** — *Estruturas de Dados em C — Uma Abordagem Didática*. São Paulo: Saraiva, 2016. Capítulo Y, *"<Nome>"*. <Relevância>.

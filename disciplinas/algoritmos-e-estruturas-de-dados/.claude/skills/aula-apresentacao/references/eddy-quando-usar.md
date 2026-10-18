@@ -12,12 +12,10 @@ Eddy é o mascote-assistente da disciplina. Aparece em **slides dedicados** traz
 
 | Bloco                    | Usar Eddy? | O quê                                                |
 |--------------------------|------------|------------------------------------------------------|
-| Bloco 1, Camada 2 ou 4   | **Sim**    | Citação inline da bibliografia (Backes, Veloso & Pereira) |
+| Bloco 1, Camada 2 ou 4   | **Sim**    | Citação inline da bibliografia (Cormen primeiro; Backes, Veloso & Pereira) |
 | Bloco 1, Camada 6        | Opcional   | Nomeia um tema da computação onde o conceito reaparece (nunca "na próxima aula") |
 | Bloco 3                  | **Sim**    | Exemplo de aplicação real ou curiosidade histórica   |
-| Bloco 4 (analogias)      | Opcional   | Curiosidade relacionada à analogia                   |
-| Bloco 5 (código C)       | **Sim**    | Armadilha comum específica do trecho exibido          |
-| Bloco 6 (exercícios)     | Opcional   | **Provoca**, nunca dá a resposta                     |
+| Bloco 4 (código C)       | **Sim**    | Armadilha comum específica do trecho exibido          |
 
 ## Estrutura HTML padrão
 
@@ -50,8 +48,7 @@ Para falas mais longas (citação com vários autores, lista de aplicações), t
 - **Até 3–4 frases**. Slide é uma pausa, não uma palestra.
 - **Cita fonte quando houver**. Formato `<cite>Backes, cap. X — Nome</cite>` ou `<cite>Veloso & Pereira, cap. Y</cite>`. Bibliografia da ementa no `CLAUDE.md`.
 - **Não inventar fatos históricos**. Se não houver certeza sobre data/autor, omitir o detalhe ou dizer apenas "proposto na década de X". Datas como "1959", "Dijkstra em Amsterdã" são bem-vindas **só se forem corretas e verificáveis**.
-- **Mesmas regras de linguagem** da disciplina: PT-BR com acentuação correta, sem coloquialismos para conceitos técnicos, sem siglas locais (RU, DCE).
-- **No bloco 6 (exercícios), nunca dar a resposta** — apenas **provocar** ("Turma, antes de ver a solução, tente identificar quem é o caso base...").
+- **Mesmas regras de linguagem** da disciplina: PT-BR com acentuação correta, sem coloquialismo nem jargão, sem siglas locais (RU, DCE).
 
 ## Exemplos por categoria
 
@@ -82,15 +79,15 @@ Para falas mais longas (citação com vários autores, lista de aplicações), t
 
 ```html
 <p class="eddy-fala">
-    Turma, a <em>stack overflow</em> que vocês já viram em mensagens
-    de erro é exatamente <strong>essa</strong> pilha de chamadas
-    estourando: cada chamada empilha um <em>frame</em>, e quando há
+    Turma, o erro de <em>stack overflow</em> (estouro da pilha de chamadas)
+    ocorre exatamente com <strong>essa</strong> pilha: cada chamada empilha
+    um registro de ativação (<em>frame</em>), e quando há
     recursão sem caso base a pilha cresce sem parar até esgotar a
     região de memória reservada para ela.
 </p>
 ```
 
-### Dica de armadilha (bloco 5)
+### Dica de armadilha (bloco 4)
 
 ```html
 <p class="eddy-fala">
@@ -99,17 +96,6 @@ Para falas mais longas (citação com vários autores, lista de aplicações), t
     <strong>e só depois</strong> chamamos <code>free</code>.
     Inverter essa ordem deixa <code>topo</code> apontando para memória
     que acabou de ser liberada — um <em>ponteiro suspenso</em>.
-</p>
-```
-
-### Provocação (bloco 6)
-
-```html
-<p class="eddy-fala">
-    Turma, antes de ver a solução do trace na mão, identifique
-    onde acontece a <strong>primeira</strong> remoção — é o ponto
-    onde o último elemento empilhado sai. A partir daí, é só repetir
-    o padrão.
 </p>
 ```
 

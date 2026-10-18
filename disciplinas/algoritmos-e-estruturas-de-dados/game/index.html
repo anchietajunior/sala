@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faculdade AED</title>
+  <style>
+    :root {
+      --azul: #2c5d8a;
+      --azul-suave: #5a7a9a;
+      --tinta: #1d2733;
+      --papel: #fbf7ee;
+      --couro-claro: #6b4423;
+      --couro-escuro: #45290f;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #17202a;
+      color: var(--tinta);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    #tela {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .painel {
+      position: fixed;
+      margin: 0;
+      border-radius: 10px;
+      background: rgb(255 255 255 / 0.93);
+      box-shadow: 0 4px 16px rgb(0 0 0 / 0.25);
+    }
+
+    kbd {
+      display: inline-block;
+      min-width: 1.6em;
+      padding: 1px 6px;
+      border: 1px solid var(--azul-suave);
+      border-bottom-width: 3px;
+      border-radius: 5px;
+      background: #fff;
+      font: 600 0.9em/1.4 ui-monospace, monospace;
+      text-align: center;
+      color: var(--azul);
+    }
+
+    #ajuda {
+      left: 16px;
+      bottom: 16px;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+
+    #dica {
+      left: 50%;
+      bottom: 28px;
+      translate: -50% 0;
+      padding: 12px 20px;
+      border: 2px solid var(--azul);
+      font: inherit;
+      font-size: 17px;
+      color: var(--tinta);
+      cursor: pointer;
+    }
+
+    #dica:disabled {
+      border-color: #cfd6dd;
+      color: var(--azul-suave);
+      cursor: default;
+    }
+
+    #aviso {
+      inset: 0;
+      width: fit-content;
+      max-width: min(520px, calc(100vw - 32px));
+      height: fit-content;
+      margin: auto;
+      padding: 20px 28px;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    [hidden] { display: none !important; }
+
+    /* Armário: lista de livros para escolher o assunto atual */
+    #estante {
+      width: min(460px, calc(100vw - 32px));
+      padding: 22px 24px;
+      border: 0;
+      border-radius: 12px;
+      box-shadow: 0 24px 60px rgb(0 0 0 / 0.45);
+    }
+    #estante::backdrop { background: rgb(8 14 22 / 0.5); }
+    #estante h2 { margin: 0 0 4px; color: var(--azul); font-size: 22px; }
+    #estante p { margin: 0 0 14px; color: var(--azul-suave); }
+    #lista-de-assuntos {
+      display: grid;
+      gap: 6px;
+      margin: 0 0 16px;
+      padding: 0;
+      list-style: none;
+    }
+    .assunto {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #cfd6dd;
+      border-radius: 8px;
+      background: #f7f9fc;
+      font: inherit;
+      font-size: 16px;
+      text-align: left;
+      color: var(--tinta);
+      cursor: pointer;
+    }
+    .assunto::before {
+      content: "";
+      flex: none;
+      width: 12px;
+      height: 30px;
+      border-radius: 2px;
+      background: var(--cor-do-livro);
+    }
+    .assunto:hover, .assunto:focus-visible { border-color: var(--azul); background: #e8f0f8; }
+    .assunto[aria-current]::after {
+      content: "atual";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--azul);
+    }
+    .fechar {
+      padding: 8px 16px;
+      border: 1px solid var(--azul-suave);
+      border-radius: 8px;
+      background: #fff;
+      font: inherit;
+      color: var(--azul);
+      cursor: pointer;
+    }
+
+    /* Livro aberto: capa de couro, duas páginas e a dobra no meio */
+    #livro {
+      width: min(96vw, 1600px);
+      height: min(92vh, 960px);
+      max-width: none;
+      max-height: none;
+      padding: 0 22px 22px;
+      border: 0;
+      border-radius: 14px;
+      background: linear-gradient(160deg, var(--couro-claro), var(--couro-escuro));
+      box-shadow: 0 30px 80px rgb(0 0 0 / 0.6);
+    }
+    #livro[open] { display: flex; flex-direction: column; animation: abrir-livro 0.45s ease-out 0.5s both; }
+    #livro::backdrop { background: rgb(8 14 22 / 0.55); animation: escurecer 0.4s ease-out 0.4s both; }
+    .cabecalho-do-livro {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 4px;
+      color: #f3e6cf;
+    }
+    .cabecalho-do-livro h2 { margin: 0; font: 600 18px/1.3 Georgia, serif; }
+    .cabecalho-do-livro .fechar { border-color: #f3e6cf; background: transparent; color: #f3e6cf; }
+    .paginas {
+      position: relative;
+      flex: 1;
+      border-radius: 6px;
+      background: var(--papel);
+      box-shadow: -4px 0 0 #efe6d2, -8px 0 0 #e2d6bd, 4px 0 0 #efe6d2, 8px 0 0 #e2d6bd;
+      overflow: hidden;
+    }
+    .paginas iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      /* Multiplicar faz o fundo branco da apresentação assumir a cor do papel. */
+      mix-blend-mode: multiply;
+    }
+    .paginas::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 50%;
+      width: 90px;
+      translate: -50% 0;
+      background: linear-gradient(to right, transparent, rgb(60 40 20 / 0.08) 38%, rgb(60 40 20 / 0.22) 50%, rgb(60 40 20 / 0.08) 62%, transparent);
+      pointer-events: none;
+    }
+
+    @keyframes abrir-livro {
+      from { opacity: 0; transform: perspective(1400px) rotateX(12deg) scale(0.8); }
+    }
+    @keyframes escurecer {
+      from { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #livro[open], #livro::backdrop { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="tela" aria-label="Corredor da faculdade visto de cima"></canvas>
+
+  <p id="ajuda" class="painel"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> ou setas: andar · <kbd>E</kbd>: interagir</p>
+  <button id="dica" class="painel" type="button" hidden></button>
+  <p id="aviso" class="painel" role="status">Carregando a faculdade…</p>
+  <script>
+    if (location.protocol === 'file:') {
+      document.querySelector('#aviso').textContent =
+        'Aberto direto do arquivo, o navegador bloqueia o jogo. Na pasta game, rode "make servir" e acesse http://localhost:8000/game/.';
+    }
+  </script>
+
+  <dialog id="estante" aria-labelledby="titulo-da-estante">
+    <h2 id="titulo-da-estante">Armário</h2>
+    <p>Escolha o assunto atual: o livro vai para a mesa e o personagem se senta para estudar.</p>
+    <ul id="lista-de-assuntos"></ul>
+    <form method="dialog"><button class="fechar">Fechar</button></form>
+  </dialog>
+
+  <dialog id="livro" aria-labelledby="titulo-do-livro">
+    <header class="cabecalho-do-livro">
+      <h2 id="titulo-do-livro"></h2>
+      <form method="dialog"><button class="fechar">Levantar (Esc)</button></form>
+    </header>
+    <div class="paginas">
+      <iframe id="apresentacao" title="Apresentação do assunto atual"></iframe>
+    </div>
+  </dialog>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

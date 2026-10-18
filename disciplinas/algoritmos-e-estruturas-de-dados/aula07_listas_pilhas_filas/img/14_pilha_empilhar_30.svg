@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 495"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="495" fill="#ffffff"/>
+  <text x="350.0" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 9 — pilha_empilhar(pilha, 30)</text>
+  <text x="192" y="125" text-anchor="end" font-size="15" fill="#2c5d8a" font-weight="600" xml:space="preserve">topo</text><path d="M 198 120 L 240.0 120.0" fill="none" stroke="#2c5d8a" stroke-width="2.2"/><polygon points="248.0,120.0 236.0,114.5 236.0,125.5" fill="#2c5d8a"/>
+  <circle cx="120" cy="120" r="12" fill="#2c5d8a"/><text x="120" y="125" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600" xml:space="preserve">2</text>
+  <text x="192" y="250" text-anchor="end" font-size="15" fill="#888" font-weight="600" xml:space="preserve">topo (antes)</text><path d="M 198 245 L 240.0 245.0" fill="none" stroke="#888" stroke-width="2.2" stroke-dasharray="6,4"/><polygon points="248.0,245.0 236.0,239.5 236.0,250.5" fill="#888"/>
+  <rect x="250" y="90" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3" rx="4"/>
+  <line x1="330" y1="90" x2="330" y2="150" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="290" y="128" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <circle cx="350" cy="120" r="4" fill="#2c5d8a"/>
+  <path d="M 350 120 L 350 182.5 L 310 182.5 L 310.0 206.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="310.0,214.0 315.5,202.0 304.5,202.0" fill="#2c5d8a"/>
+  <circle cx="385" cy="182" r="12" fill="#2c5d8a"/><text x="385" y="187" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600" xml:space="preserve">1</text>
+  <rect x="250" y="215" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="330" y1="215" x2="330" y2="275" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="290" y="253" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <circle cx="350" cy="245" r="4" fill="#2c5d8a"/>
+  <path d="M 350 245 L 350 307.5 L 310 307.5 L 310.0 331.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="310.0,339.0 315.5,327.0 304.5,327.0" fill="#2c5d8a"/>
+  <rect x="250" y="340" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="330" y1="340" x2="330" y2="400" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="290" y="378" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <text x="350" y="377" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <text x="390" y="376" text-anchor="start" font-size="14" fill="#888" font-style="italic" xml:space="preserve">fundo</text>
+  <circle cx="450" cy="125" r="12" fill="#2c5d8a"/><text x="450" y="130" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600" xml:space="preserve">1</text>
+  <text x="472" y="130" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">novo-&gt;proximo = topo;</text>
+  <circle cx="450" cy="155" r="12" fill="#2c5d8a"/><text x="450" y="160" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600" xml:space="preserve">2</text>
+  <text x="472" y="160" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">topo = novo;</text>
+  <line x1="60" y1="435" x2="640" y2="435" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350.0" y="461" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">os mesmos dois passos de inserir no início da lista</text>
+  <text x="350.0" y="483" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">o antigo topo passa a ficar logo abaixo do novo · custo O(1)</text>
+</svg>

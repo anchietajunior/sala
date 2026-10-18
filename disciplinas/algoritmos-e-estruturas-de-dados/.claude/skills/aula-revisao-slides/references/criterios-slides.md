@@ -50,7 +50,7 @@ O slide é uma mídia diferente do `.md`: projetado em sala, lido em 5–10 segu
 
 ---
 
-## 2. Registro de palestra
+## 2. Registro de palestra e jargão
 
 **O que procurar**
 
@@ -60,8 +60,14 @@ Slide que **informa ou impressiona** como keynote, em vez de **ensinar** como au
 - Metáfora ou analogia **solta**, sem o termo formal ao lado — o aluno sai com a imagem e sem o vocabulário.
 - Conclusão vaga e não avaliável ("é muito mais rápido", "não escala", "é o segredo dos grandes sistemas").
 - Tom motivacional/jornalístico onde cabia o termo canônico da disciplina.
+- **Jargão** — linguagem de nicho ou informal, que não pertence ao registro acadêmico:
+  - gíria técnica e anglicismo desnecessário: "rodar" (→ executar), "printar" (→ imprimir, exibir), "setar" (→ atribuir), "deletar" (→ remover), "debugar" (→ depurar);
+  - bordão, slogan ou máxima de mercado, em geral atrelado a um produto: "React: a interface é uma função do estado";
+  - expressão de palco ou coloquial: "mágica", "segredo", "pulo do gato", "de graça", "joga fora", "vira", "dá pra", "a gente".
 
-**A distinção que importa — e ela NÃO contradiz "voz que conversa"**
+  Termo técnico consagrado (ponteiro, struct, `malloc`, big-O) não é jargão. Termo em inglês entra como tradução em português + original em itálico no primeiro uso: "remover (*delete*)".
+
+**A distinção que importa — e ela NÃO contradiz "frases curtas"**
 
 `estrutura-slides.md` manda usar frases curtas, diretas, sem subordinação pesada. Isso é **sintaxe** e continua valendo integralmente.
 
@@ -69,7 +75,33 @@ Este critério é sobre **registro e vocabulário**: o slide de sala de aula usa
 
 > **Regra prática: a intuição nunca anda sozinha.** Analogia, imagem mental e frase de efeito são permitidas **acompanhadas** do termo formal, nunca no lugar dele. Ancore sempre: *imagem → nome canônico*.
 
-**Como corrigir**: manter a frase curta, trocar o vago pelo canônico e nomear o fenômeno.
+**Como corrigir**: manter a frase curta, trocar o vago pelo canônico e nomear o fenômeno. Para jargão: substituir por uma **frase formal que fundamente o conteúdo** — a definição, a propriedade ou o resultado, com a fonte quando couber.
+
+**Ruim** — bordão de mercado
+
+```html
+<p>React: a interface é uma função do estado.</p>
+```
+
+**Bom** — a mesma ideia, dita como propriedade
+
+```html
+<p>A saída exibida é determinada inteiramente pelos dados armazenados: os mesmos dados produzem sempre a mesma saída.</p>
+```
+
+**Ruim** — expressões de palco
+
+```html
+<p>A outra abre no meio, cai no P, e joga fora metade do livro de uma vez.</p>
+<p>A busca binária não é rápida "de graça": ela cobra a ordenação.</p>
+```
+
+**Bom**
+
+```html
+<p>A outra abre no meio, compara a palavra procurada com a da página e descarta a metade em que ela não pode estar.</p>
+<p>A busca binária tem uma pré-condição: o vetor precisa estar ordenado, e o custo de ordená-lo entra na conta.</p>
+```
 
 **Ruim** *(real — Aula 02)*
 
@@ -136,7 +168,7 @@ Cada aula é uma unidade fechada, então **conteúdo que também aparece em outr
 **O que procurar**
 
 - Conceito operacional (laço, condição, índice, ponteiro, invariante, caso-base) explicado **só em prosa**, quando 3–8 linhas de C o tornariam evidente.
-- Blocos 1–4 inteiramente sem código, com todo o C represado no bloco 5 — o aluno passa metade da aula ouvindo falar de algo que nunca vê escrito.
+- Blocos 1–3 inteiramente sem código, com todo o C represado no bloco de código — o aluno passa metade da aula ouvindo falar de algo que nunca vê escrito.
 - Armadilha descrita verbalmente ("trocar isto por aquilo causa laço infinito") sem mostrar **as duas linhas** em questão.
 - E o inverso: código exibido **complexo demais** — função longa, muitas responsabilidades, recursos que a turma nunca viu.
 
@@ -147,7 +179,7 @@ Adicionar o trecho mínimo, no slide onde o conceito é apresentado. Regras de c
 Limites próprios do slide:
 
 - Trecho ilustrativo em bloco conceitual: **≤ 8 linhas**.
-- Fatia de código no bloco 5: **≤ 20 linhas**.
+- Fatia de código no bloco de código: **≤ 20 linhas**.
 - **Legível isolado** — sem depender de declarações que ficaram em outro slide.
 - `<pre><code class="language-c">`, com `<`, `>` e `&` escapados.
 - Comentário no trecho é opcional; quando houver, explica a decisão, não a sintaxe.

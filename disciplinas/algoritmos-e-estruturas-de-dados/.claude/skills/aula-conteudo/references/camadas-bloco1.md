@@ -12,7 +12,7 @@ A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas an
 
 **Objetivo**: dar ao aluno uma imagem mental antes de qualquer terminologia.
 
-**Estilo**: completamente coloquial, sem jargão. Tipo:
+**Estilo**: linguagem simples e formal, ainda sem termos técnicos e sem jargão. Tipo:
 
 - "Imagine uma pilha de bandejas no balcão..."
 - "Pense em uma fila do banco..."

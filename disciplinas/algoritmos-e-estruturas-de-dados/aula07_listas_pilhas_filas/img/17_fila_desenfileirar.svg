@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 365"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="365" fill="#ffffff"/>
+  <text x="350.0" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Passo 12 — fila_desenfileirar(fila)</text>
+  <text x="180.0" y="80" text-anchor="middle" font-size="15" fill="#888" font-weight="600" xml:space="preserve">inicio (antes)</text><path d="M 180.0 87 L 180.0 110.0" fill="none" stroke="#888" stroke-width="2.2" stroke-dasharray="6,4"/><polygon points="180.0,118.0 185.5,106.0 174.5,106.0" fill="#888"/>
+  <text x="350.0" y="80" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600" xml:space="preserve">inicio</text><path d="M 350.0 87 L 350.0 110.0" fill="none" stroke="#2c5d8a" stroke-width="2.2"/><polygon points="350.0,118.0 355.5,106.0 344.5,106.0" fill="#2c5d8a"/>
+  <text x="520.0" y="80" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600" xml:space="preserve">fim</text><path d="M 520.0 87 L 520.0 110.0" fill="none" stroke="#2c5d8a" stroke-width="2.2"/><polygon points="520.0,118.0 525.5,106.0 514.5,106.0" fill="#2c5d8a"/>
+  <rect x="120.0" y="120" width="120" height="60" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4" rx="4"/>
+  <line x1="200.0" y1="120" x2="200.0" y2="180" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="160.0" y="158" text-anchor="middle" font-size="22" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <line x1="208.0" y1="128" x2="232.0" y2="172" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="232.0" y1="128" x2="208.0" y2="172" stroke="#b54040" stroke-width="2.5"/>
+  <path d="M 220.0 150 L 281.0 150.0" fill="none" stroke="#cfd6dd" stroke-width="2.5" stroke-dasharray="6,4"/><polygon points="289.0,150.0 277.0,144.5 277.0,155.5" fill="#cfd6dd"/>
+  <rect x="290.0" y="120" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3" rx="4"/>
+  <line x1="370.0" y1="120" x2="370.0" y2="180" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="330.0" y="158" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <circle cx="390.0" cy="150" r="4" fill="#2c5d8a"/>
+  <path d="M 390.0 150 L 451.0 150.0" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="459.0,150.0 447.0,144.5 447.0,155.5" fill="#2c5d8a"/>
+  <rect x="460.0" y="120" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="540.0" y1="120" x2="540.0" y2="180" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="500.0" y="158" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <text x="560.0" y="157" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <circle cx="150" cy="235" r="12" fill="#2c5d8a"/><text x="150" y="240" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600" xml:space="preserve">1</text>
+  <text x="172" y="240" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">fila-&gt;inicio = removido-&gt;proximo;</text>
+  <circle cx="150" cy="265" r="12" fill="#2c5d8a"/><text x="150" y="270" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600" xml:space="preserve">2</text>
+  <text x="172" y="270" text-anchor="start" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">free(removido);</text>
+  <text x="560" y="265" text-anchor="middle" font-size="18" fill="#2c5d8a" font-weight="600" xml:space="preserve">devolve 10</text>
+  <line x1="60" y1="305" x2="640" y2="305" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350.0" y="331" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">sai o 10, o primeiro que entrou</text>
+  <text x="350.0" y="353" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">fim não muda: a fila ainda tem elementos</text>
+</svg>

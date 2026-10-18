@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 525"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="0" y="0" width="700" height="525" fill="#ffffff"/>
+  <text x="350.0" y="36" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">Vetor e lista encadeada na memória</text>
+  <text x="40" y="72" text-anchor="start" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">Vetor — elementos em posições vizinhas</text>
+  <rect x="210" y="100" width="70" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="245" y="132" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">5</text>
+  <text x="245" y="92" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">1000</text>
+  <text x="245" y="172" text-anchor="middle" font-size="14" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">v[0]</text>
+  <rect x="280" y="100" width="70" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="315" y="132" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <text x="315" y="92" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">1004</text>
+  <text x="315" y="172" text-anchor="middle" font-size="14" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">v[1]</text>
+  <rect x="350" y="100" width="70" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="385" y="132" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <text x="385" y="92" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">1008</text>
+  <text x="385" y="172" text-anchor="middle" font-size="14" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">v[2]</text>
+  <rect x="420" y="100" width="70" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="455" y="132" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <text x="455" y="92" text-anchor="middle" font-size="14" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">1012</text>
+  <text x="455" y="172" text-anchor="middle" font-size="14" fill="#5a7a9a" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">v[3]</text>
+  <text x="40" y="222" text-anchor="start" font-size="15" fill="#5a7a9a" font-weight="600" xml:space="preserve">Lista encadeada — nós em qualquer posição, ligados por endereços</text>
+  <text x="100" y="275" text-anchor="middle" font-size="14" fill="#888" xml:space="preserve">endereço 2040</text>
+  <rect x="40" y="285" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="120" y1="285" x2="120" y2="345" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="80" y="323" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">5</text>
+  <circle cx="140" cy="315" r="4" fill="#2c5d8a"/>
+  <path d="M 140 315 L 208.9 398.8" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="214.0,405.0 210.6,392.2 202.1,399.2" fill="#2c5d8a"/>
+  <text x="275" y="365" text-anchor="middle" font-size="14" fill="#888" xml:space="preserve">endereço 7316</text>
+  <rect x="215" y="375" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="295" y1="375" x2="295" y2="435" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="255" y="413" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">10</text>
+  <circle cx="315" cy="405" r="4" fill="#2c5d8a"/>
+  <path d="M 315 405 L 383.9 321.2" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="389.0,315.0 377.1,320.8 385.6,327.8" fill="#2c5d8a"/>
+  <text x="450" y="275" text-anchor="middle" font-size="14" fill="#888" xml:space="preserve">endereço 1088</text>
+  <rect x="390" y="285" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="470" y1="285" x2="470" y2="345" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="430" y="323" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">20</text>
+  <circle cx="490" cy="315" r="4" fill="#2c5d8a"/>
+  <path d="M 490 315 L 554.1 398.7" fill="none" stroke="#2c5d8a" stroke-width="2.5"/><polygon points="559.0,405.0 556.1,392.1 547.3,398.8" fill="#2c5d8a"/>
+  <text x="620" y="365" text-anchor="middle" font-size="14" fill="#888" xml:space="preserve">endereço 5500</text>
+  <rect x="560" y="375" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="640" y1="375" x2="640" y2="435" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="600" y="413" text-anchor="middle" font-size="22" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" xml:space="preserve">30</text>
+  <text x="660" y="412" text-anchor="middle" font-size="18" fill="#888" xml:space="preserve">∅</text>
+  <line x1="60" y1="465" x2="640" y2="465" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350.0" y="491" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">no vetor, v[3] é localizado por um cálculo a partir do primeiro endereço</text>
+  <text x="350.0" y="513" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic" xml:space="preserve">na lista, o 4º nó só é alcançado passando pelos três primeiros · endereços ilustrativos</text>
+</svg>

@@ -28,3 +28,9 @@ atividades/
 .claude/*
 !.claude/skills/
 aula06_matriz/.claude/
+
+# Jogo (game/): cópias de segurança do Blender e cache do Python
+*.blend1
+__pycache__/
+game/dist/
+game/.wrangler/

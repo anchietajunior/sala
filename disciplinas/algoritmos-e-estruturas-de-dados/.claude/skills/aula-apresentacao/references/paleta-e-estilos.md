@@ -137,7 +137,6 @@ O `<style>` que vai no `<head>` está copiado integralmente em `templates/aprese
 - `h1, h2, h3, h4` em `var(--cor-destaque)`, sem `text-transform`.
 - `.capa h1` 2.4em; `.capa h2` 1.4em com `var(--cor-suave)`.
 - `.diagrama` (para `<img>` de SVG): max-width 100%, max-height 500–540px, centralizado.
-- `.resposta` (caixa do gabarito do exercício): borda-esquerda 3px destaque, fundo `#f7f9fc`, texto-alinhamento à esquerda.
 - `.destaque`: cor destaque + peso 600.
 - `.nota-rodape`: 0.55em, itálico, cinza.
 - `blockquote`: fundo `#f7f9fc`, borda-esquerda 4px destaque.
@@ -147,7 +146,7 @@ O `<style>` que vai no `<head>` está copiado integralmente em `templates/aprese
 ## O que não fazer
 
 - **Não** usar Mermaid em apresentações Reveal.js — sempre SVG.
-- **Não** usar PNG/JPG em diagramas técnicos (só em ilustrações de analogia, e mesmo assim só se o usuário pedir).
+- **Não** usar PNG/JPG — só se o usuário pedir explicitamente.
 - **Não** carregar fonte externa (Google Fonts, etc.) — usar a stack de fontes do sistema.
 - **Não** mudar a paleta. Se um diagrama pedir uma cor extra (ex.: vermelho para "erro"), use vermelho médio sóbrio compatível (`#b54040`) e documente o uso.
 - **Não** usar tema escuro. A disciplina usa `white`.

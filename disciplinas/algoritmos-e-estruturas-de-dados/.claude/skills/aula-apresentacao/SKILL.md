@@ -37,7 +37,7 @@ Antes de começar, **sempre**:
 
 Cada bloco do `.md` vira um conjunto de `<section>` aninhados (slide pai + sub-slides verticais). O mapeamento canônico está em `references/estrutura-slides.md` — consulte-o antes de escrever HTML.
 
-**Regra de ouro (principal — vence as demais em caso de conflito): um slide = uma ideia, voz que conversa.** Veja a regra 5 de "Pedagogia e Linguagem" no `CLAUDE.md`. Em termos práticos ao mapear o `.md`:
+**Regra de ouro (principal — vence as demais em caso de conflito): um slide = uma ideia, texto direto e formal.** Detalhes em `references/estrutura-slides.md` (seção *Uma ideia por slide*). Em termos práticos ao mapear o `.md`:
 
 - **Um parágrafo denso do `.md` quase nunca vira um único slide.** Releia o parágrafo e identifique quantas ideias distintas ele carrega. Cada ideia ganha sua própria `<section>`.
 - **Limites de texto por slide**: corpo de prosa pura ≤ **~40 palavras**; prosa + bullet ≤ **~80 palavras**; bullet pura ≤ 5 itens de até 12 palavras cada.
@@ -68,8 +68,7 @@ Pontos pedagógicos onde o Eddy faz mais sentido (do `CLAUDE.md`):
 
 - Camada 2 ou 4 do bloco 1 — citação inline da bibliografia.
 - Final do bloco 3 (problema motivador) — exemplo de aplicação real.
-- Bloco 5 (código) — armadilha comum específica do trecho exibido.
-- Bloco 6 (exercícios) — apenas **provoca**, nunca dá a resposta.
+- Bloco 4 (código) — armadilha comum específica do trecho exibido.
 
 Regras de conteúdo da fala em `references/eddy-quando-usar.md`. Em resumo:
 
@@ -83,7 +82,7 @@ Regras de conteúdo da fala em `references/eddy-quando-usar.md`. Em resumo:
 Use `templates/apresentacao.html.template` como esqueleto. Ele contém:
 
 - `<head>` com vendor relativo (`../assets/vendor/...`) e `../assets/bot/bot.css`.
-- `<style>` com as classes-padrão da disciplina (`.capa`, `.titulo-bloco`, `.diagrama`, `.resposta`, `.destaque`, `.nota-rodape`, `.duas-colunas`, `.eddy-slide`).
+- `<style>` com as classes-padrão da disciplina (`.capa`, `.titulo-bloco`, `.diagrama`, `.destaque`, `.nota-rodape`, `.duas-colunas`, `.eddy-slide`).
 - Estrutura inicial com **capa institucional + slide-título da aula** (sem slide de "Roteiro" — proibido pelo `CLAUDE.md`).
 - Script de inicialização do Reveal com transição `fade`.
 
@@ -114,13 +113,12 @@ Confirmar que a linha da aula no `README.md` aponta tanto para o `.md` quanto pa
 - **Tema `white`**, transição `fade`, capa institucional fixa.
 - **Sem slide de "Roteiro/Sumário"** — capa institucional + título da aula vão direto para o bloco 1.
 - **Eddy sempre em `<section>` dedicada**, nunca flutuando sobre outro slide.
-- **SVG é o único tipo de diagrama em apresentação** — sem Mermaid em `.html`, sem PNG/JPG (a menos que o usuário peça explicitamente para uma analogia ilustrada).
-- **Respostas mínimas dos exercícios** entram como `<div class="resposta fragment fade-in">`, reveladas por clique.
+- **SVG é o único tipo de diagrama em apresentação** — sem Mermaid em `.html`, sem PNG/JPG, salvo pedido explícito do usuário.
 - **Não inventar fatos históricos** nas falas do Eddy. Se não houver certeza sobre data/autor, omitir.
 - **Matemática em dose mínima nos slides.** A turma não tem conhecimento prévio — notação simbólica pesada (∀, ∃, ⇔, quantificadores, provas com constantes) **não entra em slide**: afugenta o aluno do conteúdo. Matemática aparece como **referência contextual** (Euclides, contagens concretas de passos, tabelas com números). Fórmula só quando indispensável: **pequena** (uma expressão curta, ex.: `3n + 5 → O(n)`), **precedida** da ideia dita em português e acompanhada da leitura em linguagem natural ("lê-se: cresce no ritmo de n"). O rigor formal completo pertence ao `.md` (camada 4), não à apresentação. Detalhes em `references/estrutura-slides.md` (seção *Matemática nos slides*).
 - **Acentuação PT-BR completa** em todo texto visível.
-- **Todo slide com `<h3>` tem uma linha-ponte logo abaixo do título**, antes de qualquer tabela, fórmula, `<pre><code>`, lista de axiomas, notação simbólica ou diagrama. A linha-ponte (**1 frase**, no máximo 2, em prosa, fonte normal) diz **o que** o aluno vai ver e **por que** importa. Detalhes e exemplos em `references/estrutura-slides.md` (seção *Linha-ponte: contexto antes do conteúdo técnico*) e na regra 4 de "Pedagogia e Linguagem" no `CLAUDE.md`. Exceções: slide do Eddy e slides puramente narrativos (já são contexto).
-- **REGRA PRINCIPAL DE DESIGN DE SLIDE — uma ideia por slide, voz que conversa.** Vence as demais em conflito. Detalhes e exemplos em `references/estrutura-slides.md` (seção *Uma ideia por slide*) e na regra 5 de "Pedagogia e Linguagem" no `CLAUDE.md`. Em resumo: prosa pura ≤ ~40 palavras; prosa + bullet ≤ ~80 palavras; linguagem coloquial, frases curtas, sem subordinação pesada; se há 2+ ideias num rascunho de slide, fatie em 2+ slides.
+- **Todo slide com `<h3>` tem uma linha-ponte logo abaixo do título**, antes de qualquer tabela, fórmula, `<pre><code>`, lista de axiomas, notação simbólica ou diagrama. A linha-ponte (**1 frase**, no máximo 2, em prosa, fonte normal) diz **o que** o aluno vai ver e **por que** importa. Detalhes e exemplos em `references/estrutura-slides.md` (seção *Linha-ponte: contexto antes do conteúdo técnico*). Exceções: slide do Eddy e slides puramente narrativos (já são contexto).
+- **REGRA PRINCIPAL DE DESIGN DE SLIDE — uma ideia por slide, texto direto e formal.** Vence as demais em conflito. Detalhes e exemplos em `references/estrutura-slides.md` (seção *Uma ideia por slide*). Em resumo: prosa pura ≤ ~40 palavras; prosa + bullet ≤ ~80 palavras; vocabulário formal e sem jargão, frases curtas, sem subordinação pesada; se há 2+ ideias num rascunho de slide, fatie em 2+ slides.
 
 ## Saída final
 

@@ -2,17 +2,15 @@
 
 Este documento detalha o que entra em cada bloco. As regras vêm do `CLAUDE.md` da raiz; aqui estão organizadas como **checklist de execução**.
 
-A numeração canônica abaixo é a das **aulas de implementação (7 blocos)**. Em **aulas conceituais**, o bloco 5 (Código em C) é **omitido** e os seguintes são renumerados:
+A numeração canônica abaixo é a das **aulas de implementação (5 blocos)**. Em **aulas conceituais**, o bloco 4 (Código em C) é **omitido** e Referências passa a ser o bloco 4:
 
-| Implementação (7)         | Conceitual (6)         |
+| Implementação (5)         | Conceitual (4)         |
 |---------------------------|------------------------|
 | 1. Conceito               | 1. Conceito            |
 | 2. Visualização Gráfica   | 2. Visualização Gráfica|
 | 3. Problema Motivador     | 3. Problema Motivador  |
-| 4. Analogias              | 4. Analogias           |
-| 5. Código em C            | —                      |
-| 6. Exercícios             | 5. Exercícios          |
-| 7. Referências            | 6. Referências         |
+| 4. Código em C            | —                      |
+| 5. Referências            | 4. Referências         |
 
 ---
 
@@ -90,22 +88,9 @@ O aluno deve sair pensando: *"ah, então é por isso que isso existe."*
 
 ---
 
-## Bloco 4 — Analogias
+## Bloco 4 — Código em C *(SOMENTE em aulas de implementação)*
 
-Cabeçalho: `## 4. Analogias`
-
-**1 a 2 analogias** do mundo real, cada uma num parágrafo:
-
-- `**1. <Título curto da analogia>.**` Texto explicando como o cotidiano espelha a estrutura/algoritmo.
-- (opcional) `**2. <Outro título>.**` Segunda analogia.
-
-Cenários **universais**, sem siglas locais (sem "RU", "DCE", etc.). Fila do banco, pilha de bandejas, agenda, árvore genealógica, lista de chamada — esses funcionam.
-
----
-
-## Bloco 5 — Código em C *(SOMENTE em aulas de implementação)*
-
-Cabeçalho: `## 5. Código em C`
+Cabeçalho: `## 4. Código em C`
 
 Frase introdutória curta. Em seguida um `>` blockquote explicando que **tudo vive em um único arquivo `tema.c`** — `#include`s, structs, funções e `main()` — para que o aluno leia o programa inteiro de cima a baixo. **Não** anunciar aula futura sobre modularização: a aula é uma unidade fechada.
 
@@ -144,32 +129,9 @@ Regras de código detalhadas em `codigo-c-regras.md`.
 
 ---
 
-## Bloco 6 — Exercícios Práticos *(bloco 5 em aulas conceituais)*
+## Bloco 5 — Referências *(bloco 4 em aulas conceituais)*
 
-Cabeçalho: `## 6. Exercícios Práticos` (ou `## 5.` em aulas conceituais).
-
-**3 a 5 exercícios** em ordem crescente de dificuldade. **Não rotular** com "fácil/médio/difícil" — a progressão fica implícita.
-
-Cada exercício no formato:
-
-```
-**Exercício N — <Título curto descritivo>.**
-<Enunciado claro, 1–3 parágrafos.>
-
-*Critério de aceitação*: <condição de sucesso, entrada/saída esperadas, ou estado final esperado.>
-
-> **Resposta mínima aceitável**
->
-> <Resposta direta ou código mínimo. Para enunciados objetivos, uma tabela ou frase + axioma aplicado. Para abertos, código enxuto ou especificação mínima de TAD.>
-```
-
-Detalhes da progressão em `exercicios.md`.
-
----
-
-## Bloco 7 — Referências *(bloco 6 em aulas conceituais)*
-
-Cabeçalho: `## 7. Referências` (ou `## 6.`).
+Cabeçalho: `## 5. Referências` (ou `## 4.`).
 
 Sempre na ordem (bibliografia básica da ementa — citar as que forem pertinentes ao tema):
 
