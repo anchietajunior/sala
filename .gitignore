@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Build C (aulas de implementação)
+*.o
+*.out
+*.exe
+*.dSYM/
+a.out
+
+# Logs e temporários
+*.log
+*.tmp
+
+# Atividades avaliativas e dados de alunos: provas, gabaritos e equipes ficam fora do repositório público
+disciplinas/*/atividades/
+
+# Claude Code (versionar apenas as skills)
+.claude/*
+!.claude/skills/
+**/.claude/settings.local.json
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Jogo (projetos/faculdade): cópias de segurança do Blender e o site montado por "make dist"
+*.blend1
+projetos/faculdade/dist/
+projetos/faculdade/.wrangler/

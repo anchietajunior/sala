@@ -1,8 +1,9 @@
 BLENDER ?= /Applications/Blender.app/Contents/MacOS/Blender
 # clang precisa do linker wasm-ld (macOS: brew install lld)
 CC = clang
-# Slides da sala 2: a pasta slides/ do projeto de Programação Avançada, com o reveal.js vendorado que eles usam.
-SLIDES_DE_PROGRAMACAO_AVANCADA ?= ../../../progavancada/projeto/slides
+# Sala 1 e sala 2: as pastas de aulas de cada disciplina, cada uma com o reveal.js vendorado em assets/.
+AULAS_DE_AED ?= ../../disciplinas/algoritmos-e-estruturas-de-dados/aulas
+AULAS_DE_PROGRAMACAO_AVANCADA ?= ../../disciplinas/programacao-avancada/aulas
 
 all: jogo.wasm modelos/faculdade.glb modelos/personagem.glb
 
@@ -21,25 +22,25 @@ recriar-blend:
 teste: jogo.wasm
 	node teste_jogo.mjs
 
-# Serve a raiz do repositório para que o jogo alcance ../aulaNN_*/apresentacao.html.
-servir: all
-	cd .. && python3 -m http.server 8000
+# Serve o mesmo site que vai para o ar, para que o jogo alcance ../aulaNN_*/apresentacao.html.
+servir: dist
+	cd dist && python3 -m http.server 8000
 
 # Monta o que vai para o ar: o jogo na raiz e, de cada aula, só a apresentação e suas imagens (nada de .md, .c ou gabaritos);
-# os slides de Programação Avançada vão para dist/programacao-avancada, sem as fontes .svg dos diagramas.
+# de Programação Avançada vão para dist/programacao-avancada só os slides e suas imagens, sem roteiros, sem .md e sem as fontes .svg.
 dist: all
 	rm -rf dist
 	mkdir -p dist/modelos
 	cp index.html main.js carregar_glb.js renderizador.js jogo.wasm dist/
 	cp modelos/*.glb dist/modelos/
-	rsync -a --exclude .DS_Store ../assets/ dist/assets/
-	for apresentacao in ../aula*/apresentacao.html; do \
+	rsync -a --exclude .DS_Store $(AULAS_DE_AED)/assets/ dist/assets/
+	for apresentacao in $(AULAS_DE_AED)/aula*/apresentacao.html; do \
 		aula=$$(basename $$(dirname $$apresentacao)); \
 		mkdir -p dist/$$aula; \
 		cp $$apresentacao dist/$$aula/; \
-		if [ -d ../$$aula/img ]; then rsync -a --exclude .DS_Store ../$$aula/img dist/$$aula/; fi; \
+		if [ -d $(AULAS_DE_AED)/$$aula/img ]; then rsync -a --exclude .DS_Store $(AULAS_DE_AED)/$$aula/img dist/$$aula/; fi; \
 	done
-	rsync -a --exclude .DS_Store --exclude '*.svg' $(SLIDES_DE_PROGRAMACAO_AVANCADA)/ dist/programacao-avancada/
+	rsync -a --exclude .DS_Store --exclude '*.svg' --exclude roteiro.html --exclude '*.md' $(AULAS_DE_PROGRAMACAO_AVANCADA)/ dist/programacao-avancada/
 
 deploy: dist
 	npx -y wrangler@4 deploy
