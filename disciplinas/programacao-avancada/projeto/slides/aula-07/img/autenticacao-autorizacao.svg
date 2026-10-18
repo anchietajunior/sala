@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 40 800 320" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+    <marker id="setaV" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b03a2e"/>
+    </marker>
+  </defs>
+
+  <!-- requisição -->
+  <rect x="15" y="70" width="165" height="96" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="97" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6da4">Requisição</text>
+  <text x="97" y="124" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#333">GET /api/books/2</text>
+  <text x="97" y="144" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#333">Bearer &lt;token&gt;</text>
+  <path d="M 183 118 L 215 118" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+
+  <!-- autenticação -->
+  <rect x="220" y="70" width="175" height="96" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="307" y="97" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a6508">1. Autenticação</text>
+  <text x="307" y="119" text-anchor="middle" font-size="13" fill="#333">quem é você?</text>
+  <text x="307" y="145" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#333">get_current_user</text>
+  <path d="M 398 118 L 430 118" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+
+  <!-- autorização -->
+  <rect x="435" y="70" width="175" height="96" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="522" y="94" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a6508">2. Autorização</text>
+  <text x="522" y="115" text-anchor="middle" font-size="13" fill="#333">o que você pode?</text>
+  <text x="522" y="138" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#333">can_access</text>
+  <text x="522" y="155" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#333">require_admin</text>
+  <path d="M 613 118 L 645 118" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+
+  <!-- rota -->
+  <rect x="650" y="70" width="135" height="96" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.8"/>
+  <text x="717" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#2f6f2f">A rota executa</text>
+  <text x="717" y="135" text-anchor="middle" font-size="13" font-family="monospace" fill="#333">200</text>
+
+  <!-- falhas -->
+  <path d="M 307 170 L 307 212" fill="none" stroke="#b03a2e" stroke-width="2" marker-end="url(#setaV)"/>
+  <rect x="220" y="217" width="175" height="62" rx="8" fill="#fdecea" stroke="#b03a2e" stroke-width="1.8"/>
+  <text x="307" y="242" text-anchor="middle" font-size="14" font-weight="bold" fill="#b03a2e">401</text>
+  <text x="307" y="263" text-anchor="middle" font-size="12" fill="#333">sem token ou token inválido</text>
+
+  <path d="M 522 170 L 522 212" fill="none" stroke="#b03a2e" stroke-width="2" marker-end="url(#setaV)"/>
+  <rect x="435" y="217" width="175" height="62" rx="8" fill="#fdecea" stroke="#b03a2e" stroke-width="1.8"/>
+  <text x="522" y="240" text-anchor="middle" font-size="12.5" fill="#333"><tspan font-weight="bold" fill="#b03a2e">404</tspan> livro sem acesso</text>
+  <text x="522" y="263" text-anchor="middle" font-size="12.5" fill="#333"><tspan font-weight="bold" fill="#b03a2e">403</tspan> rota de Admin</text>
+
+  <!-- rodapé -->
+  <text x="400" y="320" text-anchor="middle" font-size="13" fill="#333">A ordem é fixa: só se decide o que alguém pode depois de saber quem ele é.</text>
+  <text x="400" y="344" text-anchor="middle" font-size="12" fill="#999">RFC 4949 (autenticação e autorização) · RFC 9110 (401, 403 e 404)</text>
+</svg>

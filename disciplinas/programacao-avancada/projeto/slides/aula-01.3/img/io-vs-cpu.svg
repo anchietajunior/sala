@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 260" style="width:100%;max-width:740px" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#f7f7f7"/>
+      <line x1="4" y1="0" x2="4" y2="8" stroke="#c9c9c9" stroke-width="2"/>
+    </pattern>
+  </defs>
+
+  <!-- Tarefa CPU-bound -->
+  <text x="195" y="62" text-anchor="end" font-size="14" fill="#333">Tarefa CPU-bound</text>
+  <text x="195" y="80" text-anchor="end" font-size="12" fill="#777">(gerar um PDF)</text>
+  <rect x="210" y="48" width="510" height="44" rx="4" fill="#2e6da4"/>
+  <text x="465" y="75" text-anchor="middle" font-size="14" fill="#fff">processador ocupado o tempo todo</text>
+
+  <!-- Tarefa I/O-bound -->
+  <text x="234" y="128" text-anchor="middle" font-size="10" fill="#777">envia</text>
+  <text x="696" y="128" text-anchor="middle" font-size="10" fill="#777">recebe</text>
+  <text x="195" y="152" text-anchor="end" font-size="14" fill="#333">Tarefa I/O-bound</text>
+  <text x="195" y="170" text-anchor="end" font-size="12" fill="#777">(consultar o banco)</text>
+  <rect x="210" y="138" width="48"  height="44" rx="4" fill="#2e6da4"/>
+  <rect x="258" y="138" width="414" height="44" fill="url(#hatch)" stroke="#ccc" stroke-width="1"/>
+  <rect x="672" y="138" width="48"  height="44" rx="4" fill="#2e6da4"/>
+  <text x="465" y="158" text-anchor="middle" font-size="13" fill="#666">esperando a resposta</text>
+  <text x="465" y="174" text-anchor="middle" font-size="11" fill="#999">(processador ocioso)</text>
+
+  <text x="465" y="205" text-anchor="middle" font-size="12" fill="#999">tempo &#8594;</text>
+
+  <!-- legenda -->
+  <rect x="300" y="218" width="16" height="14" fill="#2e6da4"/>
+  <text x="322" y="230" font-size="12" fill="#555">processador ocupado</text>
+  <rect x="490" y="218" width="16" height="14" fill="url(#hatch)" stroke="#ccc" stroke-width="1"/>
+  <text x="512" y="230" font-size="12" fill="#555">processador ocioso</text>
+  <text x="465" y="252" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6da4">é esse tempo ocioso que a concorrência aproveita</text>
+</svg>

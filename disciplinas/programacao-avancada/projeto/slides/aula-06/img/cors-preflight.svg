@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="setaA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e6da4"/>
+    </marker>
+    <marker id="setaG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b8860b"/>
+    </marker>
+  </defs>
+
+  <!-- atores -->
+  <rect x="40" y="20" width="220" height="50" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="150" y="41" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6da4">Navegador</text>
+  <text x="150" y="60" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">origem http://localhost:5173</text>
+  <rect x="540" y="20" width="220" height="50" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
+  <text x="650" y="41" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a6508">API FastAPI</text>
+  <text x="650" y="60" text-anchor="middle" font-size="12" font-family="monospace" fill="#333">http://127.0.0.1:8000</text>
+  <line x1="150" y1="70" x2="150" y2="300" stroke="#bbb" stroke-dasharray="5,5"/>
+  <line x1="650" y1="70" x2="650" y2="300" stroke="#bbb" stroke-dasharray="5,5"/>
+
+  <!-- 1 preflight -->
+  <path d="M 155 110 L 640 110" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <text x="400" y="98" text-anchor="middle" font-size="13" font-weight="bold" font-family="monospace" fill="#2e6da4">1. OPTIONS /signup  (preflight)</text>
+  <text x="400" y="127" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#555">Origin: http://localhost:5173 · Access-Control-Request-Method: POST</text>
+
+  <!-- 2 resposta -->
+  <path d="M 645 165 L 160 165" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <text x="400" y="153" text-anchor="middle" font-size="13" font-weight="bold" font-family="monospace" fill="#8a6508">2. 200 OK</text>
+  <text x="400" y="182" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#555">Access-Control-Allow-Origin: http://localhost:5173</text>
+
+  <!-- 3 requisição real -->
+  <path d="M 155 225 L 640 225" fill="none" stroke="#2e6da4" stroke-width="2" marker-end="url(#setaA)"/>
+  <text x="400" y="213" text-anchor="middle" font-size="13" font-weight="bold" font-family="monospace" fill="#2e6da4">3. POST /signup  {"name": ..., "email": ..., "password": ...}</text>
+
+  <!-- 4 resposta real -->
+  <path d="M 645 275 L 160 275" fill="none" stroke="#b8860b" stroke-width="2" marker-end="url(#setaG)"/>
+  <text x="400" y="263" text-anchor="middle" font-size="13" font-weight="bold" font-family="monospace" fill="#8a6508">4. 201 Created  + Access-Control-Allow-Origin</text>
+
+  <!-- nota -->
+  <rect x="60" y="318" width="680" height="62" rx="8" fill="#fff" stroke="#ccc"/>
+  <text x="400" y="343" text-anchor="middle" font-size="13" fill="#333">Sem o <tspan font-family="monospace">CORSMiddleware</tspan>: a API responde <tspan font-weight="bold">405</tspan> ao OPTIONS e o navegador <tspan font-weight="bold">não envia</tspan> o POST.</text>
+  <text x="400" y="366" text-anchor="middle" font-size="12.5" fill="#777">Quem aplica a regra é o navegador; o servidor apenas declara as origens permitidas (Fetch Standard, WHATWG).</text>
+</svg>

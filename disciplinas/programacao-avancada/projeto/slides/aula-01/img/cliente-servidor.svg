@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 230" style="width:100%;max-width:760px">
+    <rect x="20" y="55" width="220" height="120" rx="10" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+    <text x="130" y="100" text-anchor="middle" font-size="20" font-weight="bold" fill="#2e6da4">Cliente</text>
+    <text x="130" y="130" text-anchor="middle" font-size="15" fill="#444">navegador</text>
+    <text x="130" y="152" text-anchor="middle" font-size="15" fill="#444">(depois: React)</text>
+    <rect x="520" y="55" width="220" height="120" rx="10" fill="#fdf6e3" stroke="#b8860b" stroke-width="2"/>
+    <text x="630" y="100" text-anchor="middle" font-size="20" font-weight="bold" fill="#8a6508">Servidor</text>
+    <text x="630" y="130" text-anchor="middle" font-size="15" fill="#444">backend</text>
+    <text x="630" y="152" text-anchor="middle" font-size="15" fill="#444">(FastAPI)</text>
+    <defs>
+      <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <path d="M0,0 L10,4 L0,8 z" fill="#444"/>
+      </marker>
+    </defs>
+    <line x1="250" y1="90" x2="510" y2="90" stroke="#444" stroke-width="2" marker-end="url(#seta)"/>
+    <text x="380" y="78" text-anchor="middle" font-size="15" fill="#444">requisição (pedido)</text>
+    <line x1="510" y1="145" x2="250" y2="145" stroke="#444" stroke-width="2" marker-end="url(#seta)"/>
+    <text x="380" y="175" text-anchor="middle" font-size="15" fill="#444">resposta</text>
+  </svg>

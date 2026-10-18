@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" style="width:100%;max-width:740px" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="setaD" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <text x="125" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">Um processo por requisição</text>
+  <text x="380" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">Uma thread por requisição</text>
+  <text x="630" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">Um event loop</text>
+  <line x1="255" y1="15" x2="255" y2="305" stroke="#eee" stroke-width="1.5"/>
+  <line x1="505" y1="15" x2="505" y2="305" stroke="#eee" stroke-width="1.5"/>
+
+  <!-- Coluna 1: um processo por requisicao -->
+  <g>
+    <rect x="25" y="55" width="200" height="70" rx="6" fill="#f7f7f7" stroke="#999" stroke-width="1.5"/>
+    <text x="38" y="79" font-size="13" fill="#555">processo</text>
+    <rect x="150" y="67" width="62" height="24" rx="4" fill="#eef4fa" stroke="#2e6da4" stroke-width="1"/>
+    <text x="181" y="83" text-anchor="middle" font-size="10" fill="#2e6da4">memória</text>
+  </g>
+  <g>
+    <rect x="25" y="140" width="200" height="70" rx="6" fill="#f7f7f7" stroke="#999" stroke-width="1.5"/>
+    <text x="38" y="164" font-size="13" fill="#555">processo</text>
+    <rect x="150" y="152" width="62" height="24" rx="4" fill="#eef4fa" stroke="#2e6da4" stroke-width="1"/>
+    <text x="181" y="168" text-anchor="middle" font-size="10" fill="#2e6da4">memória</text>
+  </g>
+  <g>
+    <rect x="25" y="225" width="200" height="70" rx="6" fill="#f7f7f7" stroke="#999" stroke-width="1.5"/>
+    <text x="38" y="249" font-size="13" fill="#555">processo</text>
+    <rect x="150" y="237" width="62" height="24" rx="4" fill="#eef4fa" stroke="#2e6da4" stroke-width="1"/>
+    <text x="181" y="253" text-anchor="middle" font-size="10" fill="#2e6da4">memória</text>
+  </g>
+  <text x="125" y="332" text-anchor="middle" font-size="12" fill="#666">isolamento total,</text>
+  <text x="125" y="350" text-anchor="middle" font-size="12" fill="#666">custo alto</text>
+
+  <!-- Coluna 2: uma thread por requisicao -->
+  <rect x="270" y="55" width="200" height="232" rx="6" fill="#f7f7f7" stroke="#999" stroke-width="1.5"/>
+  <text x="283" y="76" font-size="13" fill="#555">processo</text>
+  <line x1="370" y1="126" x2="340" y2="228" stroke="#b8860b" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+  <line x1="370" y1="168" x2="370" y2="228" stroke="#b8860b" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+  <line x1="370" y1="210" x2="400" y2="228" stroke="#b8860b" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+  <rect x="290" y="92"  width="160" height="34" rx="4" fill="#eef4fa" stroke="#2e6da4" stroke-width="1"/>
+  <text x="370" y="114" text-anchor="middle" font-size="12" fill="#2e6da4">thread</text>
+  <rect x="290" y="134" width="160" height="34" rx="4" fill="#eef4fa" stroke="#2e6da4" stroke-width="1"/>
+  <text x="370" y="156" text-anchor="middle" font-size="12" fill="#2e6da4">thread</text>
+  <rect x="290" y="176" width="160" height="34" rx="4" fill="#eef4fa" stroke="#2e6da4" stroke-width="1"/>
+  <text x="370" y="198" text-anchor="middle" font-size="12" fill="#2e6da4">thread</text>
+  <rect x="290" y="228" width="160" height="46" rx="4" fill="#fdf6e3" stroke="#b8860b" stroke-width="1"/>
+  <text x="370" y="249" text-anchor="middle" font-size="12" fill="#8a6508">memória</text>
+  <text x="370" y="265" text-anchor="middle" font-size="11" fill="#8a6508">compartilhada</text>
+  <text x="380" y="332" text-anchor="middle" font-size="12" fill="#666">mais barato,</text>
+  <text x="380" y="350" text-anchor="middle" font-size="12" fill="#666">memória compartilhada</text>
+
+  <!-- Coluna 3: um event loop -->
+  <text x="630" y="52" text-anchor="middle" font-size="12" fill="#666">conexões chegando</text>
+  <line x1="578" y1="58" x2="578" y2="78" stroke="#999" stroke-width="1.5" marker-end="url(#setaD)"/>
+  <line x1="604" y1="58" x2="604" y2="78" stroke="#999" stroke-width="1.5" marker-end="url(#setaD)"/>
+  <line x1="630" y1="58" x2="630" y2="78" stroke="#999" stroke-width="1.5" marker-end="url(#setaD)"/>
+  <line x1="656" y1="58" x2="656" y2="78" stroke="#999" stroke-width="1.5" marker-end="url(#setaD)"/>
+  <line x1="682" y1="58" x2="682" y2="78" stroke="#999" stroke-width="1.5" marker-end="url(#setaD)"/>
+  <rect x="558" y="82" width="144" height="52" rx="6" fill="#f7f7f7" stroke="#999" stroke-width="1.5"/>
+  <text x="630" y="98" text-anchor="middle" font-size="11" fill="#777">fila de eventos</text>
+  <rect x="570" y="106" width="16" height="16" rx="2" fill="#ccc"/>
+  <rect x="594" y="106" width="16" height="16" rx="2" fill="#ccc"/>
+  <rect x="618" y="106" width="16" height="16" rx="2" fill="#ccc"/>
+  <rect x="642" y="106" width="16" height="16" rx="2" fill="#ccc"/>
+  <rect x="666" y="106" width="16" height="16" rx="2" fill="#ccc"/>
+  <line x1="630" y1="136" x2="630" y2="155" stroke="#666" stroke-width="1.5" marker-end="url(#setaD)"/>
+  <path d="M 686,175 A 60 60 0 1 1 665,150" fill="none" stroke="#999" stroke-width="1.5" marker-end="url(#setaD)"/>
+  <circle cx="630" cy="207" r="46" fill="#eef4fa" stroke="#2e6da4" stroke-width="2"/>
+  <text x="630" y="203" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6da4">event</text>
+  <text x="630" y="221" text-anchor="middle" font-size="14" font-weight="bold" fill="#2e6da4">loop</text>
+  <text x="630" y="332" text-anchor="middle" font-size="12" fill="#666">uma thread,</text>
+  <text x="630" y="350" text-anchor="middle" font-size="12" fill="#666">milhares de conexões</text>
+</svg>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 01.3 — Concorrência, paralelismo e o modelo de execução do FastAPI</title>
+<link rel="stylesheet" href="../assets/reveal/dist/reset.css">
+<link rel="stylesheet" href="../assets/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../assets/reveal/dist/theme/white.css">
+<link rel="stylesheet" href="../assets/reveal/plugin/highlight/monokai.css">
+<style>
+  .reveal { font-size: 34px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+  .reveal h2 { font-size: 1.35em; }
+  .reveal ul { display: block; }
+  .reveal li { margin: .35em 0; }
+  .reveal pre { box-shadow: none; width: 100%; }
+  .reveal pre code { padding: .8em 1em; border-radius: 6px; max-height: 480px; }
+  .cite { font-size: .45em; color: #999; margin-top: 1.6em; }
+  .duas-colunas { display: flex; gap: 1em; align-items: flex-start; text-align: left; }
+  .duas-colunas > div { flex: 1; min-width: 0; }
+  .os-label { font-size: .55em; font-weight: bold; color: #666; margin: 0 0 .2em .1em; }
+  .nota { font-size: .6em; background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .6em .9em; margin-top: .8em; }
+  .destaque { color: #2e6da4; font-weight: bold; }
+  .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
+  .status-tab { font-size: .62em; border-collapse: collapse; margin: 0 auto; }
+  .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .citacao { font-size: .72em; font-style: italic; border-left: 4px solid #2e6da4; padding-left: .8em; text-align: left; margin: .8em 0; }
+  .numero { font-size: 2.2em; font-weight: bold; color: #2e6da4; line-height: 1.1; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ Abertura ============ -->
+
+<section>
+  <h1 style="font-size:1.4em">Concorrência, paralelismo<br>e o modelo de execução<br>do FastAPI</h1>
+  <p>Programação Avançada — Aula 01.3</p>
+  <p style="font-size:.55em;color:#888">Universidade Unirios</p>
+</section>
+
+<section>
+  <h2>Uma afirmação ficou sem explicação</h2>
+  <p style="font-size:.8em">Na aula 01, entre as vantagens do FastAPI:</p>
+  <div class="citacao">"…e suporta programação assíncrona."</div>
+  <p style="font-size:.75em;margin-top:1em">Foi dito, foi anotado, e ninguém explicou o que significa.</p>
+  <p style="font-size:.7em;color:#666">Hoje essa dívida é paga.</p>
+</section>
+
+<section>
+  <h2>Vocês já instalaram a peça central</h2>
+  <p style="font-size:.6em;text-align:left"><code>requirements.txt</code> — aula 01</p>
+  <pre><code class="language-text" data-trim>
+annotated-types==0.7.0
+anyio==4.14.2          ← ninguém instalou isto de propósito
+click==8.4.2
+fastapi==0.139.2
+starlette==1.3.1
+uvicorn==0.51.0
+  </code></pre>
+  <p style="font-size:.7em">O <strong>AnyIO</strong> decide <em>onde</em> cada rota de vocês é executada. Está na máquina desde o primeiro dia.</p>
+</section>
+
+<section>
+  <h2>O caminho de hoje</h2>
+  <ul style="font-size:.78em">
+    <li>Por que um servidor ingênuo atende <strong>dez</strong> clientes por segundo, não dez mil;</li>
+    <li>Concorrência e paralelismo — <strong>não</strong> são a mesma coisa;</li>
+    <li>Tarefas que <strong>esperam</strong> e tarefas que <strong>calculam</strong>;</li>
+    <li>As três arquiteturas de servidor, e o GIL do Python;</li>
+    <li>O que <code>async def</code> realmente faz no FastAPI — e quando <em>não</em> usá-lo.</li>
+  </ul>
+  <p style="font-size:.65em;margin-top:.9em;color:#666">Aula sem laboratório: as demonstrações são projetadas. Vocês preveem antes de cada uma.</p>
+</section>
+
+<!-- ============ Tema 1 — O problema ============ -->
+
+<section>
+  <h2>O servidor mais simples atende um cliente por vez</h2>
+  <pre><code class="language-text" data-trim>
+enquanto verdadeiro:
+    conexão  = espera_um_cliente()
+    pedido   = lê(conexão)
+    resposta = processa(pedido)
+    escreve(conexão, resposta)
+    fecha(conexão)
+  </code></pre>
+  <p style="font-size:.75em">Este servidor está <strong>correto</strong>. E é inútil: o segundo cliente só é lido depois que o primeiro foi embora.</p>
+</section>
+
+<section>
+  <h2>Dez por segundo, não dez mil</h2>
+  <ul style="font-size:.78em">
+    <li>Cada requisição leva <strong>100 ms</strong>;</li>
+    <li>Logo, o servidor atende <strong>10 requisições por segundo</strong>;</li>
+    <li>Turma de 40 alunos recarregando junto → o último espera <strong>4 segundos</strong>.</li>
+  </ul>
+  <p style="font-size:.72em;margin-top:1em">E dobrar a velocidade do processador <strong>não resolve</strong>.</p>
+  <p style="font-size:.65em;color:#666">Guardem essa afirmação: em vinte minutos ela vai fazer sentido.</p>
+</section>
+
+<section>
+  <h2>Em 1999 o problema ganhou nome</h2>
+  <p style="font-size:.8em">O engenheiro <strong>Dan Kegel</strong> publicou <em>The C10K problem</em> — de <em>connection 10.000</em>:</p>
+  <div class="citacao">Por que um servidor com hardware perfeitamente capaz não consegue manter dez mil conexões simultâneas?</div>
+  <p style="font-size:.72em;margin-top:.8em">O hardware dava conta do volume. Quem não dava conta era a <strong>arquitetura de software</strong>.</p>
+  <p class="cite">KEGEL, D. The C10K problem, 1999 — kegel.com/c10k.html</p>
+</section>
+
+<!-- ============ Tema 2 — Concorrência × paralelismo ============ -->
+
+<section>
+  <h2>Concorrência é estrutura; paralelismo é execução</h2>
+  <img src="img/concorrencia-paralelismo.png" alt="À esquerda, uma linha do tempo única com as tarefas A, B e C intercaladas em fatias; à direita, três linhas do tempo simultâneas, uma para cada tarefa" style="width:100%;max-width:740px">
+  <p class="cite">PIKE, R. Concurrency Is Not Parallelism, 2012 · DIJKSTRA, E. W. Cooperating Sequential Processes, 1965</p>
+</section>
+
+<section>
+  <h2>A formulação canônica é de Rob Pike</h2>
+  <div class="citacao">"Concurrency is about dealing with lots of things at once.<br>Parallelism is about doing lots of things at once."</div>
+  <p style="font-size:.7em;margin-top:.9em">O vocabulário, porém, é mais antigo: vem de <strong>Edsger Dijkstra</strong>, em <em>Cooperating Sequential Processes</em> (1965) — o trabalho que introduziu processos cooperantes, exclusão mútua e semáforos.</p>
+  <p class="cite">PIKE, R. Concurrency Is Not Parallelism. Waza Conference, 2012 · DIJKSTRA, E. W. EWD 123, 1965</p>
+</section>
+
+<section>
+  <h2>Duas perguntas diferentes</h2>
+  <table class="status-tab">
+    <tr><th></th><th>Concorrência</th><th>Paralelismo</th></tr>
+    <tr><td>O que é</td><td>forma de <em>estruturar</em>: várias tarefas em andamento</td><td>forma de <em>executar</em>: várias tarefas no mesmo instante</td></tr>
+    <tr><td>Depende de</td><td>como o software foi escrito</td><td>ter mais de um núcleo</td></tr>
+    <tr><td>Com 1 núcleo?</td><td><strong>sim</strong></td><td>não</td></tr>
+    <tr><td>Responde</td><td>"lido com muitos clientes?"</td><td>"calculo mais rápido?"</td></tr>
+  </table>
+  <p style="font-size:.65em;margin-top:.9em">Servidor web precisa da <strong>primeira</strong> coluna.</p>
+</section>
+
+<section>
+  <h2>Concorrência só rende se houver espera</h2>
+  <p style="font-size:.75em;text-align:left">Um professor em horário de monitoria orienta um aluno e, enquanto ele tenta o exercício sozinho, passa a orientar um segundo, depois um terceiro — retomando cada um quando precisa.</p>
+  <ul style="font-size:.72em">
+    <li>Um professor, três atendimentos em andamento: <strong>concorrência</strong>;</li>
+    <li>Três professores, um aluno cada: <strong>paralelismo</strong>.</li>
+  </ul>
+  <p style="font-size:.72em;margin-top:.8em">O ganho existe <strong>porque o aluno passa a maior parte do tempo trabalhando sozinho</strong>. Se cada um exigisse atenção ininterrupta, não haveria o que intercalar.</p>
+  <div class="nota">Este é o teorema da aula: concorrência aproveita <strong>tempo de espera</strong>. Sem espera, não há o que ganhar.</div>
+</section>
+
+<section>
+  <h2>A palavra "corrotina" é de 1963</h2>
+  <p style="font-size:.75em">Cunhada por <strong>Melvin Conway</strong>, ao descrever um compilador cujas partes <em>cediam o controle</em> umas às outras voluntariamente — em vez de uma chamar a outra e esperar.</p>
+  <p style="font-size:.75em;margin-top:.9em">É exatamente o que a palavra <code>await</code> faz: <strong>ceder o controle</strong>.</p>
+  <p style="font-size:.65em;color:#666;margin-top:.8em">Voltaremos a ela no fim da aula, com outro nome: <code>async def</code>.</p>
+  <p class="cite">CONWAY, M. E. Design of a Separable Transition-Diagram Compiler. CACM, v. 6, n. 7, 1963</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — concorrência e paralelismo</span></h2>
+  <ul style="font-size:.78em">
+    <li>Concorrência: estrutura do programa — várias tarefas em andamento;</li>
+    <li>Paralelismo: execução simultânea — exige mais de um núcleo;</li>
+    <li>Concorrência existe com um núcleo só; paralelismo não;</li>
+    <li>Concorrência só rende onde há <strong>espera</strong> para aproveitar.</li>
+  </ul>
+</section>
+
+<!-- ============ Tema 3 — I/O-bound × CPU-bound ============ -->
+
+<section>
+  <h2>Toda tarefa é limitada por algum recurso</h2>
+  <ul style="font-size:.75em">
+    <li><strong>CPU-bound</strong> — o tempo é determinado pelo <em>processador</em>. Processador melhor conclui antes.<br><span style="font-size:.85em;color:#666">gerar PDF, redimensionar imagem, calcular hash de senha</span></li>
+    <li><strong>I/O-bound</strong> — o tempo é determinado pela <em>espera</em> por disco, rede ou banco. Processador melhor <strong>não muda nada</strong>.<br><span style="font-size:.85em;color:#666">consultar o MySQL, ler arquivo, chamar API externa, receber upload</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Numa tarefa I/O-bound, o processador fica ocioso</h2>
+  <img src="img/io-vs-cpu.png" alt="Duas linhas do tempo: a tarefa CPU-bound com a barra preenchida quase inteira; a tarefa I/O-bound com dois pequenos trechos de trabalho separados por uma longa faixa de espera" style="width:100%;max-width:740px">
+  <p style="font-size:.62em">É esse tempo ocioso que a concorrência aproveita.</p>
+</section>
+
+<section>
+  <h2>A escala do desperdício</h2>
+  <table class="status-tab">
+    <tr><th>Operação</th><th>Tempo real</th><th>Se 1 ns fosse 1 s</th></tr>
+    <tr><td>Ler da cache L1</td><td>0,5 ns</td><td>meio segundo</td></tr>
+    <tr><td>Ler da memória (RAM)</td><td>100 ns</td><td>1 min 40 s</td></tr>
+    <tr><td>Ler 4 KB de um SSD</td><td>150 µs</td><td><strong>1,7 dia</strong></td></tr>
+    <tr><td>Rede, mesmo datacenter</td><td>500 µs</td><td><strong>5,8 dias</strong></td></tr>
+    <tr><td>Busca em disco mecânico</td><td>10 ms</td><td><strong>3,8 meses</strong></td></tr>
+    <tr><td>Califórnia → Holanda → volta</td><td>150 ms</td><td><strong>4,8 anos</strong></td></tr>
+  </table>
+  <p class="cite">DEAN, J. Latency Numbers Every Programmer Should Know. Google, 2010</p>
+</section>
+
+<section>
+  <h2>Uma consulta ao banco são onze dias de ócio</h2>
+  <p style="font-size:.8em">Consulta de <strong>1 ms</strong> ao MySQL, na escala da tabela anterior:</p>
+  <p class="numero">≈ 11 dias</p>
+  <p style="font-size:.75em">de processador <strong>parado</strong>, esperando a resposta chegar.</p>
+  <div class="nota">Lembram da pergunta do começo — onde estão os 100 ms da requisição? <strong>Quase todos em espera.</strong> O processador não está trabalhando: está aguardando.</div>
+</section>
+
+<section>
+  <h2>Um servidor web passa a vida esperando</h2>
+  <ul style="font-size:.78em">
+    <li>Servidor web típico é <strong>massivamente I/O-bound</strong>;</li>
+    <li>O tempo ocioso é o espaço onde a concorrência trabalha;</li>
+    <li>Não se trata de fazer o processador correr mais — trata-se de <strong>não o deixar parado</strong> enquanto há outro cliente para atender.</li>
+  </ul>
+  <p style="font-size:.7em;margin-top:1em;color:#666">Por isso dobrar a velocidade do processador não resolvia o slide de dez minutos atrás.</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — I/O-bound e CPU-bound</span></h2>
+  <ul style="font-size:.78em">
+    <li>CPU-bound: o tempo depende do processador (PDF, imagem, hash);</li>
+    <li>I/O-bound: o tempo depende da espera (banco, rede, disco);</li>
+    <li>Na escala humana, esperar o disco é esperar meses;</li>
+    <li>Servidor web é I/O-bound — e é isso que torna a concorrência eficaz.</li>
+  </ul>
+</section>
+
+<!-- ============ Tema 4 — Três arquiteturas ============ -->
+
+<section>
+  <h2>Três respostas ao problema de Kegel</h2>
+  <img src="img/tres-arquiteturas.png" alt="Três colunas: processos separados com memória própria; threads dentro de um processo compartilhando memória; um event loop único atendendo várias conexões" style="width:100%;max-width:740px">
+</section>
+
+<section>
+  <h2>Um processo por requisição: isolado e caro</h2>
+  <ul style="font-size:.78em">
+    <li>Modelo do <strong>Apache</strong> em configuração <em>prefork</em>, dominante nos anos 1990;</li>
+    <li><strong>A favor:</strong> isolamento total — se um processo quebra, os outros seguem;</li>
+    <li><strong>Contra:</strong> alguns megabytes por processo e custo alto de criação;</li>
+    <li>Dez mil processos são impraticáveis.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Uma thread por requisição: mais leve, mais perigosa</h2>
+  <ul style="font-size:.78em">
+    <li>Threads vivem dentro de um mesmo processo e <strong>compartilham a memória</strong>;</li>
+    <li><strong>A favor:</strong> bem mais baratas que processos;</li>
+    <li><strong>Contra:</strong> memória compartilhada gera <em>condições de corrida</em> — o problema para o qual Dijkstra inventou os semáforos;</li>
+    <li>E milhares de threads voltam a pesar: cada uma reserva pilha própria.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>O GIL impede o cálculo, não a espera</h2>
+  <p style="font-size:.7em"><em>Global Interpreter Lock</em> — "o mecanismo usado pelo interpretador CPython para garantir que apenas uma thread execute <em>bytecode</em> Python por vez".</p>
+  <ul style="font-size:.7em">
+    <li>Tarefa <strong>CPU-bound</strong>: threads <strong>não</strong> dão paralelismo. Dez threads calculando levam o tempo de uma;</li>
+    <li>Tarefa <strong>I/O-bound</strong>: threads funcionam <strong>muito bem</strong> — o interpretador <em>libera o GIL</em> durante a espera.</li>
+  </ul>
+  <div class="nota">Como servidor web é I/O-bound, o GIL é bem menos fatal para o nosso caso do que a fama dele sugere.</div>
+  <p class="cite">Documentação oficial do Python — Glossary: global interpreter lock · PEP 703 (Sam Gross, 2023) tornou o GIL opcional; há build sem ele desde o CPython 3.13, ainda não o padrão</p>
+</section>
+
+<section>
+  <h2>O event loop pergunta quem já está pronto</h2>
+  <ul style="font-size:.72em">
+    <li>Uma <strong>única</strong> thread mantém a lista de todas as conexões abertas;</li>
+    <li>Pergunta ao sistema operacional: <em>quais têm dados prontos agora?</em>;</li>
+    <li>Executa um pedaço de trabalho para cada uma pronta, e volta a perguntar;</li>
+    <li>Conexão ociosa não custa quase nada — é uma entrada numa lista.</li>
+  </ul>
+  <p style="font-size:.65em;margin-top:.8em">A pergunta é uma chamada do sistema: <code>select()</code> (4.2BSD, 1983), <code>kqueue</code> (FreeBSD, 2000), <code>epoll</code> (Linux, 2002).</p>
+  <p class="cite">SCHMIDT, D. Reactor: An Object Behavioral Pattern for Concurrent Event Demultiplexing, 1995</p>
+</section>
+
+<section>
+  <h2>Nada pode segurar o loop</h2>
+  <p style="font-size:.78em">Há uma linha de execução só. Logo, <strong>qualquer operação demorada trava todas as outras</strong>.</p>
+  <p style="font-size:.75em;margin-top:.9em">Esta é a contrapartida do modelo — e é a frase que explica tudo o que veremos a seguir no FastAPI.</p>
+  <div class="nota">Funciona mesmo assim porque, numa carga I/O-bound, quase nada é lento <em>em processador</em>: é tudo espera — e espera não ocupa o loop, desde que se peça para esperar do jeito certo.</div>
+</section>
+
+<section>
+  <h2>Quem provou que o modelo funciona</h2>
+  <ul style="font-size:.72em">
+    <li><strong>nginx</strong> (Igor Sysoev, 2004) — escrito com essa arquitetura como resposta direta ao C10K; superou o Apache justamente em conexões simultâneas;</li>
+    <li><strong>Node.js</strong> (Ryan Dahl, 2009) — popularizou o event loop entre desenvolvedores de aplicação;</li>
+    <li><strong>Python</strong>: o módulo <code>asyncio</code> entrou pela <strong>PEP 3156</strong> (Guido van Rossum, 2012, no Python 3.4);</li>
+    <li>A sintaxe <code>async</code>/<code>await</code> veio pela <strong>PEP 492</strong> (Yury Selivanov, 2015, Python 3.5).</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — as três arquiteturas</span></h2>
+  <table class="status-tab">
+    <tr><th>Modelo</th><th>A favor</th><th>Contra</th></tr>
+    <tr><td>Processo por requisição</td><td>isolamento total</td><td>caro; não escala</td></tr>
+    <tr><td>Thread por requisição</td><td>leve; memória comum</td><td>corridas; GIL no cálculo</td></tr>
+    <tr><td>Event loop</td><td>milhares de conexões</td><td>nada pode bloquear</td></tr>
+  </table>
+</section>
+
+<!-- ============ Tema 5 — O modelo do FastAPI ============ -->
+
+<section>
+  <h2>No FastAPI, a declaração decide onde a rota roda</h2>
+  <img src="img/fastapi-execucao.png" alt="Diagrama: a requisição chega ao uvicorn com seu event loop; funções async def permanecem no loop, funções def são enviadas para a threadpool do AnyIO com 40 threads; ambos os caminhos convergem para a resposta" style="width:100%;max-width:740px">
+  <p class="cite">Documentação oficial do FastAPI — fastapi.tiangolo.com · AnyIO — anyio.readthedocs.io</p>
+</section>
+
+<section>
+  <h2>Duas declarações, dois destinos</h2>
+  <table class="status-tab">
+    <tr><th>Declaração</th><th>Onde roda</th><th>Consequência</th></tr>
+    <tr><td><code>async def</code></td><td>no próprio event loop</td><td>nada nela pode bloquear, sob pena de travar o servidor inteiro</td></tr>
+    <tr><td><code>def</code></td><td>numa threadpool do AnyIO</td><td>pode bloquear à vontade; o loop segue livre — mas há um teto</td></tr>
+  </table>
+  <p style="font-size:.68em;margin-top:.9em">O FastAPI (Sebastián Ramírez, 2018) é construído sobre o <strong>Starlette</strong> (Tom Christie), que usa o <strong>AnyIO</strong> — aquele do <code>requirements.txt</code>.</p>
+</section>
+
+<section>
+  <h2>O teto são 40 threads</h2>
+  <pre><code class="language-bash" data-trim>
+python -c "
+import asyncio, anyio.to_thread
+async def m():
+    print(anyio.to_thread.current_default_thread_limiter().total_tokens)
+asyncio.run(m())"
+  </code></pre>
+  <p class="numero">40.0</p>
+  <p style="font-size:.7em">Não é um número inventado para a aula: é o limite padrão do AnyIO, conferível no <code>venv</code> de vocês.</p>
+</section>
+
+<section>
+  <h2>Quatro rotas, quatro comportamentos</h2>
+  <pre><code class="language-python" data-trim>
+@app.get("/sync-sleep")          # def + espera bloqueante
+def sync_sleep():
+    time.sleep(5)
+
+@app.get("/async-blocking")      # async def + espera bloqueante
+async def async_blocking():
+    time.sleep(5)
+
+@app.get("/async-sleep")         # async def + espera assíncrona
+async def async_sleep():
+    await asyncio.sleep(5)
+  </code></pre>
+  <p style="font-size:.68em">Todas esperam cinco segundos. Muda <strong>onde</strong> a espera acontece.</p>
+</section>
+
+<section>
+  <h2>A rota com "async" no nome foi a mais lenta</h2>
+  <table class="status-tab">
+    <tr><th>Rota</th><th>Duas requisições</th><th>Por quê</th></tr>
+    <tr><td><code>/sync-sleep</code></td><td>5,00 s</td><td>foi para a threadpool: esperaram juntas</td></tr>
+    <tr><td><code>/async-blocking</code></td><td><strong>10,01 s</strong></td><td>disputaram o event loop e foram enfileiradas</td></tr>
+    <tr><td><code>/async-sleep</code></td><td>5,00 s</td><td><code>await</code> devolveu o loop</td></tr>
+    <tr><td><code>/cpu</code></td><td>1,94× de uma só</td><td>o GIL impede paralelismo de cálculo</td></tr>
+  </table>
+  <p style="font-size:.6em;margin-top:.8em;color:#666">Números medidos com FastAPI 0.139.2 e Python 3.14.</p>
+</section>
+
+<section>
+  <h2>Uma rota mal declarada congela o servidor inteiro</h2>
+  <pre><code class="language-bash" data-trim>
+curl -s http://127.0.0.1:8000/async-blocking &
+curl -s http://127.0.0.1:8000/health
+  </code></pre>
+  <ul style="font-size:.7em">
+    <li>O <code>/health</code> não tem relação alguma com a outra rota;</li>
+    <li>Responde instantaneamente quando o servidor está livre;</li>
+    <li>Medido durante a rota bloqueante: <strong>4,70 s</strong> pendurado;</li>
+    <li>Durante a <code>/async-sleep</code>, a mesma medição: <strong>0,00 s</strong>.</li>
+  </ul>
+  <div class="nota">Uma única rota mal declarada derrubou o tempo de resposta <strong>para todos os clientes</strong>.</div>
+</section>
+
+<section>
+  <h2>A palavra <code>async</code> não acelera nada</h2>
+  <p style="font-size:.78em">O senso comum diz que <code>async def</code> é "a versão rápida". A demonstração mostrou o contrário.</p>
+  <p style="font-size:.78em;margin-top:.8em"><code>async</code> apenas declara que aquela função <strong>vai rodar no event loop</strong> — e assume o compromisso de nunca segurá-lo.</p>
+  <p style="font-size:.72em;margin-top:.8em;color:#666">Escrever <code>async def</code> numa função que bloqueia é <em>pior</em> do que escrever <code>def</code>.</p>
+</section>
+
+<section>
+  <h2>A regra do projeto, a partir de hoje</h2>
+  <ul style="font-size:.68em">
+    <li><code>async def</code> quando a função só faz <code>await</code> de I/O assíncrono, <strong>ou não faz I/O nenhum</strong> — não há motivo para pagar o salto até uma thread;</li>
+    <li><code>def</code> quando a função chama biblioteca bloqueante: sessão do SQLModel, geração de PDF, escrita em disco;</li>
+    <li><strong>Nunca</strong> <code>async def</code> com chamada bloqueante dentro — é o pior dos dois mundos, e o erro mais comum em projetos FastAPI reais.</li>
+  </ul>
+  <div class="nota">Uma pergunta só decide: <strong>esta função vai bloquear?</strong></div>
+  <p class="cite">ADR-0003 do projeto — docs/adr/0003-async-onde-ha-motivo.md</p>
+</section>
+
+<section>
+  <h2>Onde cada rota do projeto se encaixa</h2>
+  <table class="status-tab">
+    <tr><th>Rota</th><th>Declaração</th><th>Por quê</th></tr>
+    <tr><td><code>GET /health</code> (aula 01)</td><td><code>async def</code></td><td>não faz I/O; responde na hora</td></tr>
+    <tr><td>books em memória (aulas 02–03)</td><td><code>async def</code></td><td>uma lista Python — não há espera</td></tr>
+    <tr><td>rotas com banco (aula 04+)</td><td><code>def</code></td><td>o driver do MySQL é bloqueante</td></tr>
+    <tr><td>upload de capa (aula 13)</td><td><code>async def</code></td><td><code>await file.read()</code> é assíncrono</td></tr>
+    <tr><td>Reading Report em PDF (aula 14)</td><td><code>def</code></td><td>é <strong>CPU-bound</strong></td></tr>
+  </table>
+  <p style="font-size:.62em;margin-top:.8em">A última linha é a razão de termos insistido na distinção: gerar PDF não é espera, é trabalho de processador.</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando — o modelo do FastAPI</span></h2>
+  <ul style="font-size:.78em">
+    <li><code>async def</code> roda no event loop; <code>def</code> vai para a threadpool;</li>
+    <li>A threadpool do AnyIO tem 40 threads por padrão;</li>
+    <li><code>async</code> não acelera: apenas assume o compromisso de não bloquear;</li>
+    <li>A escolha se decide por uma pergunta: <em>esta função vai bloquear?</em></li>
+  </ul>
+</section>
+
+<!-- ============ Tema 6 — Quanto aguenta ============ -->
+
+<section>
+  <h2>A Lei de Little dá o número</h2>
+  <p style="font-size:.8em">Resultado de teoria de filas, de <strong>John D. C. Little</strong> (1961):</p>
+  <p class="numero">L = λ × W</p>
+  <ul style="font-size:.68em">
+    <li><strong>L</strong> — requisições dentro do sistema;</li>
+    <li><strong>λ</strong> — taxa de chegada (requisições por segundo);</li>
+    <li><strong>W</strong> — tempo médio que cada uma passa lá dentro.</li>
+  </ul>
+  <p style="font-size:.7em">Rearranjando para a vazão máxima: <strong>λ = L / W</strong></p>
+  <p class="cite">LITTLE, J. D. C. A Proof for the Queuing Formula: L = λW. Operations Research, v. 9, n. 3, 1961</p>
+</section>
+
+<section>
+  <h2>Quanto o servidor de vocês aguenta</h2>
+  <p style="font-size:.75em">Com rotas <code>def</code> e o teto de <strong>L = 40</strong> threads:</p>
+  <table class="status-tab">
+    <tr><th>Tempo por requisição (W)</th><th>Vazão máxima (λ)</th></tr>
+    <tr><td>100 ms</td><td><strong>400</strong> requisições por segundo</td></tr>
+    <tr><td>1 s (consulta pesada)</td><td><strong>40</strong> por segundo</td></tr>
+    <tr><td>5 s</td><td><strong>8</strong> por segundo — a 41ª espera na fila</td></tr>
+  </table>
+  <p style="font-size:.68em;margin-top:.9em">Lembram da pergunta da abertura — vinte pessoas ao mesmo tempo? Com a rota de três linhas da aula 01, o servidor nem sente. Com uma rota de 5 s, vinte cabem; cinquenta não.</p>
+</section>
+
+<section>
+  <h2>Quando 40 não bastam</h2>
+  <ul style="font-size:.75em">
+    <li><strong>Mais processos:</strong> <code>uvicorn --workers 4</code> sobe quatro processos independentes, cada um com seu event loop e sua threadpool. É assim que se contorna o GIL de verdade — processos não compartilham interpretador;</li>
+    <li><strong>Menos espera bloqueante:</strong> com I/O assíncrono de ponta a ponta, as requisições deixam de ocupar threads e o teto de 40 some do caminho.</li>
+  </ul>
+  <div class="nota">O Reading Tracker roda para uma sala de aula, não para dez mil clientes. Nada disso é otimização necessária ao nosso volume — estudamos para <strong>entender o que escrevemos</strong>.</div>
+</section>
+
+<!-- ============ Exercício e fechamento ============ -->
+
+<section>
+  <h2>Exercício — em dupla, no papel</h2>
+  <p style="font-size:.72em;text-align:left"><strong>1.</strong> Classifique como I/O-bound ou CPU-bound: (a) redimensionar a capa; (b) buscar livros no MySQL; (c) contar palavras de um texto já em memória; (d) baixar dados de uma API externa; (e) gerar o PDF.</p>
+  <p style="font-size:.72em;text-align:left"><strong>2.</strong> Decida <code>def</code> ou <code>async def</code>, com uma linha de justificativa: (a) <code>GET /version</code>; (b) <code>GET /books</code> com SQLModel; (c) upload com <code>await file.read()</code>; (d) <code>GET /report.pdf</code> com fpdf2.</p>
+  <p style="font-size:.72em;text-align:left"><strong>3.</strong> Preveja o que acontece com o <code>/health</code> enquanto esta rota executa — e por quê:</p>
+  <pre><code class="language-python" data-trim>
+@app.get("/relatorio")
+async def relatorio():
+    dados = session.exec(select(Book)).all()   # consulta bloqueante
+    return dados
+  </code></pre>
+</section>
+
+<section>
+  <h2>O que levamos de hoje</h2>
+  <ul style="font-size:.72em">
+    <li>Concorrência é estrutura; paralelismo é execução simultânea — servidor web precisa da primeira;</li>
+    <li>Tarefa I/O-bound espera, tarefa CPU-bound calcula — só a primeira ganha com concorrência;</li>
+    <li>O GIL impede paralelismo de cálculo em threads, mas não atrapalha a espera;</li>
+    <li>O event loop sustenta milhares de conexões, desde que nada o segure;</li>
+    <li>No FastAPI: <code>async def</code> no loop, <code>def</code> na threadpool de 40;</li>
+    <li>Uma pergunta decide a declaração de toda rota: <strong>ela vai bloquear?</strong></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Semana que vem: a viagem da requisição</h2>
+  <p style="font-size:.78em">Hoje tratamos o uvicorn como "quem executa o event loop", sem olhar para ele de perto.</p>
+  <ul style="font-size:.72em">
+    <li>Como o navegador <strong>acha</strong> o servidor (DNS);</li>
+    <li>O que exatamente <strong>trafega</strong> em HTTP — headers, status codes;</li>
+    <li>Qual é o <strong>contrato</strong> entre o uvicorn e o FastAPI.</li>
+  </ul>
+  <p style="font-size:.75em;margin-top:1em">O nome desse contrato começa com a letra que vocês aprenderam hoje:<br><strong>A</strong>, de <em>asynchronous</em>.</p>
+</section>
+
+<section>
+  <h2>Referências</h2>
+  <ul style="font-size:.5em">
+    <li>KEGEL, D. <em>The C10K problem</em>. 1999 — kegel.com/c10k.html</li>
+    <li>DIJKSTRA, E. W. <em>Cooperating Sequential Processes</em>. EWD 123, 1965.</li>
+    <li>CONWAY, M. E. <em>Design of a Separable Transition-Diagram Compiler</em>. CACM, v. 6, n. 7, 1963. (origem do termo <em>corrotina</em>)</li>
+    <li>PIKE, R. <em>Concurrency Is Not Parallelism</em>. Waza Conference, 2012.</li>
+    <li>DEAN, J. <em>Latency Numbers Every Programmer Should Know</em>. Google, 2010.</li>
+    <li>SCHMIDT, D. C. <em>Reactor: An Object Behavioral Pattern for Concurrent Event Demultiplexing and Event Handler Dispatching</em>. 1995.</li>
+    <li>LITTLE, J. D. C. <em>A Proof for the Queuing Formula: L = λW</em>. Operations Research, v. 9, n. 3, 1961.</li>
+    <li>PEP 3156 (van Rossum, 2012), PEP 492 (Selivanov, 2015), PEP 703 (Gross, 2023) — python.org.</li>
+    <li>Documentação oficial do Python — <em>Glossary: global interpreter lock</em>.</li>
+    <li>Documentação oficial do FastAPI — fastapi.tiangolo.com · AnyIO — anyio.readthedocs.io</li>
+  </ul>
+</section>
+
+</div>
+</div>
+
+<script src="../assets/reveal/dist/reveal.js"></script>
+<script src="../assets/reveal/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    plugins: [ RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>

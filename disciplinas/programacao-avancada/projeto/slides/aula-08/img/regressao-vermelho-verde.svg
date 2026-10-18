@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" style="width:100%;max-width:760px">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- 1. defeito -->
+  <rect x="15" y="40" width="170" height="100" rx="8" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="100" y="66" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">1. Defeito</text>
+  <text x="100" y="90" text-anchor="middle" font-size="11" font-family="monospace" fill="#333">{"name": "&#160;&#160;&#160;"}</text>
+  <text x="100" y="112" text-anchor="middle" font-size="11.5" fill="#333">a API responde 201</text>
+  <path d="M 188 90 L 212 90" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <!-- 2. vermelho -->
+  <rect x="215" y="40" width="170" height="100" rx="8" fill="#fdecea" stroke="#b03a2e" stroke-width="1.8"/>
+  <text x="300" y="66" text-anchor="middle" font-size="13" font-weight="bold" fill="#b03a2e">2. Teste: vermelho</text>
+  <text x="300" y="90" text-anchor="middle" font-size="11" font-family="monospace" fill="#333">assert 201 == 422</text>
+  <text x="300" y="112" text-anchor="middle" font-size="11.5" fill="#333">reproduz o defeito</text>
+  <path d="M 388 90 L 412 90" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <!-- 3. correção -->
+  <rect x="415" y="40" width="170" height="100" rx="8" fill="#fdf6e3" stroke="#b8860b" stroke-width="1.8"/>
+  <text x="500" y="66" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6508">3. Correção</text>
+  <text x="500" y="90" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#333">str_strip_whitespace</text>
+  <text x="500" y="112" text-anchor="middle" font-size="11.5" fill="#333">no BookCreate</text>
+  <path d="M 588 90 L 612 90" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <!-- 4. verde -->
+  <rect x="615" y="40" width="170" height="100" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.8"/>
+  <text x="700" y="66" text-anchor="middle" font-size="13" font-weight="bold" fill="#2f6f2f">4. Teste: verde</text>
+  <text x="700" y="90" text-anchor="middle" font-size="11" font-family="monospace" fill="#333">19 passed</text>
+  <text x="700" y="112" text-anchor="middle" font-size="11.5" fill="#333">o defeito foi corrigido</text>
+
+  <!-- permanece -->
+  <path d="M 700 144 L 700 190 L 300 190 L 300 148" fill="none" stroke="#3c8d3c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#seta)"/>
+  <text x="500" y="214" text-anchor="middle" font-size="12.5" fill="#333">o teste fica na suíte: se o defeito voltar, ele falha antes de chegar ao usuário</text>
+
+  <text x="400" y="262" text-anchor="middle" font-size="13" fill="#333">Escreve-se o teste <tspan font-weight="bold">antes</tspan> da correção: ele prova que o defeito existe e, depois, que acabou.</text>
+  <text x="400" y="288" text-anchor="middle" font-size="12" fill="#999">ISTQB - regression testing · BECK, K. - Test-Driven Development: By Example, 2002</text>
+</svg>

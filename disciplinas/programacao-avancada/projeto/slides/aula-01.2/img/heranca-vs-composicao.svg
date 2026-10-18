@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="380" viewBox="0 0 820 380" font-family="Helvetica, Arial, sans-serif">
+  <rect width="820" height="380" fill="#ffffff"/>
+
+  <!-- ================= Heranca ================= -->
+  <text x="30" y="34" font-size="17" font-weight="bold" fill="#2e6da4">Herança — “é-um”</text>
+
+  <rect x="90" y="60" width="200" height="56" rx="8" fill="#f4f2ee" stroke="#2e6da4" stroke-width="2"/>
+  <text x="190" y="94" font-size="17" fill="#222" font-family="Consolas, monospace" text-anchor="middle">Book</text>
+
+  <!-- seta de heranca: triangulo vazado apontando para a mae -->
+  <line x1="190" y1="200" x2="190" y2="128" stroke="#2e6da4" stroke-width="2"/>
+  <polygon points="190,116 180,134 200,134" fill="#ffffff" stroke="#2e6da4" stroke-width="2"/>
+
+  <rect x="90" y="200" width="200" height="56" rx="8" fill="#ffffff" stroke="#2e6da4" stroke-width="2"/>
+  <text x="190" y="234" font-size="17" fill="#222" font-family="Consolas, monospace" text-anchor="middle">EBook</text>
+
+  <text x="30" y="294" font-size="14" fill="#555">Um EBook <tspan font-weight="bold">é um</tspan> Book:</text>
+  <text x="30" y="316" font-size="14" fill="#555">recebe todos os atributos e</text>
+  <text x="30" y="338" font-size="14" fill="#555">métodos, e pode sobrescrevê-los.</text>
+
+  <!-- divisor -->
+  <line x1="410" y1="24" x2="410" y2="356" stroke="#e2ded4" stroke-width="2"/>
+
+  <!-- ================= Composicao ================= -->
+  <text x="450" y="34" font-size="17" font-weight="bold" fill="#b8860b">Composição — “tem-um”</text>
+
+  <rect x="450" y="60" width="180" height="56" rx="8" fill="#f4f2ee" stroke="#b8860b" stroke-width="2"/>
+  <text x="540" y="94" font-size="17" fill="#222" font-family="Consolas, monospace" text-anchor="middle">User</text>
+
+  <!-- losango de composicao -->
+  <polygon points="540,116 530,132 540,148 550,132" fill="#b8860b"/>
+  <line x1="540" y1="148" x2="540" y2="178" stroke="#b8860b" stroke-width="2"/>
+  <line x1="540" y1="178" x2="660" y2="178" stroke="#b8860b" stroke-width="2"/>
+  <line x1="540" y1="178" x2="500" y2="178" stroke="#b8860b" stroke-width="2"/>
+  <line x1="660" y1="178" x2="660" y2="200" stroke="#b8860b" stroke-width="2"/>
+  <line x1="500" y1="178" x2="500" y2="200" stroke="#b8860b" stroke-width="2"/>
+  <polygon points="660,206 654,194 666,194" fill="#b8860b"/>
+  <polygon points="500,206 494,194 506,194" fill="#b8860b"/>
+  <text x="566" y="170" font-size="14" fill="#b8860b" font-family="Consolas, monospace">1 : N</text>
+
+  <rect x="440" y="212" width="120" height="50" rx="8" fill="#ffffff" stroke="#b8860b" stroke-width="2"/>
+  <text x="500" y="242" font-size="15" fill="#222" font-family="Consolas, monospace" text-anchor="middle">Book</text>
+
+  <rect x="600" y="212" width="120" height="50" rx="8" fill="#ffffff" stroke="#b8860b" stroke-width="2"/>
+  <text x="660" y="242" font-size="15" fill="#222" font-family="Consolas, monospace" text-anchor="middle">Book</text>
+
+  <text x="450" y="294" font-size="14" fill="#555">Um User <tspan font-weight="bold">tem</tspan> Books:</text>
+  <text x="450" y="316" font-size="14" fill="#555">no laboratório, uma lista Python;</text>
+  <text x="450" y="338" font-size="14" fill="#555">no projeto, a relação 1:N do banco.</text>
+</svg>

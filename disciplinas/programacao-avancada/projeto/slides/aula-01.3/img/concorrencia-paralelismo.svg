@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 285" style="width:100%;max-width:740px" font-family="Helvetica, Arial, sans-serif">
+  <text x="190" y="38" text-anchor="middle" font-size="17" font-weight="bold" fill="#333">Concorrência (1 núcleo)</text>
+  <text x="570" y="38" text-anchor="middle" font-size="17" font-weight="bold" fill="#333">Paralelismo (3 núcleos)</text>
+  <line x1="380" y1="25" x2="380" y2="245" stroke="#ddd" stroke-width="1.5"/>
+
+  <!-- Concorrência: uma linha do tempo, tarefas intercaladas -->
+  <text x="212" y="64" text-anchor="middle" font-size="12" fill="#666">um único núcleo</text>
+  <rect x="80"  y="78" width="36" height="46" fill="#2e6da4"/>
+  <rect x="118" y="78" width="36" height="46" fill="#b8860b"/>
+  <rect x="156" y="78" width="36" height="46" fill="#2e6da4"/>
+  <rect x="194" y="78" width="36" height="46" fill="#6a8759"/>
+  <rect x="232" y="78" width="36" height="46" fill="#b8860b"/>
+  <rect x="270" y="78" width="36" height="46" fill="#2e6da4"/>
+  <rect x="308" y="78" width="36" height="46" fill="#6a8759"/>
+  <text x="98"  y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">A</text>
+  <text x="136" y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">B</text>
+  <text x="174" y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">A</text>
+  <text x="212" y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">C</text>
+  <text x="250" y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">B</text>
+  <text x="288" y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">A</text>
+  <text x="326" y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">C</text>
+  <text x="212" y="150" text-anchor="middle" font-size="12" fill="#999">tempo &#8594;</text>
+  <text x="190" y="215" text-anchor="middle" font-size="12" fill="#666">as três tarefas progridem, uma de cada vez</text>
+
+  <!-- Paralelismo: três linhas do tempo simultâneas -->
+  <text x="590" y="64" text-anchor="middle" font-size="12" fill="#666">três núcleos</text>
+  <text x="450" y="91"  text-anchor="end" font-size="11" fill="#666">núcleo 1</text>
+  <text x="450" y="127" text-anchor="end" font-size="11" fill="#666">núcleo 2</text>
+  <text x="450" y="163" text-anchor="end" font-size="11" fill="#666">núcleo 3</text>
+  <rect x="460" y="74"  width="260" height="26" fill="#2e6da4"/>
+  <rect x="460" y="110" width="260" height="26" fill="#b8860b"/>
+  <rect x="460" y="146" width="260" height="26" fill="#6a8759"/>
+  <text x="590" y="92"  text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">A</text>
+  <text x="590" y="128" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">B</text>
+  <text x="590" y="164" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">C</text>
+  <text x="590" y="195" text-anchor="middle" font-size="12" fill="#999">tempo &#8594;</text>
+  <text x="570" y="215" text-anchor="middle" font-size="12" fill="#666">as três tarefas executam no mesmo instante</text>
+
+  <!-- legenda de cores -->
+  <rect x="249" y="240" width="14" height="14" fill="#2e6da4"/>
+  <text x="268" y="251" font-size="12" fill="#555">tarefa A</text>
+  <rect x="345" y="240" width="14" height="14" fill="#b8860b"/>
+  <text x="364" y="251" font-size="12" fill="#555">tarefa B</text>
+  <rect x="441" y="240" width="14" height="14" fill="#6a8759"/>
+  <text x="460" y="251" font-size="12" fill="#555">tarefa C</text>
+</svg>
