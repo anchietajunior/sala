@@ -1,6 +1,6 @@
-# Os quatro critérios de revisão — heurísticas e exemplos
+# Os cinco critérios de revisão do material principal — heurísticas e exemplos
 
-Cada eixo abaixo tem: **o que procurar**, **como corrigir** e um par **ruim → bom**. Os exemplos usam o domínio da disciplina (algoritmos, C, estruturas).
+Cada eixo abaixo tem: **o que procurar**, **como corrigir** e um par **ruim → bom**. Os exemplos vêm de Algoritmos e Estruturas de Dados; os critérios valem para o material principal de qualquer disciplina (o `.md` em AED, o roteiro em Programação Avançada).
 
 ---
 
@@ -32,7 +32,7 @@ Cada eixo abaixo tem: **o que procurar**, **como corrigir** e um par **ruim → 
 **O que procurar** (isto faz cumprir a regra "não supor conhecimento prévio" do `CLAUDE.md`)
 
 - Termo técnico usado **antes** de ser definido — ou nunca definido.
-- Conceito citado de passagem como se o aluno já o conhecesse, sem ser dependência retomada de aula anterior.
+- Conceito citado de passagem como se o aluno já o conhecesse.
 - Salto de raciocínio: uma conclusão que não decorre visivelmente do que veio antes ("logo...", "portanto..." sem o passo do meio).
 - Sigla ou notação apresentada sem expansão no primeiro uso.
 
@@ -60,7 +60,7 @@ Cada eixo abaixo tem: **o que procurar**, **como corrigir** e um par **ruim → 
 - Frase ou oração que pode sair inteira sem que a explicação perca nada.
 - Detalhe que só antecipa confusão aqui e não serve ao objetivo do bloco.
 
-**Como corrigir**: **cortar**. A remoção é a ação certa — prefira deletar a digressão inteira a encolhê-la pela metade (uma meia-digressão ainda desvia, e agora sem completar o raciocínio). Curiosidade histórica que valha a pausa cabe melhor numa fala do Eddy, na apresentação — não no corpo do texto.
+**Como corrigir**: **cortar**. A remoção é a ação certa — prefira deletar a digressão inteira a encolhê-la pela metade (uma meia-digressão ainda desvia, e agora sem completar o raciocínio). Curiosidade histórica que valha a pausa cabe melhor nos slides — numa fala do Eddy em AED, numa nota de rodapé nas demais disciplinas — não no corpo do texto.
 
 **Ruim**
 

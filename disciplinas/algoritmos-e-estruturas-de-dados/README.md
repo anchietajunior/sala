@@ -2,7 +2,7 @@
 
 Materiais didáticos da disciplina **Algoritmos e Estruturas de Dados** da graduação na **UniRios**.
 
-Cada aula vive em sua própria pasta (`aulaNN_tema/`) e contém:
+Cada aula vive em sua própria pasta (`aulas/aulaNN_tema/`) e contém:
 
 - O conteúdo escrito em Markdown (`aulaNN_tema.md`) — referência completa para o aluno, com os blocos pedagógicos da disciplina (conceito em camadas progressivas, visualização gráfica, problema motivador e referências; aulas de implementação adicionam o bloco de código em C). As aulas 01–04, 06 e 08–11 trazem também analogias e exercícios.
 - A apresentação em Reveal.js (`apresentacao.html`) — usada em sala, com tema claro e transições suaves.

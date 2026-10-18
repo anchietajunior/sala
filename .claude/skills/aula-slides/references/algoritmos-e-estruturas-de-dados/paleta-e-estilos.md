@@ -131,7 +131,7 @@ Convenção: o nó removido aparece com **fundo claro #f7f9fc** + **stroke trace
 
 ## Estilos das slides (CSS embutido no `apresentacao.html`)
 
-O `<style>` que vai no `<head>` está copiado integralmente em `templates/apresentacao.html.template`. Pontos-chave:
+O `<style>` que vai no `<head>` está copiado integralmente em `templates/algoritmos-e-estruturas-de-dados/apresentacao.html.template`. Pontos-chave:
 
 - `:root` define `--cor-destaque: #2c5d8a` e `--cor-suave: #5a7a9a`.
 - `h1, h2, h3, h4` em `var(--cor-destaque)`, sem `text-transform`.

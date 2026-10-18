@@ -12,7 +12,7 @@ Adotamos o guia [zhanymkanov/fastapi-best-practices](https://github.com/zhanymka
 
 ## Rejeitado
 
-- **Alembic** — já decidido em `docs/convencoes.md`: `create_all()` + dropar o banco entre aulas. Migração é teoria mencionada, não prática.
+- **Alembic** — já decidido no perfil da disciplina (`disciplinas/programacao-avancada/CLAUDE.md`): `create_all()` + dropar o banco entre aulas. Migração é teoria mencionada, não prática.
 - ~~**Rotas `async` por padrão** — rotas síncronas (`def`) em todo o curso; FastAPI as roda em threadpool sem problema na nossa escala. `async/await` é carga cognitiva que não é tema da disciplina.~~ **Revisado pelo [ADR-0003](0003-async-onde-ha-motivo.md)**: com a aula 01.3 ensinando o modelo de execução, o projeto passa a usar `async def` onde há motivo (sem I/O ou I/O assíncrono) e `def` onde há chamada bloqueante. Continua valendo o que a decisão original protegia: nada de `async` em tudo, por moda.
 - **Custom Base Model, BaseSettings por módulo, cadeias de dependências, SQL-first, requirements base/dev/prod, ruff** — preocupações de produção; contra o critério "legibilidade acima de tudo, sem abstrações que a turma ainda não viu".
 

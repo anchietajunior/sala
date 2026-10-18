@@ -1,6 +1,6 @@
 # Bibliografia canônica por tema
 
-Referências renomadas para citar nos slides, mapeadas aos temas teóricos **[T-n]** do `docs/plano-de-aulas.md`. Cite no formato autor–título–ano; nos slides de conceito, marque a fonte no rodapé.
+Referências renomadas para citar nos slides, mapeadas aos temas teóricos **[T-n]** do `plano-de-aulas.md`. Cite no formato autor–título–ano; nos slides de conceito, marque a fonte no rodapé.
 
 ## [T-1] Frameworks
 

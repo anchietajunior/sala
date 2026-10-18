@@ -305,7 +305,7 @@ app = FastAPI()</pre>
 <pre>SHOW TABLES;
 DESCRIBE books;</pre>
 
-<div class="atencao"><code>create_all</code> cria o que <strong>não existe</strong> — ele nunca <em>altera</em> tabela existente. Mudou o model? Na disciplina: <code>DROP TABLE</code> e deixe recriar (dado de aula é descartável — decisão registrada em <code>docs/convencoes.md</code>). No mundo real, mudanças de schema são versionadas com <strong>migrations</strong> (a ferramenta do ecossistema é o Alembic) — fica na menção, não é tema do curso.</div>
+<div class="atencao"><code>create_all</code> cria o que <strong>não existe</strong> — ele nunca <em>altera</em> tabela existente. Mudou o model? Na disciplina: <code>DROP TABLE</code> e deixe recriar (dado de aula é descartável — decisão registrada no perfil da disciplina, <code>CLAUDE.md</code>). No mundo real, mudanças de schema são versionadas com <strong>migrations</strong> (a ferramenta do ecossistema é o Alembic) — fica na menção, não é tema do curso.</div>
 
 <h3>Passo 8 — BookRead: o contrato de saída</h3>
 <p><em>Por quê:</em> até aqui as rotas devolvem objetos da lista e o FastAPI os serializa por conta própria, sem contrato declarado. Com o banco, quem sai da rota passa a ser um objeto do ORM — e a resposta ganha um contrato explícito.</p>

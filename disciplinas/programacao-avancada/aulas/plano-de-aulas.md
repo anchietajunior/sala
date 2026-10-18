@@ -1,6 +1,6 @@
 # Plano de aulas — Programação Avançada (proposta)
 
-16 encontros de ~2h. Cada aula tem uma pasta `aulas/aula-NN/` (roteiro do professor e slides) e uma branch homônima em `projeto/`. Os 10 temas teóricos da ementa estão marcados como **[T-n]**.
+16 encontros de ~2h. Cada aula tem uma pasta `aulas/aula-NN/` (roteiro do professor e slides) e o código que ela constrói entra em `projeto/`, na `main`. Os 10 temas teóricos da ementa estão marcados como **[T-n]**.
 
 ## Bloco 1 — Fundamentos e primeiras rotas (backend)
 
@@ -8,12 +8,12 @@
 Teoria: o que são frameworks **[T-1]**, modelo cliente-servidor **[T-2]**, gerenciamento de dependências **[T-6]**.
 Prática: venv (Mac e Windows), `pip install fastapi uvicorn`, `requirements.txt`, primeira rota respondendo JSON, testada no navegador.
 
-**Aula 01.2 — Programação Orientada a Objetos com Python** _(aula extra, sem branch)_
+**Aula 01.2 — Programação Orientada a Objetos com Python** _(aula extra, não toca o projeto)_
 Aula complementar de fundamentos: não evolui o projeto, prepara a turma para lê-lo das aulas 03 em diante.
 Teoria: origem da POO (Simula 67, Smalltalk), objeto como estado + comportamento + identidade, encapsulamento e ocultamento de informação (Parnas), herança e substituição (Liskov), polimorfismo e _duck typing_, composição vs. herança (GoF).
 Prática: laboratório em `oop_lab.py` fora do repositório — classes, `__init__`, `self`, `__repr__`, `@property` para dado derivado (o Reading Progress), herança com `super()`, composição `User`→`Books`; leitura das classes declarativas do projeto (anotações de tipo, `Mapped`/`mapped_column`, decorators).
 
-**Aula 01.3 — Concorrência, paralelismo e o modelo de execução do FastAPI** _(aula extra, sem branch)_
+**Aula 01.3 — Concorrência, paralelismo e o modelo de execução do FastAPI** _(aula extra, não toca o projeto)_
 Aula complementar teórica, sem laboratório: não evolui o projeto, explica por que ele é escrito como é.
 Teoria: o problema C10K (Kegel, 1999); concorrência ≠ paralelismo (Dijkstra, 1965; Pike, 2012); corrotinas (Conway, 1963); tarefas I/O-bound e CPU-bound, com a escala de latências de Jeff Dean; as três arquiteturas de servidor (processo por requisição, thread por requisição, event loop) e o `select`/`epoll`/`kqueue` por baixo; o GIL do CPython e a PEP 703; `asyncio` (PEP 3156) e a sintaxe `async`/`await` (PEP 492); o modelo do FastAPI — `async def` no event loop, `def` na threadpool do AnyIO (40 threads); a Lei de Little (1961) para estimar quantas requisições o servidor sustenta.
 Demonstrações projetadas pelo professor em `async_lab.py`, fora do repositório. Fecha decidindo o critério do **ADR-0003**, que passa a valer no projeto a partir daqui.

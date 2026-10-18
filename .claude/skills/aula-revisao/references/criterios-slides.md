@@ -1,6 +1,6 @@
-# Os cinco critérios da revisão severa de slides
+# Os seis critérios da revisão severa de slides
 
-Cada eixo tem **o que procurar**, **como corrigir** e um par **ruim → bom**. Os exemplos são defeitos reais encontrados em apresentações da disciplina.
+Cada eixo tem **o que procurar**, **como corrigir** e um par **ruim → bom**. Os exemplos são defeitos reais encontrados em apresentações de Algoritmos e Estruturas de Dados; os critérios valem para os slides de qualquer disciplina.
 
 O slide é uma mídia diferente do `.md`: projetado em sala, lido em 5–10 segundos, **sem o texto em volta para socorrê-lo**. Um trecho que funciona no material escrito pode ser defeituoso como slide — e o contrário também.
 
@@ -139,7 +139,7 @@ Cada aula é uma unidade fechada, então **conteúdo que também aparece em outr
 - ❌ Um slide inteiro reexplicando complexidade de tempo e de espaço, do começo, numa aula cujo tema não é complexidade.
 - ❌ *"Da Aula 01: acesso por índice custa O(1)."* → o conteúdo está certo, a remissão é proibida (critério 6).
 
-**Como corrigir**: **cortar o slide** e, se o conteúdo for dependência real, comprimir em **uma linha** dentro do slide que precisa dela — escrita nas palavras desta aula, sem apontar para outra. Menos slides é o objetivo declarado — as faixas de `aula-apresentacao` (45–65 implementação / 35–50 conceitual) são **teto, não meta**.
+**Como corrigir**: **cortar o slide** e, se o conteúdo for dependência real, comprimir em **uma linha** dentro do slide que precisa dela — escrita nas palavras desta aula, sem apontar para outra. Menos slides é o objetivo declarado — as faixas de contagem do perfil da disciplina, quando houver, são **teto, não meta**.
 
 **Ruim** *(slide próprio para um pré-requisito, numa aula cujo tema é busca)*
 
@@ -167,21 +167,21 @@ Cada aula é uma unidade fechada, então **conteúdo que também aparece em outr
 
 **O que procurar**
 
-- Conceito operacional (laço, condição, índice, ponteiro, invariante, caso-base) explicado **só em prosa**, quando 3–8 linhas de C o tornariam evidente.
-- Blocos 1–3 inteiramente sem código, com todo o C represado no bloco de código — o aluno passa metade da aula ouvindo falar de algo que nunca vê escrito.
+- Conceito operacional (laço, condição, índice, ponteiro, invariante, caso-base) explicado **só em prosa**, quando 3–8 linhas de código o tornariam evidente.
+- A parte conceitual da aula inteiramente sem código, com todo o código represado no fim — o aluno passa metade da aula ouvindo falar de algo que nunca vê escrito.
 - Armadilha descrita verbalmente ("trocar isto por aquilo causa laço infinito") sem mostrar **as duas linhas** em questão.
 - E o inverso: código exibido **complexo demais** — função longa, muitas responsabilidades, recursos que a turma nunca viu.
 
 **Como corrigir**
 
-Adicionar o trecho mínimo, no slide onde o conceito é apresentado. Regras de conteúdo em `aula-conteudo/references/codigo-c-regras.md` (sem `<stdbool.h>`, sem `const` em parâmetro, sem `fprintf(stderr)`, nomes descritivos em PT, comentário explica o **porquê**).
+Adicionar o trecho mínimo, no slide onde o conceito é apresentado, seguindo as regras de código do perfil da disciplina. Em AED: `aula-conteudo/references/algoritmos-e-estruturas-de-dados/codigo-c-regras.md` (sem `<stdbool.h>`, sem `const` em parâmetro, sem `fprintf(stderr)`, nomes descritivos em PT, comentário explica o **porquê**). Em Programação Avançada, o trecho existe no código real de `projeto/`.
 
-Limites próprios do slide:
+Limites próprios do slide (o perfil pode apertar, como os 15 linhas de Programação Avançada):
 
-- Trecho ilustrativo em bloco conceitual: **≤ 8 linhas**.
-- Fatia de código no bloco de código: **≤ 20 linhas**.
+- Trecho ilustrativo em parte conceitual: **≤ 8 linhas**.
+- Fatia de código na parte de implementação: **≤ 20 linhas**.
 - **Legível isolado** — sem depender de declarações que ficaram em outro slide.
-- `<pre><code class="language-c">`, com `<`, `>` e `&` escapados.
+- `<pre><code class="language-...">` na linguagem da aula, com `<`, `>` e `&` escapados.
 - Comentário no trecho é opcional; quando houver, explica a decisão, não a sintaxe.
 
 **Ruim** *(real — Aula 02: a armadilha do laço infinito, só em prosa)*
@@ -220,13 +220,13 @@ Conceito que é **espacial, estrutural, sequencial ou comparativo** e está só 
 
 **Como corrigir**
 
-Criar o SVG seguindo `aula-apresentacao/references/paleta-e-estilos.md` — paleta institucional, texto ≥ 14px, `viewBox="0 0 700 ALTURA"`. Salvar em `img/NN_descritor.svg` (próximo número livre) e embutir:
+Criar o diagrama no formato e no estilo do perfil da disciplina. Em AED, o SVG segue `aula-slides/references/algoritmos-e-estruturas-de-dados/paleta-e-estilos.md` — paleta institucional, texto ≥ 14px, `viewBox="0 0 700 ALTURA"`. Salvar em `img/NN_descritor.svg` (próximo número livre) e embutir:
 
 ```html
 <img class="diagrama" src="img/08_descritor.svg" alt="<descrição clara do que o diagrama mostra>">
 ```
 
-Regras firmes: **SVG é o único tipo de diagrama**; sem PNG/JPG, sem Mermaid, sem CDN. O `alt` é obrigatório e descreve o conteúdo, não o nome do arquivo. Todo slide com diagrama mantém a **linha-ponte** dizendo o que enxergar nele.
+Regras firmes: o formato do diagrama é o do perfil (AED: SVG embutido como `<img class="diagrama">`; Programação Avançada: PNG exportado do SVG mantido ao lado), sem Mermaid, sem CDN. O `alt` é obrigatório e descreve o conteúdo, não o nome do arquivo. Todo slide com diagrama mantém a **linha-ponte** dizendo o que enxergar nele.
 
 **Reaproveitar um SVG já exibido é permitido e barato** quando serve para conectar — e não conta como repetição (critério 3), desde que a linha-ponte explique o que mudou de leitura desta vez.
 
