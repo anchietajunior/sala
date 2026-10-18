@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programação Avançada — visão geral das aulas</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 900px; margin: 3rem auto; padding: 0 1.5rem; color: #222; line-height: 1.6; }
+  h1 { font-size: 1.7rem; border-bottom: 2px solid #222; padding-bottom: .4rem; margin-bottom: .3rem; }
+  .sub { color: #666; font-size: .95rem; margin-top: 0; }
+  h2 { font-size: 1.15rem; margin-top: 2.6rem; border-bottom: 1px solid #ddd; padding-bottom: .3rem; }
+  code { font-family: 'SF Mono', Consolas, monospace; background: #f4f2ee; border-radius: 4px; padding: .1rem .35rem; font-size: .87em; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .92rem; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid #e5e2dc; vertical-align: top; }
+  th { background: #f4f2ee; font-size: .85rem; text-transform: uppercase; letter-spacing: .03em; }
+  .aula { border: 1px solid #e0ddd6; border-radius: 8px; padding: 1.1rem 1.3rem; margin: 1.2rem 0; }
+  .aula.pronta { border-left: 5px solid #2e6da4; }
+  .aula.planejada { border-left: 5px solid #ccc; background: #fbfaf8; }
+  .aula h3 { margin: 0 0 .4rem; font-size: 1.08rem; }
+  .aula h3 .tag { font-size: .68rem; font-family: Consolas, monospace; text-transform: uppercase; letter-spacing: .05em; border-radius: 999px; padding: .12rem .6rem; vertical-align: middle; margin-left: .5rem; }
+  .tag.ok { background: #2e6da4; color: #fff; }
+  .tag.todo { background: #eee; color: #666; }
+  .tag.extra { background: #b8860b; color: #fff; }
+  .aula.pronta.extra { border-left-color: #b8860b; }
+  .branch { font-family: Consolas, monospace; font-size: .78rem; color: #777; display: block; margin-bottom: .7rem; }
+  .bloco { display: grid; grid-template-columns: 6.5rem 1fr; gap: .3rem .8rem; margin: .5rem 0; font-size: .93rem; }
+  .bloco dt { font-weight: bold; color: #555; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; padding-top: .15rem; }
+  .bloco dd { margin: 0; }
+  ul { margin: .2rem 0; padding-left: 1.1rem; }
+  li { margin: .18rem 0; }
+  .divida { background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 5px; padding: .5rem .8rem; margin-top: .7rem; font-size: .88rem; }
+  .gancho { font-style: italic; color: #555; font-size: .88rem; margin-top: .7rem; }
+  .legenda { font-size: .85rem; color: #666; }
+  a { color: #2e6da4; }
+</style>
+</head>
+<body>
+
+<h1>Programação Avançada — visão geral das aulas</h1>
+<p class="sub">Reading Tracker (FastAPI + MySQL + React) · 16 encontros de ~2h (+ 1 aula extra) · Unirios</p>
+
+<h2>Panorama</h2>
+
+<table>
+  <tr><th>#</th><th>Aula</th><th>Em uma frase</th><th>Teoria [T-n]</th><th>Status</th></tr>
+  <tr><td>01</td><td>Início do projeto e frameworks</td><td>venv, pip, <code>requirements.txt</code> e a primeira rota FastAPI respondendo JSON no navegador</td><td>T-1 frameworks · T-2 cliente-servidor · T-6 dependências</td><td>roteiro pronto</td></tr>
+  <tr><td>01.2</td><td>Programação Orientada a Objetos com Python <em>(extra)</em></td><td>classes, <code>self</code>, <code>@property</code>, herança, polimorfismo e composição — a base para <em>ler</em> o código das aulas 03 em diante</td><td>fundamentos (fora dos T-n da ementa)</td><td>roteiro pronto</td></tr>
+  <tr><td>02</td><td>Ciclo de vida de uma requisição</td><td>DNS, HTTP cru, status codes, path/query params e o CRUD de Books em memória — já sobre uma classe <code>Book</code> e uma lista de objetos</td><td>T-4 DNS/HTTP · T-5 uvicorn</td><td>roteiro pronto</td></tr>
+  <tr><td>03</td><td>APIs REST e URIs</td><td>anatomia da URI, verbos × CRUD, schemas Pydantic e o CRUD completo em memória</td><td>T-3 REST e URIs</td><td>roteiro pronto</td></tr>
+  <tr><td>04</td><td>Banco de dados e ORMs</td><td>MySQL, SQL na mão, SQLAlchemy, model <code>User</code> e <code>POST /signup</code> persistente</td><td>T-7 ORM, SQL vs ORM</td><td>roteiro pronto</td></tr>
+  <tr><td>05</td><td>Relações 1:N e o CRUD de Books</td><td>chave estrangeira, integridade referencial e o CRUD de Books renascendo sobre o banco</td><td>aprofunda T-7</td><td>roteiro pronto</td></tr>
+  <tr><td>06</td><td>Reading Updates e dados derivados</td><td>segunda relação 1:N e a porcentagem de leitura calculada, sem campo de status</td><td>—</td><td>planejada</td></tr>
+  <tr><td>07</td><td>React, Vite e Tailwind</td><td>SPA, componentes, estado, CORS e a tela de signup consumindo a API</td><td>—</td><td>planejada</td></tr>
+  <tr><td>08</td><td>Telas de livros</td><td>listagem e cadastro de books no front, exibindo a porcentagem</td><td>—</td><td>planejada</td></tr>
+  <tr><td>09</td><td>Autenticação com JWT (1)</td><td>demonstrar a falha do <code>user_id</code> na URL, hash de senha e <code>POST /login</code></td><td>T-8 sessões vs tokens, JWT</td><td>planejada</td></tr>
+  <tr><td>10</td><td>Autenticação com JWT (2)</td><td>dependency de auth, <code>user_id</code> sai do token, tela de login e header <code>Authorization</code></td><td>—</td><td>planejada</td></tr>
+  <tr><td>11</td><td>Autorização e RBAC</td><td><code>require_admin</code>, rotas administrativas e rotas protegidas no React</td><td>T-9 autenticação × autorização, RBAC</td><td>planejada</td></tr>
+  <tr><td>12</td><td>Admin Dashboard</td><td>contagens de users e books, navegação pelos users e seus livros</td><td>—</td><td>planejada</td></tr>
+  <tr><td>13</td><td>Upload de capas</td><td><code>UploadFile</code>, arquivo em disco, estático servido e preview no front</td><td>T-10 multipart/form-data</td><td>planejada</td></tr>
+  <tr><td>14</td><td>Geração de PDF</td><td>Reading Report com fpdf2, rota de download e botão no front</td><td>—</td><td>planejada</td></tr>
+  <tr><td>15</td><td>Integração e encerramento técnico</td><td>validações, tratamento de erros, revisão do fluxo completo e o que ficou fora</td><td>—</td><td>planejada</td></tr>
+  <tr><td>16</td><td>Apresentação de trabalhos</td><td>apresentação e avaliação dos trabalhos finais</td><td>—</td><td>planejada</td></tr>
+</table>
+
+<p class="legenda"><strong>roteiro pronto</strong> = existe <code>aulas/aula-NN/roteiro.html</code> escrito. <strong>planejada</strong> = só o que está no <code>docs/plano-de-aulas.md</code>.</p>
+
+<h2>Bloco 1 — Fundamentos e primeiras rotas (backend)</h2>
+
+<div class="aula pronta">
+  <h3>Aula 01 — Início do projeto e frameworks <span class="tag ok">roteiro pronto</span></h3>
+  <span class="branch">branch: aula-01-inicio-do-projeto-e-frameworks · ~2h</span>
+  <dl class="bloco">
+    <dt>Teoria</dt>
+    <dd>
+      <ul>
+        <li><strong>[T-2] Cliente-servidor</strong>: cliente pede, servidor responde, nunca o contrário; analogia do restaurante.</li>
+        <li><strong>[T-1] Framework</strong>: biblioteca × framework, inversão de controle ("princípio de Hollywood") — quem controla o <code>main()</code> é o FastAPI.</li>
+        <li><strong>[T-6] Dependências</strong>: PyPI, pip, ambiente virtual isolado por projeto, <code>requirements.txt</code>, semver de passagem.</li>
+      </ul>
+    </dd>
+    <dt>Prática</dt>
+    <dd>
+      <ul>
+        <li>Criar <code>projeto/backend</code>, <code>python -m venv .venv</code> e ativar (Mac e Windows), <code>pip install fastapi uvicorn</code>, <code>pip freeze &gt; requirements.txt</code>.</li>
+        <li>Primeira rota: <code>@app.get("/")</code> devolvendo <code>{"message": ...}</code> — o dict vira JSON sozinho.</li>
+        <li>Subir com <code>uvicorn main:app --reload</code> e ver o reload agir ao editar a mensagem.</li>
+        <li><code>.gitignore</code> (<code>.venv/</code>, <code>__pycache__/</code>) e <code>README.md</code> com a Tabela de Dependências.</li>
+        <li>Teaser de 30s no <code>/docs</code> — "o framework documentou a API sozinho".</li>
+      </ul>
+    </dd>
+    <dt>Exercício</dt>
+    <dd>Rotas <code>GET /status</code> e <code>GET /about</code>, testadas no navegador. Erros clássicos: venv desativado e arquivo não salvo.</dd>
+  </dl>
+  <p class="gancho">Gancho: "digitamos um endereço e apareceu um JSON — mas o que viajou pela rede entre uma coisa e outra?"</p>
+</div>
+
+<div class="aula pronta extra">
+  <h3>Aula 01.2 — Programação Orientada a Objetos com Python <span class="tag extra">aula extra</span> <span class="tag ok">roteiro pronto</span></h3>
+  <span class="branch">sem branch · ~2h · laboratório em <code>oop_lab.py</code>, fora do repositório do projeto</span>
+  <dl class="bloco">
+    <dt>Teoria</dt>
+    <dd>
+      <ul>
+        <li><strong>Por que a POO existe</strong>: o dicionário cru não garante nada e espalha o comportamento. Origem em <strong>Simula 67</strong> (Dahl &amp; Nygaard) — inventada para simular entidades com estado próprio; o termo vem de Alan Kay e do Smalltalk. Definição de Booch: objeto = <strong>estado + comportamento + identidade</strong>.</li>
+        <li><strong>Encapsulamento</strong>: ocultamento de informação (Parnas, 1972) — interface estável por fora, decisões mutáveis por dentro. Python usa convenção (<code>_nome</code>), não trava.</li>
+        <li><strong>Herança</strong>: reaproveitar implementação <em>e</em> declarar um subtipo; princípio da substituição (Liskov, 1987) — onde se espera a mãe, a filha tem de servir.</li>
+        <li><strong>Polimorfismo</strong> (Strachey, 1967) e <strong><em>duck typing</em></strong>: Python não pede parentesco, pede o método — e o preço é o erro tardio, que motiva a validação da aula 03.</li>
+        <li><strong>Composição × herança</strong>: "tem-um" contra "é-um"; a recomendação clássica do GoF de preferir a composição.</li>
+      </ul>
+    </dd>
+    <dt>Prática</dt>
+    <dd>
+      <ul>
+        <li><strong>Ponte</strong>: reler <code>app = FastAPI()</code> da aula 01 — classe, objeto e método já estavam lá.</li>
+        <li>Classe <code>Book</code> com <code>__init__</code>, atributos e método; instanciar dois objetos e provar que o estado é independente.</li>
+        <li><strong>Desmistificar o <code>self</code></strong>: <code>objeto.metodo()</code> é açúcar para <code>Classe.metodo(objeto)</code>, digitado lado a lado.</li>
+        <li><code>__repr__</code> e os <em>dunder methods</em>; atributo de classe × de instância — e por que a aula 04 usa <code>default_factory=datetime.now</code>.</li>
+        <li><strong><code>@property</code> para dado derivado</strong>: <code>progress_percentage</code> e <code>is_finished</code> calculados, nunca armazenados — exatamente a definição de Reading Progress do <code>CONTEXT.md</code>. O <em>setter</em> centraliza a validação (<code>pages &gt; 0</code>).</li>
+        <li><code>EBook(Book)</code> com <code>super()</code> e sobrescrita; leitura da hierarquia real <code>BaseModel → SQLModel → nossas classes</code>.</li>
+        <li><em>Duck typing</em> com uma <code>Magazine</code> que não herda de nada; <code>HTTPException</code> funcionando por <strong>ser-uma</strong> <code>Exception</code>.</li>
+        <li>Composição <code>User</code> → <code>Books</code> como lista Python — o mesmo desenho que a aula 05 grava no banco com <code>Relationship</code>.</li>
+        <li><strong>POO declarativa</strong>: <code>title: str</code> é anotação e não atribuição (<code>__annotations__</code> ao vivo no interpretador), <code>table=True</code> como argumento lido pela metaclasse, e um decorator escrito à mão para explicar o <code>@app.get</code>.</li>
+      </ul>
+    </dd>
+    <dt>Exercício</dt>
+    <dd>Uma pequena biblioteca: <code>Author</code>, <code>Book</code> por composição, <code>AudioBook(Book)</code> com <code>__repr__</code> sobrescrito e <code>Library.average_progress</code> (com o caso da lista vazia). Erros previsíveis: <code>super().__init__()</code> esquecido, parênteses ao ler uma <code>@property</code> e divisão por zero.</dd>
+  </dl>
+  <div class="divida"><strong>Aula complementar:</strong> não evolui o Reading Tracker e não gera branch — prepara a turma para lê-lo. Abre e fecha com o mesmo trecho de <code>models.py</code> da aula 05: "quantos símbolos vocês explicam agora?" no início, releitura símbolo a símbolo no fim.</div>
+  <p class="gancho">Gancho: "voltamos ao projeto na aula 02, ainda com dicionários crus — guardem o incômodo: na aula 03 eles viram classes."</p>
+</div>
+
+<div class="aula pronta">
+  <h3>Aula 02 — Ciclo de vida de uma requisição <span class="tag ok">roteiro pronto</span></h3>
+  <span class="branch">branch: aula-02-ciclo-de-vida-de-uma-requisicao · ~2h</span>
+  <dl class="bloco">
+    <dt>Teoria</dt>
+    <dd>
+      <ul>
+        <li><strong>[T-4] DNS</strong>: nome → IP, a consulta em etapas, IP + porta identificando máquina e programa, <code>127.0.0.1</code> como loopback (sem DNS nenhum).</li>
+        <li><strong>[T-4] HTTP cru</strong>: linha de pedido, headers, corpo; a resposta com linha de status e <code>content-type</code>. Famílias de status: 2xx, 3xx, 4xx (culpa do cliente), 5xx (culpa do servidor).</li>
+        <li><strong>[T-5] uvicorn × FastAPI</strong>: o servidor cuida da rede e dos bytes, o framework cuida da aplicação; o contrato entre eles é o ASGI; o <code>--reload</code> é serviço do uvicorn.</li>
+        <li><strong>Parâmetros</strong>: path identifica o recurso, query ajusta o pedido (exemplos do GitHub, Google e YouTube).</li>
+      </ul>
+    </dd>
+    <dt>Prática</dt>
+    <dd>
+      <ul>
+        <li><strong>Analisar a conversa</strong>: DevTools → aba Network na rota <code>/health</code> (status, request/response headers, <code>server: uvicorn</code>); <code>curl -i</code> e <code>curl -v</code> mostrando as duas direções; provocar um 404 em <code>/nada</code>.</li>
+        <li><strong>Modelo <code>Book</code> como classe</strong> (<code>__init__</code> + <code>__repr__</code>, Python puro) e a lista <code>books</code> de <em>objetos</em> em memória + prefixo <code>/api</code> — a POO da aula 01.2 entrando no projeto, no mesmo desenho que o ORM usa na aula 04.</li>
+        <li><code>GET /api/books</code> (lista) e <code>GET /api/books/{book_id}</code> com <code>book_id: int</code> e <code>HTTPException(404)</code> — <code>/abc</code> devolve 422 antes da função rodar. Acesso por atributo (<code>book.id</code>), e o FastAPI serializa o objeto lendo seus atributos.</li>
+        <li><code>GET /api/books?name=</code> — query param opcional com <code>.lower()</code> dos dois lados.</li>
+        <li>Explorar o <strong>Swagger</strong> (<code>/docs</code>): rotas documentadas de graça, "Try it out" como cliente HTTP.</li>
+        <li><code>POST /api/books</code> com <code>book: dict</code> cru e <code>status_code=201</code> — entra dicionário, sai <code>Book</code>: o dict só existe na fronteira.</li>
+        <li><code>PUT /api/books/{book_id}</code> (path param e corpo juntos pela primeira vez; o objeto é mutado no lugar) e <code>DELETE</code> com <strong>204 sem corpo</strong>.</li>
+        <li><strong>Demonstração da falha:</strong> com o DELETE em mãos, <code>len(books) + 1</code> produz <strong>dois livros com o mesmo id</strong> — o novo fica inalcançável e o DELETE apaga o errado. Fica sem conserto, como dívida da aula 03.</li>
+        <li>Tabela de <strong>Endpoints</strong> no README.</li>
+      </ul>
+    </dd>
+    <dt>Exercício</dt>
+    <dd><strong>"Quem decidiu esse status?"</strong> — o aluno interroga a própria API: provoca 200/404/422/500 e classifica cada um entre <em>rejeitado na borda pelo framework</em>, <em>escolhido por nós</em> ou <em>consequência de um erro não tratado</em>. Depois argumenta por escrito: por que o 422 e o 404 diferem para o cliente; por que o 500 do POST é a API mentindo sobre a culpa; por que <code>name: str</code> não impediu um livro chamado <code>42</code>; e por que busca vazia é 200 e não 404. Em casa: fechar a fronteira na mão, escolhendo entre 400 e 422 com justificativa — e contar quantos <code>if</code> seriam necessários com dez campos.</dd>
+  </dl>
+  <div class="divida"><strong>Ganchos armados de propósito:</strong> POST sem <code>name</code> → 500 — e a classe <em>não</em> impede, porque ela protege o interior e não vigia a borda (o Pydantic fecha na aula 03); o Swagger documenta a entrada mas mostra a resposta como schema vazio (gancho do <code>response_model</code>); ao salvar qualquer arquivo o livro criado some (memória morre com o processo — banco na aula 04); "o que quebra no <code>len(books) + 1</code> quando existir DELETE?"</div>
+</div>
+
+<div class="aula pronta">
+  <h3>Aula 03 — APIs REST e URIs <span class="tag ok">roteiro pronto</span></h3>
+  <span class="branch">branch: aula-03-apis-rest-e-uris · ~2h</span>
+  <dl class="bloco">
+    <dt>Teoria</dt>
+    <dd>
+      <ul>
+        <li><strong>[T-3] Anatomia da URI</strong> (RFC 3986): esquema, host, porta, caminho, query, fragmento — e o fragmento que o navegador nunca envia. URI × URL.</li>
+        <li><strong>[T-3] REST</strong> (Fielding, tese de 2000): estilo arquitetural, seis restrições, recurso × representação, interface uniforme, stateless (que motiva o token da aula 09). Honestidade: o mercado usa o núcleo recursos + verbos + status codes.</li>
+        <li><strong>Verbos × CRUD</strong> na coleção e no item, com status típicos (201, 200, 204); métodos seguros e idempotentes (RFC 9110); PATCH mencionado, não usado.</li>
+        <li><strong>Boas práticas de URI</strong>: substantivo e não verbo, plural na coleção, mesmo nome de path param em todas as rotas.</li>
+      </ul>
+    </dd>
+    <dt>Prática</dt>
+    <dd>
+      <ul>
+        <li><strong>Desenhar o mapa de rotas do projeto no quadro</strong> — inclusive as que só nascem depois (<code>/signup</code>, <code>/users/{user_id}/books</code>, <code>/books/{book_id}/progress</code>).</li>
+        <li>Reproduzir o 500 do dict cru e trocá-lo por <strong>Pydantic</strong>: <code>BookCreate</code> → o erro vira 422 apontando o campo.</li>
+        <li><code>response_model</code> nas rotas + schema <code>Book</code> (o que sai tem <code>id</code>, o que entra não).</li>
+        <li><code>PUT /api/books/{book_id}</code> (idempotência ao vivo) e <code>DELETE</code> com 204 sem corpo.</li>
+        <li><strong>Quebrar o <code>len(books) + 1</code></strong>: apagar → criar → dois livros com <code>id 3</code>; corrigir com contador monotônico <code>next_book_id</code> e <code>global</code>.</li>
+        <li>Atualizar a tabela de Endpoints do README.</li>
+      </ul>
+    </dd>
+    <dt>Exercício</dt>
+    <dd>Campo <code>author</code> (opcional, padrão <code>""</code>) nos dois schemas + create e update. Descartável: a branch segue sem ele.</dd>
+  </dl>
+  <p class="gancho">Gancho: "o CRUD está completo, mas os dados continuam morrendo a cada restart — e o contador de id é artesanal."</p>
+</div>
+
+<h2>Bloco 2 — Persistência (backend)</h2>
+
+<div class="aula pronta">
+  <h3>Aula 04 — Banco de dados e ORMs <span class="tag ok">roteiro pronto</span></h3>
+  <span class="branch">branch: aula-04-banco-de-dados-e-orms · ~2h · pedir o download do MySQL com antecedência</span>
+  <dl class="bloco">
+    <dt>Teoria</dt>
+    <dd>
+      <ul>
+        <li><strong>[T-7] Modelo relacional</strong> (Codd, 1970): tabela, linha, coluna, chave primária, constraint, independência de dados; auto-increment aposentando o contador artesanal.</li>
+        <li><strong>SQL</strong> (Chamberlin &amp; Boyce, 1974; ANSI 1986): linguagem declarativa. <strong>MySQL</strong> (Widenius &amp; Axmark, 1995) como banco do curso.</li>
+        <li><strong>[T-7] ORM</strong>: descompasso objeto-relacional, padrões de Fowler (Active Record, Data Mapper, Unit of Work), SQLAlchemy como Data Mapper. Tabela comparativa SQL cru × ORM.</li>
+        <li>Honestidade: o ORM não elimina o SQL, ele o gera — por isso o <code>echo=True</code> fica ligado a aula inteira.</li>
+      </ul>
+    </dd>
+    <dt>Prática</dt>
+    <dd>
+      <ul>
+        <li>Instalar e subir o MySQL (brew / MySQL Installer), <code>CREATE DATABASE reading_tracker</code>.</li>
+        <li><strong>SQL na mão</strong>: <code>CREATE TABLE user</code>, <code>INSERT</code>, <code>SELECT</code>, <code>DESCRIBE</code>; repetir o INSERT e ver o <code>ERROR 1062: Duplicate entry</code>; <code>DROP TABLE</code> ao final para o ORM recriá-la.</li>
+        <li><code>pip install sqlalchemy pymysql cryptography</code> — uma dependência por camada da conversa.</li>
+        <li><code>database.py</code>: <code>DATABASE_URL</code> dissecada como URI, <code>engine</code> com <code>echo=True</code>, <code>SessionLocal</code>, <code>Base</code>.</li>
+        <li><code>models.py</code>: model <code>User</code> comparado coluna a coluna com o <code>CREATE TABLE</code> do quadro.</li>
+        <li><code>Base.metadata.create_all()</code> — assistir ao ORM emitir o CREATE TABLE no terminal.</li>
+        <li>Schemas <code>UserCreate</code>/<code>UserRead</code> (<code>from_attributes=True</code>) e <code>get_db</code> com <strong><code>Depends</code></strong> — injeção de dependência, ensaio geral da autenticação da aula 10.</li>
+        <li><code>POST /signup</code>: o trio <code>add</code>/<code>commit</code>/<code>refresh</code> como Unit of Work ao vivo.</li>
+        <li>Provar a persistência: reiniciar o uvicorn — o User fica, os Books voltam à lista de fábrica.</li>
+        <li>E-mail duplicado: <strong>500 → 409</strong> com <code>select(...).where(...)</code> + <code>db.scalar</code>, mantendo o <code>UNIQUE</code> como última defesa.</li>
+        <li>README ganha a seção Banco de dados e a Tabela de Dependências atualizada.</li>
+      </ul>
+    </dd>
+    <dt>Exercício</dt>
+    <dd>Campo <code>age</code> no model — a pegadinha é o <code>create_all</code> não alterar tabela existente (<code>Unknown column 'age'</code>): resolve-se com <code>DROP TABLE</code>. É a dor que justifica migrations. Descartável.</dd>
+  </dl>
+  <div class="divida"><strong>Dívida deliberada (ADR-0001):</strong> a senha é gravada em texto puro e fica visível no <code>SELECT * FROM user</code>. Anotada no quadro; vira material da aula 09.</div>
+</div>
+
+<div class="aula pronta">
+  <h3>Aula 05 — Relações 1:N e o CRUD de Books <span class="tag ok">roteiro pronto</span></h3>
+  <span class="branch">branch: aula-05-relacoes-1-n-e-o-crud-de-books · ~2h</span>
+  <dl class="bloco">
+    <dt>Teoria</dt>
+    <dd>
+      <ul>
+        <li>Ligar dados <strong>por valor, não por ponteiro</strong> — o que o modelo relacional substituiu (bancos navegacionais, CODASYL).</li>
+        <li><strong>Modelo entidade-relacionamento</strong> (Chen, 1976): entidades, relacionamentos, cardinalidades 1:1, 1:N, N:M.</li>
+        <li><strong>Chave estrangeira</strong> (definição de C. J. Date) e por que ela mora sempre no lado N.</li>
+        <li><strong>Integridade referencial</strong>: o banco recusa o filho órfão e protege o pai com filhos (RESTRICT padrão; CASCADE e SET NULL mencionados).</li>
+        <li><strong>Rotas aninhadas</strong>: coleção no dono (<code>/users/{user_id}/books</code>), item plano (<code>/books/{book_id}</code>); o prefixo <code>/api</code> se aposenta.</li>
+      </ul>
+    </dd>
+    <dt>Prática</dt>
+    <dd>
+      <ul>
+        <li><code>models.Book</code> com <code>ForeignKey("user.id")</code> e os dois lados de <code>relationship(back_populates=...)</code> — colunas × relação navegável.</li>
+        <li><code>create_all</code> cria só a tabela <code>book</code>; <code>SHOW CREATE TABLE book</code> exibe a FK e o <code>ENGINE=InnoDB</code>.</li>
+        <li><strong>Integridade ao vivo no cliente MySQL</strong>: <code>ERROR 1452</code> (órfão) e <code>ERROR 1451</code> (pai protegido) — sem um <code>if</code> sequer.</li>
+        <li>Demolição da lista em memória e dos schemas antigos; <code>name</code> vira <code>title</code> e <code>pages</code> entra no cadastro (a aula 06 depende dele).</li>
+        <li>CRUD sobre o banco: <code>POST</code> e <code>GET /users/{user_id}/books</code> (com <code>db.get</code> e 404 de <code>User</code>), <code>GET</code>/<code>PUT</code>/<code>DELETE /books/{book_id}</code>.</li>
+        <li><code>user.books</code> e o <strong>lazy loading</strong>; o <code>PUT</code> sem nenhum <code>db.update()</code> — o Unit of Work emite o UPDATE sozinho.</li>
+        <li>Reiniciar o uvicorn: acabou a "lista de fábrica" — Users e Books moram no MySQL.</li>
+        <li>README com a tabela de Endpoints reescrita (sem dependências novas).</li>
+      </ul>
+    </dd>
+    <dt>Exercício</dt>
+    <dd>Reconstruir a busca por título sobre o banco (<code>select</code> + <code>contains</code> + <code>db.scalars().all()</code>), observando o <code>LIKE</code> no echo. O erro clássico — esquecer o <code>user_id</code> no <code>where</code> — vaza livros de todos os usuários. Descartável.</dd>
+  </dl>
+  <div class="divida"><strong>Segunda dívida deliberada (ADR-0001):</strong> o <code>user_id</code> vem da URL, sem autenticação — trocar o número lê os livros de qualquer pessoa. É o ataque que abre a aula 09.</div>
+</div>
+
+<h2>Bloco 2 (continuação) — o que vem a seguir</h2>
+
+<div class="aula planejada">
+  <h3>Aula 06 — Reading Updates e dados derivados <span class="tag todo">planejada</span></h3>
+  <p>Model <code>ReadingUpdate</code> (segunda relação 1:N, agora com o Book como pai), <code>POST /books/{book_id}/progress</code> e a porcentagem de leitura derivada do update mais recente — concluído é 100%, sem campo de status armazenado.</p>
+</div>
+
+<h2>Bloco 3 — Frontend entra em cena</h2>
+
+<div class="aula planejada">
+  <h3>Aula 07 — React, Vite e Tailwind <span class="tag todo">planejada</span></h3>
+  <p>Teoria: SPA, componentes, estado e CORS (a primeira dor real de integrar front e back). Prática: criar o frontend e a tela de signup consumindo a API.</p>
+</div>
+
+<div class="aula planejada">
+  <h3>Aula 08 — Telas de livros <span class="tag todo">planejada</span></h3>
+  <p>Listagem e cadastro de books no front — ainda no modo naive, com <code>user_id</code> explícito — e exibição da porcentagem de leitura.</p>
+</div>
+
+<h2>Bloco 4 — Autenticação e autorização</h2>
+
+<div class="aula planejada">
+  <h3>Aula 09 — Autenticação com JWT (parte 1) <span class="tag todo">planejada</span></h3>
+  <p>Teoria <strong>[T-8]</strong>: sessões vs tokens, anatomia de um JWT. Prática: <strong>demonstrar a falha</strong> ("troque o <code>user_id</code> e veja os livros de outra pessoa"), hash de senha como retrofit do signup e <code>POST /login</code> emitindo token. É aqui que as duas dívidas do quadro são pagas.</p>
+</div>
+
+<div class="aula planejada">
+  <h3>Aula 10 — Autenticação com JWT (parte 2) <span class="tag todo">planejada</span></h3>
+  <p>Dependency de autenticação no FastAPI (a mesma mecânica do <code>get_db</code>), rotas de books refatoradas com o <code>user_id</code> vindo do token, tela de login no front e o header <code>Authorization</code>.</p>
+</div>
+
+<div class="aula planejada">
+  <h3>Aula 11 — Autorização e RBAC <span class="tag todo">planejada</span></h3>
+  <p>Teoria <strong>[T-9]</strong>: autenticação × autorização, RBAC em nível de código. Prática: dependency <code>require_admin</code>, rotas administrativas (contagens, listar users e seus books) e rotas protegidas no React.</p>
+</div>
+
+<div class="aula planejada">
+  <h3>Aula 12 — Admin Dashboard <span class="tag todo">planejada</span></h3>
+  <p>Tela do dashboard: quantidade de users, de books e navegação pelos users e seus livros.</p>
+</div>
+
+<h2>Bloco 5 — Features finais</h2>
+
+<div class="aula planejada">
+  <h3>Aula 13 — Upload de capas <span class="tag todo">planejada</span></h3>
+  <p>Teoria <strong>[T-10]</strong>: multipart/form-data. Prática: <code>UploadFile</code> no FastAPI, salvar em disco, servir estático e input de arquivo com preview no front.</p>
+</div>
+
+<div class="aula planejada">
+  <h3>Aula 14 — Geração de PDF <span class="tag todo">planejada</span></h3>
+  <p>Reading Report do User (livros, porcentagens, histórico de updates) com <strong>fpdf2</strong>, rota de download e botão no front.</p>
+</div>
+
+<div class="aula planejada">
+  <h3>Aula 15 — Integração e encerramento técnico <span class="tag todo">planejada</span></h3>
+  <p>Validações (<code>pages &gt; 0</code>, <code>current_page ≤ pages</code>), tratamento de erros e mensagens no front, revisão do fluxo completo signup → login → livros → relatório, e o panorama do que ficou fora: migrations, deploy e testes.</p>
+</div>
+
+<div class="aula planejada">
+  <h3>Aula 16 — Apresentação de trabalhos <span class="tag todo">planejada</span></h3>
+  <p>Apresentação e avaliação dos trabalhos finais.</p>
+</div>
+
+<h2>Fios que atravessam o semestre</h2>
+
+<ul>
+  <li><strong>Um projeto só</strong>: toda aula evolui o Reading Tracker; a teoria aparece quando a prática precisa dela.</li>
+  <li><strong>Provocar a falha antes de corrigi-la</strong>: 500 do dict cru (03), 500 do e-mail duplicado (04), 500 do book órfão (05) — cada um vira o status 4xx correto na mesma aula.</li>
+  <li><strong>Dívidas deliberadas (ADR-0001)</strong>: senha em texto puro (04) e <code>user_id</code> na URL (05) ficam anotadas no quadro até a aula 09, quando abrem a discussão de autenticação.</li>
+  <li><strong>Analogia do restaurante</strong>: recorrente das aulas 01 a 03 (cliente/servidor, status codes, interface uniforme).</li>
+  <li><strong>Mac e Windows</strong>: todo comando de terminal aparece nas duas variantes.</li>
+  <li><strong>Uma branch por aula</strong> em <code>projeto/</code>, e o README atualizado ao fim de cada uma (Endpoints + Tabela de Dependências) — exceto a aula extra 01.2, que não toca o projeto.</li>
+  <li><strong>Exercícios descartáveis</strong>: das aulas 03, 04 e 05 são desfeitos ao final — a branch seguinte parte do código do roteiro.</li>
+</ul>
+
+</body>
+</html>
