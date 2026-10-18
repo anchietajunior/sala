@@ -1,6 +1,6 @@
 # Plano de aulas — Programação Avançada (proposta)
 
-16 encontros de ~2h. Cada aula tem uma pasta `aulas/aula-NN/` (roteiro do professor e slides) e o código que ela constrói entra em `projeto/`, na `main`. Os 10 temas teóricos da ementa estão marcados como **[T-n]**.
+16 encontros de ~2h. Cada aula tem uma pasta `aulas/aula-NN/` (slides) e o código que ela constrói entra em `projeto/`, na `main`. Os 10 temas teóricos da ementa estão marcados como **[T-n]**.
 
 ## Bloco 1 — Fundamentos e primeiras rotas (backend)
 

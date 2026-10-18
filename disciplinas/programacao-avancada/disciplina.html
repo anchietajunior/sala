@@ -22,7 +22,7 @@
   .tag.todo { background: #eee; color: #666; }
   .tag.extra { background: #b8860b; color: #fff; }
   .aula.pronta.extra { border-left-color: #b8860b; }
-  .branch { font-family: Consolas, monospace; font-size: .78rem; color: #777; display: block; margin-bottom: .7rem; }
+  .meta { font-family: Consolas, monospace; font-size: .78rem; color: #777; display: block; margin-bottom: .7rem; }
   .bloco { display: grid; grid-template-columns: 6.5rem 1fr; gap: .3rem .8rem; margin: .5rem 0; font-size: .93rem; }
   .bloco dt { font-weight: bold; color: #555; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; padding-top: .15rem; }
   .bloco dd { margin: 0; }
@@ -43,12 +43,12 @@
 
 <table>
   <tr><th>#</th><th>Aula</th><th>Em uma frase</th><th>Teoria [T-n]</th><th>Status</th></tr>
-  <tr><td>01</td><td>Início do projeto e frameworks</td><td>venv, pip, <code>requirements.txt</code> e a primeira rota FastAPI respondendo JSON no navegador</td><td>T-1 frameworks · T-2 cliente-servidor · T-6 dependências</td><td>roteiro pronto</td></tr>
-  <tr><td>01.2</td><td>Programação Orientada a Objetos com Python <em>(extra)</em></td><td>classes, <code>self</code>, <code>@property</code>, herança, polimorfismo e composição — a base para <em>ler</em> o código das aulas 03 em diante</td><td>fundamentos (fora dos T-n da ementa)</td><td>roteiro pronto</td></tr>
-  <tr><td>02</td><td>Ciclo de vida de uma requisição</td><td>DNS, HTTP cru, status codes, path/query params e o CRUD de Books em memória — já sobre uma classe <code>Book</code> e uma lista de objetos</td><td>T-4 DNS/HTTP · T-5 uvicorn</td><td>roteiro pronto</td></tr>
-  <tr><td>03</td><td>APIs REST e URIs</td><td>anatomia da URI, verbos × CRUD, schemas Pydantic e o CRUD completo em memória</td><td>T-3 REST e URIs</td><td>roteiro pronto</td></tr>
-  <tr><td>04</td><td>Banco de dados e ORMs</td><td>MySQL, SQL na mão, SQLAlchemy, model <code>User</code> e <code>POST /signup</code> persistente</td><td>T-7 ORM, SQL vs ORM</td><td>roteiro pronto</td></tr>
-  <tr><td>05</td><td>Relações 1:N e o CRUD de Books</td><td>chave estrangeira, integridade referencial e o CRUD de Books renascendo sobre o banco</td><td>aprofunda T-7</td><td>roteiro pronto</td></tr>
+  <tr><td>01</td><td>Início do projeto e frameworks</td><td>venv, pip, <code>requirements.txt</code> e a primeira rota FastAPI respondendo JSON no navegador</td><td>T-1 frameworks · T-2 cliente-servidor · T-6 dependências</td><td>slides prontos</td></tr>
+  <tr><td>01.2</td><td>Programação Orientada a Objetos com Python <em>(extra)</em></td><td>classes, <code>self</code>, <code>@property</code>, herança, polimorfismo e composição — a base para <em>ler</em> o código das aulas 03 em diante</td><td>fundamentos (fora dos T-n da ementa)</td><td>slides prontos</td></tr>
+  <tr><td>02</td><td>Ciclo de vida de uma requisição</td><td>DNS, HTTP cru, status codes, path/query params e o CRUD de Books em memória — já sobre uma classe <code>Book</code> e uma lista de objetos</td><td>T-4 DNS/HTTP · T-5 uvicorn</td><td>slides prontos</td></tr>
+  <tr><td>03</td><td>APIs REST e URIs</td><td>anatomia da URI, verbos × CRUD, schemas Pydantic e o CRUD completo em memória</td><td>T-3 REST e URIs</td><td>slides prontos</td></tr>
+  <tr><td>04</td><td>Banco de dados e ORMs</td><td>MySQL, SQL na mão, SQLAlchemy, model <code>User</code> e <code>POST /signup</code> persistente</td><td>T-7 ORM, SQL vs ORM</td><td>slides prontos</td></tr>
+  <tr><td>05</td><td>Relações 1:N e o CRUD de Books</td><td>chave estrangeira, integridade referencial e o CRUD de Books renascendo sobre o banco</td><td>aprofunda T-7</td><td>slides prontos</td></tr>
   <tr><td>06</td><td>Reading Updates e dados derivados</td><td>segunda relação 1:N e a porcentagem de leitura calculada, sem campo de status</td><td>—</td><td>planejada</td></tr>
   <tr><td>07</td><td>React, Vite e Tailwind</td><td>SPA, componentes, estado, CORS e a tela de signup consumindo a API</td><td>—</td><td>planejada</td></tr>
   <tr><td>08</td><td>Telas de livros</td><td>listagem e cadastro de books no front, exibindo a porcentagem</td><td>—</td><td>planejada</td></tr>
@@ -62,13 +62,13 @@
   <tr><td>16</td><td>Apresentação de trabalhos</td><td>apresentação e avaliação dos trabalhos finais</td><td>—</td><td>planejada</td></tr>
 </table>
 
-<p class="legenda"><strong>roteiro pronto</strong> = existe <code>aulas/aula-NN/roteiro.html</code> escrito. <strong>planejada</strong> = só o que está no <code>aulas/plano-de-aulas.md</code>.</p>
+<p class="legenda"><strong>slides prontos</strong> = existe <code>aulas/aula-NN/slides.html</code> escrito. <strong>planejada</strong> = só o que está no <code>aulas/plano-de-aulas.md</code>.</p>
 
 <h2>Bloco 1 — Fundamentos e primeiras rotas (backend)</h2>
 
 <div class="aula pronta">
-  <h3>Aula 01 — Início do projeto e frameworks <span class="tag ok">roteiro pronto</span></h3>
-  <span class="branch">branch: aula-01-inicio-do-projeto-e-frameworks · ~2h</span>
+  <h3>Aula 01 — Início do projeto e frameworks <span class="tag ok">slides prontos</span></h3>
+  <span class="meta">~2h</span>
   <dl class="bloco">
     <dt>Teoria</dt>
     <dd>
@@ -95,8 +95,8 @@
 </div>
 
 <div class="aula pronta extra">
-  <h3>Aula 01.2 — Programação Orientada a Objetos com Python <span class="tag extra">aula extra</span> <span class="tag ok">roteiro pronto</span></h3>
-  <span class="branch">sem branch · ~2h · laboratório em <code>oop_lab.py</code>, fora do repositório do projeto</span>
+  <h3>Aula 01.2 — Programação Orientada a Objetos com Python <span class="tag extra">aula extra</span> <span class="tag ok">slides prontos</span></h3>
+  <span class="meta">~2h · laboratório em <code>oop_lab.py</code>, fora do repositório do projeto</span>
   <dl class="bloco">
     <dt>Teoria</dt>
     <dd>
@@ -125,13 +125,13 @@
     <dt>Exercício</dt>
     <dd>Uma pequena biblioteca: <code>Author</code>, <code>Book</code> por composição, <code>AudioBook(Book)</code> com <code>__repr__</code> sobrescrito e <code>Library.average_progress</code> (com o caso da lista vazia). Erros previsíveis: <code>super().__init__()</code> esquecido, parênteses ao ler uma <code>@property</code> e divisão por zero.</dd>
   </dl>
-  <div class="divida"><strong>Aula complementar:</strong> não evolui o Reading Tracker e não gera branch — prepara a turma para lê-lo. Abre e fecha com o mesmo trecho de <code>models.py</code> da aula 05: "quantos símbolos vocês explicam agora?" no início, releitura símbolo a símbolo no fim.</div>
+  <div class="divida"><strong>Aula complementar:</strong> não evolui o Reading Tracker — prepara a turma para lê-lo. Abre e fecha com o mesmo trecho de <code>models.py</code> da aula 05: "quantos símbolos vocês explicam agora?" no início, releitura símbolo a símbolo no fim.</div>
   <p class="gancho">Gancho: "voltamos ao projeto na aula 02, ainda com dicionários crus — guardem o incômodo: na aula 03 eles viram classes."</p>
 </div>
 
 <div class="aula pronta">
-  <h3>Aula 02 — Ciclo de vida de uma requisição <span class="tag ok">roteiro pronto</span></h3>
-  <span class="branch">branch: aula-02-ciclo-de-vida-de-uma-requisicao · ~2h</span>
+  <h3>Aula 02 — Ciclo de vida de uma requisição <span class="tag ok">slides prontos</span></h3>
+  <span class="meta">~2h</span>
   <dl class="bloco">
     <dt>Teoria</dt>
     <dd>
@@ -163,8 +163,8 @@
 </div>
 
 <div class="aula pronta">
-  <h3>Aula 03 — APIs REST e URIs <span class="tag ok">roteiro pronto</span></h3>
-  <span class="branch">branch: aula-03-apis-rest-e-uris · ~2h</span>
+  <h3>Aula 03 — APIs REST e URIs <span class="tag ok">slides prontos</span></h3>
+  <span class="meta">~2h</span>
   <dl class="bloco">
     <dt>Teoria</dt>
     <dd>
@@ -187,7 +187,7 @@
       </ul>
     </dd>
     <dt>Exercício</dt>
-    <dd>Campo <code>author</code> (opcional, padrão <code>""</code>) nos dois schemas + create e update. Descartável: a branch segue sem ele.</dd>
+    <dd>Campo <code>author</code> (opcional, padrão <code>""</code>) nos dois schemas + create e update. Descartável: o projeto segue sem ele.</dd>
   </dl>
   <p class="gancho">Gancho: "o CRUD está completo, mas os dados continuam morrendo a cada restart — e o contador de id é artesanal."</p>
 </div>
@@ -195,8 +195,8 @@
 <h2>Bloco 2 — Persistência (backend)</h2>
 
 <div class="aula pronta">
-  <h3>Aula 04 — Banco de dados e ORMs <span class="tag ok">roteiro pronto</span></h3>
-  <span class="branch">branch: aula-04-banco-de-dados-e-orms · ~2h · pedir o download do MySQL com antecedência</span>
+  <h3>Aula 04 — Banco de dados e ORMs <span class="tag ok">slides prontos</span></h3>
+  <span class="meta">~2h · pedir o download do MySQL com antecedência</span>
   <dl class="bloco">
     <dt>Teoria</dt>
     <dd>
@@ -230,8 +230,8 @@
 </div>
 
 <div class="aula pronta">
-  <h3>Aula 05 — Relações 1:N e o CRUD de Books <span class="tag ok">roteiro pronto</span></h3>
-  <span class="branch">branch: aula-05-relacoes-1-n-e-o-crud-de-books · ~2h</span>
+  <h3>Aula 05 — Relações 1:N e o CRUD de Books <span class="tag ok">slides prontos</span></h3>
+  <span class="meta">~2h</span>
   <dl class="bloco">
     <dt>Teoria</dt>
     <dd>
@@ -334,7 +334,7 @@
   <li><strong>Analogia do restaurante</strong>: recorrente das aulas 01 a 03 (cliente/servidor, status codes, interface uniforme).</li>
   <li><strong>Mac e Windows</strong>: todo comando de terminal aparece nas duas variantes.</li>
   <li><strong>O projeto evolui na <code>main</code></strong>, em <code>projeto/</code>, com o README atualizado ao fim de cada aula (Endpoints + Tabela de Dependências) — exceto a aula extra 01.2, que não toca o projeto.</li>
-  <li><strong>Exercícios descartáveis</strong>: das aulas 03, 04 e 05 são desfeitos ao final — o projeto segue com o código do roteiro.</li>
+  <li><strong>Exercícios descartáveis</strong>: das aulas 03, 04 e 05 são desfeitos ao final — o projeto segue com o código dos slides.</li>
 </ul>
 
 </body>

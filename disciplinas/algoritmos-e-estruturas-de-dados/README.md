@@ -4,28 +4,27 @@ Materiais didáticos da disciplina **Algoritmos e Estruturas de Dados** da gradu
 
 Cada aula vive em sua própria pasta (`aulas/aulaNN_tema/`) e contém:
 
-- O conteúdo escrito em Markdown (`aulaNN_tema.md`) — referência completa para o aluno, com os blocos pedagógicos da disciplina (conceito em camadas progressivas, visualização gráfica, problema motivador e referências; aulas de implementação adicionam o bloco de código em C). As aulas 01–04, 06 e 08–11 trazem também analogias e exercícios.
-- A apresentação em Reveal.js (`apresentacao.html`) — usada em sala, com tema claro e transições suaves.
-- Diagramas em SVG (`img/`) — visualizações reaproveitadas tanto no `.md` quanto nos slides.
-- Em aulas de implementação: um único arquivo `.c` autossuficiente ao lado do `.md` (sem `.h` — modularização é tema de aula futura).
+- A apresentação em Reveal.js (`apresentacao.html`) — a aula inteira, usada em sala e para estudo, com os blocos pedagógicos da disciplina (conceito em camadas progressivas, visualização gráfica, problema motivador e referências; aulas de implementação adicionam o bloco de código em C). As aulas 01–04, 06 e 08–11 trazem também exercícios.
+- Diagramas em SVG (`img/`) — as visualizações passo a passo exibidas nos slides.
+- Em aulas de implementação: um único arquivo `.c` autossuficiente, com o código que os slides mostram (sem `.h`: o aluno lê o programa inteiro de cima a baixo).
 
 O livro-texto da disciplina é **Cormen, Leiserson, Rivest & Stein — Algoritmos: Teoria e Prática**. A bibliografia da ementa completa a referência: **Backes — Algoritmos e Estruturas de Dados em Linguagem C**, **Veloso & Pereira — Estruturas de Dados em C: Uma Abordagem Didática**, **Toscani & Veloso — Complexidade de Algoritmos** e **Schildt — C Completo e Total** como básica; **Wirth**, **Damas**, **Azevedo**, **Forouzan & Gilbert**, **Ford & Topp** e **Jamsa & Klander** como complementar.
 
 ## Aulas
 
-| # | Tema | Tipo | Conteúdo (`.md`) | Apresentação |
-|---|------|------|------------------|--------------|
-| 01 | Fundamentos: Algoritmos, Linguagem C, Listas Sequenciais e Complexidade (Big O) | Conceitual | [aulas/aula01_fundamentos/aula01_fundamentos.md](aulas/aula01_fundamentos/aula01_fundamentos.md) | [aulas/aula01_fundamentos/apresentacao.html](aulas/aula01_fundamentos/apresentacao.html) |
-| 02 | Análise de Complexidade na Prática: Busca Linear e Busca Binária | Implementação | [aulas/aula02_complexidade/aula02_complexidade.md](aulas/aula02_complexidade/aula02_complexidade.md) | [aulas/aula02_complexidade/apresentacao.html](aulas/aula02_complexidade/apresentacao.html) |
-| 03 | Funções e Recursão (anatomia, parâmetros, retorno, fatorial e Fibonacci) | Conceitual | [aulas/aula03_funcoes_recursao/aula03_funcoes_recursao.md](aulas/aula03_funcoes_recursao/aula03_funcoes_recursao.md) | [aulas/aula03_funcoes_recursao/apresentacao.html](aulas/aula03_funcoes_recursao/apresentacao.html) |
-| 04 | Ordenação: Bubble Sort, Merge Sort e Quick Sort | Implementação | [aulas/aula04_ordenacao/aula04_ordenacao.md](aulas/aula04_ordenacao/aula04_ordenacao.md) | [aulas/aula04_ordenacao/apresentacao.html](aulas/aula04_ordenacao/apresentacao.html) |
-| 05 | Ponteiros e Structs (endereço, passagem por referência, `malloc`/`free`, struct e `->`) | Implementação | [aulas/aula05_ponteiros_structs/aula05_ponteiros_structs.md](aulas/aula05_ponteiros_structs/aula05_ponteiros_structs.md) | [aulas/aula05_ponteiros_structs/apresentacao.html](aulas/aula05_ponteiros_structs/apresentacao.html) |
-| 06 | Matriz (alocação dinâmica com ponteiro duplo) | Implementação | [aulas/aula06_matriz/aula06_matriz.md](aulas/aula06_matriz/aula06_matriz.md) | [aulas/aula06_matriz/apresentacao.html](aulas/aula06_matriz/apresentacao.html) |
-| 07 | Listas Encadeadas, Pilhas (LIFO) e Filas (FIFO) | Implementação | [aulas/aula07_listas_pilhas_filas/aula07_listas_pilhas_filas.md](aulas/aula07_listas_pilhas_filas/aula07_listas_pilhas_filas.md) | [aulas/aula07_listas_pilhas_filas/apresentacao.html](aulas/aula07_listas_pilhas_filas/apresentacao.html) |
-| 08 | Listas Encadeadas (FIFO/LIFO, duplas, circulares) | Conceitual | [aulas/aula08_listas_encadeadas/aula08_listas_encadeadas.md](aulas/aula08_listas_encadeadas/aula08_listas_encadeadas.md) | [aulas/aula08_listas_encadeadas/apresentacao.html](aulas/aula08_listas_encadeadas/apresentacao.html) |
-| 09 | Fila (Queue) | Implementação | [aulas/aula09_fila/aula09_fila.md](aulas/aula09_fila/aula09_fila.md) | [aulas/aula09_fila/apresentacao.html](aulas/aula09_fila/apresentacao.html) |
-| 10 | Pilha (Stack) | Implementação | [aulas/aula10_pilha/aula10_pilha.md](aulas/aula10_pilha/aula10_pilha.md) | [aulas/aula10_pilha/apresentacao.html](aulas/aula10_pilha/apresentacao.html) |
-| 11 | Árvores e Árvores Binárias (BST + 3 travessias) | Implementação | [aulas/aula11_arvore_binaria/aula11_arvore_binaria.md](aulas/aula11_arvore_binaria/aula11_arvore_binaria.md) | [aulas/aula11_arvore_binaria/apresentacao.html](aulas/aula11_arvore_binaria/apresentacao.html) |
+| # | Tema | Tipo | Apresentação |
+|---|------|------|--------------|
+| 01 | Fundamentos: Algoritmos, Linguagem C, Listas Sequenciais e Complexidade (Big O) | Conceitual | [aulas/aula01_fundamentos/apresentacao.html](aulas/aula01_fundamentos/apresentacao.html) |
+| 02 | Análise de Complexidade na Prática: Busca Linear e Busca Binária | Implementação | [aulas/aula02_complexidade/apresentacao.html](aulas/aula02_complexidade/apresentacao.html) |
+| 03 | Funções e Recursão (anatomia, parâmetros, retorno, fatorial e Fibonacci) | Conceitual | [aulas/aula03_funcoes_recursao/apresentacao.html](aulas/aula03_funcoes_recursao/apresentacao.html) |
+| 04 | Ordenação: Bubble Sort, Merge Sort e Quick Sort | Implementação | [aulas/aula04_ordenacao/apresentacao.html](aulas/aula04_ordenacao/apresentacao.html) |
+| 05 | Ponteiros e Structs (endereço, passagem por referência, `malloc`/`free`, struct e `->`) | Implementação | [aulas/aula05_ponteiros_structs/apresentacao.html](aulas/aula05_ponteiros_structs/apresentacao.html) |
+| 06 | Matriz (alocação dinâmica com ponteiro duplo) | Implementação | [aulas/aula06_matriz/apresentacao.html](aulas/aula06_matriz/apresentacao.html) |
+| 07 | Listas Encadeadas, Pilhas (LIFO) e Filas (FIFO) | Implementação | [aulas/aula07_listas_pilhas_filas/apresentacao.html](aulas/aula07_listas_pilhas_filas/apresentacao.html) |
+| 08 | Listas Encadeadas (FIFO/LIFO, duplas, circulares) | Conceitual | [aulas/aula08_listas_encadeadas/apresentacao.html](aulas/aula08_listas_encadeadas/apresentacao.html) |
+| 09 | Fila (Queue) | Implementação | [aulas/aula09_fila/apresentacao.html](aulas/aula09_fila/apresentacao.html) |
+| 10 | Pilha (Stack) | Implementação | [aulas/aula10_pilha/apresentacao.html](aulas/aula10_pilha/apresentacao.html) |
+| 11 | Árvores e Árvores Binárias (BST + 3 travessias) | Implementação | [aulas/aula11_arvore_binaria/apresentacao.html](aulas/aula11_arvore_binaria/apresentacao.html) |
 
 ## Convenções
 
