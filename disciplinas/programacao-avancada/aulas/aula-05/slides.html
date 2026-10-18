@@ -78,7 +78,7 @@
 
 <section>
   <h2>A relação é uma coluna</h2>
-  <img src="img/relacao-1-n.png" alt="Diagrama da relação 1:N: a coluna user_id em books aponta para a chave primária de users" style="width:100%;max-width:760px">
+  <img src="img/relacao-1-n.svg" alt="Diagrama da relação 1:N: a coluna user_id em books aponta para a chave primária de users" style="width:100%;max-width:760px">
   <p class="cite">CHEN, P. — 1976 · DATE, C. J. — An Introduction to Database Systems, 2003</p>
 </section>
 
@@ -307,7 +307,7 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
 
 <section>
   <h2>A anatomia de um JWT</h2>
-  <img src="img/anatomia-jwt.png" alt="As três partes de um JWT: header com o algoritmo, payload com os claims sub e exp, e a assinatura HMAC-SHA256" style="width:100%;max-width:760px">
+  <img src="img/anatomia-jwt.svg" alt="As três partes de um JWT: header com o algoritmo, payload com os claims sub e exp, e a assinatura HMAC-SHA256" style="width:100%;max-width:760px">
 </section>
 
 <section>
@@ -429,7 +429,7 @@ def login(credentials: LoginRequest, session: Session = Depends(get_session)):
 
 <section>
   <h2>O ciclo completo</h2>
-  <img src="img/fluxo-jwt.png" alt="Fluxo do JWT: o login troca credenciais por um token assinado; cada requisição envia o token, a dependency verifica e a rota opera sobre o usuário logado" style="width:100%;max-width:760px">
+  <img src="img/fluxo-jwt.svg" alt="Fluxo do JWT: o login troca credenciais por um token assinado; cada requisição envia o token, a dependency verifica e a rota opera sobre o usuário logado" style="width:100%;max-width:760px">
 </section>
 
 <section>

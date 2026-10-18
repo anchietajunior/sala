@@ -79,7 +79,7 @@
 
 <section>
   <h2>Dois servidores, dois papéis</h2>
-  <img src="img/spa-dois-servidores.png" alt="Diagrama: o Vite entrega o programa React ao navegador; a API FastAPI entrega dados em JSON; são duas origens diferentes" style="width:100%;max-width:760px">
+  <img src="img/spa-dois-servidores.svg" alt="Diagrama: o Vite entrega o programa React ao navegador; a API FastAPI entrega dados em JSON; são duas origens diferentes" style="width:100%;max-width:760px">
   <p class="cite">GARRETT, J. J. - 2005 · Documentação oficial do Vite - vite.dev</p>
 </section>
 
@@ -96,7 +96,7 @@
 
 <section>
   <h2>Mudar o estado é a única forma de mudar a tela</h2>
-  <img src="img/ui-funcao-do-estado.png" alt="Diagrama do ciclo: estado alimenta o componente, que devolve JSX desenhado no DOM; um evento altera o estado e o ciclo recomeça" style="width:100%;max-width:760px">
+  <img src="img/ui-funcao-do-estado.svg" alt="Diagrama do ciclo: estado alimenta o componente, que devolve JSX desenhado no DOM; um evento altera o estado e o ciclo recomeça" style="width:100%;max-width:760px">
   <p class="cite">Documentação oficial do React - react.dev (Managing State)</p>
 </section>
 
@@ -248,7 +248,7 @@ class BookRead(BaseModel):
 
 <section>
   <h2>Preflight: o OPTIONS que ninguém escreveu</h2>
-  <img src="img/cors-preflight.png" alt="Diagrama de sequência: o navegador envia OPTIONS com Origin e Access-Control-Request-Method, a API responde 200 com Access-Control-Allow-Origin, e só então o POST é enviado" style="width:100%;max-width:760px">
+  <img src="img/cors-preflight.svg" alt="Diagrama de sequência: o navegador envia OPTIONS com Origin e Access-Control-Request-Method, a API responde 200 com Access-Control-Allow-Origin, e só então o POST é enviado" style="width:100%;max-width:760px">
   <p class="cite">WHATWG - Fetch Standard (CORS protocol)</p>
 </section>
 
@@ -457,7 +457,7 @@ npm run dev
 
 <section>
   <h2>Três pastas, três decisões escondidas</h2>
-  <img src="img/camadas-do-frontend.png" alt="Diagrama: App.jsx escolhe a página; as páginas passam props aos componentes e recebem callbacks; as páginas chamam os services, que usam fetch para falar com a API FastAPI" style="width:100%;max-width:760px">
+  <img src="img/camadas-do-frontend.svg" alt="Diagrama: App.jsx escolhe a página; as páginas passam props aos componentes e recebem callbacks; as páginas chamam os services, que usam fetch para falar com a API FastAPI" style="width:100%;max-width:760px">
   <p class="cite">DIJKSTRA, 1974 · PARNAS, 1972</p>
 </section>
 
@@ -857,7 +857,7 @@ export default function App() {
 
 <section>
   <h2>O token entra no login e sai em toda requisição</h2>
-  <img src="img/token-no-navegador.png" alt="Diagrama: o login recebe o token, o App guarda no localStorage, o api.js o lê e envia no header Authorization: Bearer em toda requisição, que a API verifica" style="width:100%;max-width:760px">
+  <img src="img/token-no-navegador.svg" alt="Diagrama: o login recebe o token, o App guarda no localStorage, o api.js o lê e envia no header Authorization: Bearer em toda requisição, que a API verifica" style="width:100%;max-width:760px">
   <p class="cite">RFC 6750 - 2012 · WHATWG - HTML Standard</p>
 </section>
 

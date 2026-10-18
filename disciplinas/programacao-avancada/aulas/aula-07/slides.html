@@ -63,7 +63,7 @@ if book is None or book.user_id != current_user.id:                # delete_book
 
 <section>
   <h2>A autorização se constrói de baixo para cima</h2>
-  <img src="img/camadas-da-autorizacao.png" alt="Diagrama em três camadas, na ordem de construção de baixo para cima: 1, banco de dados, o papel é um dado na coluna users.role com DEFAULT user; 2, backend, a API lê o papel e decide o acesso com can_access, require_admin e as respostas 401, 403 e 404; 3, frontend, a interface mostra o que o papel permite, com o link e a página /admin" style="width:100%;max-width:800px">
+  <img src="img/camadas-da-autorizacao.svg" alt="Diagrama em três camadas, na ordem de construção de baixo para cima: 1, banco de dados, o papel é um dado na coluna users.role com DEFAULT user; 2, backend, a API lê o papel e decide o acesso com can_access, require_admin e as respostas 401, 403 e 404; 3, frontend, a interface mostra o que o papel permite, com o link e a página /admin" style="width:100%;max-width:800px">
 </section>
 
 <section>
@@ -92,7 +92,7 @@ if book is None or book.user_id != current_user.id:                # delete_book
 
 <section>
   <h2>Toda requisição passa pelas duas perguntas, nessa ordem</h2>
-  <img src="img/autenticacao-autorizacao.png" alt="Diagrama: a requisição passa pela autenticação (get_current_user, falha responde 401) e depois pela autorização (can_access e require_admin, falha responde 404 para livro sem acesso ou 403 para rota de Admin) até a rota executar com 200" style="width:100%;max-width:820px">
+  <img src="img/autenticacao-autorizacao.svg" alt="Diagrama: a requisição passa pela autenticação (get_current_user, falha responde 401) e depois pela autorização (can_access e require_admin, falha responde 404 para livro sem acesso ou 403 para rota de Admin) até a rota executar com 200" style="width:100%;max-width:820px">
   <p class="cite">RFC 4949 · RFC 9110</p>
 </section>
 
@@ -122,7 +122,7 @@ if book is None or book.user_id != current_user.id:                # delete_book
 
 <section>
   <h2>Usuários, papéis e permissões no projeto</h2>
-  <img src="img/rbac.png" alt="Diagrama: Machado tem o papel admin, com as permissões de ler, editar e apagar qualquer Book e ver o Admin Dashboard; Clarice e Cecília têm o papel user, com a permissão de ler, editar e apagar os próprios Books" style="width:100%;max-width:820px">
+  <img src="img/rbac.svg" alt="Diagrama: Machado tem o papel admin, com as permissões de ler, editar e apagar qualquer Book e ver o Admin Dashboard; Clarice e Cecília têm o papel user, com a permissão de ler, editar e apagar os próprios Books" style="width:100%;max-width:820px">
   <p class="cite">Ferraiolo e Kuhn, 1992 · Sandhu et al., 1996</p>
 </section>
 
@@ -417,7 +417,7 @@ return TokenResponse(access_token=create_access_token(user.id), role=user.role)
 
 <section>
   <h2>A interface esconde, a API proíbe</h2>
-  <img src="img/interface-e-api.png" alt="Diagrama: no navegador, o localStorage guarda token e papel, o papel decide o que desenhar e o usuário pode alterar tudo; para a API vai só o token, o get_current_user busca o papel no banco e require_admin e can_access decidem a cada requisição: Admin recebe 200, User recebe 403" style="width:100%;max-width:800px">
+  <img src="img/interface-e-api.svg" alt="Diagrama: no navegador, o localStorage guarda token e papel, o papel decide o que desenhar e o usuário pode alterar tudo; para a API vai só o token, o get_current_user busca o papel no banco e require_admin e can_access decidem a cada requisição: Admin recebe 200, User recebe 403" style="width:100%;max-width:800px">
   <p class="cite">OWASP - Authorization Cheat Sheet</p>
 </section>
 

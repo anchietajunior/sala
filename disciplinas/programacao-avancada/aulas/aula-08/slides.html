@@ -109,7 +109,7 @@ def test_user_lists_only_own_books(client, clarice, machado_admin):
 
 <section>
   <h2>A pirâmide de testes</h2>
-  <img src="img/piramide-de-testes.png" alt="Pirâmide em três camadas com a suíte da aula: no topo, aceitação de ponta a ponta com Playwright, 2 testes em cerca de 2 segundos; no meio, integração de rotas, schemas, regras e banco com pytest e TestClient, 12 testes em cerca de 5 segundos; na base, unidade de um model, um componente ou um service com pytest e Vitest, 7 mais 5 testes em menos de 1 segundo" style="width:100%;max-width:760px">
+  <img src="img/piramide-de-testes.svg" alt="Pirâmide em três camadas com a suíte da aula: no topo, aceitação de ponta a ponta com Playwright, 2 testes em cerca de 2 segundos; no meio, integração de rotas, schemas, regras e banco com pytest e TestClient, 12 testes em cerca de 5 segundos; na base, unidade de um model, um componente ou um service com pytest e Vitest, 7 mais 5 testes em menos de 1 segundo" style="width:100%;max-width:760px">
   <p class="cite">COHN, M. - Succeeding with Agile, 2009 · VOCKE, H. - The Practical Test Pyramid, 2018</p>
 </section>
 
@@ -137,7 +137,7 @@ def test_user_lists_only_own_books(client, clarice, machado_admin):
 
 <section>
   <h2>Caixa preta e caixa branca</h2>
-  <img src="img/caixa-preta-caixa-branca.png" alt="À esquerda, caixa preta: a requisição POST /api/books com nome só de espaços entra numa caixa escura chamada API e sai 422; os casos saem da especificação, em test_books_api.py. À direita, caixa branca: o código is_admin or book.user_id == self.id com três caminhos - é Admin, True; não é Admin e é o dono, True; nenhum dos dois, False; os casos saem do código, um teste por caminho, em test_models.py" style="width:100%;max-width:760px">
+  <img src="img/caixa-preta-caixa-branca.svg" alt="À esquerda, caixa preta: a requisição POST /api/books com nome só de espaços entra numa caixa escura chamada API e sai 422; os casos saem da especificação, em test_books_api.py. À direita, caixa branca: o código is_admin or book.user_id == self.id com três caminhos - é Admin, True; não é Admin e é o dono, True; nenhum dos dois, False; os casos saem do código, um teste por caminho, em test_models.py" style="width:100%;max-width:760px">
   <p class="cite">MYERS, G. - The Art of Software Testing, 1979</p>
 </section>
 
@@ -156,7 +156,7 @@ def test_user_lists_only_own_books(client, clarice, machado_admin):
 <section>
   <h2>Teste de regressão: o defeito vira teste</h2>
   <p class="definicao" style="font-size:.66em">Teste repetido depois de uma modificação para garantir que ela não introduziu defeitos nem expôs defeitos nas partes não alteradas do software.</p>
-  <img src="img/regressao-vermelho-verde.png" alt="Ciclo em quatro passos: o defeito, um nome só de espaços aceito com 201; o teste vermelho, assert 201 igual a 422, que reproduz o defeito; a correção, str_strip_whitespace no BookCreate; o teste verde, 19 passed; o teste fica na suíte e falha se o defeito voltar" style="width:100%;max-width:720px">
+  <img src="img/regressao-vermelho-verde.svg" alt="Ciclo em quatro passos: o defeito, um nome só de espaços aceito com 201; o teste vermelho, assert 201 igual a 422, que reproduz o defeito; a correção, str_strip_whitespace no BookCreate; o teste verde, 19 passed; o teste fica na suíte e falha se o defeito voltar" style="width:100%;max-width:720px">
   <p class="cite">ISTQB - regression testing, tradução livre · BECK, K. - Test-Driven Development: By Example, 2002</p>
 </section>
 

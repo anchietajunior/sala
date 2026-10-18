@@ -163,7 +163,7 @@ def progress_percentage(book):
 
 <section>
   <h2>A classe é o molde; o objeto é a peça</h2>
-  <img src="img/classe-vs-objeto.png" alt="Diagrama: a classe Book como molde, com atributos e métodos, e três objetos instanciados com estados diferentes" style="width:100%;max-width:800px">
+  <img src="img/classe-vs-objeto.svg" alt="Diagrama: a classe Book como molde, com atributos e métodos, e três objetos instanciados com estados diferentes" style="width:100%;max-width:800px">
 </section>
 
 <section>
@@ -302,7 +302,7 @@ class Book:
 
 <section>
   <h2>Interface pública por fora, estado por dentro</h2>
-  <img src="img/encapsulamento.png" alt="Diagrama: objeto Book com estado interno oculto e interface pública acessível pelo resto do programa" style="width:100%;max-width:780px">
+  <img src="img/encapsulamento.svg" alt="Diagrama: objeto Book com estado interno oculto e interface pública acessível pelo resto do programa" style="width:100%;max-width:780px">
 </section>
 
 <section>
@@ -410,7 +410,7 @@ print(isinstance(fluent, Book))     # True — "é-um"
 
 <section>
   <h2>No projeto, herdamos de quem veio antes</h2>
-  <img src="img/heranca-sqlmodel.png" alt="Diagrama da hierarquia BaseModel, SQLModel e as classes do projeto BookCreate e Book com table igual a True" style="width:100%;max-width:800px">
+  <img src="img/heranca-sqlmodel.svg" alt="Diagrama da hierarquia BaseModel, SQLModel e as classes do projeto BookCreate e Book com table igual a True" style="width:100%;max-width:800px">
   <p class="cite">Documentação do Pydantic (Samuel Colvin, 2017) · Documentação do SQLModel</p>
 </section>
 
@@ -531,7 +531,7 @@ raise HTTPException(status_code=404, detail="Book not found")
 
 <section>
   <h2>"É-um" e "tem-um" são coisas diferentes</h2>
-  <img src="img/heranca-vs-composicao.png" alt="Diagrama comparando herança, em que EBook é um Book, e composição, em que User tem vários Books" style="width:100%;max-width:800px">
+  <img src="img/heranca-vs-composicao.svg" alt="Diagrama comparando herança, em que EBook é um Book, e composição, em que User tem vários Books" style="width:100%;max-width:800px">
 </section>
 
 <section>

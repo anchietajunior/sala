@@ -27,7 +27,7 @@ servir: dist
 	cd dist && python3 -m http.server 8000
 
 # Monta o que vai para o ar: o jogo na raiz e, de cada aula, só a apresentação e suas imagens (nada de .md, .c ou gabaritos);
-# de Programação Avançada vão para dist/programacao-avancada só os slides e suas imagens, sem roteiros, sem .md e sem as fontes .svg.
+# de Programação Avançada vão para dist/programacao-avancada os slides e suas imagens, sem o plano e a bibliografia (.md).
 dist: all
 	rm -rf dist
 	mkdir -p dist/modelos
@@ -40,7 +40,7 @@ dist: all
 		cp $$apresentacao dist/$$aula/; \
 		if [ -d $(AULAS_DE_AED)/$$aula/img ]; then rsync -a --exclude .DS_Store $(AULAS_DE_AED)/$$aula/img dist/$$aula/; fi; \
 	done
-	rsync -a --exclude .DS_Store --exclude '*.svg' --exclude roteiro.html --exclude '*.md' $(AULAS_DE_PROGRAMACAO_AVANCADA)/ dist/programacao-avancada/
+	rsync -a --exclude .DS_Store --exclude '*.md' $(AULAS_DE_PROGRAMACAO_AVANCADA)/ dist/programacao-avancada/
 
 deploy: dist
 	npx -y wrangler@4 deploy

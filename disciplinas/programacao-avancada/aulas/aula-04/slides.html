@@ -76,7 +76,7 @@
 
 <section>
   <h2>Tabela, linha, coluna, chave</h2>
-  <img src="img/modelo-relacional.png" alt="Diagrama de uma tabela relacional: colunas tipadas, linhas como registros, chave primária e constraint NOT NULL" style="width:100%;max-width:740px">
+  <img src="img/modelo-relacional.svg" alt="Diagrama de uma tabela relacional: colunas tipadas, linhas como registros, chave primária e constraint NOT NULL" style="width:100%;max-width:740px">
   <p class="cite">CODD, E. F. — A Relational Model of Data for Large Shared Data Banks, CACM, 1970</p>
 </section>
 
@@ -190,7 +190,7 @@ DESCRIBE books;
 
 <section>
   <h2>O ORM é um tradutor</h2>
-  <img src="img/orm-tradutor.png" alt="Diagrama do ORM traduzindo entre a classe Book em Python e a tabela books no MySQL" style="width:100%;max-width:740px">
+  <img src="img/orm-tradutor.svg" alt="Diagrama do ORM traduzindo entre a classe Book em Python e a tabela books no MySQL" style="width:100%;max-width:740px">
   <p class="cite">FOWLER, M. — Patterns of Enterprise Application Architecture, 2002 · docs.sqlalchemy.org</p>
 </section>
 
@@ -433,7 +433,7 @@ def create_book(book: BookCreate, session: Session = Depends(get_session)):
 
 <section>
   <h2>A requisição completa</h2>
-  <img src="img/fluxo-create-book.png" alt="Fluxo do POST /api/books: JSON validado pelo BookCreate, gravado pela Session no MySQL, devolvido pelo BookRead sem o created_at" style="width:100%;max-width:760px">
+  <img src="img/fluxo-create-book.svg" alt="Fluxo do POST /api/books: JSON validado pelo BookCreate, gravado pela Session no MySQL, devolvido pelo BookRead sem o created_at" style="width:100%;max-width:760px">
 </section>
 
 <section>

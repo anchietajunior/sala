@@ -114,7 +114,7 @@ enquanto verdadeiro:
 
 <section>
   <h2>Concorrência é estrutura; paralelismo é execução</h2>
-  <img src="img/concorrencia-paralelismo.png" alt="À esquerda, uma linha do tempo única com as tarefas A, B e C intercaladas em fatias; à direita, três linhas do tempo simultâneas, uma para cada tarefa" style="width:100%;max-width:740px">
+  <img src="img/concorrencia-paralelismo.svg" alt="À esquerda, uma linha do tempo única com as tarefas A, B e C intercaladas em fatias; à direita, três linhas do tempo simultâneas, uma para cada tarefa" style="width:100%;max-width:740px">
   <p class="cite">PIKE, R. Concurrency Is Not Parallelism, 2012 · DIJKSTRA, E. W. Cooperating Sequential Processes, 1965</p>
 </section>
 
@@ -178,7 +178,7 @@ enquanto verdadeiro:
 
 <section>
   <h2>Numa tarefa I/O-bound, o processador fica ocioso</h2>
-  <img src="img/io-vs-cpu.png" alt="Duas linhas do tempo: a tarefa CPU-bound com a barra preenchida quase inteira; a tarefa I/O-bound com dois pequenos trechos de trabalho separados por uma longa faixa de espera" style="width:100%;max-width:740px">
+  <img src="img/io-vs-cpu.svg" alt="Duas linhas do tempo: a tarefa CPU-bound com a barra preenchida quase inteira; a tarefa I/O-bound com dois pequenos trechos de trabalho separados por uma longa faixa de espera" style="width:100%;max-width:740px">
   <p style="font-size:.62em">É esse tempo ocioso que a concorrência aproveita.</p>
 </section>
 
@@ -228,7 +228,7 @@ enquanto verdadeiro:
 
 <section>
   <h2>Três respostas ao problema de Kegel</h2>
-  <img src="img/tres-arquiteturas.png" alt="Três colunas: processos separados com memória própria; threads dentro de um processo compartilhando memória; um event loop único atendendo várias conexões" style="width:100%;max-width:740px">
+  <img src="img/tres-arquiteturas.svg" alt="Três colunas: processos separados com memória própria; threads dentro de um processo compartilhando memória; um event loop único atendendo várias conexões" style="width:100%;max-width:740px">
 </section>
 
 <section>
@@ -305,7 +305,7 @@ enquanto verdadeiro:
 
 <section>
   <h2>No FastAPI, a declaração decide onde a rota roda</h2>
-  <img src="img/fastapi-execucao.png" alt="Diagrama: a requisição chega ao uvicorn com seu event loop; funções async def permanecem no loop, funções def são enviadas para a threadpool do AnyIO com 40 threads; ambos os caminhos convergem para a resposta" style="width:100%;max-width:740px">
+  <img src="img/fastapi-execucao.svg" alt="Diagrama: a requisição chega ao uvicorn com seu event loop; funções async def permanecem no loop, funções def são enviadas para a threadpool do AnyIO com 40 threads; ambos os caminhos convergem para a resposta" style="width:100%;max-width:740px">
   <p class="cite">Documentação oficial do FastAPI — fastapi.tiangolo.com · AnyIO — anyio.readthedocs.io</p>
 </section>
 
