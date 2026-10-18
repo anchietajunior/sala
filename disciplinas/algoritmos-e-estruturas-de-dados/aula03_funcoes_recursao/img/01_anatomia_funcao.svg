@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    A anatomia de uma função
+  </text>
+
+  <!-- chave que agrupa a assinatura -->
+  <line x1="192" y1="112" x2="512" y2="112" stroke="#5a7a9a" stroke-width="1.5"/>
+  <line x1="192" y1="112" x2="192" y2="122" stroke="#5a7a9a" stroke-width="1.5"/>
+  <line x1="512" y1="112" x2="512" y2="122" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="352" y="104" text-anchor="middle" font-size="14" font-style="italic" fill="#5a7a9a">
+    assinatura — o contrato da função
+  </text>
+
+  <!-- a linha da assinatura, em tres partes -->
+  <text x="192" y="145" font-size="24" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int</text>
+  <text x="250" y="145" font-size="24" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">soma</text>
+  <text x="310" y="145" font-size="24" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">(int a, int b)</text>
+  <text x="520" y="145" font-size="24" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">{</text>
+
+  <!-- barras sob cada parte -->
+  <rect x="192" y="157" width="44" height="3" fill="#2c5d8a"/>
+  <rect x="250" y="157" width="58" height="3" fill="#5a7a9a"/>
+  <rect x="310" y="157" width="202" height="3" fill="#2c5d8a"/>
+
+  <!-- conectores + rotulos -->
+  <line x1="214" y1="160" x2="214" y2="174" stroke="#5a7a9a" stroke-width="1.2"/>
+  <text x="214" y="190" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">
+    tipo de retorno
+  </text>
+
+  <line x1="411" y1="160" x2="411" y2="174" stroke="#5a7a9a" stroke-width="1.2"/>
+  <text x="411" y="190" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">
+    lista de parâmetros
+  </text>
+
+  <line x1="279" y1="160" x2="279" y2="202" stroke="#5a7a9a" stroke-width="1.2"/>
+  <text x="279" y="218" text-anchor="middle" font-size="14" font-weight="600" fill="#5a7a9a">
+    nome
+  </text>
+
+  <!-- corpo -->
+  <rect x="192" y="245" width="320" height="80" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="225" y="293" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">return a + b;</text>
+  <text x="192" y="350" font-size="24" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">}</text>
+
+  <path d="M 528 285 L 519 285" fill="none" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="521,280 512,285 521,290" fill="#2c5d8a"/>
+  <text x="536" y="290" font-size="14" font-weight="600" fill="#2c5d8a">corpo — os passos</text>
+
+  <line x1="100" y1="365" x2="600" y2="365" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="387" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    o return devolve o valor e encerra a função na hora
+  </text>
+</svg>

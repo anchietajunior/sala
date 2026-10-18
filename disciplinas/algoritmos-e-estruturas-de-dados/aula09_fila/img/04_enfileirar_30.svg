@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 280"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="450" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 4 — enfileirar(30)
+  </text>
+
+  <!-- inicio -->
+  <text x="170" y="170" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">inicio →</text>
+
+  <!-- Nó 1: 10 -->
+  <rect x="180" y="140" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="260" y1="140" x2="260" y2="200" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="220" y="178" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="280" cy="170" r="3.5" fill="#2c5d8a"/>
+
+  <line x1="300" y1="170" x2="350" y2="170" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="345,165 357,170 345,175" fill="#2c5d8a"/>
+
+  <!-- Nó 2: 20 -->
+  <rect x="360" y="140" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="440" y1="140" x2="440" y2="200" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="400" y="178" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="460" cy="170" r="3.5" fill="#2c5d8a"/>
+
+  <line x1="480" y1="170" x2="530" y2="170" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="525,165 537,170 525,175" fill="#2c5d8a"/>
+
+  <!-- Nó 3: 30 (novo, destacado com borda mais forte) -->
+  <rect x="540" y="140" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <line x1="620" y1="140" x2="620" y2="200" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="580" y="178" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="640" y="178" text-anchor="middle" font-size="14" fill="#888">∅</text>
+
+  <!-- fim -->
+  <text x="690" y="170" font-size="14" font-weight="600" fill="#2c5d8a">← fim</text>
+
+  <!-- Nota -->
+  <line x1="100" y1="240" x2="800" y2="240" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="450" y="265" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    fim avança novamente · inicio segue em [10] · enfileirar é sempre O(1)
+  </text>
+</svg>

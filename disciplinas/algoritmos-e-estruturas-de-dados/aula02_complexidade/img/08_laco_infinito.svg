@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 300"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- vermelho sobrio #b54040 usado apenas para sinalizar o caminho defeituoso -->
+
+  <text x="350" y="34" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Sem o + 1, o trecho nunca encolhe</text>
+
+  <text x="350" y="60" text-anchor="middle" font-size="14" fill="#5a7a9a">
+    trecho [6..7] · meio = (6 + 7) / 2 = 6
+  </text>
+
+  <!-- volta 1 -->
+  <text x="150" y="96" text-anchor="middle" font-size="13" font-weight="600" fill="#5a7a9a">volta 1</text>
+  <rect x="98"  y="106" width="104" height="52" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="3" rx="4"/>
+  <rect x="206" y="106" width="104" height="52" fill="#e8f0f8" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="19" fill="#222">
+    <text x="150" y="139" text-anchor="middle" font-weight="700" fill="#2c5d8a">55</text>
+    <text x="258" y="139" text-anchor="middle">68</text>
+  </g>
+  <g font-size="13" fill="#888">
+    <text x="150" y="178" text-anchor="middle" font-weight="700" fill="#2c5d8a">6 ← meio</text>
+    <text x="258" y="178" text-anchor="middle">7</text>
+  </g>
+
+  <!-- seta: inicio = meio -->
+  <path d="M 330 132 L 386 132" fill="none" stroke="#b54040" stroke-width="2.5"/>
+  <polygon points="381,127 394,132 381,137" fill="#b54040"/>
+  <text x="360" y="120" text-anchor="middle" font-size="13" font-weight="600" fill="#b54040"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">inicio = meio</text>
+
+  <!-- volta 2 — identica -->
+  <text x="470" y="96" text-anchor="middle" font-size="13" font-weight="600" fill="#5a7a9a">volta 2</text>
+  <rect x="418" y="106" width="104" height="52" fill="#cfe0f2" stroke="#2c5d8a" stroke-width="3" rx="4"/>
+  <rect x="526" y="106" width="104" height="52" fill="#e8f0f8" stroke="#5a7a9a" stroke-width="2" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="19" fill="#222">
+    <text x="470" y="139" text-anchor="middle" font-weight="700" fill="#2c5d8a">55</text>
+    <text x="578" y="139" text-anchor="middle">68</text>
+  </g>
+  <g font-size="13" fill="#888">
+    <text x="470" y="178" text-anchor="middle" font-weight="700" fill="#2c5d8a">6 ← meio</text>
+    <text x="578" y="178" text-anchor="middle">7</text>
+  </g>
+
+  <!-- seta circular de retorno: o estado se repete -->
+  <path d="M 630 132 C 664 132, 664 214, 596 214 L 160 214 C 96 214, 96 168, 118 160"
+        fill="none" stroke="#b54040" stroke-width="2.5" stroke-dasharray="7,5"/>
+  <polygon points="123,155 112,164 126,167" fill="#b54040"/>
+  <text x="375" y="236" text-anchor="middle" font-size="14" font-weight="600" fill="#b54040">
+    estado idêntico ao anterior — repete para sempre
+  </text>
+
+  <line x1="100" y1="258" x2="600" y2="258" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="284" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">
+    com inicio = meio + 1 o trecho vira [7..7] e o laço termina na volta seguinte
+  </text>
+</svg>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="400" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Acesso M[1][2]: dois saltos numerados
+  </text>
+
+  <!-- ===== M->dados ===== -->
+  <text x="80" y="116" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    M-&gt;dados
+  </text>
+  <rect x="20" y="130" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="80" y="167" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    endereco do vetor
+  </text>
+  <circle cx="140" cy="160" r="4" fill="#2c5d8a"/>
+
+  <!-- Seta inicial (cinza, ja conhecida) -->
+  <path d="M 140 160 L 225 160" fill="none" stroke="#cfd6dd" stroke-width="2"/>
+  <polygon points="220,155 233,160 220,165" fill="#cfd6dd"/>
+
+  <!-- ===== Vetor externo ===== -->
+  <text x="290" y="80" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Vetor externo
+  </text>
+
+  <!-- slot 0 -->
+  <text x="225" y="118" text-anchor="end" font-size="12" fill="#888">[0]</text>
+  <rect x="235" y="95" width="110" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="280" y="126" text-anchor="middle" font-size="13" fill="#888">linha 0</text>
+  <circle cx="345" cy="120" r="3" fill="#cfd6dd"/>
+
+  <!-- slot 1 — destaque -->
+  <text x="225" y="198" text-anchor="end" font-size="12" fill="#888">[1]</text>
+  <rect x="235" y="175" width="110" height="50" fill="#ffe5cc" stroke="#d97706" stroke-width="2.5" rx="4"/>
+  <text x="280" y="206" text-anchor="middle" font-size="13" fill="#222" font-weight="600">linha 1</text>
+  <circle cx="345" cy="200" r="4" fill="#d97706"/>
+
+  <!-- slot 2 -->
+  <text x="225" y="278" text-anchor="end" font-size="12" fill="#888">[2]</text>
+  <rect x="235" y="255" width="110" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="280" y="286" text-anchor="middle" font-size="13" fill="#888">linha 2</text>
+  <circle cx="345" cy="280" r="3" fill="#cfd6dd"/>
+
+  <!-- SALTO 1 — M[1]: do ponteiro externo para o slot [1] -->
+  <path d="M 140 190 Q 180 230 225 215" fill="none" stroke="#d97706" stroke-width="3"/>
+  <polygon points="220,209 233,216 222,222" fill="#d97706"/>
+  <circle cx="170" cy="240" r="14" fill="#d97706"/>
+  <text x="170" y="245" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">1</text>
+
+  <!-- SALTO 2 — M[1][2]: do slot [1] para a coluna [2] da linha 1 -->
+  <path d="M 345 200 L 535 200" fill="none" stroke="#d97706" stroke-width="3"/>
+  <polygon points="530,195 543,200 530,205" fill="#d97706"/>
+  <circle cx="400" cy="170" r="14" fill="#d97706"/>
+  <text x="400" y="175" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">2</text>
+
+  <!-- ===== Linhas ===== -->
+  <text x="590" y="80" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Linhas — vetores de 4 inteiros
+  </text>
+
+  <!-- Linha 0 — apagada -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" opacity="0.45">
+    <text x="455" y="89" text-anchor="middle" font-size="11" fill="#888">[0]</text>
+    <text x="510" y="89" text-anchor="middle" font-size="11" fill="#888">[1]</text>
+    <text x="565" y="89" text-anchor="middle" font-size="11" fill="#888">[2]</text>
+    <text x="620" y="89" text-anchor="middle" font-size="11" fill="#888">[3]</text>
+    <rect x="435" y="95" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="460" y="126" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="490" y="95" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="515" y="126" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="545" y="95" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="570" y="126" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="600" y="95" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="625" y="126" text-anchor="middle" font-size="18" fill="#888">0</text>
+  </g>
+
+  <!-- Linha 1 — destaque -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <text x="455" y="169" text-anchor="middle" font-size="11" fill="#888">[0]</text>
+    <text x="510" y="169" text-anchor="middle" font-size="11" fill="#888">[1]</text>
+    <text x="565" y="169" text-anchor="middle" font-size="11" fill="#d97706" font-weight="700">[2]</text>
+    <text x="620" y="169" text-anchor="middle" font-size="11" fill="#888">[3]</text>
+    <rect x="435" y="175" width="50" height="50" fill="#fff5e8" stroke="#d97706" stroke-width="2" rx="3"/>
+    <text x="460" y="206" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="490" y="175" width="50" height="50" fill="#fff5e8" stroke="#d97706" stroke-width="2" rx="3"/>
+    <text x="515" y="206" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="545" y="175" width="50" height="50" fill="#ffe5cc" stroke="#d97706" stroke-width="2.5" rx="3"/>
+    <text x="570" y="206" text-anchor="middle" font-size="20" fill="#d97706" font-weight="700">0</text>
+    <rect x="600" y="175" width="50" height="50" fill="#fff5e8" stroke="#d97706" stroke-width="2" rx="3"/>
+    <text x="625" y="206" text-anchor="middle" font-size="18" fill="#222">0</text>
+  </g>
+
+  <!-- Linha 2 — apagada -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" opacity="0.45">
+    <rect x="435" y="255" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="460" y="286" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="490" y="255" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="515" y="286" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="545" y="255" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="570" y="286" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="600" y="255" width="50" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="3"/>
+    <text x="625" y="286" text-anchor="middle" font-size="18" fill="#888">0</text>
+  </g>
+
+  <!-- Legenda -->
+  <line x1="80" y1="355" x2="720" y2="355" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="400" y="378" text-anchor="middle" font-size="14" fill="#222">
+    <tspan font-weight="700" fill="#d97706">Salto 1</tspan>: vai ate o ponteiro da
+    <tspan font-weight="700">linha 1</tspan>. <tspan font-weight="700" fill="#d97706">Salto 2</tspan>: vai ate a
+    <tspan font-weight="700">coluna 2</tspan> dessa linha.
+  </text>
+</svg>

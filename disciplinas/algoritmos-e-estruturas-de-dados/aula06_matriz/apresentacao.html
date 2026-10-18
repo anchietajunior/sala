@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 06 — Matriz | Algoritmos e Estruturas de dados</title>
+
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong { color: var(--cor-destaque); }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li { margin-bottom: 0.25em; }
+        .reveal .resposta code { font-size: 0.95em; }
+        .reveal .resposta pre { font-size: 0.85em; margin: 0.3em 0; }
+
+        .reveal .destaque { color: var(--cor-destaque); font-weight: 600; }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table { font-size: 0.7em; margin: 0 auto; }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- ============================================================ -->
+        <!-- CAPA INSTITUCIONAL                                            -->
+        <!-- ============================================================ -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- TÍTULO DA AULA                                                -->
+        <!-- ============================================================ -->
+        <section>
+            <p class="titulo-bloco">Aula 06</p>
+            <h1>Matriz</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                Grade retangular · acesso direto por par de índices · ponteiro duplo em C
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — primeira estrutura da disciplina
+                baseada em <strong>alocação dinâmica bidimensional</strong>.
+            </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO)              -->
+        <!-- ============================================================ -->
+        <section>
+
+            <!-- ===== CAMADA 1 — INTRODUÇÃO ===== -->
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>Introdução</h3>
+                <p style="text-align: left;">
+                    Pense numa <strong>planilha do Excel</strong>: linhas numeradas
+                    verticalmente, colunas identificadas por letras. Para falar de uma
+                    célula você combina os dois — "C7", "A1", "F12".
+                </p>
+                <blockquote>
+                    Linhas × colunas, acesso por par de coordenadas. Essa é a ideia central
+                    da estrutura chamada <strong>matriz</strong>.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Mesma ideia, outro cenário</h3>
+                <p style="text-align: left;">
+                    Pense num <strong>tabuleiro de xadrez</strong>: oito linhas, oito colunas.
+                    Cada casa identificada por letra (coluna) e número (linha): "e4", "a1", "h8".
+                </p>
+                <p style="text-align: left; margin-top: 1em;">
+                    Em ambos os casos, a estrutura é a mesma: uma <strong>grade retangular</strong>
+                    em que cada célula carrega um valor e é acessada por <strong>dois índices</strong>.
+                </p>
+            </section>
+
+            <!-- ===== CAMADA 2 — DEFINIÇÃO INFORMAL ===== -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>O que é, formalmente</h3>
+                <p style="text-align: left;">
+                    Uma <strong>matriz</strong> (em inglês, <em>matrix</em>) é uma estrutura
+                    <strong>bidimensional</strong> que armazena valores em uma grade
+                    <strong>L linhas × C colunas</strong>.
+                </p>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    Cada célula é identificada por <strong>(i, j)</strong>, com
+                    <code>0 ≤ i &lt; L</code> e <code>0 ≤ j &lt; C</code>.
+                </p>
+                <p class="nota-rodape">Tenenbaum, cap. 1 — Vetores e Arrays · Sedgewick, Parte 1</p>
+            </section>
+
+            <section>
+                <h3>As operações da matriz</h3>
+                <p style="text-align: left;">
+                    Para essa grade ser útil, oferecemos um conjunto pequeno e direto de operações:
+                </p>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li><strong>criar</strong> (<em>create</em>) — produz matriz L × C zerada.</li>
+                    <li><strong>definir</strong> (<em>set</em>) — atribui valor à célula (i, j).</li>
+                    <li><strong>obter</strong> (<em>get</em>) — devolve o valor da célula (i, j).</li>
+                    <li><strong>linhas</strong>, <strong>colunas</strong> — dimensões.</li>
+                    <li><strong>destruir</strong> (<em>destroy</em>) — libera a memória.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O que a matriz NÃO oferece</h3>
+                <p style="text-align: left;">
+                    Diferente de filas, pilhas e listas:
+                </p>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>Não há <strong>"primeiro" nem "último"</strong> — (0,0) não é mais especial que (2,3).</li>
+                    <li>Não cresce dinamicamente — dimensões <strong>fixas</strong> após criar.</li>
+                    <li>Não preserva ordem de inserção — gravar (1,1) antes ou depois de (0,0) dá o mesmo estado.</li>
+                </ul>
+                <blockquote>
+                    Em troca, ganhamos algo novo: <strong>acesso direto em O(1)</strong> por par
+                    de coordenadas.
+                </blockquote>
+            </section>
+
+            <!-- ===== EDDY — citação inline da bibliografia ===== -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, no Tenenbaum a matriz aparece já no capítulo 1, junto
+                            com vetores — porque ela é apenas um <strong>array de arrays</strong>.
+                            É a primeira estrutura "composta" do livro: você ainda não viu
+                            ponteiros encadeados, mas já vê duas camadas de indexação.
+                            <cite>Tenenbaum, cap. 1 — Vetores e Arrays</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CAMADA 3 — PROPRIEDADES E COMPORTAMENTO ===== -->
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>Não é uma estrutura encadeada</h3>
+                <p style="text-align: left;">
+                    Diferente da lista, fila, pilha e árvore — a matriz <strong>não tem nós</strong>
+                    nem ponteiros entre células.
+                </p>
+                <blockquote>
+                    A matriz é uma <strong>estrutura de acesso direto</strong>: dado (i, j),
+                    chegamos à célula em tempo constante, <strong>sem percorrer</strong> nada.
+                </blockquote>
+            </section>
+
+            <!-- ===== DEGRAU 1 — ponteiro simples (revisão) ===== -->
+            <section>
+                <h3>Degrau 1 — ponteiro simples (lembrando)</h3>
+                <p style="text-align: left;">
+                    <code>int*</code> guarda o <strong>endereço</strong> de um <code>int</code>.
+                </p>
+                <img class="diagrama" src="img/00a_ponteiro_simples.svg"
+                     alt="Variável p do tipo int* aponta para variável x do tipo int que vale 42">
+            </section>
+
+            <section>
+                <h3>Como ler através do ponteiro</h3>
+                <p style="text-align: left;">
+                    <code>*p</code> significa "vai até o endereço guardado em <code>p</code>
+                    e me devolve o que está lá".
+                </p>
+                <blockquote>
+                    Se <code>p</code> guarda o endereço de <code>x</code>,
+                    então <code>*p</code> é <strong>o próprio <code>x</code></strong>.
+                </blockquote>
+            </section>
+
+            <!-- ===== DEGRAU 2 — ponteiro duplo ===== -->
+            <section>
+                <h3>Degrau 2 — ponteiro de ponteiro</h3>
+                <p style="text-align: left;">
+                    Um <code>int*</code> também é uma <strong>variável</strong> — e toda variável
+                    tem um endereço.
+                </p>
+                <blockquote>
+                    <code>int**</code> guarda o endereço de um <code>int*</code>.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Dois saltos até chegar no número</h3>
+                <img class="diagrama" src="img/00b_ponteiro_duplo.svg"
+                     alt="pp (int**) aponta para p (int*), que aponta para x (int) com valor 42">
+                <p class="nota-rodape">
+                    <code>**pp</code> = "siga o primeiro endereço, depois o segundo, devolva o que está lá".
+                </p>
+            </section>
+
+            <section>
+                <h3>Para que servem dois saltos?</h3>
+                <p style="text-align: left;">
+                    Se um <code>int*</code> pode apontar para um <strong>vetor de inteiros</strong>...
+                </p>
+                <blockquote>
+                    ...então um <code>int**</code> pode apontar para um
+                    <strong>vetor de <code>int*</code></strong> — um vetor cujos
+                    elementos são, eles mesmos, vetores. É essa a matriz.
+                </blockquote>
+            </section>
+
+            <!-- ===== NOVOS SLIDES — Memória: estática, dinâmica linear e ponteiro duplo ===== -->
+
+            <section>
+                <h3>Como o C guarda <code>int m[3][4]</code> na memória</h3>
+                <p style="text-align: left;">
+                    Antes de chegar ao ponteiro duplo, vamos ver como o C arruma uma matriz
+                    <strong>estática</strong>. Não existe grade — existem inteiros enfileirados.
+                </p>
+<pre style="font-size: 0.42em;"><code class="language-text">posição:  0     1     2     3     4     5     6     7     8     9    10    11
+valor:  m[0][0] m[0][1] m[0][2] m[0][3] m[1][0] m[1][1] m[1][2] m[1][3] m[2][0] m[2][1] m[2][2] m[2][3]
+        └──── linha 0 ─────────┘ └──── linha 1 ─────────┘ └──── linha 2 ─────────┘</code></pre>
+                <p class="nota-rodape">
+                    Um único <strong>bloco contíguo</strong> de 12 inteiros, ordem
+                    <em>row-major</em>: linha por linha.
+                </p>
+            </section>
+
+            <section>
+                <h3><code>m[i][j]</code> na matriz estática</h3>
+                <p style="text-align: left;">
+                    Não há "vetor de ponteiros" aqui — o compilador apenas caminha pela
+                    fila de inteiros até a posição certa. Quem traduz <code>[i][j]</code>
+                    para a célula correta é ele, automaticamente.
+                </p>
+                <blockquote>
+                    Consequência visual: <code>m[0][3]</code> e <code>m[1][0]</code> são
+                    <strong>vizinhos</strong> na memória — posições <code>3</code> e <code>4</code>
+                    da fila, mesmo estando em "linhas diferentes" na grade lógica.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>E quando <code>L</code> e <code>C</code> só são conhecidos em runtime?</h3>
+                <p style="text-align: left;">
+                    Se o usuário decide as dimensões durante a execução, a estática não serve:
+                    o compilador não consegue reservar memória sem saber os números antes.
+                </p>
+                <blockquote>
+                    Solução: pedir memória <strong>durante a execução</strong> do programa com
+                    <code>malloc</code>, já com as dimensões em mãos.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Alternativa 1 — um único bloco enfileirado</h3>
+                <p style="text-align: left;">
+                    A ideia mais econômica: <strong>um único <code>malloc</code></strong> que
+                    devolve todos os inteiros enfileirados, exatamente como no caso estático.
+                </p>
+                <blockquote>
+                    Rápido e barato — mas perdemos a sintaxe <code>m[i][j]</code>. O que
+                    recebemos é um vetor de <strong>uma dimensão só</strong>; quem chama
+                    precisa calcular a posição da célula <em>na mão</em> a cada acesso.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Alternativa 2 — vetor de ponteiros para linhas</h3>
+                <p style="text-align: left;">
+                    Para reaver a sintaxe <code>m[i][j]</code>, mudamos a representação:
+                    <strong>L blocos separados</strong>, um por linha, mais um vetor extra de
+                    <code>L</code> ponteiros.
+                </p>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li>O vetor externo guarda <strong>L endereços de linhas</strong>.</li>
+                    <li>Cada linha é um <code>malloc</code> independente — vive em algum lugar da memória.</li>
+                    <li>Tipo do ponteiro externo: <code>int**</code>.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Como isso fica na memória</h3>
+                <p style="text-align: left;">
+                    Cada componente da indireção tem <strong>nome e endereço próprios</strong> —
+                    nada está escondido em fórmula.
+                </p>
+<pre style="font-size: 0.45em;"><code class="language-text">  M-&gt;dados                vetor externo (L ponteiros)
+  ┌──────┐             ┌─────────┬─────────┬─────────┐
+  │ int**│────────────▶│  int*   │  int*   │  int*   │
+  └──────┘             └────┬────┴────┬────┴────┬────┘
+                            │         │         │
+                            ▼         ▼         ▼
+                       ┌────────┐ ┌────────┐ ┌────────┐
+                       │ linha 0│ │ linha 1│ │ linha 2│
+                       └────────┘ └────────┘ └────────┘
+                       (cada uma em algum lugar da memória)</code></pre>
+            </section>
+
+            <section>
+                <h3>A consequência: vizinhança lógica ≠ vizinhança física</h3>
+                <p style="text-align: left;">
+                    Comparando com a estática, muda quem é "vizinho de quem" em memória.
+                </p>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li><strong>Estática / linearizada</strong>: <code>m[0][3]</code> e
+                        <code>m[1][0]</code> são vizinhos — endereços consecutivos.</li>
+                    <li><strong>Ponteiro duplo</strong>: <code>linha[0]</code> e <code>linha[1]</code>
+                        podem estar em <strong>lugares totalmente diferentes</strong> da memória.</li>
+                </ul>
+                <blockquote>
+                    O vetor de ponteiros é quem <strong>reconstrói</strong> a estrutura
+                    bidimensional logicamente.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Por que <strong>esta</strong> aula escolhe <code>int**</code></h3>
+                <p style="text-align: left;">
+                    A versão linearizada é mais econômica. A estática é mais simples. Mas
+                    apenas o <code>int**</code> nos dá uma coisa:
+                </p>
+                <blockquote>
+                    Cada parte da indireção tem <strong>nome e endereço próprios</strong> na memória —
+                    o ponteiro externo, o vetor de ponteiros, cada linha.
+                </blockquote>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    O preço é pequeno: <code>L+1</code> mallocs e <code>L</code> ponteiros extras.
+                    O ganho é didático — o ponteiro duplo fica <strong>visível</strong>.
+                </p>
+            </section>
+
+            <!-- ===== DEGRAU 3 — matriz ===== -->
+            <section>
+                <h3>Degrau 3 — assim a matriz é montada</h3>
+                <p style="text-align: left;">
+                    <strong>Um <code>int**</code></strong> aponta para um vetor de
+                    <code>L</code> ponteiros; <strong>cada ponteiro</strong> aponta para
+                    uma linha de <code>C</code> inteiros.
+                </p>
+                <img class="diagrama" src="img/01b_camada2_linhas.svg"
+                     alt="M->dados aponta para vetor externo com 3 slots; cada slot aponta para uma linha de 4 inteiros">
+            </section>
+
+            <section>
+                <h3>O que <code>M[i][j]</code> faz por baixo</h3>
+                <p style="text-align: left;">São os <strong>dois saltos</strong> do degrau anterior, agora com nome:</p>
+                <ol style="text-align: left; font-size: 0.85em;">
+                    <li><code>M[i]</code> — pula <code>i</code> casas no vetor externo → <strong>linha <em>i</em></strong>.</li>
+                    <li><code>M[i][j]</code> — pula <code>j</code> casas dentro da linha → <strong>número final</strong>.</li>
+                </ol>
+                <p class="nota-rodape">
+                    Sempre <strong>O(1)</strong>: duas somas e duas leituras de memória.
+                </p>
+            </section>
+
+            <section>
+                <h3>Operações em detalhe — custos</h3>
+                <p style="text-align: left;">
+                    Quatro operações, custos casados com a estrutura do ponteiro duplo.
+                </p>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li><strong><code>criar</code></strong>: <code>L + 1</code> mallocs · custo <strong>O(L · C)</strong> dominado pela zeragem.</li>
+                    <li><strong><code>obter</code></strong> / <strong><code>definir</code></strong>: duas indireções, sem laço · <strong>O(1)</strong>.</li>
+                    <li><strong><code>destruir</code></strong>: <code>L</code> frees de linha + 1 do vetor + 1 da struct · <strong>O(L)</strong>.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Invariantes — o que precisa valer sempre</h3>
+                <p style="text-align: left;">
+                    Cada operação tem o dever de manter estas três coisas verdadeiras, do
+                    <code>criar</code> ao <code>destruir</code>.
+                </p>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li><strong>Dimensões fixas</strong>: <code>L</code> e <code>C</code> não mudam. Não há "redimensionar" — quem precisar de mais espaço, cria nova e copia.</li>
+                    <li><strong>Cobertura válida</strong>: todo <code>(i, j)</code> dentro dos limites aponta para memória alocada — vetor externo com <code>L</code> slots, cada um com <code>C</code> inteiros.</li>
+                    <li><strong>Limites são do cliente</strong>: C não checa — acesso fora é comportamento indefinido.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Por que a ordem na destruição importa</h3>
+                <p style="text-align: left;">
+                    Liberar o vetor externo antes das linhas seria o erro clássico.
+                </p>
+                <blockquote>
+                    Depois de <code>free(M-&gt;dados)</code>, os endereços das linhas
+                    <strong>somem</strong> — perdemos o mapa para chegar até elas, e cada uma
+                    fica vazada para sempre.
+                </blockquote>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    Ordem correta: <strong>linhas → vetor externo → struct</strong>.
+                </p>
+            </section>
+
+            <!-- ===== CAMADA 4 — DEFINIÇÃO FORMAL ===== -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>TAD Matriz — assinaturas</h3>
+                <p style="text-align: left;">
+                    Agora formalizamos o <strong>contrato observável</strong> da matriz —
+                    operações com tipos de entrada/saída, sem mencionar a representação interna.
+                </p>
+<pre><code class="language-text">TAD Matriz de Inteiros
+
+  Tipos: Matriz, Inteiro
+
+  Operacoes:
+    criar(Inteiro L, Inteiro C)                    -> Matriz
+    linhas(Matriz)                                 -> Inteiro
+    colunas(Matriz)                                -> Inteiro
+    definir(Matriz, Inteiro i, Inteiro j, Inteiro v) -> Matriz
+    obter(Matriz, Inteiro i, Inteiro j)            -> Inteiro</code></pre>
+            </section>
+
+            <section>
+                <h3>Os axiomas</h3>
+                <p style="text-align: left;">
+                    Os 5 axiomas abaixo definem o comportamento observável. Cada um pode ser
+                    aplicado mecanicamente em <em>traces</em> manuais.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li><strong>A1.</strong> <code>linhas(criar(L, C)) = L</code></li>
+                    <li><strong>A2.</strong> <code>colunas(criar(L, C)) = C</code></li>
+                    <li><strong>A3.</strong> <code>obter(criar(L, C), i, j) = 0</code> — nasce zerada</li>
+                    <li><strong>A4.</strong> <code>obter(definir(M, i, j, v), i, j) = v</code> — o que gravo, leio</li>
+                    <li><strong>A5.</strong> <code>obter(definir(M, i, j, v), i', j') = obter(M, i', j')</code>
+                        se <code>(i,j) ≠ (i',j')</code> — efeito local</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O coração do TAD</h3>
+                <p style="text-align: left;">
+                    Entre os 5 axiomas, dois capturam a essência da matriz como
+                    <strong>coleção de células independentes</strong>:
+                </p>
+                <blockquote>
+                    <strong>A4</strong> — "o que gravei, leio de volta".<br>
+                    <strong>A5</strong> — "gravar numa célula não mexe nas outras".
+                </blockquote>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    A3 acrescenta a garantia de estado inicial: matriz recém-criada vem
+                    <strong>zerada</strong>.
+                </p>
+            </section>
+
+            <section>
+                <h3>Representação interna como tupla</h3>
+                <p style="text-align: left;">
+                    Agora descemos da abstração para o concreto: como representamos uma matriz
+                    em C com ponteiro duplo.
+                </p>
+                <p style="text-align: center; font-family: ui-monospace, monospace; font-size: 1.1em;">
+                    M = (L, C, dados)
+                </p>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li><strong>L ∈ ℕ⁺</strong> — número de linhas.</li>
+                    <li><strong>C ∈ ℕ⁺</strong> — número de colunas.</li>
+                    <li><strong>dados</strong> — função <code>(i, j) → ℤ</code>; em C, um <code>int**</code>.</li>
+                </ul>
+            </section>
+
+            <!-- ===== CAMADA 5 — ANÁLISE DE COMPLEXIDADE ===== -->
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>Comparando custos das três representações</h3>
+                <p style="text-align: left;">
+                    Já vimos as três opções; agora colocamos os custos lado a lado.
+                    A coluna em <strong>negrito</strong> é a desta aula.
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operação</th>
+                            <th><code>int m[L][C]</code></th>
+                            <th><strong><code>int**</code></strong></th>
+                            <th><code>int* m</code> linear</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>criar</code></td><td>O(1) (pilha)</td><td><strong>O(L · C)</strong></td><td>O(L · C) + 1 malloc</td></tr>
+                        <tr><td><code>obter(i,j)</code></td><td>O(1)</td><td><strong>O(1)</strong></td><td>O(1)</td></tr>
+                        <tr><td><code>definir(i,j,v)</code></td><td>O(1)</td><td><strong>O(1)</strong></td><td>O(1)</td></tr>
+                        <tr><td><code>destruir</code></td><td>auto</td><td><strong>O(L) + L+1 frees</strong></td><td>1 free</td></tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape">Acesso é O(1) nas três · o que muda é o custo de criação e o modelo de alocação</p>
+            </section>
+
+            <section>
+                <h3>O(1) no acesso — mas não pelo mesmo trabalho</h3>
+                <p style="text-align: left;">
+                    Todas as três fazem <code>obter</code> em tempo constante. O número de passos é fixo,
+                    mas o trabalho concreto difere.
+                </p>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li><strong>Estática</strong>: o compilador caminha até a célula — <strong>uma</strong> leitura.</li>
+                    <li><strong>Linearizada</strong>: o mesmo caminhar, mas quem precisa "saber o caminho" é o cliente.</li>
+                    <li><strong><code>int**</code></strong>: <strong>duas</strong> leituras — primeiro o ponteiro da linha, depois o inteiro.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Por que <code>criar</code> é mais caro em <code>int**</code></h3>
+                <p style="text-align: left;">
+                    Os <code>L * C</code> inteiros precisam ser zerados em qualquer versão dinâmica.
+                    O que muda é o <strong>número de chamadas a <code>malloc</code></strong>.
+                </p>
+                <blockquote>
+                    Linearizada: <strong>1 malloc</strong> grande. <code>int**</code>: <strong>L + 1
+                    mallocs</strong> (vetor externo + uma por linha).
+                </blockquote>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    Em matrizes muito grandes, fazer mil chamadas em vez de uma cobra um preço perceptível.
+                </p>
+            </section>
+
+            <section>
+                <h3>E o espaço extra?</h3>
+                <p style="text-align: left;">
+                    A versão <code>int**</code> gasta <code>L</code> ponteiros além dos
+                    <code>L*C</code> inteiros — o vetor externo.
+                </p>
+                <blockquote>
+                    Em máquina 64 bits: 8 bytes por ponteiro. Matriz 1000 × 1000 paga
+                    <strong>8 KB extras</strong> sobre ~4 MB de inteiros — pequeno em proporção.
+                </blockquote>
+                <p style="text-align: left; margin-top: 0.6em;">
+                    Conta mais quando há <strong>muitas matrizes pequenas</strong>.
+                </p>
+            </section>
+
+            <!-- ===== CAMADA 6 — CONEXÕES E VARIANTES ===== -->
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde a matriz aparece em computação</h3>
+                <p style="text-align: left;">
+                    A matriz é a representação universal para qualquer dado que se organiza em grade —
+                    aparece em praticamente toda subárea da computação.
+                </p>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li><strong>Imagens digitais</strong> — cada pixel é uma célula; foto colorida é 3 matrizes (R, G, B).</li>
+                    <li><strong>Grafos</strong> — matriz de adjacência, célula <code>(i,j)</code> = 1 se há aresta. Aula futura.</li>
+                    <li><strong>ML e álgebra linear</strong> — entradas e pesos de redes neurais. NumPy, BLAS, LAPACK existem para isso.</li>
+                    <li><strong>Computação gráfica</strong> — rotação, escala, translação são multiplicações de matrizes.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Variantes que economizam memória</h3>
+                <p style="text-align: left;">
+                    Quando os dados têm <strong>estrutura especial</strong>, a matriz cheia
+                    desperdiça espaço. Surgem variantes específicas — uma por cenário.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li><strong>Esparsa</strong>: maioria das células é zero (ex.: grafo com poucos arcos). Guarda só as não-nulas.</li>
+                    <li><strong>Triangular</strong>: matriz simétrica (ex.: distância entre cidades). Metade é redundante — guarda só o triângulo.</li>
+                    <li><strong>Jagged</strong>: linhas com tamanhos diferentes (ex.: notas por aluno). <code>int**</code> suporta nativamente.</li>
+                </ul>
+            </section>
+
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA                                -->
+        <!-- ============================================================ -->
+        <section>
+
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Ciclo de vida completo de uma matriz 3 × 4:<br>
+                    criação · três <code>definir</code> · uma leitura · destruição.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1a — primeiro o "esqueleto"</h3>
+                <p style="text-align: left;">
+                    <code>M-&gt;dados</code> guarda o endereço de um <strong>vetor de
+                    ponteiros</strong> — um slot para cada linha.
+                </p>
+                <img class="diagrama" src="img/01a_camada1_vetor_externo.svg"
+                     alt="M->dados aponta para um vetor externo com três slots: um para cada linha. As linhas ainda não existem">
+            </section>
+
+            <section>
+                <h3>Passo 1b — agora as linhas</h3>
+                <p style="text-align: left;">
+                    Cada slot do vetor externo aponta para <strong>uma linha</strong> —
+                    e cada linha é um vetor de 4 inteiros zerados.
+                </p>
+                <img class="diagrama" src="img/01b_camada2_linhas.svg"
+                     alt="Mesmo vetor externo, mas agora cada slot aponta para uma linha de 4 inteiros zerados">
+            </section>
+
+            <section>
+                <h3>Passo 1c — como <code>M[1][2]</code> chega no número</h3>
+                <p style="text-align: left;">
+                    São <strong>dois saltos</strong>: primeiro até a linha 1, depois até a coluna 2.
+                </p>
+                <img class="diagrama" src="img/01c_acesso_M_1_2.svg"
+                     alt="Acesso M[1][2] destacado em laranja: salto 1 vai do ponteiro externo ao slot da linha 1; salto 2 vai do slot até a coluna 2 dessa linha">
+            </section>
+
+            <section>
+                <h3>Passo 2 — matriz_criar(3, 4)</h3>
+                <p style="text-align: left;">
+                    Duas camadas de alocação: vetor externo com 3 ponteiros, depois cada
+                    linha com 4 inteiros zerados. <strong>4 mallocs no total</strong>.
+                </p>
+                <img class="diagrama" src="img/02_criar.svg"
+                     alt="Matriz 3x4 recém-criada, todas as células zeradas">
+            </section>
+
+            <section>
+                <h3>Passo 3 — matriz_definir(0, 1, 7)</h3>
+                <p style="text-align: left;">
+                    Atribuição direta: <code>M-&gt;dados[0][1] = 7</code>. Apenas a célula
+                    (0, 1) muda — as demais permanecem zeradas (axioma A5).
+                </p>
+                <img class="diagrama" src="img/03_definir_0_1_7.svg"
+                     alt="Matriz 3x4 com a célula (0,1) destacada com valor 7">
+            </section>
+
+            <section>
+                <h3>Passo 4 — matriz_definir(2, 3, 5)</h3>
+                <p style="text-align: left;">
+                    Linha e coluna diferentes da anterior. Cada linha é um
+                    <strong>bloco de memória independente</strong> alcançado pelo ponteiro
+                    externo — não há "deslocamento" como em vetor linear.
+                </p>
+                <img class="diagrama" src="img/04_definir_2_3_5.svg"
+                     alt="Matriz 3x4 com (0,1)=7 e (2,3)=5">
+            </section>
+
+            <section>
+                <h3>Passo 5 — matriz_definir(1, 0, 9)</h3>
+                <p style="text-align: left;">
+                    Linha do meio, primeira coluna. Mesmo padrão: duas indireções, custo O(1).
+                </p>
+                <img class="diagrama" src="img/05_definir_1_0_9.svg"
+                     alt="Matriz 3x4 com (0,1)=7, (1,0)=9 e (2,3)=5">
+            </section>
+
+            <section>
+                <h3>Passo 6 — matriz_obter(2, 3)</h3>
+                <p style="text-align: left;">
+                    Devolve <code>5</code>. <strong>Não altera a matriz</strong> — só lê.
+                    Caixa pontilhada no diagrama sinaliza leitura.
+                </p>
+                <img class="diagrama" src="img/06_obter_2_3.svg"
+                     alt="Matriz com a célula (2,3) destacada como leitura, valor 5">
+            </section>
+
+            <section>
+                <h3>Passo 7 — matriz_destruir(M)</h3>
+                <p style="text-align: left;">
+                    Liberação na <strong>ordem inversa</strong> da alocação: cada linha,
+                    depois o vetor externo, depois a struct. Inverter causa vazamento.
+                </p>
+                <img class="diagrama" src="img/07_destruir.svg"
+                     alt="Sequência de liberação: 1, 2, 3 nas linhas; 4 no vetor externo; 5 na struct">
+            </section>
+
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR                                  -->
+        <!-- ============================================================ -->
+        <section>
+
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que matriz existe?</h2>
+            </section>
+
+            <section>
+                <h3>Como o Instagram aplica um filtro?</h3>
+                <blockquote>
+                    "Como o Instagram aplica um filtro 'preto e branco' em uma foto?"
+                </blockquote>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Uma fotografia digital é uma <strong>matriz de pixels</strong>. Em
+                    1920 × 1080, são <strong>mais de 2 milhões de células</strong>.
+                </p>
+            </section>
+
+            <section>
+                <h3>O algoritmo do filtro</h3>
+                <p style="text-align: left;">
+                    Aplicar tons de cinza é literal:
+                </p>
+                <ol style="text-align: left; font-size: 0.82em;">
+                    <li>Percorrer cada célula <code>(i, j)</code> da matriz.</li>
+                    <li>Calcular uma intensidade única a partir das componentes RGB.</li>
+                    <li>Gravar esse valor numa nova matriz de saída.</li>
+                </ol>
+                <blockquote>
+                    Cada acesso é <strong>O(1)</strong> graças ao par de índices direto.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>O mesmo padrão fora do Instagram</h3>
+                <p style="text-align: left;">
+                    Sempre que dados se organizam em grade com acesso por par de coordenadas,
+                    a matriz reaparece — em contextos bem diferentes da foto.
+                </p>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li><strong>Recomendação</strong> — matriz <em>usuários × itens</em> com a nota dada.</li>
+                    <li><strong>Mapas de calor</strong> — cada célula vira um pixel colorido proporcional ao valor.</li>
+                    <li><strong>Tabuleiros</strong> — xadrez, sudoku: estado do jogo em grade.</li>
+                </ul>
+                <p class="nota-rodape">A lista completa de aplicações aparece na Camada 6 da seção anterior.</p>
+            </section>
+
+            <!-- ===== EDDY — aplicação real ===== -->
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, quando vocês usam o NumPy em Python — biblioteca padrão de
+                            ciência de dados — todo <code>ndarray</code> de duas dimensões é
+                            uma matriz por baixo dos panos, escrita em C. A diferença é que
+                            o NumPy usa representação <strong>linearizada</strong> com um único
+                            bloco contíguo, exatamente a terceira opção que vocês viram na
+                            tabela de complexidade. A ergonomia <code>m[i][j]</code> em Python
+                            é só uma camada de açúcar sintático em cima disso.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 4 — ANALOGIAS                                           -->
+        <!-- ============================================================ -->
+        <section>
+
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>1. Tabuleiro de xadrez</h3>
+                <p style="text-align: left;">
+                    O tabuleiro mostra como cada propriedade da matriz se traduz num
+                    objeto que todo mundo conhece.
+                </p>
+                <p style="text-align: left;">
+                    Matriz 8 × 8. Cada casa tem coordenada: letras <code>a</code>–<code>h</code>
+                    (colunas) e números <code>1</code>–<code>8</code> (linhas). "Cavalo para f3"
+                    vira <code>matriz_definir(tabuleiro, 2, 5, cavalo)</code>.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>Tamanho <strong>fixo</strong> durante toda a partida.</li>
+                    <li>Sem ordem implícita entre as casas.</li>
+                    <li>Acesso <strong>direto</strong>, sem percorrer.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>2. Mapa de poltronas do cinema</h3>
+                <p style="text-align: left;">
+                    Fileiras (letras) × poltronas (números). Sua "fileira G, poltrona 12"
+                    é o par <code>(6, 11)</code>.
+                </p>
+                <ul style="text-align: left; font-size: 0.8em;">
+                    <li>Cada célula: <code>0</code> (livre), <code>1</code> (ocupada), <code>2</code> (sua).</li>
+                    <li>Comprar poltrona = <code>matriz_definir(sala, fileira, num, 1)</code>.</li>
+                    <li>Consultar disponibilidade = <code>matriz_obter(...)</code>.</li>
+                    <li>Dimensões da sala <strong>não mudam</strong> durante a sessão.</li>
+                </ul>
+            </section>
+
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 5 — CÓDIGO EM C                                         -->
+        <!-- ============================================================ -->
+        <section>
+
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Código em C</h2>
+            </section>
+
+            <section>
+                <h3>Um único arquivo: <code>matriz.c</code></h3>
+                <p style="text-align: left;">
+                    Tudo vive num só arquivo — <code>#include</code>s, struct, funções da TAD
+                    e <code>main()</code> demonstrativa. A separação <code>.h</code> / <code>.c</code>
+                    fica para a aula futura sobre organização de projetos.
+                </p>
+                <blockquote>
+                    A simplicidade é didática: dá pra ler o programa todo, de cima a baixo, em
+                    um único <em>scroll</em>.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Includes e struct</h3>
+                <p style="text-align: left;">
+                    A struct guarda as dimensões e o <strong>ponteiro duplo</strong> que
+                    organiza o acesso.
+                </p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// A matriz guarda suas dimensoes e um ponteiro duplo "dados".
+// O ponteiro duplo aponta para um vetor de ponteiros — cada
+// posicao desse vetor aponta para uma linha (vetor de inteiros).
+typedef struct Matriz {
+    int linhas;
+    int colunas;
+    int** dados;
+} Matriz;</code></pre>
+            </section>
+
+            <section>
+                <h3><code>matriz_criar</code> — alocação em duas camadas</h3>
+                <p style="text-align: left;">
+                    Primeiro o vetor externo, depois cada linha. Total: <code>L + 1</code> mallocs.
+                </p>
+<pre><code class="language-c">Matriz* matriz_criar(int linhas, int colunas) {
+    Matriz* m = malloc(sizeof(Matriz));
+    if (m == NULL) { printf("erro: memoria insuficiente\n"); exit(1); }
+    m-&gt;linhas = linhas;
+    m-&gt;colunas = colunas;
+
+    // Camada 1: vetor externo com "linhas" ponteiros para int.
+    m-&gt;dados = malloc(linhas * sizeof(int*));
+    if (m-&gt;dados == NULL) { printf("erro: memoria insuficiente\n"); exit(1); }
+
+    // Camada 2: cada linha aloca "colunas" inteiros e zera tudo.
+    for (int i = 0; i &lt; linhas; i++) {
+        m-&gt;dados[i] = malloc(colunas * sizeof(int));
+        if (m-&gt;dados[i] == NULL) { printf("erro: memoria insuficiente\n"); exit(1); }
+        for (int j = 0; j &lt; colunas; j++) {
+            m-&gt;dados[i][j] = 0;
+        }
+    }
+    return m;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3><code>definir</code> e <code>obter</code> — O(1) puro</h3>
+                <p style="text-align: left;">
+                    Atribuição direta e leitura direta. As pré-condições de índice ficam em
+                    comentário; quem chama é responsável.
+                </p>
+<pre><code class="language-c">// Pre-condicao: 0 &lt;= i &lt; linhas e 0 &lt;= j &lt; colunas.
+// m-&gt;dados[i][j] equivale a *(*(m-&gt;dados + i) + j):
+// duas indirecoes — primeiro a linha i, depois a coluna j.
+void matriz_definir(Matriz* m, int i, int j, int valor) {
+    m-&gt;dados[i][j] = valor;
+}
+
+int matriz_obter(Matriz* m, int i, int j) {
+    return m-&gt;dados[i][j];
+}
+
+int matriz_linhas(Matriz* m)  { return m-&gt;linhas;  }
+int matriz_colunas(Matriz* m) { return m-&gt;colunas; }</code></pre>
+            </section>
+
+            <section>
+                <h3><code>matriz_destruir</code> — ordem importa</h3>
+                <p style="text-align: left;">
+                    Liberar na ordem inversa da alocação: cada linha, depois o vetor externo,
+                    depois a struct.
+                </p>
+<pre><code class="language-c">// Libera TODA a memoria da matriz, na ordem inversa da alocacao:
+//   1) cada linha (free de cada vetor de inteiros);
+//   2) o vetor externo de ponteiros;
+//   3) a propria struct Matriz.
+void matriz_destruir(Matriz* m) {
+    for (int i = 0; i &lt; m-&gt;linhas; i++) {
+        free(m-&gt;dados[i]);
+    }
+    free(m-&gt;dados);
+    free(m);
+}</code></pre>
+            </section>
+
+            <!-- ===== EDDY — ferramenta para detectar o erro ===== -->
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, se um dia vocês <strong>esquecerem</strong> a ordem em
+                            <code>matriz_destruir</code> ou esquecerem o <code>free</code> de
+                            alguma linha, existe uma ferramenta clássica que pega isso na hora:
+                            o <code>valgrind</code>. Rodando <code>valgrind ./matriz_demo</code>,
+                            ele aponta cada bloco que ficou vazado e o número da linha onde foi
+                            alocado. É indispensável quando se trabalha com <code>malloc</code> manual.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3><code>main()</code> — demonstração do ciclo</h3>
+                <p style="text-align: left;">
+                    Exercita criar, definir, imprimir, obter e destruir — exatamente o ciclo
+                    do bloco 2.
+                </p>
+<pre><code class="language-c">int main(void) {
+    Matriz* m = matriz_criar(3, 4);
+
+    printf("Matriz recem criada (3x4, zerada):\n");
+    matriz_imprimir(m);
+
+    matriz_definir(m, 0, 1, 7);
+    matriz_definir(m, 2, 3, 5);
+    matriz_definir(m, 1, 0, 9);
+
+    printf("\nApos definir (0,1)=7, (2,3)=5 e (1,0)=9:\n");
+    matriz_imprimir(m);
+
+    printf("\nObter (2,3) = %d (a matriz nao muda)\n",
+           matriz_obter(m, 2, 3));
+
+    printf("\nDimensoes: %d linhas x %d colunas\n",
+           matriz_linhas(m), matriz_colunas(m));
+
+    matriz_destruir(m);
+    return 0;
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Compilando e rodando</h3>
+                <p style="text-align: left;">
+                    Tudo num arquivo só — linha de compilação direta. Saída esperada abaixo
+                    é a <strong>prova empírica</strong> dos axiomas.
+                </p>
+<pre><code class="language-bash">gcc -Wall -Wextra -o matriz_demo matriz.c
+./matriz_demo</code></pre>
+<pre><code class="language-text">Matriz recem criada (3x4, zerada):
+[   0   0   0   0 ]
+[   0   0   0   0 ]
+[   0   0   0   0 ]
+
+Apos definir (0,1)=7, (2,3)=5 e (1,0)=9:
+[   0   7   0   0 ]
+[   9   0   0   0 ]
+[   0   0   0   5 ]
+
+Obter (2,3) = 5 (a matriz nao muda)
+
+Dimensoes: 3 linhas x 4 colunas</code></pre>
+            </section>
+
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 6 — EXERCÍCIOS                                          -->
+        <!-- ============================================================ -->
+        <section>
+
+            <section>
+                <p class="titulo-bloco">Bloco 6</p>
+                <h2>Exercícios práticos</h2>
+                <p style="font-size: 0.75em; color: #666;">
+                    Cinco exercícios em ordem crescente de dificuldade — o último é o desafio.
+                </p>
+            </section>
+
+            <section>
+                <h3>Exercício 1 — trace na mão</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Matriz 3 × 3 recém-criada (zerada). Execute em ordem e diga o estado
+                    após cada operação:
+                </p>
+                <ol style="text-align: left; font-size: 0.78em;">
+                    <li><code>matriz_definir(m, 0, 0, 1)</code></li>
+                    <li><code>matriz_definir(m, 1, 1, 2)</code></li>
+                    <li><code>matriz_definir(m, 2, 2, 3)</code></li>
+                    <li><code>matriz_obter(m, 1, 1)</code></li>
+                    <li><code>matriz_definir(m, 0, 2, 4)</code></li>
+                </ol>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ul>
+                        <li>Estado final: linha 0 = <code>[1, 0, 4]</code> · linha 1 = <code>[0, 2, 0]</code> · linha 2 = <code>[0, 0, 3]</code></li>
+                        <li><code>matriz_obter(m, 1, 1)</code> devolve <code>2</code> sem alterar a matriz (axioma A4).</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 2 — matriz identidade</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Adicione <code>matriz_preencher_identidade(Matriz* m)</code>: célula
+                    <code>(i, j)</code> recebe <code>1</code> se <code>i == j</code>, senão <code>0</code>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">void matriz_preencher_identidade(Matriz* m) {
+    for (int i = 0; i &lt; m-&gt;linhas; i++) {
+        for (int j = 0; j &lt; m-&gt;colunas; j++) {
+            m-&gt;dados[i][j] = (i == j) ? 1 : 0;
+        }
+    }
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 3 — soma de matrizes</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    <code>Matriz* matriz_somar(Matriz* a, Matriz* b)</code>: devolve <strong>nova
+                    matriz</strong> <code>c</code> com <code>c[i][j] = a[i][j] + b[i][j]</code>.
+                    Assuma dimensões iguais. Destruir <code>a</code> ou <code>b</code> não pode afetar <code>c</code>.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">Matriz* matriz_somar(Matriz* a, Matriz* b) {
+    Matriz* c = matriz_criar(a-&gt;linhas, a-&gt;colunas);
+    for (int i = 0; i &lt; a-&gt;linhas; i++) {
+        for (int j = 0; j &lt; a-&gt;colunas; j++) {
+            c-&gt;dados[i][j] = a-&gt;dados[i][j] + b-&gt;dados[i][j];
+        }
+    }
+    return c;
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 4 — transposta</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    <code>Matriz* matriz_transposta(Matriz* m)</code>: devolve nova matriz
+                    com <code>t[j][i] = m[i][j]</code>. Se <code>m</code> é L × C, então
+                    <code>t</code> é C × L.
+                </p>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">Matriz* matriz_transposta(Matriz* m) {
+    Matriz* t = matriz_criar(m-&gt;colunas, m-&gt;linhas);
+    for (int i = 0; i &lt; m-&gt;linhas; i++) {
+        for (int j = 0; j &lt; m-&gt;colunas; j++) {
+            t-&gt;dados[j][i] = m-&gt;dados[i][j];
+        }
+    }
+    return t;
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- ===== EDDY — provocação antes do desafio ===== -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, o próximo é o desafio. Antes de ver a solução, tente
+                            <strong>desenhar no caderno</strong> uma matriz 3 × 3 com valores
+                            <code>1</code>–<code>9</code> e marcar para onde cada célula vai
+                            após uma rotação 90° horária. A fórmula da resposta vai aparecer
+                            sozinha.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 5 — desafio: rotação 90°</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    <code>Matriz* matriz_rotacionar_90(Matriz* m)</code>: nova matriz <code>r</code>
+                    correspondente a <code>m</code> rotacionada 90° no sentido horário.
+                    Fórmula: <code>r[j][L - 1 - i] = m[i][j]</code>.
+                </p>
+<pre style="font-size: 0.42em;"><code class="language-text">m = [[1,2,3],         r = [[7,4,1],
+     [4,5,6],              [8,5,2],
+     [7,8,9]]              [9,6,3]]</code></pre>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+<pre><code class="language-c">Matriz* matriz_rotacionar_90(Matriz* m) {
+    int L = m-&gt;linhas;
+    int C = m-&gt;colunas;
+    Matriz* r = matriz_criar(C, L);
+    for (int i = 0; i &lt; L; i++) {
+        for (int j = 0; j &lt; C; j++) {
+            r-&gt;dados[j][L - 1 - i] = m-&gt;dados[i][j];
+        }
+    }
+    return r;
+}</code></pre>
+                </div>
+            </section>
+
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 7 — REFERÊNCIAS                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.75em;">
+                <li><strong>Tenenbaum, Langsam &amp; Augenstein</strong> —
+                    <em>Estruturas de Dados Usando C</em>. Capítulo 1 —
+                    <em>"Introdução às Estruturas de Dados"</em>, seções sobre arrays
+                    e arrays multidimensionais.</li>
+                <li><strong>Sedgewick, R.</strong> —
+                    <em>Algoritmos em C</em>, Parte 1, capítulo inicial sobre estruturas
+                    elementares de dados — arrays bidimensionais.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.7em; color: #666;">
+                <li><strong>CLRS</strong> — apêndice de notação matricial; algoritmos matriciais (Strassen).</li>
+                <li><strong>Ziviani, N.</strong> — vetores e matrizes em PT-BR.</li>
+                <li><strong>Kernighan &amp; Ritchie</strong> (K&amp;R) — cap. 5,
+                    <em>Pointers and Arrays</em> — referência canônica sobre ponteiros e <code>int**</code>.</li>
+            </ul>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- ENCERRAMENTO                                                  -->
+        <!-- ============================================================ -->
+        <section class="capa">
+            <h1>Fim — Matriz</h1>
+            <h2>Próxima aula em breve</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Vimos a primeira estrutura bidimensional da disciplina — e o ponteiro duplo
+                deixou de ser misterioso. As próximas aulas voltam às estruturas encadeadas
+                e usarão a matriz novamente como matriz de adjacência em grafos.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

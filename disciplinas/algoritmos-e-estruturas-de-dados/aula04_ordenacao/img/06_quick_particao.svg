@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 370"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Quick sort — o particionamento</text>
+
+  <text x="623" y="66" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">pivô</text>
+  <text x="48" y="88" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">antes</text>
+
+  <rect x="48" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="125" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="202" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="279" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="356" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="433" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="510" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="587" y="96" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#222">
+    <text x="84" y="128" text-anchor="middle" font-weight="400" fill="#222">7</text>
+    <text x="161" y="128" text-anchor="middle" font-weight="400" fill="#222">3</text>
+    <text x="238" y="128" text-anchor="middle" font-weight="400" fill="#222">9</text>
+    <text x="315" y="128" text-anchor="middle" font-weight="400" fill="#222">1</text>
+    <text x="392" y="128" text-anchor="middle" font-weight="400" fill="#222">5</text>
+    <text x="469" y="128" text-anchor="middle" font-weight="400" fill="#222">8</text>
+    <text x="546" y="128" text-anchor="middle" font-weight="400" fill="#222">2</text>
+    <text x="623" y="128" text-anchor="middle" font-weight="700" fill="#222">6</text>
+  </g>
+
+  <path d="M 350 154 L 350 174" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="344,173 350,186 356,173" fill="#2c5d8a"/>
+  <text x="48" y="208" text-anchor="start" font-size="13" fill="#5a7a9a" font-weight="400">depois de uma única varredura</text>
+
+  <rect x="48" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="125" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="202" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="279" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="356" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3.5" rx="4"/>
+  <rect x="433" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="510" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="587" y="216" width="72" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#222">
+    <text x="84" y="248" text-anchor="middle" font-weight="400" fill="#222">3</text>
+    <text x="161" y="248" text-anchor="middle" font-weight="400" fill="#222">1</text>
+    <text x="238" y="248" text-anchor="middle" font-weight="400" fill="#222">5</text>
+    <text x="315" y="248" text-anchor="middle" font-weight="400" fill="#222">2</text>
+    <text x="392" y="248" text-anchor="middle" font-weight="700" fill="#222">6</text>
+    <text x="469" y="248" text-anchor="middle" font-weight="400" fill="#222">8</text>
+    <text x="546" y="248" text-anchor="middle" font-weight="400" fill="#222">7</text>
+    <text x="623" y="248" text-anchor="middle" font-weight="400" fill="#222">9</text>
+  </g>
+
+  <path d="M 48 276 L 48 284 L 351 284 L 351 276" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="200" y="302" text-anchor="middle" font-size="12.5" fill="#5a7a9a">menores ou iguais a 6</text>
+
+  <path d="M 356 276 L 356 284 L 428 284 L 428 276" fill="none" stroke="#2c5d8a" stroke-width="1.5"/>
+  <text x="392" y="302" text-anchor="middle" font-size="12.5" fill="#2c5d8a">posição definitiva</text>
+
+  <path d="M 433 276 L 433 284 L 659 284 L 659 276" fill="none" stroke="#5a7a9a" stroke-width="1.5"/>
+  <text x="546" y="302" text-anchor="middle" font-size="12.5" fill="#5a7a9a">maiores que 6</text>
+
+  <line x1="60" y1="320" x2="640" y2="320" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="346" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">o pivô está no lugar final dele · nenhuma chamada seguinte o toca</text>
+</svg>

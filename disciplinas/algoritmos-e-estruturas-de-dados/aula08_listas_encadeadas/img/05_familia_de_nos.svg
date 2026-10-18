@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- Título -->
+  <text x="450" y="34" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Família de nós — mesmo conceito, ligações diferentes
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    O campo de dado é equivalente em todos. O que muda é o número e o significado dos campos de ligação.
+  </text>
+
+  <!-- ===== Cell 1 (top-left): Lista simples ===== -->
+  <text x="225" y="100" text-anchor="middle" font-size="15" font-weight="600" fill="#2c5d8a">
+    Lista simplesmente encadeada
+  </text>
+  <text x="225" y="120" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    1 ponteiro: proximo
+  </text>
+  <rect x="135" y="145" width="180" height="65" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="245" y1="145" x2="245" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="190" y="165" text-anchor="middle" font-size="11" fill="#888">valor</text>
+  <text x="280" y="165" text-anchor="middle" font-size="11" fill="#888">prox</text>
+  <text x="190" y="195" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">v</text>
+  <circle cx="280" cy="185" r="4" fill="#2c5d8a"/>
+  <line x1="285" y1="185" x2="335" y2="185" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="330,180 342,185 330,190" fill="#2c5d8a"/>
+  <text x="385" y="190" text-anchor="middle" font-size="11" fill="#888" font-style="italic">próximo nó</text>
+
+  <!-- ===== Cell 2 (top-right): Lista dupla ===== -->
+  <text x="675" y="100" text-anchor="middle" font-size="15" font-weight="600" fill="#2c5d8a">
+    Lista duplamente encadeada
+  </text>
+  <text x="675" y="120" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    2 ponteiros: anterior, proximo
+  </text>
+  <text x="510" y="190" text-anchor="middle" font-size="11" fill="#888" font-style="italic">anterior</text>
+  <line x1="555" y1="185" x2="585" y2="185" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="585,180 573,185 585,190" fill="#2c5d8a"/>
+  <rect x="590" y="145" width="220" height="65" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="640" y1="145" x2="640" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="760" y1="145" x2="760" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="615" y="165" text-anchor="middle" font-size="11" fill="#888">ant</text>
+  <text x="700" y="165" text-anchor="middle" font-size="11" fill="#888">valor</text>
+  <text x="785" y="165" text-anchor="middle" font-size="11" fill="#888">prox</text>
+  <circle cx="615" cy="185" r="4" fill="#2c5d8a"/>
+  <text x="700" y="195" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">v</text>
+  <circle cx="785" cy="185" r="4" fill="#2c5d8a"/>
+  <line x1="790" y1="185" x2="820" y2="185" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="815,180 827,185 815,190" fill="#2c5d8a"/>
+  <text x="855" y="190" text-anchor="middle" font-size="11" fill="#888" font-style="italic">próximo</text>
+
+  <!-- ===== Cell 3 (bottom-left): Árvore binária ===== -->
+  <text x="225" y="280" text-anchor="middle" font-size="15" font-weight="600" fill="#2c5d8a">
+    Árvore binária
+  </text>
+  <text x="225" y="300" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    2 ponteiros: esquerda, direita
+  </text>
+  <rect x="135" y="325" width="180" height="65" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="170" y1="325" x2="170" y2="390" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="280" y1="325" x2="280" y2="390" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="152" y="345" text-anchor="middle" font-size="11" fill="#888">esq</text>
+  <text x="225" y="345" text-anchor="middle" font-size="11" fill="#888">valor</text>
+  <text x="297" y="345" text-anchor="middle" font-size="11" fill="#888">dir</text>
+  <circle cx="152" cy="368" r="4" fill="#2c5d8a"/>
+  <text x="225" y="378" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">v</text>
+  <circle cx="297" cy="368" r="4" fill="#2c5d8a"/>
+  <line x1="152" y1="372" x2="125" y2="438" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="120,430 124,442 132,435" fill="#2c5d8a"/>
+  <line x1="297" y1="372" x2="325" y2="438" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="320,435 328,442 332,430" fill="#2c5d8a"/>
+  <text x="118" y="462" text-anchor="middle" font-size="11" fill="#888" font-style="italic">subárvore esq.</text>
+  <text x="332" y="462" text-anchor="middle" font-size="11" fill="#888" font-style="italic">subárvore dir.</text>
+
+  <!-- ===== Cell 4 (bottom-right): Grafo (lista de adjacência) ===== -->
+  <text x="675" y="280" text-anchor="middle" font-size="15" font-weight="600" fill="#2c5d8a">
+    Grafo (lista de adjacência)
+  </text>
+  <text x="675" y="300" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    1 ponteiro para a lista de vizinhos
+  </text>
+  <rect x="555" y="325" width="200" height="65" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="640" y1="325" x2="640" y2="390" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="595" y="345" text-anchor="middle" font-size="11" fill="#888">valor</text>
+  <text x="700" y="345" text-anchor="middle" font-size="11" fill="#888">vizinhos</text>
+  <text x="595" y="378" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">v</text>
+  <circle cx="700" cy="368" r="4" fill="#2c5d8a"/>
+  <line x1="705" y1="368" x2="755" y2="368" stroke="#2c5d8a" stroke-width="2"/>
+  <polygon points="750,363 762,368 750,373" fill="#2c5d8a"/>
+  <!-- mini lista de adjacência -->
+  <rect x="765" y="350" width="55" height="38" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="1.5" rx="3"/>
+  <text x="792" y="374" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">v1</text>
+  <line x1="822" y1="368" x2="848" y2="368" stroke="#5a7a9a" stroke-width="1.5"/>
+  <polygon points="844,364 854,368 844,372" fill="#5a7a9a"/>
+  <text x="118" y="430" text-anchor="middle" font-size="11" fill="#888" font-style="italic"></text>
+
+  <!-- Legenda inferior -->
+  <line x1="100" y1="495" x2="800" y2="495" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="450" y="518" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Ao entender o nó da lista simples, o aluno já tem o mapa mental para os demais — basta ajustar as ligações.
+  </text>
+</svg>

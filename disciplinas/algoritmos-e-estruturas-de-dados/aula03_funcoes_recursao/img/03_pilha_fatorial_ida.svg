@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    fatorial(4) — a ida: as chamadas se empilham
+  </text>
+
+  <!-- chamada 1 -->
+  <rect x="130" y="80" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="148" y="111" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(4)</text>
+  <path d="M 160 130 L 180 144" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="176,140 185,148 174,148" fill="#5a7a9a"/>
+  <text x="203" y="141" font-size="12" fill="#5a7a9a" font-style="italic">chama</text>
+
+  <!-- chamada 2 -->
+  <rect x="155" y="148" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="173" y="179" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(3)</text>
+  <path d="M 185 198 L 205 212" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="201,208 210,216 199,216" fill="#5a7a9a"/>
+
+  <!-- chamada 3 -->
+  <rect x="180" y="216" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="198" y="247" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(2)</text>
+  <path d="M 210 266 L 230 280" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="226,276 235,284 224,284" fill="#5a7a9a"/>
+
+  <!-- chamada 4 -->
+  <rect x="205" y="284" width="280" height="48" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="223" y="315" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(1)</text>
+  <path d="M 235 334 L 255 348" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="251,344 260,352 249,352" fill="#5a7a9a"/>
+
+  <!-- chamada 5: caso base -->
+  <rect x="230" y="352" width="280" height="48" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="248" y="383" font-size="17" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">fatorial(0)</text>
+
+  <!-- anotacoes laterais -->
+  <text x="530" y="205" font-size="13" font-weight="600" fill="#5a7a9a">5 chamadas</text>
+  <text x="530" y="224" font-size="13" font-weight="600" fill="#5a7a9a">pendentes ao</text>
+  <text x="530" y="243" font-size="13" font-weight="600" fill="#5a7a9a">mesmo tempo</text>
+
+  <text x="530" y="374" font-size="13" font-weight="600" fill="#2c5d8a">caso base</text>
+  <text x="530" y="393" font-size="13" fill="#2c5d8a">responde 1 sozinha</text>
+
+  <line x1="80" y1="430" x2="620" y2="430" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="453" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    na ida nenhuma conta é feita — o problema só é repartido
+  </text>
+  <text x="350" y="474" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    cada chamada guarda o seu próprio n: 4, 3, 2, 1 e 0
+  </text>
+</svg>

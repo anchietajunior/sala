@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 390"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Merge sort — a divisão até os elementos isolados</text>
+
+  <rect x="135" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="161" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">7</text>
+  <rect x="189" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="215" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">3</text>
+  <rect x="243" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="269" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">9</text>
+  <rect x="297" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="323" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">1</text>
+  <rect x="351" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="377" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">5</text>
+  <rect x="405" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="431" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">8</text>
+  <rect x="459" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="485" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">2</text>
+  <rect x="513" y="58" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="539" y="84" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">6</text>
+
+  <rect x="119" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="145" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">7</text>
+  <rect x="173" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="199" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">3</text>
+  <rect x="227" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="253" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">9</text>
+  <rect x="281" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="307" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">1</text>
+  <rect x="367" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="393" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">5</text>
+  <rect x="421" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="447" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">8</text>
+  <rect x="475" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="501" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">2</text>
+  <rect x="529" y="136" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="555" y="162" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">6</text>
+
+  <rect x="105" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="131" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">7</text>
+  <rect x="159" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="185" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">3</text>
+  <rect x="233" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="259" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">9</text>
+  <rect x="287" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="313" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">1</text>
+  <rect x="361" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="387" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">5</text>
+  <rect x="415" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="441" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">8</text>
+  <rect x="489" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="515" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">2</text>
+  <rect x="543" y="214" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="569" y="240" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">6</text>
+
+  <rect x="93" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="119" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">7</text>
+  <rect x="159" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="185" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">3</text>
+  <rect x="225" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="251" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">9</text>
+  <rect x="291" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="317" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">1</text>
+  <rect x="357" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="383" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">5</text>
+  <rect x="423" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="449" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">8</text>
+  <rect x="489" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="515" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">2</text>
+  <rect x="555" y="292" width="52" height="38" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="581" y="318" text-anchor="middle" font-size="17" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#222">6</text>
+
+  <path d="M 350 96 L 226 136" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 350 96 L 474 136" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 226 174 L 158 214" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 226 174 L 286 214" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 474 174 L 414 214" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 474 174 L 542 214" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 158 252 L 119 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 158 252 L 185 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 286 252 L 251 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 286 252 L 317 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 414 252 L 383 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 414 252 L 449 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 542 252 L 515 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+  <path d="M 542 252 L 581 292" fill="none" stroke="#cfd6dd" stroke-width="1.5"/>
+
+  <line x1="60" y1="346" x2="640" y2="346" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="372" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">três divisões até sobrarem trechos de um elemento · nenhuma comparação ainda</text>
+</svg>

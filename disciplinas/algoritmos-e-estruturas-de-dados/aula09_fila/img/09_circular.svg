@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="450" y="35" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Fila circular — um único ponteiro externo (Tenenbaum, cap. 5)
+  </text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    fim aponta para o último; o início é fim→proximo
+  </text>
+
+  <!-- Nó 10 (frente, acessada via fim->proximo) -->
+  <rect x="180" y="160" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="260" y1="160" x2="260" y2="220" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="220" y="198" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="280" cy="190" r="3.5" fill="#2c5d8a"/>
+  <text x="240" y="148" text-anchor="middle" font-size="11" fill="#5a7a9a" font-style="italic">
+    (frente lógica)
+  </text>
+
+  <!-- Seta 10 -> 20 -->
+  <line x1="300" y1="190" x2="350" y2="190" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="345,185 357,190 345,195" fill="#2c5d8a"/>
+
+  <!-- Nó 20 -->
+  <rect x="360" y="160" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="440" y1="160" x2="440" y2="220" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="400" y="198" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="460" cy="190" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Seta 20 -> 30 -->
+  <line x1="480" y1="190" x2="530" y2="190" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="525,185 537,190 525,195" fill="#2c5d8a"/>
+
+  <!-- Nó 30 (rear, apontado por fim) -->
+  <rect x="540" y="160" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <line x1="620" y1="160" x2="620" y2="220" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="580" y="198" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="640" cy="190" r="3.5" fill="#2c5d8a"/>
+  <text x="600" y="148" text-anchor="middle" font-size="11" fill="#5a7a9a" font-style="italic">
+    (último — apontado por fim)
+  </text>
+
+  <!-- Curva de retorno: 30 -> 10 (aro circular) -->
+  <path d="M 640 200 Q 700 320 420 320 Q 200 320 220 220" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="217,225 220,212 226,222" fill="#2c5d8a"/>
+  <text x="430" y="345" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    o último aponta de volta ao primeiro — a fila é um anel
+  </text>
+
+  <!-- Ponteiro externo único: fim -->
+  <text x="730" y="195" font-size="14" font-weight="600" fill="#2c5d8a">← fim</text>
+  <text x="780" y="215" font-size="11" fill="#888" font-style="italic">(único)</text>
+
+  <!-- Linha indicando o "frente lógico" -->
+  <path d="M 240 130 Q 240 110 280 110" fill="none" stroke="#5a7a9a" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="430" y="105" font-size="12" fill="#5a7a9a">
+    <tspan font-style="italic">acessível em O(1) via</tspan>
+    <tspan font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"> fim->proximo</tspan>
+  </text>
+</svg>

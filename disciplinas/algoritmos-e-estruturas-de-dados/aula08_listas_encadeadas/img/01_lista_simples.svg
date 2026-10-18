@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- Título -->
+  <text x="450" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Lista simplesmente encadeada
+  </text>
+
+  <!-- Ponteiro âncora "inicio" -->
+  <text x="100" y="155" text-anchor="end" font-size="15" font-weight="600" fill="#2c5d8a">inicio →</text>
+
+  <!-- Rótulos dos campos (apenas no primeiro nó) -->
+  <text x="155" y="115" text-anchor="middle" font-size="11" fill="#888">valor</text>
+  <text x="215" y="115" text-anchor="middle" font-size="11" fill="#888">prox</text>
+
+  <!-- Nó 1: 10 -->
+  <rect x="115" y="125" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="195" y1="125" x2="195" y2="185" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="155" y="163" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="215" cy="155" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Seta nó1 -> nó2 -->
+  <line x1="235" y1="155" x2="285" y2="155" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="280,150 292,155 280,160" fill="#2c5d8a"/>
+
+  <!-- Nó 2: 20 -->
+  <rect x="295" y="125" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="375" y1="125" x2="375" y2="185" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="335" y="163" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="395" cy="155" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Seta nó2 -> nó3 -->
+  <line x1="415" y1="155" x2="465" y2="155" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="460,150 472,155 460,160" fill="#2c5d8a"/>
+
+  <!-- Nó 3: 30 -->
+  <rect x="475" y="125" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="555" y1="125" x2="555" y2="185" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="515" y="163" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="575" cy="155" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Seta nó3 -> NULL -->
+  <line x1="595" y1="155" x2="645" y2="155" stroke="#5a7a9a" stroke-width="2.5"/>
+  <polygon points="640,150 652,155 640,160" fill="#5a7a9a"/>
+
+  <!-- NULL -->
+  <text x="685" y="160" text-anchor="middle" font-size="16" fill="#888" font-style="italic">NULL</text>
+
+  <!-- Legenda inferior -->
+  <line x1="100" y1="240" x2="800" y2="240" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="450" y="270" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Cada nó tem dois campos: valor (carga útil) e prox (ponteiro para o próximo).
+  </text>
+  <text x="450" y="293" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    O último nó aponta para NULL — marca o fim da lista.
+  </text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 440"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- vermelho sóbrio #b54040 usado apenas na curva O(n²), sinalizando a classe "perigosa" -->
+
+  <text x="350" y="38" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Como o custo cresce com a entrada</text>
+
+  <!-- eixos -->
+  <path d="M 80 380 L 655 380" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="650,375 663,380 650,385" fill="#5a7a9a"/>
+  <path d="M 80 380 L 80 70" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="75,75 80,62 85,75" fill="#5a7a9a"/>
+
+  <text x="365" y="416" text-anchor="middle" font-size="14" fill="#5a7a9a">n — tamanho da entrada</text>
+  <text x="72" y="58" text-anchor="end" font-size="14" fill="#5a7a9a">passos</text>
+
+  <!-- O(n²) -->
+  <path d="M 90 378 C 300 355, 470 240, 540 80" fill="none" stroke="#b54040" stroke-width="3"/>
+  <text x="552" y="86" font-size="15" font-weight="600" fill="#b54040">O(n²)</text>
+
+  <!-- O(n log n) -->
+  <path d="M 90 378 C 300 335, 500 235, 600 155" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <text x="610" y="158" font-size="15" font-weight="600" fill="#2c5d8a">O(n log n)</text>
+
+  <!-- O(n) -->
+  <path d="M 90 378 L 600 245" fill="none" stroke="#2c5d8a" stroke-width="2.5" stroke-dasharray="8,5"/>
+  <text x="610" y="248" font-size="15" font-weight="600" fill="#2c5d8a">O(n)</text>
+
+  <!-- O(log n) -->
+  <path d="M 90 378 C 220 342, 420 328, 600 318" fill="none" stroke="#5a7a9a" stroke-width="2.5"/>
+  <text x="610" y="321" font-size="15" font-weight="600" fill="#5a7a9a">O(log n)</text>
+
+  <!-- O(1) -->
+  <path d="M 90 362 L 600 362" fill="none" stroke="#5a7a9a" stroke-width="2.5" stroke-dasharray="3,5"/>
+  <text x="610" y="366" font-size="15" font-weight="600" fill="#5a7a9a">O(1)</text>
+
+  <text x="350" y="438" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    para n pequeno as curvas andam juntas — para n grande, a classe decide
+  </text>
+</svg>

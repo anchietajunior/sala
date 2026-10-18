@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 460"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 10 — pos_ordem()  →  20, 40, 30, 70, 50
+  </text>
+
+  <!-- raiz -> 50 -->
+  <text x="290" y="100" text-anchor="end" font-size="16" font-weight="600" fill="#2c5d8a">raiz →</text>
+
+  <!-- Arestas -->
+  <line x1="350" y1="95" x2="220" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="95" x2="480" y2="210" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="210" x2="140" y2="325" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="210" x2="300" y2="325" stroke="#2c5d8a" stroke-width="2"/>
+
+  <!-- Nós -->
+  <circle cx="350" cy="95" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="102" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+
+  <circle cx="220" cy="210" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="220" y="217" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+
+  <circle cx="480" cy="210" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="480" y="217" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+
+  <circle cx="140" cy="325" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="140" y="332" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+
+  <circle cx="300" cy="325" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="300" y="332" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+
+  <!-- Badges com ordem de visita: POS = esq, dir, no → 20, 40, 30, 70, 50 -->
+  <!-- 20 → 1 -->
+  <circle cx="180" cy="298" r="12" fill="#2c5d8a"/>
+  <text x="180" y="303" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1</text>
+  <!-- 40 → 2 -->
+  <circle cx="340" cy="298" r="12" fill="#2c5d8a"/>
+  <text x="340" y="303" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2</text>
+  <!-- 30 → 3 -->
+  <circle cx="260" cy="183" r="12" fill="#2c5d8a"/>
+  <text x="260" y="188" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">3</text>
+  <!-- 70 → 4 -->
+  <circle cx="520" cy="183" r="12" fill="#2c5d8a"/>
+  <text x="520" y="188" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">4</text>
+  <!-- 50 → 5 -->
+  <circle cx="390" cy="68" r="12" fill="#2c5d8a"/>
+  <text x="390" y="73" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">5</text>
+
+  <!-- separador + nota -->
+  <line x1="100" y1="395" x2="600" y2="395" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="420" text-anchor="middle" font-size="14" fill="#2c5d8a" font-weight="600">
+    pós-ordem  =  esquerda · direita · nó
+  </text>
+  <text x="350" y="445" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    a raiz aparece por último · ordem natural para liberar memória com free()
+  </text>
+</svg>

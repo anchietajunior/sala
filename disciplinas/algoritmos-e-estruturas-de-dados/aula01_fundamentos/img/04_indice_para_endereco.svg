@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 400"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="36" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">A memória como gavetas numeradas</text>
+
+  <text x="350" y="60" text-anchor="middle" font-size="14" fill="#5a7a9a">
+    cada gaveta tem um endereço fixo · cada int ocupa 4 bytes
+  </text>
+
+  <!-- coluna: endereço | gaveta (elemento) -->
+  <!-- cabeçalho -->
+  <text x="150" y="94" text-anchor="middle" font-size="13" font-weight="600" fill="#5a7a9a">endereço</text>
+  <text x="360" y="94" text-anchor="middle" font-size="13" font-weight="600" fill="#5a7a9a">conteúdo (int = 4 bytes)</text>
+
+  <!-- 5 linhas de gaveta -->
+  <!-- linha 0 -->
+  <text x="150" y="130" text-anchor="middle" font-size="16" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1000</text>
+  <rect x="240" y="108" width="240" height="34" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="360" y="130" text-anchor="middle" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">notas[0]</text>
+  <text x="500" y="130" font-size="13" fill="#5a7a9a">← endereço-base</text>
+
+  <!-- linha 1 -->
+  <text x="150" y="172" text-anchor="middle" font-size="16" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1004</text>
+  <rect x="240" y="150" width="240" height="34" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="360" y="172" text-anchor="middle" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">notas[1]</text>
+
+  <!-- linha 2 -->
+  <text x="150" y="214" text-anchor="middle" font-size="16" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1008</text>
+  <rect x="240" y="192" width="240" height="34" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="360" y="214" text-anchor="middle" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">notas[2]</text>
+
+  <!-- linha 3 (destaque) -->
+  <text x="150" y="256" text-anchor="middle" font-size="16" font-weight="600" fill="#2c5d8a"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1012</text>
+  <rect x="240" y="234" width="240" height="34" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="3" rx="4"/>
+  <text x="360" y="256" text-anchor="middle" font-size="15" font-weight="600" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">notas[3]</text>
+
+  <!-- linha 4 -->
+  <text x="150" y="298" text-anchor="middle" font-size="16" fill="#888"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">1016</text>
+  <rect x="240" y="276" width="240" height="34" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="360" y="298" text-anchor="middle" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">notas[4]</text>
+
+  <!-- conta do acesso direto -->
+  <line x1="100" y1="336" x2="600" y2="336" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="362" text-anchor="middle" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    notas[3] = 1000 + 3 × 4 = 1012
+  </text>
+  <text x="350" y="384" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    uma multiplicação e uma soma — vai direto à gaveta, seja i = 3 ou 3.000.000
+  </text>
+</svg>

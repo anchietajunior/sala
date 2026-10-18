@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <!-- ========== ESQUERDA: FIFO (Fila) ========== -->
+  <text x="225" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    FIFO — Fila
+  </text>
+  <text x="225" y="62" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    First-In, First-Out
+  </text>
+
+  <!-- Setas indicando entrada e saída -->
+  <text x="40" y="170" font-size="13" fill="#2c5d8a" font-weight="600">sai →</text>
+  <text x="385" y="170" font-size="13" fill="#2c5d8a" font-weight="600" text-anchor="end">← entra</text>
+
+  <!-- Nó 1 (frente, sai primeiro): 10 -->
+  <rect x="95" y="135" width="80" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="135" y="172" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <text x="135" y="218" text-anchor="middle" font-size="11" fill="#5a7a9a">1º a entrar</text>
+
+  <line x1="178" y1="165" x2="200" y2="165" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="197,160 207,165 197,170" fill="#5a7a9a"/>
+
+  <!-- Nó 2: 20 -->
+  <rect x="210" y="135" width="80" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="250" y="172" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="250" y="218" text-anchor="middle" font-size="11" fill="#5a7a9a">2º</text>
+
+  <line x1="293" y1="165" x2="315" y2="165" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="312,160 322,165 312,170" fill="#5a7a9a"/>
+
+  <!-- Nó 3 (fundo, entrou por último): 30 -->
+  <rect x="325" y="135" width="80" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="365" y="172" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="365" y="218" text-anchor="middle" font-size="11" fill="#5a7a9a">último</text>
+
+  <!-- Indicador de ordem de saída -->
+  <line x1="95" y1="260" x2="405" y2="260" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="225" y="290" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">
+    Sai: 10, depois 20, depois 30
+  </text>
+  <text x="225" y="315" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    quem chegou primeiro, sai primeiro
+  </text>
+
+  <!-- Exemplos -->
+  <text x="225" y="365" text-anchor="middle" font-size="13" font-weight="600" fill="#5a7a9a">Exemplos no mundo</text>
+  <text x="225" y="388" text-anchor="middle" font-size="12" fill="#222">fila do banco</text>
+  <text x="225" y="408" text-anchor="middle" font-size="12" fill="#222">fila de impressão</text>
+  <text x="225" y="428" text-anchor="middle" font-size="12" fill="#222">buffer de pacotes de rede</text>
+
+  <!-- Separador -->
+  <line x1="450" y1="80" x2="450" y2="440" stroke="#cfd6dd" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- ========== DIREITA: LIFO (Pilha) ========== -->
+  <text x="675" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    LIFO — Pilha
+  </text>
+  <text x="675" y="62" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    Last-In, First-Out
+  </text>
+
+  <!-- Setas: entrada e saída pelo mesmo lado (topo) -->
+  <text x="675" y="100" text-anchor="middle" font-size="13" fill="#2c5d8a" font-weight="600">↓ entra ↑ sai</text>
+
+  <!-- Pilha vertical: topo (último) em cima -->
+  <!-- Topo: 30 -->
+  <rect x="635" y="125" width="80" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="675" y="158" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="740" y="155" font-size="11" fill="#5a7a9a">← topo (último)</text>
+
+  <!-- Meio: 20 -->
+  <rect x="635" y="180" width="80" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="675" y="213" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+
+  <!-- Base: 10 -->
+  <rect x="635" y="235" width="80" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="675" y="268" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <text x="740" y="265" font-size="11" fill="#5a7a9a">← base (1º)</text>
+
+  <!-- Indicador de ordem de saída -->
+  <line x1="495" y1="320" x2="855" y2="320" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="675" y="345" text-anchor="middle" font-size="14" font-weight="600" fill="#2c5d8a">
+    Sai: 30, depois 20, depois 10
+  </text>
+  <text x="675" y="368" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    quem chegou por último, sai primeiro
+  </text>
+
+  <!-- Exemplos -->
+  <text x="675" y="395" text-anchor="middle" font-size="13" font-weight="600" fill="#5a7a9a">Exemplos no mundo</text>
+  <text x="675" y="418" text-anchor="middle" font-size="12" fill="#222">Ctrl+Z (desfazer)</text>
+  <text x="675" y="438" text-anchor="middle" font-size="12" fill="#222">botão "voltar" do navegador</text>
+  <text x="675" y="458" text-anchor="middle" font-size="12" fill="#222">pilha de chamadas de função</text>
+</svg>

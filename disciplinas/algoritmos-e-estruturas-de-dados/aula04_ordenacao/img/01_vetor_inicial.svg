@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 250"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="32" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">O vetor de partida — oito inteiros fora de ordem</text>
+
+  <rect x="48" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="125" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="202" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="279" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="356" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="433" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="510" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <rect x="587" y="90" width="72" height="56" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#222">
+    <text x="84" y="125" text-anchor="middle" font-weight="400" fill="#222">7</text>
+    <text x="161" y="125" text-anchor="middle" font-weight="400" fill="#222">3</text>
+    <text x="238" y="125" text-anchor="middle" font-weight="400" fill="#222">9</text>
+    <text x="315" y="125" text-anchor="middle" font-weight="400" fill="#222">1</text>
+    <text x="392" y="125" text-anchor="middle" font-weight="400" fill="#222">5</text>
+    <text x="469" y="125" text-anchor="middle" font-weight="400" fill="#222">8</text>
+    <text x="546" y="125" text-anchor="middle" font-weight="400" fill="#222">2</text>
+    <text x="623" y="125" text-anchor="middle" font-weight="400" fill="#222">6</text>
+  </g>
+  <text x="36" y="176" text-anchor="end" font-size="13" fill="#888">índice</text>
+  <g font-size="14" fill="#888">
+    <text x="84" y="176" text-anchor="middle">0</text>
+    <text x="161" y="176" text-anchor="middle">1</text>
+    <text x="238" y="176" text-anchor="middle">2</text>
+    <text x="315" y="176" text-anchor="middle">3</text>
+    <text x="392" y="176" text-anchor="middle">4</text>
+    <text x="469" y="176" text-anchor="middle">5</text>
+    <text x="546" y="176" text-anchor="middle">6</text>
+    <text x="623" y="176" text-anchor="middle">7</text>
+  </g>
+
+  <line x1="60" y1="206" x2="640" y2="206" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="232" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">o mesmo vetor entra nos três algoritmos · alvo: [1, 2, 3, 5, 6, 7, 8, 9]</text>
+</svg>

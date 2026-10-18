@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 03 — Funções e Recursão | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+        .reveal .resposta pre {
+            font-size: 0.85em;
+            margin: 0.3em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- 1. CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- 2. TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 03</p>
+            <h1>Funções e Recursão</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                Delegar uma tarefa · delegar a si mesmo
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>conceitual</strong> — o que uma função é por dentro,
+                e o que acontece quando ela chama a si mesma.
+            </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO, 6 CAMADAS)   -->
+        <!-- ============================================================ -->
+        <section>
+
+            <!-- ----- CAMADA 1 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>Você não organiza a festa sozinho</h3>
+                <p style="text-align: left;">
+                    Você pede a alguém que cuide da comida. Diz <strong>o que precisa</strong>,
+                    recebe <strong>o que pediu</strong> — e não acompanha como foi feito.
+                    Enquanto isso, você espera.
+                </p>
+                <blockquote>
+                    E se a tarefa for grande demais, quem recebeu reparte: pede a alguém
+                    o jantar de vinte. Que reparte de novo.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 2 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>Isso tem nome: função</h3>
+                <p style="text-align: left;">
+                    Uma <span class="destaque">função</span> (<em>function</em>) é um bloco de
+                    código com nome próprio: recebe valores de entrada, executa passos e
+                    devolve um valor de saída.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Em C, <strong>tudo</strong> é função — inclusive a <code>main</code>.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    A literatura também usa sub-rotina, subprograma e procedimento para a mesma ideia.
+                </p>
+            </section>
+
+            <section>
+                <h3>Quatro palavras dão conta de qualquer função</h3>
+                <p style="text-align: left;">
+                    Esse é o vocabulário para falar de função sem ambiguidade.
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Assinatura</strong> — tipo de retorno, nome e parâmetros.</li>
+                    <li><strong>Corpo</strong> — os passos, entre chaves.</li>
+                    <li><strong>Chamada</strong> — o ponto onde a função é acionada.</li>
+                    <li><strong>Retorno</strong> — o valor devolvido a quem chamou.</li>
+                </ul>
+                <p class="nota-rodape" style="text-align: left;">
+                    Sem valor a devolver? O tipo de retorno é <code>void</code> — "nada", em C.
+                </p>
+            </section>
+
+            <section>
+                <h3>E se a função chamar a si mesma?</h3>
+                <p style="text-align: left;">
+                    Nada proíbe. Uma <span class="destaque">função recursiva</span> chama a si
+                    mesma sobre uma entrada <strong>menor</strong> — e se organiza em dois casos:
+                </p>
+                <ul style="font-size: 0.82em;">
+                    <li><strong>Caso base</strong> — entrada tão pequena que a resposta sai direto.</li>
+                    <li><strong>Caso recursivo</strong> — reduz o problema e delega o resto a si mesma.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O que uma função <em>não</em> é</h3>
+                <p style="text-align: left;">
+                    Três mal-entendidos que vale desarmar já:
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li>Não é <strong>atalho de escrita</strong> — é um contrato: dados estes parâmetros, este resultado.</li>
+                    <li>Não <strong>guarda estado</strong> — cada chamada nasce e morre nela mesma.</li>
+                    <li>Não <strong>enxerga</strong> as variáveis de quem chamou.</li>
+                </ul>
+            </section>
+
+            <!-- EDDY 1 — bibliografia -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, esta aula tem duas fontes principais. Schildt trata a função como
+                            recurso da linguagem C — assinatura, protótipo, escopo. Backes trata a
+                            recursividade como técnica de algoritmo, com fatorial e Fibonacci.
+                            São os dois olhares que vamos juntar hoje.
+                            <cite>Schildt, capítulo de funções · Backes, capítulo de recursividade</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 3 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>Por que não deixar tudo dentro da <code>main</code>?</h3>
+                <p style="text-align: left;">
+                    Um programa funciona igual com tudo dentro da <code>main</code>.
+                    Três razões justificam separar mesmo assim:
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Nomear</strong> — <code>busca_binaria(v, 8, 55)</code> diz o que faz. O laço não diz.</li>
+                    <li><strong>Reusar</strong> — sem função, seriam quatro cópias do mesmo laço.</li>
+                    <li><strong>Isolar</strong> — o defeito mora em 12 linhas, não em 300.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Abstração — usar sem saber como funciona</h3>
+                <p style="text-align: left;">
+                    Quem chama <code>busca_binaria</code> precisa saber <strong>o que ela devolve</strong> —
+                    nunca como ela faz por dentro. Essa separação tem nome:
+                    <span class="destaque">abstração</span>.
+                </p>
+                <blockquote>
+                    É assim que um algoritmo grande é construído a partir de algoritmos pequenos.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A anatomia, peça por peça</h3>
+                <p style="text-align: left;">
+                    Toda função em C tem a mesma forma. Repare nas três partes da primeira linha —
+                    juntas, elas são a assinatura.
+                </p>
+                <pre><code class="language-c" data-trim>
+/* assinatura: tipo de retorno, nome e lista de parametros */
+int soma(int a, int b) {
+
+    /* corpo: os passos */
+    return a + b;
+}
+                </code></pre>
+                <p class="nota-rodape" style="text-align: left;">
+                    Quem chama precisa conhecer só a assinatura — nunca o corpo.
+                </p>
+            </section>
+
+            <section>
+                <h3>O <code>return</code> faz duas coisas</h3>
+                <p style="text-align: left;">
+                    Ele devolve <strong>um único valor</strong> — e <strong>encerra a função na hora</strong>.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    É por isso que uma busca pode dar <code>return i</code> de dentro
+                    do <code>for</code>: achou, acabou,
+                    o laço nem termina.
+                </p>
+            </section>
+
+            <section>
+                <h3>Parâmetro e argumento não são a mesma coisa</h3>
+                <p style="text-align: left;">
+                    A distinção parece formalidade — até perguntarmos <strong>o que exatamente
+                    viaja</strong> de um para o outro.
+                </p>
+                <ul style="font-size: 0.82em;">
+                    <li><strong>Parâmetro</strong> — o nome declarado na assinatura: <code>a</code>, <code>b</code>.</li>
+                    <li><strong>Argumento</strong> — o valor entregue na chamada: <code>3</code>, <code>4</code>.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O que viaja é uma cópia</h3>
+                <p style="text-align: left;">
+                    Em C, o parâmetro é uma variável <strong>nova</strong>, iniciada com o valor do
+                    argumento. Mexer nela não toca no original — chama-se
+                    <span class="destaque">passagem por valor</span>.
+                </p>
+                <pre><code class="language-c" data-trim>
+void dobrar(int x) {
+    x = x * 2;          /* altera a copia local, e so ela */
+}
+
+int n = 10;
+dobrar(n);
+printf("%d", n);        /* imprime 10, nao 20 */
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Cada função tem suas próprias variáveis</h3>
+                <p style="text-align: left;">
+                    Parâmetros e variáveis declaradas no corpo são
+                    <span class="destaque">variáveis locais</span>. O trecho onde um nome existe
+                    é o seu <span class="destaque">escopo</span> — e ele acaba na chave da função.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Por isso o <code>i</code> de <code>busca_linear</code> e o <code>i</code> de
+                    <code>montar_tabela</code> são variáveis diferentes.
+                </p>
+            </section>
+
+            <section>
+                <h3>Então por que o vetor muda?</h3>
+                <p style="text-align: left;">
+                    Uma função que recebe um vetor e escreve nele <strong>altera</strong> o vetor
+                    de quem chamou. A regra não foi quebrada: um vetor é uma fileira de posições
+                    vizinhas na memória, e o que veio por cópia foi só <strong>onde a fileira começa</strong>.
+                </p>
+                <blockquote>
+                    Valores simples são copiados. Vetores, não.
+                </blockquote>
+                <p class="nota-rodape" style="text-align: left;">
+                    Guardar e manipular endereços de forma explícita é o que se chama trabalhar com ponteiros.
+                </p>
+            </section>
+
+            <section>
+                <h3>Fatorial: o problema contém a si mesmo</h3>
+                <p style="text-align: left;">
+                    Com a mecânica da chamada na mão, voltemos à função que chama a si mesma.
+                    <code>4! = 4 × 3 × 2 × 1 = 24</code> — mas <code>3 × 2 × 1</code> é
+                    exatamente <code>3!</code>.
+                </p>
+                <p style="text-align: center; font-size: 1.1em; font-family: ui-monospace, monospace; color: #2c5d8a;">
+                    4! = 4 × 3!
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Dentro do problema mora uma versão menor <strong>dele mesmo</strong>.
+                    É disso que a recursão vive.
+                </p>
+            </section>
+
+            <section>
+                <h3>O fatorial em seis linhas</h3>
+                <p style="text-align: left;">
+                    Os dois casos da Camada 2 aparecem literalmente, um em cada
+                    <code>return</code>.
+                </p>
+                <pre><code class="language-c" data-trim>
+int fatorial(int n) {
+    /* caso base: 0! vale 1 */
+    if (n == 0) {
+        return 1;
+    }
+
+    /* caso recursivo: n! = n x (n-1)! */
+    return n * fatorial(n - 1);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Duas obrigações — nenhuma opcional</h3>
+                <p style="text-align: left;">
+                    Sem qualquer uma das duas, a função não termina:
+                </p>
+                <ul style="font-size: 0.82em;">
+                    <li><strong>Ter caso base</strong> — alguma entrada respondida sem nova chamada.</li>
+                    <li><strong>Progredir</strong> — cada chamada recebe entrada mais perto do caso base.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Falhar produz <span class="destaque">recursão infinita</span>: chamadas se
+                    acumulam ocupando memória até o programa ser interrompido.
+                </p>
+            </section>
+
+            <section>
+                <h3>A chamada não desaparece — ela espera</h3>
+                <p style="text-align: left;">
+                    Quando uma função chama outra, a primeira fica <strong>pendente</strong>:
+                    guarda seus parâmetros e o ponto exato onde parou, à espera do retorno.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    A cadeia de chamadas à espera é a
+                    <span class="destaque">pilha de chamadas</span>. Quantas estão esperando
+                    é a <strong>profundidade</strong> da recursão.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    "Pilha" aqui é o nome dessa cadeia à espera: a última a chegar é a primeira a resolver.
+                </p>
+            </section>
+
+            <section>
+                <h3>As contas acontecem na volta</h3>
+                <p style="text-align: left;">
+                    Na ida, o algoritmo só reparte. A primeira multiplicação só ocorre
+                    depois que o caso base responde.
+                </p>
+                <pre><code data-trim>
+ida — so reparte o problema, nenhuma conta e feita
+fatorial(4) → fatorial(3) → fatorial(2) → fatorial(1) → fatorial(0)
+
+volta — agora cada chamada multiplica
+    24      ←      6      ←      2      ←      1      ←      1
+                </code></pre>
+                <p class="nota-rodape" style="text-align: left;">
+                    Existem cinco variáveis <code>n</code> vivas ao mesmo tempo: 4, 3, 2, 1 e 0.
+                </p>
+            </section>
+
+            <!-- EDDY 2 — aplicação real -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, aquela mensagem de erro <em>stack overflow</em> que vocês já viram
+                            é exatamente esta pilha estourando. Recursão sem caso base — ou com caso
+                            base que nunca é alcançado — empilha chamadas até acabar a memória
+                            reservada para elas. O nome do site mais famoso de programação vem daí.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Fibonacci — a mesma ideia, dois ramos</h3>
+                <p style="text-align: left;">
+                    Cada termo é a soma dos dois anteriores: 0, 1, 1, 2, 3, 5, 8, 13…
+                    Agora são <strong>dois</strong> casos base e <strong>duas</strong> chamadas.
+                </p>
+                <pre><code class="language-c" data-trim>
+int fibonacci(int n) {
+    /* dois casos base */
+    if (n == 0) { return 0; }
+    if (n == 1) { return 1; }
+
+    /* caso recursivo: duas chamadas, nao uma */
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+                </code></pre>
+                <p class="nota-rodape" style="text-align: left;">
+                    A função está correta. O problema é outro — e aparece no próximo slide.
+                </p>
+            </section>
+
+            <section>
+                <h3>Corrente contra árvore</h3>
+                <p style="text-align: left;">
+                    No fatorial, cada chamada gera <strong>uma</strong> — uma corrente.
+                    No Fibonacci, cada chamada gera <strong>duas</strong> — uma árvore que
+                    dobra de largura a cada nível.
+                </p>
+                <blockquote>
+                    Pior: a árvore recalcula. Em <code>fibonacci(5)</code>, o termo
+                    <code>fib(2)</code> é computado do zero <strong>três vezes</strong>.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 4 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>A função da matemática e a da programação</h3>
+                <p style="text-align: left;">
+                    Em matemática, uma função associa a cada entrada exatamente uma saída.
+                    A função da programação foi batizada por analogia — e
+                    <code>fatorial(4) = 24</code> tem o mesmo sentido nos dois mundos.
+                </p>
+                <blockquote>
+                    Só que a analogia não fecha: em C, a função pode fazer coisas
+                    <strong>além</strong> de devolver seu valor.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Efeito colateral e função pura</h3>
+                <p style="text-align: left;">
+                    Imprimir na tela, alterar um vetor recebido — qualquer coisa observável
+                    fora do retorno é um <span class="destaque">efeito colateral</span>.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Sem nenhum deles, e devolvendo sempre o mesmo para os mesmos argumentos,
+                    a função é <strong>pura</strong>. <code>fatorial</code> é;
+                    uma função que imprime na tela, não.
+                </p>
+            </section>
+
+            <section>
+                <h3>Antes de ser código, é definição</h3>
+                <p style="text-align: left;">
+                    Os dois exemplos da aula são definições matemáticas recursivas —
+                    o código é transcrição direta delas.
+                </p>
+                <pre><code data-trim>
+0! = 1                             caso base
+n! = n x (n - 1)!    para n &gt;= 1   caso recursivo
+
+F(0) = 0    F(1) = 1               casos base
+F(n) = F(n - 1) + F(n - 2)         caso recursivo
+                </code></pre>
+                <p class="nota-rodape" style="text-align: left;">
+                    O tratamento formal completo está no material escrito da aula.
+                </p>
+            </section>
+
+            <section>
+                <h3>Isso não é circular?</h3>
+                <p style="text-align: left;">
+                    Definir uma coisa usando ela mesma parece truque. Não é — desde que
+                    duas condições valham:
+                </p>
+                <ul style="font-size: 0.82em;">
+                    <li>Existe ao menos um caso resolvido <strong>diretamente</strong>.</li>
+                    <li>Todo caso recursivo se reduz a um caso <strong>estritamente menor</strong>.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.8em;">
+                    São as mesmas duas obrigações da Camada 3 — e são as hipóteses da
+                    <strong>indução matemática</strong>.
+                </p>
+            </section>
+
+            <section>
+                <h3>Definir por recursão, provar por indução</h3>
+                <p style="text-align: left;">
+                    Se <code>fatorial(k)</code> está correto para todo <code>k</code> menor
+                    que <code>n</code>, então <code>n × fatorial(n-1)</code> também está.
+                    E <code>fatorial(0)</code> está correto por definição.
+                </p>
+                <blockquote>
+                    Pronto: a função está correta para todo <code>n</code>. São o mesmo
+                    movimento, escrito de duas maneiras.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 5 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>A novidade desta aula é o espaço</h3>
+                <p style="text-align: left;">
+                    Um algoritmo que só usa duas ou três variáveis auxiliares gasta O(1) de
+                    memória adicional. O fatorial recursivo gasta <strong>O(n)</strong> — sem
+                    alocar nada: são as <code>n+1</code> chamadas pendentes ocupando lugar.
+                </p>
+                <blockquote>
+                    E esse custo tem teto: recursão funda demais esgota a memória
+                    disponível e derruba o programa.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>As duas recursões lado a lado</h3>
+                <p style="text-align: left;">
+                    Mesma técnica, custos de mundos diferentes. Olhe a última coluna:
+                    é ela que separa as duas.
+                </p>
+                <table>
+                    <tr><th>Algoritmo</th><th>Tempo</th><th>Espaço</th><th>Chamadas (n = 30)</th></tr>
+                    <tr><td>fatorial recursivo</td><td>O(n)</td><td>O(n)</td><td>31</td></tr>
+                    <tr><td>Fibonacci recursivo</td><td>O(2<sup>n</sup>)</td><td>O(n)</td><td>2.692.537</td></tr>
+                </table>
+                <p class="nota-rodape" style="text-align: left;">
+                    Trinta e uma chamadas contra dois milhões e meio — para o mesmo tamanho de entrada.
+                </p>
+            </section>
+
+            <section>
+                <h3>O preço do Fibonacci recursivo</h3>
+                <p style="text-align: left;">
+                    Números reais, numa máquina que execute cem milhões de passos por segundo.
+                </p>
+                <table>
+                    <tr><th>n</th><th>Chamadas</th><th>Tempo</th></tr>
+                    <tr><td>30</td><td>2.692.537</td><td>instantâneo</td></tr>
+                    <tr><td>40</td><td>331.160.281</td><td>~3 segundos</td></tr>
+                    <tr><td>50</td><td>40.730.022.147</td><td>~7 minutos</td></tr>
+                    <tr><td>60</td><td>5.009.461.563.921</td><td>~14 horas</td></tr>
+                </table>
+                <p class="nota-rodape" style="text-align: left;">
+                    Dez unidades a mais multiplicam o trabalho por cerca de 123.
+                </p>
+            </section>
+
+            <section>
+                <h3>O vilão não é a recursão</h3>
+                <p style="text-align: left;">
+                    O Fibonacci é catastrófico porque <strong>recalcula</strong>, não porque
+                    é recursivo. O fatorial, recursivo do mesmo jeito, não repete nada —
+                    e custa O(n).
+                </p>
+                <blockquote>
+                    Corrente de <code>n</code> elos contra árvore com nós repetidos.
+                    A diferença está aí — não na recursão.
+                </blockquote>
+            </section>
+
+            <!-- EDDY 3 — aponta para frente -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, e o defeito do Fibonacci tem conserto sem abandonar a recursão:
+                            basta a função anotar cada resultado já calculado e consultar a anotação
+                            antes de recalcular. Chama-se <em>memoização</em>, derruba o custo de
+                            exponencial para linear, e é a porta de entrada da programação dinâmica.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 6 ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde a recursão aparece</h3>
+                <p style="text-align: left;">
+                    A recursão não é curiosidade acadêmica — ela sustenta:
+                </p>
+                <ul style="font-size: 0.78em;">
+                    <li><strong>Ordenação eficiente</strong> — merge sort e quicksort ordenam duas metades menores.</li>
+                    <li><strong>Árvores</strong> — uma raiz com duas árvores menores penduradas.</li>
+                    <li><strong>Busca binária</strong> — descartar metade a cada passo é dividir e conquistar.</li>
+                    <li><strong>Listas encadeadas</strong> — um nó seguido de uma lista.</li>
+                    <li><strong>Algoritmo de Euclides</strong> — o máximo divisor comum, em duas linhas.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Três variantes que você vai encontrar</h3>
+                <p style="text-align: left;">
+                    Três nomes que aparecem na bibliografia sobre recursão:
+                </p>
+                <ul style="font-size: 0.8em;">
+                    <li><strong>Recursão indireta</strong> — A chama B, que chama A de volta.</li>
+                    <li><strong>Recursão de cauda</strong> — a chamada é a última operação, sem conta pendente na volta.</li>
+                    <li><strong>Memoização</strong> — anotar para não recalcular.</li>
+                </ul>
+                <p class="nota-rodape" style="text-align: left;">
+                    O fatorial desta aula <strong>não</strong> é de cauda: a multiplicação espera o retorno.
+                </p>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA                                -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.8em; color: #666;">
+                    Cinco figuras: a anatomia, o ciclo da chamada, a ida e a volta do
+                    fatorial, e a árvore que explica o custo do Fibonacci.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1 — a anatomia de uma função</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Olhe primeiro para a linha de cima: as três partes destacadas são a assinatura.
+                    O corpo vem abaixo dela.
+                </p>
+                <img class="diagrama" src="img/01_anatomia_funcao.svg"
+                     alt="Assinatura de uma função em C com tipo de retorno, nome, parâmetros e corpo identificados">
+            </section>
+
+            <section>
+                <h3>Passo 2 — a chamada e o retorno</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Siga as duas setas: os argumentos vão como cópia, o valor volta pelo
+                    <code>return</code>. Entre uma seta e outra, a <code>main</code> está parada.
+                </p>
+                <img class="diagrama" src="img/02_chamada_e_retorno.svg"
+                     alt="Fluxo de main chamando a função soma, com argumentos entrando e o valor de retorno voltando">
+            </section>
+
+            <section>
+                <h3>Passo 3 — a ida: as chamadas se empilham</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Cinco chamadas pendentes ao mesmo tempo, cada uma com seu próprio
+                    <code>n</code>. Nenhuma conta foi feita ainda.
+                </p>
+                <img class="diagrama" src="img/03_pilha_fatorial_ida.svg"
+                     alt="Cinco chamadas pendentes de fatorial, de fatorial(4) até fatorial(0), empilhadas">
+            </section>
+
+            <section>
+                <h3>Passo 4 — a volta: as multiplicações acontecem</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Agora os valores sobem e cada chamada finalmente multiplica.
+                    O 24 só existe no último passo.
+                </p>
+                <img class="diagrama" src="img/04_pilha_fatorial_volta.svg"
+                     alt="Desempilhamento das chamadas de fatorial com os valores 1, 1, 2, 6 e 24 subindo">
+            </section>
+
+            <section>
+                <h3>Passo 5 — a árvore de chamadas do Fibonacci</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Procure os nós destacados: são o mesmo <code>fib(2)</code>, calculado
+                    do zero três vezes. É esta figura que explica o custo exponencial.
+                </p>
+                <img class="diagrama" src="img/05_arvore_fibonacci.svg"
+                     alt="Árvore de chamadas de fibonacci(5) com quinze nós e as repetições de fib(2) destacadas">
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR                                  -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que recursão existe?</h2>
+                <blockquote style="font-size: 0.8em;">
+                    Como um programa lista todos os arquivos de uma pasta — incluindo os
+                    que estão dentro de outras pastas — sem saber quantos níveis existem?
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>A estrutura se define por si mesma</h3>
+                <p style="text-align: left;">
+                    Uma pasta contém arquivos <strong>e pastas</strong>. Cada uma dessas
+                    contém arquivos e mais pastas. Sem limite anunciado.
+                </p>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Igualzinho ao fatorial: o problema contém uma versão menor de si mesmo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Com laços, não dá</h3>
+                <p style="text-align: left;">
+                    Um <code>for</code> percorre a pasta principal. Para entrar nas subpastas,
+                    um segundo <code>for</code>. Para as subpastas delas, um terceiro.
+                </p>
+                <blockquote>
+                    Cada nível exige um laço <strong>escrito no código</strong> — e o número
+                    de níveis só se conhece quando o programa roda.
+                </blockquote>
+                <p class="nota-rodape" style="text-align: left;">
+                    Sete <code>for</code> aninhados funcionam para sete níveis e falham no oitavo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Com recursão, seis linhas bastam</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    O algoritmo não conta níveis — ele só sabe repartir. A profundidade
+                    que o programador não conhecia vira profundidade da pilha de chamadas.
+                </p>
+                <pre><code data-trim>
+void listar(Pasta p) {
+    para cada item dentro de p:
+        se o item e um arquivo:
+            imprime o nome;
+        senao:                  /* o item e uma pasta */
+            listar(item);       /* mesma tarefa, parte menor */
+}
+                </code></pre>
+                <p class="nota-rodape" style="text-align: left;">
+                    O caso base nem precisa de <code>if</code>: pasta só com arquivos não gera chamada.
+                </p>
+            </section>
+
+            <!-- EDDY 4 — aplicação real -->
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, o mesmo vale para o compilador de C. Para calcular
+                            <code>2 * (3 + 4 * (5 - 1))</code> é preciso resolver primeiro o parêntese
+                            mais interno — e parênteses aninham sem limite. A ferramenta que vocês
+                            usam para escrever os algoritmos foi construída com o conceito de hoje.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 4 — ANALOGIAS                                           -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>1. A empresa e a delegação</h3>
+                <p style="text-align: left; font-size: 0.9em;">
+                    Você entrega o que o funcionário precisa e recebe o resultado. Não pergunta
+                    como foi feito — entre vocês existe um <strong>combinado</strong>, que é a assinatura.
+                </p>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Você não entrega o documento original: entrega uma <strong>fotocópia</strong>.
+                    Ele rabisca à vontade, o seu original fica intacto.
+                </p>
+                <p class="nota-rodape" style="text-align: left;">
+                    E enquanto ele trabalha, você fica parado — a chamada pendente.
+                </p>
+            </section>
+
+            <section>
+                <h3>2. A fila e a pergunta que se propaga</h3>
+                <p style="text-align: left; font-size: 0.9em;">
+                    Você quer saber sua posição na fila, mas não enxerga o começo.
+                    Pergunta a quem está à frente. Ela também não sabe — e repassa a pergunta.
+                </p>
+                <p style="text-align: left; font-size: 0.82em;">
+                    A primeira pessoa responde sem perguntar a ninguém: <strong>caso base</strong>.
+                    A resposta volta pelo mesmo caminho, e cada um soma 1 ao que ouviu.
+                </p>
+                <blockquote style="font-size: 0.75em;">
+                    E enquanto a pergunta viaja, <strong>toda</strong> a fila está parada,
+                    esperando, ocupando lugar. É o custo em espaço.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 5 — REFERÊNCIAS                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.72em;">
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em Linguagem C</em>.
+                    LTC, 2023. Capítulos de funções e de recursividade.</li>
+                <li><strong>Schildt, H.</strong> — <em>C Completo e Total</em>. Makron Books, 1997.
+                    Capítulo de funções — assinatura, protótipos e escopo.</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C</em>.
+                    Saraiva, 2016. Capítulo de recursividade.</li>
+                <li><strong>Toscani, L. V.; Veloso, P. A. S.</strong> — <em>Complexidade de Algoritmos</em>.
+                    Bookman, 2012. Capítulos de recorrências e de indução.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.65em; color: #666;">
+                <li>Wirth — <em>Algoritmos e Estruturas de Dados</em> — quando a recursão não compensa.</li>
+                <li>Damas — <em>Linguagem C</em> — funções, escopo e organização de programas.</li>
+                <li>Jamsa &amp; Klander — <em>Programando em C/C++: a bíblia</em> — exemplos curtos.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Funções e Recursão</h1>
+            <h2>Perguntas</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Uma função é um contrato: entram argumentos, sai um retorno. Quando ela chama
+                a si mesma, precisa de um caso base — e as contas acontecem na volta.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

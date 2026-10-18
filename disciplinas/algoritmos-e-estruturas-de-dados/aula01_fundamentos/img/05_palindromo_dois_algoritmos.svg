@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 460"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="38" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">Dois algoritmos, o mesmo problema: RADAR é palíndromo?</text>
+
+  <!-- ================= ALGORITMO 1 — CÓPIA INVERTIDA ================= -->
+  <text x="60" y="82" font-size="16" font-weight="600" fill="#2c5d8a">Algoritmo 1 — cópia invertida</text>
+  <text x="640" y="82" text-anchor="end" font-size="15" fill="#5a7a9a">guarda uma cópia inteira</text>
+
+  <!-- palavra original -->
+  <text x="175" y="126" text-anchor="end" font-size="14" fill="#5a7a9a">palavra</text>
+  <g>
+    <rect x="190" y="94" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+    <rect x="256" y="94" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+    <rect x="322" y="94" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+    <rect x="388" y="94" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+    <rect x="454" y="94" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  </g>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="22" fill="#222">
+    <text x="218" y="126" text-anchor="middle">R</text>
+    <text x="284" y="126" text-anchor="middle">A</text>
+    <text x="350" y="126" text-anchor="middle">D</text>
+    <text x="416" y="126" text-anchor="middle">A</text>
+    <text x="482" y="126" text-anchor="middle">R</text>
+  </g>
+
+  <!-- comparação letra a letra -->
+  <g font-size="16" fill="#5a7a9a">
+    <text x="218" y="174" text-anchor="middle">=</text>
+    <text x="284" y="174" text-anchor="middle">=</text>
+    <text x="350" y="174" text-anchor="middle">=</text>
+    <text x="416" y="174" text-anchor="middle">=</text>
+    <text x="482" y="174" text-anchor="middle">=</text>
+  </g>
+
+  <!-- cópia invertida (memória extra) -->
+  <text x="175" y="222" text-anchor="end" font-size="14" fill="#5a7a9a">cópia invertida</text>
+  <g>
+    <rect x="190" y="190" width="56" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="4"/>
+    <rect x="256" y="190" width="56" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="4"/>
+    <rect x="322" y="190" width="56" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="4"/>
+    <rect x="388" y="190" width="56" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="4"/>
+    <rect x="454" y="190" width="56" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="4"/>
+  </g>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="22" fill="#888">
+    <text x="218" y="222" text-anchor="middle">R</text>
+    <text x="284" y="222" text-anchor="middle">A</text>
+    <text x="350" y="222" text-anchor="middle">D</text>
+    <text x="416" y="222" text-anchor="middle">A</text>
+    <text x="482" y="222" text-anchor="middle">R</text>
+  </g>
+
+  <text x="350" y="270" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    percorre a palavra duas vezes · precisa de uma palavra inteira a mais na memória
+  </text>
+
+  <!-- ================= ALGORITMO 2 — DUAS PONTAS ================= -->
+  <text x="60" y="308" font-size="16" font-weight="600" fill="#2c5d8a">Algoritmo 2 — duas pontas</text>
+  <text x="640" y="308" text-anchor="end" font-size="15" fill="#5a7a9a">não guarda nada</text>
+
+  <!-- ordem das comparações -->
+  <g font-size="14" font-weight="600" fill="#2c5d8a">
+    <text x="218" y="334" text-anchor="middle">1ª</text>
+    <text x="284" y="334" text-anchor="middle">2ª</text>
+    <text x="416" y="334" text-anchor="middle">2ª</text>
+    <text x="482" y="334" text-anchor="middle">1ª</text>
+  </g>
+  <text x="350" y="334" text-anchor="middle" font-size="14" fill="#5a7a9a">meio ✓</text>
+
+  <g>
+    <rect x="190" y="342" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+    <rect x="256" y="342" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+    <rect x="322" y="342" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" stroke-dasharray="6,4" rx="4"/>
+    <rect x="388" y="342" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+    <rect x="454" y="342" width="56" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  </g>
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="22" fill="#222">
+    <text x="218" y="374" text-anchor="middle">R</text>
+    <text x="284" y="374" text-anchor="middle">A</text>
+    <text x="350" y="374" text-anchor="middle">D</text>
+    <text x="416" y="374" text-anchor="middle">A</text>
+    <text x="482" y="374" text-anchor="middle">R</text>
+  </g>
+
+  <!-- setas caminhando para o centro -->
+  <path d="M 200 408 L 296 408" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="292,403 305,408 292,413" fill="#2c5d8a"/>
+  <path d="M 500 408 L 404 408" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="408,403 395,408 408,413" fill="#2c5d8a"/>
+
+  <line x1="100" y1="428" x2="600" y2="428" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="452" text-anchor="middle"
+        font-size="14" fill="#5a7a9a" font-style="italic">
+    mesma resposta, custos diferentes — a ideia determina o custo
+  </text>
+</svg>

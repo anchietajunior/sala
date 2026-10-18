@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="380" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Anatomia do ponteiro duplo — int** ligando o vetor externo as linhas
+  </text>
+
+  <!-- ===== Bloco 1: M->dados (int**) ===== -->
+  <text x="95" y="100" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">M-&gt;dados</text>
+  <rect x="40" y="115" width="110" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="95" y="146" text-anchor="middle" font-size="16" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int**</text>
+  <text x="95" y="183" text-anchor="middle" font-size="12" fill="#888" font-style="italic">
+    ponteiro duplo
+  </text>
+
+  <!-- Seta de M->dados para o vetor externo -->
+  <path d="M 150 140 L 227 140" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="220,135 233,140 220,145" fill="#2c5d8a"/>
+
+  <!-- ===== Bloco 2: vetor externo (vetor de int*) ===== -->
+  <text x="280" y="60" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    vetor externo (3 ponteiros int*)
+  </text>
+
+  <!-- Cell 0 (indice 0) -->
+  <text x="225" y="98" text-anchor="end" font-size="12" fill="#888">[0]</text>
+  <rect x="235" y="75" width="100" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="275" y="106" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int*</text>
+  <circle cx="335" cy="100" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Cell 1 (indice 1) -->
+  <text x="225" y="178" text-anchor="end" font-size="12" fill="#888">[1]</text>
+  <rect x="235" y="155" width="100" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="275" y="186" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int*</text>
+  <circle cx="335" cy="180" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Cell 2 (indice 2) -->
+  <text x="225" y="258" text-anchor="end" font-size="12" fill="#888">[2]</text>
+  <rect x="235" y="235" width="100" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="275" y="266" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int*</text>
+  <circle cx="335" cy="260" r="3.5" fill="#2c5d8a"/>
+
+  <!-- ===== Setas de cada ponteiro para sua linha ===== -->
+  <path d="M 335 100 L 415 100" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="410,95 423,100 410,105" fill="#2c5d8a"/>
+
+  <path d="M 335 180 L 415 180" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="410,175 423,180 410,185" fill="#2c5d8a"/>
+
+  <path d="M 335 260 L 415 260" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="410,255 423,260 410,265" fill="#2c5d8a"/>
+
+  <!-- ===== Bloco 3: linhas (cada uma com 4 inteiros) ===== -->
+  <text x="555" y="60" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    linhas — vetores de 4 inteiros
+  </text>
+
+  <!-- Linha 0: y=75 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="425" y="75" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="452" y="106" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="485" y="75" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="512" y="106" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="545" y="75" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="572" y="106" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="605" y="75" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="632" y="106" text-anchor="middle" font-size="18" fill="#222">0</text>
+  </g>
+
+  <!-- Linha 1: y=155 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="425" y="155" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="452" y="186" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="485" y="155" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="512" y="186" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="545" y="155" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="572" y="186" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="605" y="155" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="632" y="186" text-anchor="middle" font-size="18" fill="#222">0</text>
+  </g>
+
+  <!-- Linha 2: y=235 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="425" y="235" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="452" y="266" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="485" y="235" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="512" y="266" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="545" y="235" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="572" y="266" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="605" y="235" width="55" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="632" y="266" text-anchor="middle" font-size="18" fill="#222">0</text>
+  </g>
+
+  <!-- Nota de rodape -->
+  <line x1="80" y1="335" x2="680" y2="335" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="380" y="360" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    M[i][j] = duas indirecoes: primeiro o ponteiro externo ate a linha i, depois o ponteiro da linha i ate a coluna j
+  </text>
+</svg>

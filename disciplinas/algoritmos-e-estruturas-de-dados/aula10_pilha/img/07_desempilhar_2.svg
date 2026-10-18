@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="380" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 7 — desempilhar() remove 20
+  </text>
+
+  <!-- Nó 20 antigo (liberado) -->
+  <rect x="235" y="100" width="120" height="60" fill="#f0f0f0" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,4" rx="4"/>
+  <line x1="315" y1="100" x2="315" y2="160" stroke="#cfd6dd" stroke-width="2"/>
+  <text x="275" y="138" text-anchor="middle" font-size="22" fill="#aaa"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="335" y="138" text-anchor="middle" font-size="14" fill="#aaa">×</text>
+
+  <text x="430" y="135" font-size="13" fill="#b54" font-weight="600" font-style="italic">
+    free()
+  </text>
+
+  <!-- topo aponta para 10 (único restante) -->
+  <text x="195" y="260" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">topo →</text>
+
+  <!-- Nó 10 -->
+  <rect x="235" y="225" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <line x1="315" y1="225" x2="315" y2="285" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="275" y="263" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <text x="335" y="263" text-anchor="middle" font-size="14" fill="#888">∅</text>
+
+  <text x="375" y="258" font-size="13" fill="#888" font-style="italic">(volta a ser fundo)</text>
+
+  <!-- Box de retorno -->
+  <rect x="280" y="310" width="200" height="40" fill="#fffbe6" stroke="#2c5d8a" stroke-width="1.5" rx="4"/>
+  <text x="380" y="335" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">
+    retorno: 20
+  </text>
+
+  <!-- Nota -->
+  <text x="380" y="370" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    sem caso especial · diferente da Fila, basta um único ponteiro topo
+  </text>
+</svg>

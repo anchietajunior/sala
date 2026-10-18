@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 440"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Tipo 1 — Árvore geral
+  </text>
+  <text x="350" y="62" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    qualquer fator de ramificação · um nó pode ter 1, 2, 3, 4, … filhos
+  </text>
+
+  <!-- raiz -->
+  <text x="290" y="115" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">raiz →</text>
+
+  <!-- Arestas A -> B, C, D, E -->
+  <line x1="350" y1="110" x2="130" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="110" x2="270" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="110" x2="430" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="110" x2="580" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+
+  <!-- Arestas B -> F, G  e  D -> H -->
+  <line x1="130" y1="225" x2="80" y2="345" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="130" y1="225" x2="190" y2="345" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="430" y1="225" x2="430" y2="345" stroke="#2c5d8a" stroke-width="2"/>
+
+  <!-- Nó raiz A -->
+  <circle cx="350" cy="110" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="117" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">A</text>
+
+  <!-- Nível 1 -->
+  <circle cx="130" cy="225" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="130" y="232" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">B</text>
+
+  <circle cx="270" cy="225" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="270" y="232" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">C</text>
+
+  <circle cx="430" cy="225" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="430" y="232" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">D</text>
+
+  <circle cx="580" cy="225" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="580" y="232" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">E</text>
+
+  <!-- Nível 2 -->
+  <circle cx="80" cy="345" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="80" y="352" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">F</text>
+
+  <circle cx="190" cy="345" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="190" y="352" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">G</text>
+
+  <circle cx="430" cy="345" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="430" y="352" text-anchor="middle" font-size="20" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">H</text>
+
+  <!-- separador + nota -->
+  <line x1="100" y1="395" x2="600" y2="395" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="420" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    A tem 4 filhos · B tem 2 · D tem 1 · C, E, F, G, H são folhas
+  </text>
+</svg>

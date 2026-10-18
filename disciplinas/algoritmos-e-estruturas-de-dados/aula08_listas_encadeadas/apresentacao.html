@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 02 — Listas Encadeadas | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.55em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 600px;
+        }
+
+        /* Visualizações: imagens SVG dos diagramas das aulas */
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 540px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Bloco de resposta mínima nos exercícios — revelado por clique */
+        .reveal .resposta {
+            margin-top: 0.5em;
+            padding: 8px 14px;
+            border-left: 3px solid var(--cor-destaque);
+            background: #f7f9fc;
+            font-size: 0.72em;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .reveal .resposta strong {
+            color: var(--cor-destaque);
+        }
+        .reveal .resposta ol,
+        .reveal .resposta ul {
+            margin: 0.4em 0 0.2em 0;
+            padding-left: 1.6em;
+            display: block;
+        }
+        .reveal .resposta li {
+            margin-bottom: 0.25em;
+        }
+        .reveal .resposta code {
+            font-size: 0.95em;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol {
+            display: block;
+        }
+        .reveal li {
+            margin-bottom: 0.4em;
+        }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- ============================================ -->
+        <!-- 1. CAPA INSTITUCIONAL (padrão da disciplina) -->
+        <!-- ============================================ -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- 2. TÍTULO DA AULA                            -->
+        <!-- ============================================ -->
+        <section>
+            <p class="titulo-bloco">Aula 02</p>
+            <h1>Listas Encadeadas</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                FIFO e LIFO · duplas · circulares
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>conceitual</strong> — apresentamos a <em>família</em>
+                das listas e os <em>padrões de acesso</em>. Implementação em C
+                começa na Aula 03 (Fila).
+            </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO, 6 CAMADAS)   -->
+        <!-- ============================================================ -->
+        <section>
+            <!-- ----- CAMADA 1 — INTRODUÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>Introdução</h3>
+                <p style="text-align: left;">
+                    Você precisa guardar uma sequência que <strong>muda o tempo todo</strong>:
+                    cresce, encolhe, e você não sabe quantos elementos vai ter ao final.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Não dá para reservar um espaço gigante "por garantia".
+                    Não dá para correr o risco de ficar sem espaço no meio do caminho.
+                </p>
+                <blockquote>
+                    Solução intuitiva: guarde cada coisa em seu próprio lugarzinho separado,
+                    e faça com que cada lugarzinho <strong>saiba onde está o próximo</strong>.
+                </blockquote>
+                <p class="nota-rodape">
+                    Essa ideia, formalizada, vira a <strong>lista encadeada</strong>.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 2 — DEFINIÇÃO INFORMAL ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>O que é uma lista encadeada</h3>
+                <p style="text-align: left;">
+                    Uma estrutura <strong>dinâmica</strong> de objetos —
+                    chamados <span class="destaque">nós</span> — em ordem linear.
+                </p>
+                <p class="nota-rodape">
+                    Tenenbaum, cap. 5; Cormen et al., cap. 10.
+                </p>
+            </section>
+
+            <section>
+                <h3>Cada nó tem dois campos</h3>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>
+                        <span class="destaque">campo de informação</span>
+                        — a carga útil (chave, dado).
+                    </li>
+                    <li>
+                        <span class="destaque">campo de endereço</span>
+                        — ponteiro <code>proximo</code> para o próximo nó.
+                    </li>
+                </ul>
+                <blockquote>
+                    O último nó guarda <code>NULL</code> em <code>proximo</code>:
+                    "não há próximo".
+                </blockquote>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, segundo Tenenbaum, uma lista encadeada é uma
+                            coleção de elementos onde a ordem é dada não pela
+                            posição na memória, mas pelos próprios ponteiros que
+                            ligam um nó ao próximo.
+                            <cite>Tenenbaum, cap. 5 — Listas em C</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>O ponteiro externo (<em>head</em>)</h3>
+                <p style="text-align: left;">
+                    Para acessar a lista, mantém-se um <span class="destaque">ponteiro
+                    externo</span> chamado <code>inicio</code> (em inglês, <em>head</em>),
+                    que aponta para o primeiro nó.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Esse ponteiro <strong>não é um nó</strong> — é o "endereço de entrada".
+                </p>
+                <ul style="text-align: left; font-size: 0.82em; margin-top: 0.8em;">
+                    <li>Lista vazia → <code>inicio = NULL</code>.</li>
+                    <li>Sem o <code>inicio</code>, a lista inteira fica perdida na memória.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Lista × vetor — como vem a ordem</h3>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>
+                        <strong>Vetor</strong> — ordem dada pelos
+                        <em>índices</em>, embutida no armazenamento.
+                    </li>
+                    <li>
+                        <strong>Lista</strong> — ordem dada pelos
+                        <em>ponteiros</em>, dentro de cada nó.
+                    </li>
+                </ul>
+                <blockquote>
+                    A ordem está nas ligações, não na vizinhança.
+                </blockquote>
+            </section>
+
+            <!-- ----- APROFUNDAMENTO — O NÓ COMO UNIDADE DE CONSTRUÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Aprofundamento da Camada 2</p>
+                <h3>O nó — unidade de construção</h3>
+                <p style="text-align: left;">
+                    Lista, pilha, fila, árvore, grafo, tabela hash com encadeamento
+                    — todas elas são, no fundo,
+                    <span class="destaque">conjuntos de nós ligados por ponteiros</span>.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Estudar o nó com cuidado é estudar a base sobre a qual quase
+                    toda estrutura dinâmica do curso será construída — o mesmo
+                    conceito reaparece especializado em cada estrutura nova.
+                </p>
+                <p class="nota-rodape">
+                    Tratamento canônico: <em>Tenenbaum</em>, cap. 5;
+                    <em>Cormen et al.</em>, cap. 10.
+                </p>
+            </section>
+
+            <section>
+                <h3>Composição — dois grupos de campos</h3>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>
+                        <span class="destaque">Dado</span> — a carga útil
+                        (<code>int</code>, nome, struct inteira).
+                    </li>
+                    <li>
+                        <span class="destaque">Ligação</span> — um ou mais
+                        <em>ponteiros</em> para outros nós.
+                    </li>
+                </ul>
+                <blockquote>
+                    O segundo grupo <strong>define a topologia</strong> — lista, árvore ou grafo.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Anatomia de um nó</h3>
+                <p style="text-align: left;">
+                    Esquema visual do nó da lista simples: à esquerda, o campo de
+                    <strong>dado</strong> (a carga útil); à direita, o campo de
+                    <strong>ligação</strong> (<code>proximo</code>) apontando para o
+                    nó seguinte.
+                </p>
+                <img class="diagrama" src="img/04_anatomia_no.svg"
+                     alt="Anatomia de um nó: à esquerda o campo de valor (carga útil), à direita o campo de ponteiro proximo apontando para outro nó">
+            </section>
+
+            <section>
+                <h3>Família de nós — mesmo conceito, ligações diferentes</h3>
+                <p style="text-align: left;">
+                    O mesmo nó da lista simples, com pequenas variações no
+                    <strong>número e papel dos ponteiros</strong>, dá origem a
+                    estruturas inteiramente diferentes. Veja os quatro casos lado a
+                    lado — o campo de dado é igual em todos.
+                </p>
+                <img class="diagrama" src="img/05_familia_de_nos.svg"
+                     alt="Quatro nós lado a lado: lista simples (1 ponteiro), lista dupla (2 ponteiros), árvore binária (esq/dir) e grafo (lista de adjacência)">
+                <p class="nota-rodape">
+                    O dado é equivalente em todos. Muda apenas o
+                    <strong>padrão de ligações</strong>.
+                </p>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, ao entender o nó da lista simples vocês já
+                            terão boa parte do mapa mental para lista dupla,
+                            árvore binária e grafo — basta ajustar o número e
+                            o significado dos ponteiros. Esse é o motivo de
+                            tantas estruturas serem chamadas, em conjunto, de
+                            <em>estruturas baseadas em nó</em>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Tópicos importantes — struct autorreferenciada</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Em C, um nó é um <code>typedef struct</code> que contém
+                    <strong>um ponteiro para o próprio tipo</strong> que está
+                    sendo definido — construção chamada
+                    <span class="destaque">struct autorreferenciada</span>
+                    (Tenenbaum, cap. 5).
+                </p>
+                <pre><code class="language-c" data-trim>typedef struct No {
+    int valor;
+    struct No *proximo;   // referência ao próprio tipo
+} No;</code></pre>
+                <p style="text-align: left; font-size: 0.74em; margin-top: 0.6em;">
+                    Dentro da definição, é obrigatório usar o
+                    <strong>tag</strong> <code>struct No</code>. Trocar por
+                    <code>No *proximo</code> ali dentro <strong>não compila</strong>:
+                    o <code>typedef</code> só conclui o nome <code>No</code>
+                    no <code>;</code> final, depois do <code>}</code>.
+                </p>
+                <p class="nota-rodape">
+                    Fora da definição, <code>struct No *p</code> e
+                    <code>No *p</code> são equivalentes. Implementação concreta:
+                    a partir da Aula 03 (Fila).
+                </p>
+            </section>
+
+            <section>
+                <h3>Tópicos importantes — alocação dinâmica</h3>
+                <p style="text-align: left; font-size: 0.82em;">
+                    Cada nó é criado em tempo de execução por uma chamada a
+                    <code>malloc(sizeof(No))</code> — <em>malloc</em> =
+                    <em>memory allocation</em>.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>
+                        <code>malloc</code> reserva uma região do tamanho exato
+                        de um <code>No</code> e devolve o endereço dela.
+                    </li>
+                    <li>
+                        Quando o nó é descartado, a memória é devolvida com
+                        <code>free</code>.
+                    </li>
+                    <li>
+                        Lista com mil elementos → <strong>~mil chamadas a
+                        <code>malloc</code></strong> ao longo da vida.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h3><code>NULL</code> como fronteira</h3>
+                <p style="text-align: left;">
+                    Em qualquer campo de ligação, <code>NULL</code> significa
+                    <em>"não há nó aqui"</em>.
+                </p>
+                <ul style="text-align: left; font-size: 0.82em;">
+                    <li>Último da lista: <code>proximo = NULL</code>.</li>
+                    <li>Lista vazia: <code>inicio = NULL</code>.</li>
+                    <li>Folha de árvore: <code>esq = dir = NULL</code>.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>O erro mais comum</h3>
+                <blockquote>
+                    Tentar percorrer a partir de <code>NULL</code> =
+                    <em>segmentation fault</em> quase certa.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Tópicos importantes — preço do ponteiro &amp; identidade</h3>
+                <div class="duas-colunas">
+                    <div>
+                        <h4 style="color: #2c5d8a;">Preço do ponteiro</h4>
+                        <ul style="font-size: 0.74em;">
+                            <li>Cada ponteiro: <strong>8 bytes</strong> em sistemas de 64 bits.</li>
+                            <li>
+                                Nó com um <code>int</code> (4 B) paga
+                                <em>mais</em> em ligação do que em dado.
+                            </li>
+                            <li>
+                                Custo só pesa em listas grandes com elementos pequenos.
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #2c5d8a;">Identidade pelo endereço</h4>
+                        <ul style="font-size: 0.74em;">
+                            <li>
+                                Identidade do nó = seu
+                                <strong>endereço de memória</strong>.
+                            </li>
+                            <li>
+                                Dois nós com o mesmo valor são
+                                <em>nós distintos</em>.
+                            </li>
+                            <li>
+                                Operações que recebem "o nó alvo" recebem o
+                                ponteiro — não o valor da chave.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 3 — PROPRIEDADES E COMPORTAMENTO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>Propriedades essenciais</h3>
+                <p style="text-align: left;">
+                    Antes de classificar variantes e operações, fixemos as
+                    <strong>quatro propriedades</strong> que toda lista encadeada
+                    compartilha — independente de ser simples, dupla, circular,
+                    ordenada ou não.
+                </p>
+                <ul style="text-align: left; font-size: 0.76em;">
+                    <li>
+                        <span class="destaque">Estrutura dinâmica</span> — cresce e
+                        encolhe sob demanda; sem capacidade máxima a priori.
+                    </li>
+                    <li>
+                        <span class="destaque">Sem alocação contígua</span> — nós podem
+                        estar em qualquer região da memória.
+                    </li>
+                    <li>
+                        <span class="destaque">Sem deslocamento em inserção/remoção</span> —
+                        apenas reajuste de <em>ponteiros locais</em>.
+                    </li>
+                    <li>
+                        <span class="destaque">Acesso linear, não aleatório</span> —
+                        chegar ao k-ésimo nó exige passar pelos k−1 anteriores.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>As variantes estruturais</h3>
+                <p style="text-align: left;">
+                    A "lista encadeada" não é uma só — é uma <strong>família</strong>
+                    de três estruturas que diferem em <strong>como cada nó se conecta
+                    aos vizinhos</strong>. As três compartilham as propriedades
+                    essenciais; mudam só na quantidade e direção dos ponteiros.
+                </p>
+                <ul style="text-align: left; font-size: 0.76em;">
+                    <li>
+                        <span class="destaque">Simplesmente encadeada</span> — um ponteiro por nó.
+                        Percurso unidirecional. Último → <code>NULL</code>.
+                    </li>
+                    <li>
+                        <span class="destaque">Duplamente encadeada</span> — dois ponteiros
+                        (sucessor e predecessor) por nó.
+                        Percurso nos dois sentidos. Custo: 1 ponteiro extra/nó.
+                    </li>
+                    <li>
+                        <span class="destaque">Circular</span> — o último aponta de volta ao primeiro.
+                        Anel sem fim explícito.
+                    </li>
+                </ul>
+                <p class="nota-rodape">
+                    Variantes tratadas em <em>Tenenbaum</em>, cap. 5;
+                    <em>Cormen et al.</em>, cap. 10.2.
+                </p>
+            </section>
+
+            <section>
+                <h3>Ordenadas × não ordenadas</h3>
+                <p style="text-align: left;">
+                    Decisão <span class="destaque">ortogonal</span> às variantes
+                    estruturais — vale para simples, dupla ou circular.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>
+                        <span class="destaque">Ordenada</span> — nós mantidos
+                        classificados pela chave; cada inserção localiza a
+                        posição correta antes de religar.
+                    </li>
+                    <li>
+                        <span class="destaque">Não ordenada</span> — nós entram
+                        em ordem arbitrária; inserção é mais barata.
+                    </li>
+                </ul>
+                <p class="nota-rodape">
+                    Escolha guiada pela <em>operação dominante</em>: lista
+                    ordenada paga custo na inserção para ganhar na busca.
+                </p>
+            </section>
+
+            <section>
+                <h3>FIFO e LIFO — <em>padrões de acesso</em>, não estruturas</h3>
+                <p style="text-align: left;">
+                    São <span class="destaque">políticas de comportamento</span>:
+                    descrevem <em>qual elemento sai quando se pede para retirar</em>.
+                </p>
+                <ul style="text-align: left;">
+                    <li>
+                        <span class="destaque">FIFO</span> — <em>First-In, First-Out</em>.
+                        Comportamento da <strong>Fila</strong>. Ordem de chegada.
+                    </li>
+                    <li>
+                        <span class="destaque">LIFO</span> — <em>Last-In, First-Out</em>.
+                        Comportamento da <strong>Pilha</strong>. Desfazer na ordem inversa.
+                    </li>
+                </ul>
+                <blockquote>
+                    A lista encadeada é uma das <strong>representações internas</strong>
+                    possíveis para Pilha e para Fila.
+                </blockquote>
+                <p class="nota-rodape">
+                    Tratamento por capítulos próprios em <em>Tenenbaum</em>
+                    (cap. 2 — Pilhas; cap. 4 — Filas).
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 4 — DEFINIÇÃO FORMAL E NOTAÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>Definição formal — a tupla</h3>
+                <p style="text-align: left;">
+                    Agora <strong>formalizamos</strong> a lista simples como uma
+                    <strong>tupla matemática</strong> — uma forma compacta de listar
+                    tudo que a define: o conjunto de nós, as funções que ligam cada
+                    nó ao seu valor e ao seguinte, e o ponteiro externo de entrada.
+                </p>
+                <p style="text-align: left;">
+                    Uma lista simplesmente encadeada <code>L</code> é a tupla:
+                </p>
+                <blockquote style="font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.95em;">
+                    L = (N, chave, proximo, inicio)
+                </blockquote>
+                <ul style="text-align: left; font-size: 0.76em;">
+                    <li><strong>N</strong> — conjunto (possivelmente vazio) dos nós da lista.</li>
+                    <li><strong>chave: N → V</strong> — campo de informação; associa cada nó a um valor de <em>V</em>.</li>
+                    <li><strong>proximo: N → N ∪ {NULL}</strong> — campo de endereço; associa cada nó ao seguinte, ou <code>NULL</code>.</li>
+                    <li><strong>inicio ∈ N ∪ {NULL}</strong> — ponteiro externo; <code>NULL</code> se a lista está vazia.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Operações canônicas</h3>
+                <p style="text-align: left;">
+                    Definida a estrutura, listamos as <strong>cinco operações
+                    canônicas</strong> sobre a lista simples — com suas assinaturas
+                    e pré-condições. É o "contrato" mínimo que qualquer cliente da
+                    lista pode invocar.
+                </p>
+                <p style="font-size: 0.7em; color: #666; text-align: left;">
+                    Cormen et al. (cap. 10.2): <code>LIST-SEARCH</code>,
+                    <code>LIST-INSERT</code>, <code>LIST-DELETE</code>.
+                    Tenenbaum (cap. 5): nomenclatura equivalente em estilo C.
+                </p>
+                <ul style="text-align: left; font-size: 0.74em;">
+                    <li><code>criar() → L</code> — devolve lista vazia (<code>inicio = NULL</code>).</li>
+                    <li><code>inserir_inicio(L, v)</code> — adiciona nó com chave <code>v</code> no início.</li>
+                    <li><code>remover_inicio(L) → V</code> — pré-cond.: lista não vazia. Devolve a chave do primeiro.</li>
+                    <li><code>buscar(L, v) → N ∪ {NULL}</code> — devolve o primeiro nó com <code>chave = v</code>, ou <code>NULL</code>.</li>
+                    <li><code>vazia(L) → {0, 1}</code> — devolve 1 se <code>inicio = NULL</code>.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Axiomas</h3>
+                <p style="text-align: left;">
+                    Os axiomas <strong>definem o significado</strong> das operações
+                    combinando-as entre si — sem dizer como elas são implementadas.
+                    Repare em <strong>A3</strong>: é ele que captura, em uma linha, o
+                    comportamento LIFO quando se insere e remove pelo início.
+                </p>
+                <ul style="text-align: left; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.82em;">
+                    <li><strong>A1</strong>. vazia(criar()) = 1</li>
+                    <li><strong>A2</strong>. vazia(inserir_inicio(L, v)) = 0</li>
+                    <li><strong>A3</strong>. remover_inicio(inserir_inicio(L, v)) = v</li>
+                </ul>
+                <p style="text-align: left; margin-top: 0.8em; font-size: 0.78em;">
+                    A3 caracteriza o comportamento <strong>LIFO</strong> sobre <code>inserir_inicio</code>:
+                    remover devolve exatamente o que se acabou de inserir.
+                </p>
+                <p class="nota-rodape">
+                    Para a variante dupla, acrescenta-se <code>anterior: N → N ∪ {NULL}</code> e a âncora <code>fim</code>.
+                    Para a circular, redefine-se <code>proximo(último) = inicio</code>, eliminando <code>NULL</code>.
+                </p>
+            </section>
+
+            <section>
+                <h3>Exemplo concreto: lista [10, 20, 30]</h3>
+                <p style="text-align: left;">
+                    Para ancorar a tupla abstrata em algo palpável, vejamos como a
+                    lista <code>[10, 20, 30]</code> se traduz exatamente nos
+                    <strong>quatro componentes</strong> da definição formal. Cada
+                    linha abaixo corresponde a um componente da tupla.
+                </p>
+                <ul style="text-align: left; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.82em;">
+                    <li>N = {n₁, n₂, n₃}</li>
+                    <li>chave(n₁) = 10, chave(n₂) = 20, chave(n₃) = 30</li>
+                    <li>proximo(n₁) = n₂, proximo(n₂) = n₃, proximo(n₃) = NULL</li>
+                    <li>inicio = n₁</li>
+                </ul>
+                <p class="nota-rodape">
+                    A notação dá nome preciso a cada parte da estrutura — útil para provar
+                    propriedades e para discutir alternativas.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 5 — ANÁLISE DE COMPLEXIDADE ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>Análise — operações principais</h3>
+                <p style="text-align: left;">
+                    Em <strong>negrito</strong>: onde a lista ganha do vetor — e vice-versa
+                    no acesso ao k-ésimo.
+                </p>
+                <p style="font-size: 0.65em; color: #666;">
+                    <strong>O(...)</strong> = "ordem de"; <strong>O(1)</strong> = tempo constante;
+                    <strong>O(n)</strong> = proporcional a <em>n</em>.
+                    Análise canônica: <em>Cormen et al.</em>, cap. 10.2; <em>Tenenbaum</em>, cap. 5.
+                </p>
+                <table style="font-size: 0.7em;">
+                    <thead>
+                        <tr>
+                            <th>Operação</th>
+                            <th>Lista simples</th>
+                            <th>Lista dupla</th>
+                            <th>Vetor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Acesso ao primeiro</td><td>O(1)</td><td>O(1)</td><td>O(1)</td></tr>
+                        <tr><td>Acesso ao k-ésimo</td><td>O(n)</td><td>O(n)</td><td><strong>O(1)</strong></td></tr>
+                        <tr><td>Buscar uma chave</td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+                        <tr><td>Inserir no início</td><td><strong>O(1)</strong></td><td><strong>O(1)</strong></td><td>O(n)</td></tr>
+                        <tr><td>Inserir no fim (com <code>fim</code>)</td><td>O(1)</td><td>O(1)</td><td>O(1)*</td></tr>
+                        <tr><td>Remover o primeiro</td><td><strong>O(1)</strong></td><td><strong>O(1)</strong></td><td>O(n)</td></tr>
+                        <tr><td>Remover nó dado o <em>ponteiro</em></td><td>O(n)**</td><td><strong>O(1)</strong></td><td>O(n)</td></tr>
+                        <tr><td>Remover nó dada a <em>chave</em></td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape">
+                    * amortizado.
+                    ** simples precisa achar o nó <em>anterior</em> percorrendo desde <code>inicio</code>;
+                    a dupla já o conhece via <code>anterior</code>.
+                </p>
+            </section>
+
+            <section>
+                <h3>A nuance que separa O(1) de O(n)</h3>
+                <p style="text-align: left;">
+                    Inserção e remoção são <strong>extremamente rápidas</strong>
+                    quando o local da operação <em>já é conhecido</em> — basta
+                    reajustar ponteiros locais.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Quando é preciso <strong>buscar</strong> o elemento antes,
+                    o tempo da busca <strong>domina</strong> e a operação cai para O(n).
+                </p>
+                <blockquote style="font-size: 0.8em;">
+                    "Deletar o primeiro nó" → O(1).<br>
+                    "Deletar o nó cuja chave é 42" → O(n).
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Vantagens e custos</h3>
+                <p style="text-align: left;">
+                    Resumindo a tabela em prosa: a lista compra <strong>flexibilidade
+                    dinâmica</strong> ao preço de <strong>perder acesso aleatório</strong>
+                    e pagar <em>overhead</em> de ponteiro por nó. Cada linha das duas
+                    colunas explicita uma dessas trocas.
+                </p>
+                <div class="duas-colunas">
+                    <div>
+                        <h4 style="color: #2a7;">Vantagens</h4>
+                        <ul style="font-size: 0.76em;">
+                            <li>Estrutura <strong>dinâmica</strong> — sem capacidade fixa.</li>
+                            <li>Sem deslocamento em inserção/remoção.</li>
+                            <li>Memória <strong>exata</strong> — sem desperdício.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #b54;">Custos</h4>
+                        <ul style="font-size: 0.76em;">
+                            <li>Sem acesso aleatório (k-ésimo em O(n)).</li>
+                            <li><strong>Overhead</strong> de ponteiro por nó (8 bytes em 64 bits).</li>
+                            <li>Cada nó é uma alocação individual com <code>malloc</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="nota-rodape">
+                    A escolha entre vetor e lista depende do padrão de uso — não é dogmática.
+                </p>
+            </section>
+
+            <!-- ----- CAMADA 6 — CONEXÕES E VARIANTES ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde reaparece no curso</h3>
+                <p style="text-align: left;">
+                    A lista encadeada não é só uma estrutura — é a <strong>peça base</strong>
+                    sobre a qual quase tudo que vem depois é construído. Veja em que
+                    aulas e em que aplicações reais ela retorna como protagonista.
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>
+                        <span class="destaque">Pilha</span> (Aula 04) — lista simples
+                        operada como LIFO; insere e remove pelo início.
+                    </li>
+                    <li>
+                        <span class="destaque">Fila</span> (Aula 03) — lista simples
+                        com <code>inicio</code> e <code>fim</code> operada como FIFO;
+                        insere no fim, remove do início.
+                    </li>
+                    <li>
+                        <span class="destaque">Listas duplas</span> — editores de texto,
+                        histórico de browsers, árvores com referência ao pai.
+                    </li>
+                    <li>
+                        <span class="destaque">Listas circulares</span> — escalonadores
+                        round-robin, <em>playlists</em> em loop, algoritmo de Josephus.
+                    </li>
+                </ul>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, esta aula é a base sobre a qual praticamente
+                            todas as próximas se apoiam — Pilha, Fila, e até
+                            estruturas mais sofisticadas como tabelas hash com
+                            tratamento de colisão por encadeamento.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA               -->
+        <!-- ============================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.7em; color: #666;">
+                    Estrutura básica → variantes → padrões de acesso.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1 — lista simples encadeada</h3>
+                <p style="text-align: left;">
+                    Forma canônica da lista: três nós em sequência, cada um com seu
+                    valor e seu ponteiro <code>proximo</code>; o ponteiro externo
+                    <code>inicio</code> aponta para o primeiro, e o último fecha com
+                    <code>NULL</code>.
+                </p>
+                <img class="diagrama" src="img/01_lista_simples.svg"
+                     alt="Lista simplesmente encadeada com três nós (10, 20, 30) e ponteiro inicio; o último aponta para NULL">
+            </section>
+
+            <section>
+                <h3>Passo 2 — variantes: dupla e circular</h3>
+                <p style="text-align: left;">
+                    Mesmo nó, mesma ideia — só muda como os ponteiros se ligam. Na
+                    dupla, cada nó "olha para os dois lados". Na circular, o último
+                    fecha o anel apontando de volta para o primeiro, eliminando o
+                    <code>NULL</code> terminal.
+                </p>
+                <img class="diagrama" src="img/02_dupla_e_circular.svg"
+                     alt="Lista duplamente encadeada com ponteiros anterior e próximo, e lista circular em que o último liga ao primeiro">
+            </section>
+
+            <section>
+                <h3>Passo 3 — FIFO e LIFO sobre a mesma estrutura</h3>
+                <p style="text-align: left;">
+                    A mesma lista simples vira <strong>Fila</strong> ou
+                    <strong>Pilha</strong> só pela <em>política de acesso</em> aplicada:
+                    se entra de um lado e sai do outro, FIFO; se entra e sai pelo
+                    mesmo lado, LIFO.
+                </p>
+                <img class="diagrama" src="img/03_fifo_lifo.svg"
+                     alt="FIFO (Fila): sai pela frente, entra atrás. LIFO (Pilha): entra e sai pelo topo">
+                <p class="nota-rodape">A estrutura é a mesma — muda a <strong>política de acesso</strong>.</p>
+            </section>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR                 -->
+        <!-- ============================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que não usar sempre vetor?</h2>
+            </section>
+
+            <section>
+                <h3>O sistema de mensageria</h3>
+                <p style="text-align: left;">
+                    Mensagens chegam o tempo todo, são entregues e removidas;
+                    o número total <span class="destaque">varia muito</span>:
+                    de 0 a milhares ao longo do dia.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Como armazenar?
+                </p>
+            </section>
+
+            <section>
+                <h3>Tentativa 1 — vetor de tamanho fixo</h3>
+                <p style="text-align: left;">
+                    Reserva 10.000 posições na inicialização.
+                </p>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>🔴 Em pico: lota → recusa mensagens.</li>
+                    <li>🔴 Em calmaria: 9.900 posições vazias ocupando memória.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Tentativa 2 — vetor que cresce (<code>realloc</code>)</h3>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>🟡 Cada <code>realloc</code> pode <strong>copiar tudo</strong> para
+                        uma nova região contígua → O(n) que congela o sistema.</li>
+                    <li>🔴 Remover da frente exige <strong>deslocar</strong> todas as outras
+                        → outro O(n).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Solução — lista encadeada</h3>
+                <ul style="text-align: left; font-size: 0.85em;">
+                    <li>✅ Cada mensagem é um <strong>nó</strong> alocado individualmente.</li>
+                    <li>✅ Inserir no fim com ponteiro <code>fim</code>: <strong>O(1)</strong>.</li>
+                    <li>✅ Remover da frente: <strong>O(1)</strong>.</li>
+                    <li>✅ Memória <strong>exata</strong>; sem cópias massivas; sem limite estático.</li>
+                </ul>
+                <p class="nota-rodape">
+                    É exatamente esse padrão FIFO que filas de impressão, buffers de pacotes
+                    e sistemas de mensageria usam. Para LIFO, o exemplo análogo é a
+                    pilha de chamadas de função.
+                </p>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, listas encadeadas resolvem problemas como
+                            histórico de undo em editores, gerenciamento da fila de
+                            processos prontos no kernel do Linux e a própria pilha
+                            de chamadas que o C usa para executar funções.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BLOCO 4 — ANALOGIAS                          -->
+        <!-- ============================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Analogias</h2>
+            </section>
+
+            <section>
+                <h3>Fila do banco</h3>
+                <p style="text-align: left;">
+                    Entrada da fila = <strong>fim</strong> (último a chegar).<br>
+                    Saída da fila = <strong>início</strong> (próximo a ser atendido).
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    Cada pessoa "aponta" mentalmente para a pessoa da frente — sua
+                    referência de "<em>próximo a sair</em>".
+                </p>
+                <blockquote>
+                    Lista simplesmente encadeada operada como <strong>FIFO</strong> = Fila.
+                </blockquote>
+            </section>
+
+            <section>
+                <h3>Pilha de provas para corrigir</h3>
+                <p style="text-align: left;">
+                    O professor coloca cada prova <span class="destaque">em cima</span>
+                    da última. Ao corrigir, <strong>pega a do topo</strong> — a última colocada.
+                </p>
+                <p style="text-align: left; margin-top: 0.8em;">
+                    A pilha cresce e encolhe pelo <strong>mesmo lado</strong>. Não há esforço
+                    para acessar o meio: você não acessa o meio.
+                </p>
+                <blockquote>
+                    Lista simplesmente encadeada operada como <strong>LIFO</strong> = Pilha.
+                </blockquote>
+            </section>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BLOCO 5 — EXERCÍCIOS                         -->
+        <!-- ============================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 5</p>
+                <h2>Exercícios práticos</h2>
+                <p style="font-size: 0.7em; color: #666;">
+                    Conceituais — sem programar em C.
+                </p>
+            </section>
+
+            <section>
+                <h3>Exercício 1 — variante adequada</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Para cada situação, indique <strong>simples</strong>, <strong>dupla</strong>
+                    ou <strong>circular</strong> e justifique em 1 linha:
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>a) Histórico de comandos do shell (setas ↑ ↓).</li>
+                    <li>b) <em>Playlist</em> em modo "repetir tudo".</li>
+                    <li>c) Buffer FIFO: insere atrás, remove na frente.</li>
+                    <li>d) Cursor de editor caminhando ← →.</li>
+                    <li>e) Escalonamento <em>round-robin</em> de processos.</li>
+                </ul>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ul>
+                        <li>a) <strong>Dupla</strong> — navegação em dois sentidos.</li>
+                        <li>b) <strong>Circular</strong> — sem fim explícito.</li>
+                        <li>c) <strong>Simples</strong> com <code>inicio</code> e <code>fim</code> — pontas em O(1).</li>
+                        <li>d) <strong>Dupla</strong> — caminhar para a esquerda exige <code>anterior</code>.</li>
+                        <li>e) <strong>Circular</strong> — rotação cíclica natural.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 2 — vetor ou lista?</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Decida e justifique em 2 linhas (operação dominante + custo da operação cara em cada alternativa):
+                </p>
+                <ul style="text-align: left; font-size: 0.78em;">
+                    <li>a) Tabela de notas — acesso por matrícula.</li>
+                    <li>b) Tarefas pendentes — inserção/remoção nas pontas.</li>
+                    <li>c) Histórico de Ctrl+Z — só topo.</li>
+                    <li>d) 10 M de pontos com <em>uma única passada</em> sequencial.</li>
+                </ul>
+                <div class="resposta fragment fade-in">
+                    <strong>Resposta:</strong>
+                    <ul>
+                        <li>a) <strong>Vetor</strong> — acesso por índice O(1) vs O(n) na lista.</li>
+                        <li>b) <strong>Lista</strong> — pontas em O(1); vetor pagaria deslocamento O(n).</li>
+                        <li>c) <strong>Lista</strong> (Pilha) ou vetor dinâmico — ambos O(1) amortizado.</li>
+                        <li>d) <strong>Vetor</strong> — uma única alocação contígua; lista exigiria 10 M de <code>malloc</code> + ~80 MB só de ponteiros.</li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BLOCO 6 — REFERÊNCIAS                        -->
+        <!-- ============================================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.7em;">
+                <li>
+                    <strong>Tenenbaum, Langsam &amp; Augenstein</strong> —
+                    <em>Estruturas de Dados Usando C</em>, caps. 4 (filas e listas)
+                    e 5 (listas em C). Variantes da lista encadeada.
+                </li>
+                <li>
+                    <strong>Cormen, Leiserson, Rivest &amp; Stein</strong> (CLRS) —
+                    <em>Algoritmos: Teoria e Prática</em>, cap. 10, seção 10.2
+                    (listas ligadas).
+                </li>
+                <li>
+                    <strong>Sedgewick, R.</strong> —
+                    <em>Algoritmos em C</em>, Parte 1, cap. 3 (estruturas elementares).
+                </li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leitura complementar:</p>
+            <ul style="text-align: left; font-size: 0.7em; color: #666;">
+                <li>Ziviani — cap. de estruturas lineares (em português).</li>
+            </ul>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- ENCERRAMENTO                                  -->
+        <!-- ============================================ -->
+        <section class="capa">
+            <h1>Próxima aula</h1>
+            <h2>Aula 03 — Fila</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                A primeira implementação concreta em C: FIFO sobre lista encadeada.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<!-- Reveal.js scripts -->
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        // Transições leves
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

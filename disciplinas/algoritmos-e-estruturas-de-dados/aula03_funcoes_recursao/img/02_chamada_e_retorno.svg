@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    A chamada e o retorno
+  </text>
+
+  <!-- quem chama -->
+  <rect x="50" y="90" width="250" height="200" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="4"/>
+  <text x="175" y="118" text-anchor="middle" font-size="16" font-weight="600" fill="#5a7a9a">main</text>
+  <text x="70" y="158" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int r = soma(3, 4);</text>
+  <text x="70" y="205" font-size="13" fill="#888" font-style="italic">fica pendente,</text>
+  <text x="70" y="223" font-size="13" fill="#888" font-style="italic">esperando o retorno</text>
+  <text x="70" y="268" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">printf("%d", r);</text>
+
+  <!-- quem e chamado -->
+  <rect x="400" y="90" width="250" height="200" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="525" y="118" text-anchor="middle" font-size="16" font-weight="600" fill="#2c5d8a">soma</text>
+  <text x="420" y="162" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">a = 3</text>
+  <text x="530" y="162" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">b = 4</text>
+  <text x="420" y="200" font-size="15" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">return a + b;</text>
+  <text x="420" y="245" font-size="13" fill="#5a7a9a" font-style="italic">cópias — os originais</text>
+  <text x="420" y="263" font-size="13" fill="#5a7a9a" font-style="italic">da main não são tocados</text>
+
+  <!-- ida -->
+  <path d="M 305 150 L 388 150" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="385,145 398,150 385,155" fill="#2c5d8a"/>
+  <text x="350" y="126" text-anchor="middle" font-size="13" font-weight="600" fill="#2c5d8a">argumentos</text>
+  <text x="350" y="142" text-anchor="middle" font-size="13" font-weight="600" fill="#2c5d8a">3 e 4</text>
+
+  <!-- volta -->
+  <path d="M 395 250 L 312 250" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="315,245 302,250 315,255" fill="#2c5d8a"/>
+  <text x="353" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="#2c5d8a">return → 7</text>
+
+  <line x1="80" y1="330" x2="620" y2="330" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="355" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    enquanto soma executa, a main fica parada
+  </text>
+  <text x="350" y="376" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    com o retorno, ela retoma exatamente na linha seguinte
+  </text>
+</svg>

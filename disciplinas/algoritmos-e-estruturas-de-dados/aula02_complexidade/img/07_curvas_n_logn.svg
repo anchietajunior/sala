@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 430"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="36" text-anchor="middle"
+        font-size="18" font-weight="600" fill="#2c5d8a">As duas contagens quando n cresce</text>
+
+  <!-- eixos -->
+  <path d="M 90 360 L 655 360" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="650,355 663,360 650,365" fill="#5a7a9a"/>
+  <path d="M 90 360 L 90 70" fill="none" stroke="#5a7a9a" stroke-width="2"/>
+  <polygon points="85,75 90,62 95,75" fill="#5a7a9a"/>
+
+  <text x="370" y="398" text-anchor="middle" font-size="14" fill="#5a7a9a">n — tamanho da entrada</text>
+  <text x="82" y="58" text-anchor="end" font-size="14" fill="#5a7a9a">comparações (pior caso)</text>
+
+  <!-- O(n) — reta que dispara -->
+  <path d="M 98 356 L 590 90" fill="none" stroke="#b54040" stroke-width="3"/>
+  <text x="596" y="92" font-size="15" font-weight="700" fill="#b54040">O(n)</text>
+  <text x="596" y="110" font-size="12" fill="#b54040">busca linear</text>
+
+  <!-- O(log n) — curva que se achata -->
+  <path d="M 98 356 C 240 322, 430 316, 640 312" fill="none" stroke="#2c5d8a" stroke-width="3"/>
+  <text x="600" y="300" font-size="15" font-weight="700" fill="#2c5d8a">O(log n)</text>
+  <text x="600" y="318" font-size="12" fill="#2c5d8a">busca binária</text>
+
+  <!-- painel de números concretos -->
+  <rect x="115" y="90" width="235" height="116" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5" rx="6"/>
+  <text x="128" y="110" font-size="13" font-weight="600" fill="#2c5d8a">comparações no pior caso</text>
+  <g font-size="12.5">
+    <text x="248" y="130" text-anchor="middle" font-weight="600" fill="#b54040">linear</text>
+    <text x="322" y="130" text-anchor="middle" font-weight="600" fill="#2c5d8a">binária</text>
+  </g>
+  <g font-size="12.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <text x="128" y="152" fill="#222">n = 8</text>
+    <text x="248" y="152" text-anchor="middle" fill="#b54040">8</text>
+    <text x="322" y="152" text-anchor="middle" fill="#2c5d8a">4</text>
+
+    <text x="128" y="174" fill="#222">n = mil</text>
+    <text x="248" y="174" text-anchor="middle" fill="#b54040">1.000</text>
+    <text x="322" y="174" text-anchor="middle" fill="#2c5d8a">10</text>
+
+    <text x="128" y="196" fill="#222">n = milhão</text>
+    <text x="248" y="196" text-anchor="middle" fill="#b54040">1.000.000</text>
+    <text x="322" y="196" text-anchor="middle" fill="#2c5d8a">20</text>
+  </g>
+
+  <text x="350" y="424" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">
+    multiplicar n por mil multiplica a linear por mil — e soma dez à binária
+  </text>
+</svg>

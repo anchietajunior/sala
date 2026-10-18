@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="400" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    2a camada: cada ponteiro do vetor externo leva ate uma linha
+  </text>
+
+  <!-- ===== M->dados ===== -->
+  <text x="80" y="116" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    M-&gt;dados
+  </text>
+  <rect x="20" y="130" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="80" y="167" text-anchor="middle" font-size="13" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    endereco do vetor
+  </text>
+  <circle cx="140" cy="160" r="4" fill="#2c5d8a"/>
+
+  <!-- Seta M->dados para vetor externo -->
+  <path d="M 140 160 L 225 160" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="220,155 233,160 220,165" fill="#2c5d8a"/>
+
+  <!-- ===== Vetor externo ===== -->
+  <text x="290" y="80" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Vetor externo
+  </text>
+
+  <!-- slot 0 -->
+  <text x="225" y="118" text-anchor="end" font-size="12" fill="#888">[0]</text>
+  <rect x="235" y="95" width="110" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="280" y="126" text-anchor="middle" font-size="13" fill="#222">linha 0</text>
+  <circle cx="345" cy="120" r="3.5" fill="#2c5d8a"/>
+
+  <!-- slot 1 -->
+  <text x="225" y="198" text-anchor="end" font-size="12" fill="#888">[1]</text>
+  <rect x="235" y="175" width="110" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="280" y="206" text-anchor="middle" font-size="13" fill="#222">linha 1</text>
+  <circle cx="345" cy="200" r="3.5" fill="#2c5d8a"/>
+
+  <!-- slot 2 -->
+  <text x="225" y="278" text-anchor="end" font-size="12" fill="#888">[2]</text>
+  <rect x="235" y="255" width="110" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="280" y="286" text-anchor="middle" font-size="13" fill="#222">linha 2</text>
+  <circle cx="345" cy="280" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Setas para as linhas -->
+  <path d="M 345 120 L 425 120" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="420,115 433,120 420,125" fill="#2c5d8a"/>
+
+  <path d="M 345 200 L 425 200" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="420,195 433,200 420,205" fill="#2c5d8a"/>
+
+  <path d="M 345 280 L 425 280" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="420,275 433,280 420,285" fill="#2c5d8a"/>
+
+  <!-- ===== Linhas (cada uma com 4 inteiros) ===== -->
+  <text x="595" y="80" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Linhas — cada uma com 4 inteiros
+  </text>
+
+  <!-- Linha 0 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <text x="455" y="89" text-anchor="middle" font-size="11" fill="#888">[0]</text>
+    <text x="510" y="89" text-anchor="middle" font-size="11" fill="#888">[1]</text>
+    <text x="565" y="89" text-anchor="middle" font-size="11" fill="#888">[2]</text>
+    <text x="620" y="89" text-anchor="middle" font-size="11" fill="#888">[3]</text>
+    <rect x="435" y="95" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="460" y="126" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="490" y="95" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="515" y="126" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="545" y="95" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="570" y="126" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="600" y="95" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="625" y="126" text-anchor="middle" font-size="18" fill="#222">0</text>
+  </g>
+
+  <!-- Linha 1 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="435" y="175" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="460" y="206" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="490" y="175" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="515" y="206" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="545" y="175" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="570" y="206" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="600" y="175" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="625" y="206" text-anchor="middle" font-size="18" fill="#222">0</text>
+  </g>
+
+  <!-- Linha 2 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="435" y="255" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="460" y="286" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="490" y="255" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="515" y="286" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="545" y="255" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="570" y="286" text-anchor="middle" font-size="18" fill="#222">0</text>
+    <rect x="600" y="255" width="50" height="50" fill="#f7f9fc" stroke="#2c5d8a" stroke-width="2" rx="3"/>
+    <text x="625" y="286" text-anchor="middle" font-size="18" fill="#222">0</text>
+  </g>
+
+  <!-- Nota -->
+  <line x1="80" y1="340" x2="720" y2="340" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="400" y="363" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    Tres linhas independentes. Cada uma e um vetor de 4 inteiros zerados.
+  </text>
+</svg>

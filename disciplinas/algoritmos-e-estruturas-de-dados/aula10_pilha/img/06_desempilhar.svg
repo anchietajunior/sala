@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="380" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 6 — desempilhar() remove 30
+  </text>
+
+  <!-- Nó 30 antigo (sendo liberado) -->
+  <rect x="235" y="100" width="120" height="60" fill="#f0f0f0" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="4,4" rx="4"/>
+  <line x1="315" y1="100" x2="315" y2="160" stroke="#cfd6dd" stroke-width="2"/>
+  <text x="275" y="138" text-anchor="middle" font-size="22" fill="#aaa"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="335" y="138" text-anchor="middle" font-size="14" fill="#aaa">×</text>
+
+  <text x="430" y="135" font-size="13" fill="#b54" font-weight="600" font-style="italic">
+    free()
+  </text>
+
+  <!-- topo agora aponta para o 20 -->
+  <text x="195" y="260" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">topo →</text>
+
+  <!-- Nó 20 (agora topo) -->
+  <rect x="235" y="225" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <line x1="315" y1="225" x2="315" y2="285" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="275" y="263" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="335" cy="255" r="3.5" fill="#2c5d8a"/>
+
+  <path d="M 335 290 Q 335 325, 295 325 L 295 345" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="290,340 295,353 300,340" fill="#2c5d8a"/>
+
+  <!-- Nó 10 -->
+  <rect x="235" y="350" width="120" height="60" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <line x1="315" y1="350" x2="315" y2="410" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="275" y="388" text-anchor="middle" font-size="22" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <text x="335" y="388" text-anchor="middle" font-size="14" fill="#888">∅</text>
+
+  <!-- Box de retorno -->
+  <rect x="280" y="430" width="200" height="40" fill="#fffbe6" stroke="#2c5d8a" stroke-width="1.5" rx="4"/>
+  <text x="380" y="455" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">
+    retorno: 30
+  </text>
+
+  <!-- Nota -->
+  <text x="380" y="490" text-anchor="middle" font-size="12" fill="#5a7a9a" font-style="italic">
+    o último a entrar saiu primeiro · LIFO em ação · O(1)
+  </text>
+</svg>

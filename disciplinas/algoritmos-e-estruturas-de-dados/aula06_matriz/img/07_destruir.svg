@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="380" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Passo 7 — matriz_destruir(M) · ordem inversa da alocacao
+  </text>
+
+  <!-- ===== M->dados (struct) ===== -->
+  <text x="95" y="100" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">M-&gt;dados</text>
+  <rect x="40" y="115" width="110" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2.5" rx="4"/>
+  <text x="95" y="146" text-anchor="middle" font-size="16" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int**</text>
+
+  <!-- Badge 5 sobre M->dados (free do struct e' o ultimo) -->
+  <circle cx="160" cy="115" r="13" fill="#fff" stroke="#b54040" stroke-width="2"/>
+  <text x="160" y="120" text-anchor="middle" font-size="14" font-weight="700" fill="#b54040">5</text>
+
+  <path d="M 150 140 L 215 140" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="210,135 223,140 210,145" fill="#2c5d8a"/>
+
+  <!-- ===== Vetor externo (3 ponteiros) ===== -->
+  <text x="280" y="60" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    vetor externo
+  </text>
+
+  <text x="225" y="98" text-anchor="end" font-size="12" fill="#888">[0]</text>
+  <rect x="235" y="75" width="100" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="275" y="106" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int*</text>
+  <circle cx="335" cy="100" r="3.5" fill="#2c5d8a"/>
+
+  <text x="225" y="178" text-anchor="end" font-size="12" fill="#888">[1]</text>
+  <rect x="235" y="155" width="100" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="275" y="186" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int*</text>
+  <circle cx="335" cy="180" r="3.5" fill="#2c5d8a"/>
+
+  <text x="225" y="258" text-anchor="end" font-size="12" fill="#888">[2]</text>
+  <rect x="235" y="235" width="100" height="50" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2" rx="4"/>
+  <text x="275" y="266" text-anchor="middle" font-size="14" fill="#222"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">int*</text>
+  <circle cx="335" cy="260" r="3.5" fill="#2c5d8a"/>
+
+  <!-- Badge 4 sobre o vetor externo (entre as celulas) -->
+  <circle cx="285" cy="305" r="13" fill="#fff" stroke="#b54040" stroke-width="2"/>
+  <text x="285" y="310" text-anchor="middle" font-size="14" font-weight="700" fill="#b54040">4</text>
+  <text x="305" y="310" font-size="12" fill="#b54040" font-style="italic">free(dados)</text>
+
+  <!-- ===== Setas para as linhas ===== -->
+  <path d="M 335 100 L 415 100" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="410,95 423,100 410,105" fill="#2c5d8a"/>
+
+  <path d="M 335 180 L 415 180" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="410,175 423,180 410,185" fill="#2c5d8a"/>
+
+  <path d="M 335 260 L 415 260" fill="none" stroke="#2c5d8a" stroke-width="2.5"/>
+  <polygon points="410,255 423,260 410,265" fill="#2c5d8a"/>
+
+  <!-- ===== Linhas (3 vetores de 4 inteiros) ===== -->
+  <text x="555" y="60" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    linhas (vetores de inteiros)
+  </text>
+
+  <!-- Linha 0 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="425" y="75" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="452" y="106" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="485" y="75" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="512" y="106" text-anchor="middle" font-size="18" fill="#888">7</text>
+    <rect x="545" y="75" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="572" y="106" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="605" y="75" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="632" y="106" text-anchor="middle" font-size="18" fill="#888">0</text>
+  </g>
+  <circle cx="685" cy="100" r="13" fill="#fff" stroke="#b54040" stroke-width="2"/>
+  <text x="685" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#b54040">1</text>
+
+  <!-- Linha 1 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="425" y="155" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="452" y="186" text-anchor="middle" font-size="18" fill="#888">9</text>
+    <rect x="485" y="155" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="512" y="186" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="545" y="155" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="572" y="186" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="605" y="155" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="632" y="186" text-anchor="middle" font-size="18" fill="#888">0</text>
+  </g>
+  <circle cx="685" cy="180" r="13" fill="#fff" stroke="#b54040" stroke-width="2"/>
+  <text x="685" y="185" text-anchor="middle" font-size="14" font-weight="700" fill="#b54040">2</text>
+
+  <!-- Linha 2 -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <rect x="425" y="235" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="452" y="266" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="485" y="235" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="512" y="266" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="545" y="235" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="572" y="266" text-anchor="middle" font-size="18" fill="#888">0</text>
+    <rect x="605" y="235" width="55" height="50" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" rx="3" stroke-dasharray="5,3"/>
+    <text x="632" y="266" text-anchor="middle" font-size="18" fill="#888">5</text>
+  </g>
+  <circle cx="685" cy="260" r="13" fill="#fff" stroke="#b54040" stroke-width="2"/>
+  <text x="685" y="265" text-anchor="middle" font-size="14" font-weight="700" fill="#b54040">3</text>
+
+  <!-- Legenda em texto -->
+  <line x1="80" y1="355" x2="680" y2="355" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="380" y="380" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    1, 2, 3: free de cada linha · 4: free(M-&gt;dados) · 5: free(M)
+  </text>
+  <text x="380" y="402" text-anchor="middle" font-size="13" fill="#b54040" font-style="italic">
+    inverter essa ordem (vetor externo antes das linhas) causaria vazamento de memoria
+  </text>
+</svg>

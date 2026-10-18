@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 440"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+
+  <text x="350" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#2c5d8a">
+    Tipo 4 — Árvore rubro-negra (BST balanceada)
+  </text>
+  <text x="350" y="62" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    BST + cor em cada nó · regras de cor garantem altura O(log n)
+  </text>
+
+  <!-- raiz -->
+  <text x="290" y="115" text-anchor="end" font-size="14" font-weight="600" fill="#2c5d8a">raiz →</text>
+
+  <!-- Arestas -->
+  <line x1="350" y1="110" x2="220" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="110" x2="500" y2="225" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="225" x2="140" y2="340" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="220" y1="225" x2="300" y2="340" stroke="#2c5d8a" stroke-width="2"/>
+
+  <!-- Nó 50 (preto, raiz sempre preta) -->
+  <circle cx="350" cy="110" r="28" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="350" y="117" text-anchor="middle" font-size="20" fill="#fff"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+
+  <!-- Nó 30 (preto) -->
+  <circle cx="220" cy="225" r="28" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="220" y="232" text-anchor="middle" font-size="20" fill="#fff"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+
+  <!-- Nó 70 (preto) -->
+  <circle cx="500" cy="225" r="28" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="500" y="232" text-anchor="middle" font-size="20" fill="#fff"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+
+  <!-- Nó 20 (vermelho) -->
+  <circle cx="140" cy="340" r="28" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="140" y="347" text-anchor="middle" font-size="20" fill="#fff"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+
+  <!-- Nó 40 (vermelho) -->
+  <circle cx="300" cy="340" r="28" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="300" y="347" text-anchor="middle" font-size="20" fill="#fff"
+        font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+
+  <!-- Legenda -->
+  <circle cx="490" cy="375" r="10" fill="#1a1a1a"/>
+  <text x="510" y="380" font-size="13" fill="#222">preto</text>
+  <circle cx="565" cy="375" r="10" fill="#b54040"/>
+  <text x="585" y="380" font-size="13" fill="#222">vermelho</text>
+
+  <!-- Resumo das regras -->
+  <text x="90" y="375" font-size="12" fill="#5a7a9a" font-style="italic">regras: raiz preta · nó vermelho não tem filho vermelho ·</text>
+  <text x="90" y="392" font-size="12" fill="#5a7a9a" font-style="italic">todo caminho da raiz a uma folha tem o mesmo nº de pretos</text>
+
+  <!-- separador + nota -->
+  <line x1="100" y1="408" x2="600" y2="408" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="428" text-anchor="middle" font-size="13" fill="#5a7a9a" font-style="italic">
+    é a variante usada em std::map (C++) e TreeMap (Java) · CLRS, cap. 13
+  </text>
+</svg>
