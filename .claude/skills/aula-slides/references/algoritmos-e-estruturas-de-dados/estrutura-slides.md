@@ -1,6 +1,6 @@
-# Estrutura de slides — como mapear o `.md` para a apresentação
+# Estrutura de slides — como cada bloco da aula vira apresentação
 
-Cada bloco do `.md` vira um conjunto de `<section>` Reveal.js. **Slides verticais** (sub-slides aninhados dentro de um `<section>` pai) são usados para agrupar slides que pertencem ao mesmo bloco.
+Cada bloco da aula (o conteúdo de cada um está em `estrutura-blocos.md` e `camadas-bloco1.md`) vira um conjunto de `<section>` Reveal.js. **Slides verticais** (sub-slides aninhados dentro de um `<section>` pai) são usados para agrupar slides que pertencem ao mesmo bloco.
 
 > **Regra transversal antes de qualquer mapeamento**: leia a seção *Linha-ponte: contexto antes do conteúdo técnico* mais adiante neste arquivo. Ela define a forma **mínima** de cada slide com `<h3>` — independente do bloco. Sem ela, os slides ficam órfãos (título grudado em fórmula/tabela) e a aula não funciona em sala.
 
@@ -71,12 +71,12 @@ Texto **literal** desta forma em todas as aulas.
 
 `<section>` pai contendo diretamente os slides das camadas — **não inclua slide de capa/abertura do bloco** ("Bloco 1 — Conceito — aprofundamento progressivo" com lista enumerada das 6 camadas). A apresentação entra direto na Camada 1.
 
-1. **Slides das 6 camadas**. Cada camada tipicamente ocupa **1 a 3 slides**, conforme tamanho do conteúdo no `.md`. Comece cada camada com `<p class="titulo-bloco">Camada N</p>` seguido de `<h3>Nome da camada</h3>`.
+1. **Slides das 6 camadas**. Cada camada tipicamente ocupa **1 a 3 slides**, conforme o conteúdo da camada. Comece cada camada com `<p class="titulo-bloco">Camada N</p>` seguido de `<h3>Nome da camada</h3>`.
 
    - **Camada 1** — 1 slide. Texto simples, em registro formal, + blockquote com a frase essencial.
    - **Camada 2** — 1–2 slides. Definição + operações em bullet.
    - **Camada 3** — 2–4 slides. Sub-divida em "ponteiros / estado externo", "operações em detalhe", "invariantes".
-   - **Camada 4** — 2–3 slides. Um para o TAD (com `<pre><code class="language-c">...</code></pre>`), um para axiomas em bullet, um para a tupla. Quando a camada 4 do `.md` for matemática (definição formal, notação assintótica), **não transplantar a definição para o slide** — ver seção *Matemática nos slides* adiante.
+   - **Camada 4** — 2–3 slides. Um para o TAD (com `<pre><code class="language-c">...</code></pre>`), um para axiomas em bullet, um para a tupla. Quando a camada 4 for matemática (definição formal, notação assintótica), **a definição simbólica completa fica fora do slide** — ver seção *Matemática nos slides* adiante.
    - **Camada 5** — 1–2 slides. Um para a tabela de complexidade, outro para a comparação em prosa (use `.duas-colunas`).
    - **Camada 6** — 1–2 slides. Lista de aplicações + lista de variantes.
 
@@ -273,7 +273,7 @@ O título "Representação interna como tupla" colado na fórmula. O aluno vê a
 
 ## Matemática nos slides — dose mínima, sempre contextualizada
 
-**Não estamos ensinando matemática — estamos ensinando algoritmos a uma turma sem conhecimento prévio.** Fórmula em notação simbólica projetada na parede afugenta o aluno do conteúdo que queremos passar. A camada formal existe e é importante — mas ela vive no `.md` (camada 4), que o aluno lê no próprio ritmo, com o texto em volta. O slide é outra mídia: 5–10 segundos de olhar, em sala.
+**Não estamos ensinando matemática — estamos ensinando algoritmos a uma turma sem conhecimento prévio.** Fórmula em notação simbólica projetada na parede afugenta o aluno do conteúdo que queremos passar. A camada formal existe e é importante — no slide ela aparece em português, com fórmula mínima, e a notação completa fica na bibliografia, que o aluno lê no próprio ritmo. O slide é lido em 5–10 segundos, em sala.
 
 ### Regras
 
@@ -283,15 +283,15 @@ O título "Representação interna como tupla" colado na fórmula. O aluno vê a
    - **Pequena** — uma expressão curta: `3n + 5 → O(n)`, `meio = (inicio + fim) / 2`.
    - **Depois da ideia em português** — o slide diz a ideia em prosa primeiro; a fórmula aparece como resumo, nunca como apresentação.
    - **Com leitura em linguagem natural ao lado** — "lê-se: cresce no ritmo de n".
-4. **A definição formal completa é remetida ao material escrito** — use `<p class="nota-rodape">A definição matemática completa está no material escrito da aula.</p>`.
+4. **A definição formal completa é remetida à bibliografia** — use `<p class="nota-rodape">A definição matemática completa está em <fonte>.</p>`, sem inventar capítulo.
 
-### Exemplo ruim — definição transplantada do `.md`
+### Exemplo ruim — definição simbólica completa no slide
 
 ```html
 <p><span class="formula">f(n) = O(g(n)) ⇔ ∃ c &gt; 0, n₀ ≥ 1 : f(n) ≤ c·g(n) ∀ n ≥ n₀</span></p>
 ```
 
-O aluno de primeiro período vê ∃ e ∀ pela primeira vez na vida, no meio de uma aula que não é de lógica. Custo alto, ganho zero — a definição está no `.md`.
+O aluno de primeiro período vê ∃ e ∀ pela primeira vez na vida, no meio de uma aula que não é de lógica. Custo alto, ganho zero — a definição completa está na bibliografia.
 
 ### Exemplo bom — mesma ideia, em português com fórmula mínima
 
@@ -302,7 +302,7 @@ O aluno de primeiro período vê ∃ e ∀ pela primeira vez na vida, no meio de
 </p>
 <p><span class="formula">3n + 5 passos → O(n)</span></p>
 <p style="text-align: left; font-size: 0.8em;">Lê-se: "cresce no ritmo de n".</p>
-<p class="nota-rodape">A definição matemática completa está no material escrito da aula.</p>
+<p class="nota-rodape">A definição matemática completa está em Cormen et al., no capítulo sobre crescimento de funções.</p>
 ```
 
 ---

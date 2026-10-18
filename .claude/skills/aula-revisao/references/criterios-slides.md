@@ -1,8 +1,8 @@
-# Os seis critérios da revisão severa de slides
+# Os oito critérios da revisão severa de slides
 
 Cada eixo tem **o que procurar**, **como corrigir** e um par **ruim → bom**. Os exemplos são defeitos reais encontrados em apresentações de Algoritmos e Estruturas de Dados; os critérios valem para os slides de qualquer disciplina.
 
-O slide é uma mídia diferente do `.md`: projetado em sala, lido em 5–10 segundos, **sem o texto em volta para socorrê-lo**. Um trecho que funciona no material escrito pode ser defeituoso como slide — e o contrário também.
+O slide é a única fonte da verdade da aula: projetado em sala, lido em 5–10 segundos, **sem texto em volta para socorrê-lo**. Cada slide precisa se sustentar sozinho, e a sequência de slides precisa contar a aula inteira.
 
 ---
 
@@ -174,7 +174,7 @@ Cada aula é uma unidade fechada, então **conteúdo que também aparece em outr
 
 **Como corrigir**
 
-Adicionar o trecho mínimo, no slide onde o conceito é apresentado, seguindo as regras de código do perfil da disciplina. Em AED: `aula-conteudo/references/algoritmos-e-estruturas-de-dados/codigo-c-regras.md` (sem `<stdbool.h>`, sem `const` em parâmetro, sem `fprintf(stderr)`, nomes descritivos em PT, comentário explica o **porquê**). Em Programação Avançada, o trecho existe no código real de `projeto/`.
+Adicionar o trecho mínimo, no slide onde o conceito é apresentado, seguindo as regras de código do perfil da disciplina. Em AED: `aula-slides/references/algoritmos-e-estruturas-de-dados/codigo-c-regras.md` (sem `<stdbool.h>`, sem `const` em parâmetro, sem `fprintf(stderr)`, nomes descritivos em PT, comentário explica o **porquê**). Em Programação Avançada, o trecho existe no código real de `projeto/`.
 
 Limites próprios do slide (o perfil pode apertar, como os 15 linhas de Programação Avançada):
 
@@ -226,7 +226,7 @@ Criar o diagrama no formato e no estilo do perfil da disciplina. Em AED, o SVG s
 <img class="diagrama" src="img/08_descritor.svg" alt="<descrição clara do que o diagrama mostra>">
 ```
 
-Regras firmes: o formato do diagrama é o do perfil (AED: SVG embutido como `<img class="diagrama">`; Programação Avançada: PNG exportado do SVG mantido ao lado), sem Mermaid, sem CDN. O `alt` é obrigatório e descreve o conteúdo, não o nome do arquivo. Todo slide com diagrama mantém a **linha-ponte** dizendo o que enxergar nele.
+Regras firmes: diagrama é SVG, embutido como o perfil define (AED: `<img class="diagrama">`; Programação Avançada: `<img>` com largura no `style`), sem Mermaid, sem CDN. O `alt` é obrigatório e descreve o conteúdo, não o nome do arquivo. Todo slide com diagrama mantém a **linha-ponte** dizendo o que enxergar nele.
 
 **Reaproveitar um SVG já exibido é permitido e barato** quando serve para conectar — e não conta como repetição (critério 3), desde que a linha-ponte explique o que mudou de leitura desta vez.
 
@@ -272,10 +272,71 @@ Nomear um **tema da computação** é permitido — *"a ordenação eficiente de
 
 ---
 
+## 7. Ambiguidade
+
+**O que procurar**
+
+- Pronomes e demonstrativos sem antecedente único: `isso`, `ele`, `ela`, `essa`, `o mesmo`. A que exatamente se referem?
+- Frases que admitem duas leituras.
+- Critérios e enunciados vagos: "rápido", "grande", "melhor" sem referência ("melhor em quê?").
+- Referências posicionais frágeis: "o primeiro", "o de cima", "aquele" quando há mais de um candidato.
+
+**Como corrigir**: reescrever para uma leitura única — troque o pronome pelo referente, quantifique o vago, desdobre a frase em duas se ela carrega duas leituras.
+
+**Ruim**
+
+> A lista encadeada é mais eficiente que o vetor, então use ela quando puder.
+
+*(Eficiente em quê? "ela" = a lista? "quando puder" = quando?)*
+
+**Bom**
+
+> Inserir no início de uma lista encadeada custa O(1); no vetor, custa O(n), porque todos os elementos seguintes precisam ser deslocados. Quando as inserções acontecem sobretudo no início, a lista encadeada é preferível.
+
+---
+
+## 8. Conexão lógica
+
+**O que procurar**
+
+- Um slide que aparece **sem ponte** com o anterior — a apresentação pula de um assunto a outro e o aluno não vê o elo.
+- Salto de raciocínio: uma conclusão que não decorre visivelmente do que veio antes ("logo...", "portanto..." sem o passo do meio).
+- Ordem que atrapalha: um slide que depende de outro apresentado só depois.
+
+**A distinção que importa: desconexão (defeito) × novo assunto (legítimo).**
+
+Antes de marcar uma quebra como defeito, faça **três perguntas**:
+
+1. **É consequência, detalhamento ou contraste do slide anterior?** Se sim e não há ponte → **defeito**: adicione a linha-ponte.
+2. **Abre um assunto que a estrutura da aula prevê aqui** — um bloco novo, uma camada nova? Se sim → **início legítimo**: não force o elo; garanta só a frase de transição ("Com isso na mão, vejamos agora...").
+3. **Não é nem continuação nem abertura prevista — surgiu do nada?** → **órfão**: realoque para onde se conecta, ou remova se não tem função na aula.
+
+**Como corrigir**: adicionar a ponte; mover o slide para junto do que se liga a ele; ou remover o órfão. Nunca "conectar" à força dois assuntos que não têm relação — se um novo assunto começa, o certo é anunciá-lo como novo, não fingir que decorre do anterior.
+
+**Ruim (desconexão real)**
+
+> ...e é por isso que o algoritmo das duas pontas gasta menos memória.
+>
+> *(slide seguinte)* Um vetor tem tamanho fixo, definido na criação.
+
+*(O segundo slide cai sem elo. O fato sobre vetor é relevante, mas precisa de ponte — ou de ser realocado para junto da apresentação do vetor.)*
+
+**Bom (ponte adicionada)**
+
+> Repare que o algoritmo das duas pontas só funciona porque a palavra está num vetor, que dá acesso direto à última posição. Um vetor tem tamanho fixo, definido na criação...
+
+**Bom (novo assunto legítimo — não é defeito)**
+
+> *Bloco 3 — Problema Motivador:* "Como uma IA gera cada palavra da resposta em fração de segundo?"
+
+*(Novo bloco. Não precisa "decorrer" do bloco 2 — é uma virada prevista pela estrutura. Basta ser anunciado como tal.)*
+
+---
+
 ## Ordem de aplicação
 
 Numa passagem só, por slide, rode nesta ordem:
 
-**3 (cortar) → 6 (desamarrar remissão) → 1 (ancorar termo) → 2 (registro) → 4 (código) → 5 (visualização)**
+**3 (cortar) → 6 (desamarrar remissão) → 1 (ancorar termo) → 2 (registro) → 7 (ambiguidade) → 4 (código) → 5 (visualização) → 8 (conexão)**
 
-Dois motivos, ambos econômicos. Decidir os cortes primeiro evita escrever código e desenhar SVG para um slide que ia sair de qualquer forma. E desamarrar as remissões logo em seguida evita ancorar termo (1) num slide cujo texto ainda vai ser reescrito — trocar *"na Aula 02 vimos X"* pela explicação de X muda o slide inteiro.
+Três motivos, todos econômicos. Decidir os cortes primeiro evita escrever código e desenhar SVG para um slide que ia sair de qualquer forma. Desamarrar as remissões logo em seguida evita ancorar termo (1) num slide cujo texto ainda vai ser reescrito — trocar *"na Aula 02 vimos X"* pela explicação de X muda o slide inteiro. E a conexão fica por último porque só se julga a ponte entre slides depois que cada um tem seu texto final.

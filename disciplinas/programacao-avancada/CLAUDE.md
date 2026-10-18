@@ -19,9 +19,8 @@ programacao-avancada/
 │   ├── bibliografia.md    ← referências canônicas por tema [T-n]
 │   ├── assets/reveal/     ← reveal.js vendorado (offline)
 │   └── aula-NN/
-│       ├── roteiro.html   ← guia do professor
-│       ├── slides.html    ← deck do aluno (reveal.js)
-│       └── img/           ← diagramas em PNG (fonte .svg ao lado)
+│       ├── slides.html    ← a aula
+│       └── img/           ← diagramas em SVG e capturas de tela em PNG
 └── projeto/
     ├── CONTEXT.md         ← glossário do domínio
     ├── README.md          ← como rodar, endpoints e dependências
@@ -34,14 +33,12 @@ programacao-avancada/
 
 | Artefato | Caminho | Papel |
 |----------|---------|-------|
-| Roteiro do professor | `aulas/aula-NN/roteiro.html` | **material principal**: teoria, live-coding passo a passo e exercício |
-| Código | `projeto/` | exatamente o que o live-coding do roteiro constrói |
-| Slides do aluno | `aulas/aula-NN/slides.html` | deck reveal.js derivado do roteiro |
+| Slides | `aulas/aula-NN/slides.html` | **a aula inteira**: fonte da verdade, com teoria, live-coding passo a passo e exercício |
+| Código | `projeto/` | exatamente o que o live-coding dos slides constrói |
 | README do projeto | `projeto/README.md` | estado do projeto até esta aula |
 
-- Ordem: roteiro → código → slides → revisão. Slides nunca divergem do roteiro; o roteiro nunca diverge do código.
-- O título completo da aula fica no `<title>` e no `<h1>` de cada arquivo.
-- O código evolui na `main`: o projeto parte do estado deixado pela aula anterior, sem branch por aula.
+- O título completo da aula fica no `<title>` e no `<h1>` dos slides.
+- O código evolui na `main`: cada aula parte do estado em que o projeto está.
 
 ## Regras da disciplina
 
@@ -50,29 +47,26 @@ programacao-avancada/
 - **Comandos de terminal** (criar venv, instalar dependências etc.) sempre em duas variantes: **Mac e Windows**.
 - **Termos do domínio** exatamente como no `projeto/CONTEXT.md` (User, Book, Reading Update...).
 - **ADRs** em `projeto/docs/adr/` valem em todas as aulas (ex.: ADR-0001, rotas nascem sem autenticação até a aula de JWT).
-- **Exceção à aula fechada**: o cabeçalho operacional do roteiro (duração, objetivos) e a bibliografia; informação de trabalho do professor e fonte citada não são referência cruzada a outra aula.
+- **A bibliografia** não é referência cruzada a outra aula.
 - **Um problema deixado em aberto** é apresentado como problema técnico em aberto, nunca como plano de curso.
 
-## Conteúdo (skill `aula-conteudo`)
+## Slides (skill `aula-slides`)
 
 Leia antes de escrever:
 
 1. `aulas/plano-de-aulas.md` - escopo, teoria **[T-n]** e prática da aula NN. Se a aula não está no plano, pare e avise.
 2. `projeto/CONTEXT.md` e os ADRs em `projeto/docs/adr/`.
-3. O código atual de `projeto/` - o roteiro parte dele.
-4. `.claude/skills/aula-conteudo/references/programacao-avancada/roteiro.md` - estrutura e regras do roteiro.
+3. O código atual de `projeto/` - a aula parte dele.
+4. `.claude/skills/aula-slides/references/programacao-avancada/slides.md` - estrutura, formato e didática dos slides.
+5. `aulas/bibliografia.md` - referências canônicas por tema.
 
-O código da aula é implementado em `projeto/` seguindo o live-coding do roteiro, nem código a mais, nem passo sem código:
+O código da aula é implementado em `projeto/` seguindo o live-coding dos slides, nem código a mais, nem passo sem código:
 
 - Todo bloco ou instrução do código leva um comentário **imediatamente acima**, em pt-BR, explicando o que as instruções fazem; identificadores e strings ficam em inglês.
 - Valide com uma chamada rápida (`python -c "import main"` ou `TestClient`) e com os testes existentes (`pytest` em `backend/`, `npm test` em `frontend/`); derrube o que subir.
 - Atualize o `projeto/README.md` para o estado desta aula.
 
-## Slides (skill `aula-slides`)
-
-- Formato e didática: `.claude/skills/aula-slides/references/programacao-avancada/slides.md`.
-- Bibliografia canônica por tema: `aulas/bibliografia.md`.
-- **Diagramas como imagens PNG locais** em `aulas/aula-NN/img/`, exportados do `.svg` mantido ao lado: nunca SVG inline nem recurso externo, porque máquinas da universidade já falharam ao exibi-los.
+Diagramas em `aulas/aula-NN/img/nome.svg`, referenciados por `<img src="img/nome.svg" style="width:100%;max-width:760px">`: o SVG não carrega tamanho próprio, e a largura do `<img>` o dimensiona.
 
 ## Stack e ferramentas
 
@@ -95,9 +89,8 @@ O código da aula é implementado em `projeto/` seguindo o live-coding do roteir
 
 ## Consistência (conferida pela `aula-revisao`)
 
-- [ ] O código da aula contém exatamente o que o live-coding do roteiro constrói: confira o `git diff` de `projeto/` (trabalho ainda não commitado, ou os commits `pa aula NN:`).
-- [ ] Os trechos de código dos slides existem no código real.
-- [ ] Diagramas dos slides são `<img>` PNG locais em `aulas/aula-NN/img/`, com a fonte `.svg` ao lado.
+- [ ] O código da aula contém exatamente o que o live-coding dos slides constrói: confira o `git diff` de `projeto/` (trabalho ainda não commitado, ou os commits `pa aula NN:`).
+- [ ] Diagramas dos slides são SVG locais em `aulas/aula-NN/img/`, com largura no `<img>`.
 - [ ] Blocos e instruções do código têm comentário explicativo imediatamente acima, em pt-BR; código em inglês; termos do domínio conforme `projeto/CONTEXT.md`.
 - [ ] Decisões dos ADRs respeitadas.
 - [ ] O backend importa e os testes existentes passam.

@@ -6,9 +6,10 @@ Material de estudos e projetos construídos em sala de aula pelo professor José
 
 | Disciplina | Aulas | Projeto |
 |------------|-------|---------|
-| [Algoritmos e Estruturas de Dados](disciplinas/algoritmos-e-estruturas-de-dados/) | [`aulas/`](disciplinas/algoritmos-e-estruturas-de-dados/aulas/): conteúdo em Markdown, código em C e apresentação de cada aula | - |
-| [Programação Avançada](disciplinas/programacao-avancada/) | [`aulas/`](disciplinas/programacao-avancada/aulas/): roteiro e slides de cada aula | [`projeto/`](disciplinas/programacao-avancada/projeto/): rastreador de leituras com FastAPI e React |
+| [Algoritmos e Estruturas de Dados](disciplinas/algoritmos-e-estruturas-de-dados/) | [`aulas/`](disciplinas/algoritmos-e-estruturas-de-dados/aulas/): os slides e o código em C de cada aula | - |
+| [Programação Avançada](disciplinas/programacao-avancada/) | [`aulas/`](disciplinas/programacao-avancada/aulas/): os slides de cada aula | [`projeto/`](disciplinas/programacao-avancada/projeto/): rastreador de leituras com FastAPI e React |
 
+Cada aula é a sua apresentação: os slides são a única fonte da verdade, e o código de cada aula é o que eles mostram.
 Cada disciplina tem um `disciplina.html` com a visão geral das aulas.
 Os slides abrem direto no navegador e funcionam offline: o Reveal.js está vendorado em `aulas/assets/` de cada disciplina.
 
@@ -18,14 +19,13 @@ Os slides abrem direto no navegador e funcionam offline: o Reveal.js está vendo
 
 ## Como as aulas são produzidas
 
-As aulas são escritas com o Claude Code, por quatro skills que valem para todas as disciplinas (`.claude/skills/`):
+As aulas são escritas com o Claude Code, por três skills que valem para todas as disciplinas (`.claude/skills/`):
 
 | Skill | O que faz |
 |-------|-----------|
-| `aula-completa` | o fluxo inteiro: conteúdo, slides, revisão e commit |
-| `aula-conteudo` | o material principal da aula (texto ou roteiro, e o código) |
-| `aula-slides` | a apresentação Reveal.js derivada do material principal |
-| `aula-revisao` | revisão severa do conteúdo e dos slides e conferência de consistência |
+| `aula-slides` | escreve ou altera a aula: slides, diagramas e código |
+| `aula-revisao` | revisão severa dos slides e conferência de consistência com o código e os índices |
+| `aula-completa` | o fluxo inteiro: aula, revisão, commit e push |
 
 As regras comuns a toda aula estão no [`CLAUDE.md`](CLAUDE.md) da raiz.
 O que muda de uma disciplina para outra está no perfil de cada uma, `disciplinas/<disciplina>/CLAUDE.md`.

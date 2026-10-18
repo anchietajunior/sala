@@ -36,13 +36,13 @@ Aplicam-se **apenas a aulas de implementação** (bloco 4). Existem para que o a
 
 ## Comentários no `.c` — autoexplicativos
 
-O aluno pode estar lendo o `.c` **sem** o `.md` ao lado. Comentários não podem depender do `.md`:
+O aluno pode estar lendo o `.c` **sem** os slides ao lado. Comentários não podem depender dos slides:
 
 - ❌ `// preserva I1`
 - ❌ `// veja invariante A4 no bloco 1`
 - ✅ `// O fim tambem precisa virar NULL — caso contrario continuaria apontando para um no que vamos liberar com free()`
 
-Acentos em comentários do `.c` são **opcionais** (alguns editores antigos ainda dão problema com UTF-8). Quando em dúvida, escrever sem acento — `proximo`, `nao`, `memoria` — e manter a frase clara mesmo assim. No `.md` e na apresentação, acentuação completa é obrigatória.
+Acentos em comentários do `.c` são **opcionais** (alguns editores antigos ainda dão problema com UTF-8). Quando em dúvida, escrever sem acento — `proximo`, `nao`, `memoria` — e manter a frase clara mesmo assim. Na apresentação, acentuação completa é obrigatória.
 
 ## A `main()` demonstrativa
 

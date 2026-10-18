@@ -1,6 +1,6 @@
 # Camadas do Bloco 1 (Aprofundamento Progressivo)
 
-Bloco mais importante da aula. **Texto narrativo e extenso, não bullet seco.** As listas só aparecem onde naturalmente cabem (axiomas, propriedades enumeráveis, tabela de complexidade).
+Bloco mais importante da aula. Cada camada ocupa os slides indicados abaixo, **uma ideia por slide** (`estrutura-slides.md`): a narrativa vem da sequência dos slides e da fala do professor. Os subtítulos de cada camada viram títulos de slide.
 
 A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas anteriores**. Termos novos são definidos no primeiro uso.
 
@@ -8,7 +8,7 @@ A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas an
 
 ## Camada 1 — Introdução
 
-**Tamanho**: 1 parágrafo curto (3 a 6 frases).
+**Tamanho**: 1 slide.
 
 **Objetivo**: dar ao aluno uma imagem mental antes de qualquer terminologia.
 
@@ -28,7 +28,7 @@ A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas an
 
 ## Camada 2 — Definição informal com vocabulário básico
 
-**Tamanho**: 2 a 4 parágrafos.
+**Tamanho**: 1–2 slides.
 
 **Objetivo**: dar o nome técnico do que foi descrito na camada 1, introduzindo só os termos **estritamente necessários** para nomeá-lo.
 
@@ -46,31 +46,31 @@ A regra de ouro: **a cada camada, o aluno só precisa do que veio nas camadas an
 
 ## Camada 3 — Propriedades e comportamento
 
-**Tamanho**: vários parágrafos, com **listas e sub-headings (`####`)** onde fizer sentido.
+**Tamanho**: 2–4 slides, um por sub-seção abaixo.
 
 **Objetivo**: descrever **como** a estrutura/algoritmo se comporta, ainda em prosa narrativa, sem formalismo simbólico pesado.
 
 Sub-seções típicas:
 
-### `#### Os fundamentos que esta aula usa` (opcional, mas comum)
+### Os fundamentos que esta aula usa (opcional, mas comum)
 
 Quando a estrutura da aula é construída sobre um conceito mais básico (o **nó** das estruturas encadeadas, o acesso por índice do vetor), apresentar esse conceito **aqui, do zero**, em 1–2 parágrafos com definição e exemplo próprios.
 
 **Nunca escrever "como vimos na Aula NN" nem equivalente.** A aula é uma unidade fechada: se o aluno precisa do nó para entender esta aula, o nó é definido nesta aula. Repetir a definição em várias aulas é o comportamento desejado, não desperdício.
 
-### `#### Os ponteiros / variáveis de estado externo`
+### Os ponteiros / variáveis de estado externo
 
 Descrever o estado interno mínimo (`topo`, `inicio`+`fim`, `raiz`, etc.) e **por que** ele é assim. Justificar com base em desempenho — sem invocar conceitos de SO/arquitetura proibidos pelo `CLAUDE.md`.
 
-### `#### As operações em detalhe`
+### As operações em detalhe
 
 Bullet list com cada operação. Para cada uma:
 
-- O que ela faz, passo a passo (sem código C ainda — é prosa).
+- O que ela faz, passo a passo; um trecho curto de C (até 8 linhas) entra quando torna o passo evidente.
 - **Custo entre parênteses**: `Custo: **O(1)**.`
 - Armadilhas conhecidas, em frases completas (ex.: "Atenção à ordem: primeiro atualizar `topo`, só depois chamar `free` — inverter cria um ponteiro suspenso (*dangling pointer*).").
 
-### `#### Invariantes (propriedades que devem sempre valer)`
+### Invariantes (propriedades que devem sempre valer)
 
 Lista em prosa, **sem rótulos abreviados (I1, I2)** — escrever frases completas:
 
@@ -81,13 +81,13 @@ Lista em prosa, **sem rótulos abreviados (I1, I2)** — escrever frases complet
 
 ## Camada 4 — Definição formal e notação
 
-**Tamanho**: parágrafos + bloco de definição em fence simples.
+**Tamanho**: 2–3 slides: o TAD, os axiomas e a tupla.
 
 **Objetivo**: rigor — TAD, axiomas, tupla de definição.
 
-### `#### O TAD <Nome>`
+### O TAD <Nome>
 
-Definir o TAD em bloco de código simples (fence sem linguagem):
+Definir o TAD em bloco de código simples (`<pre><code>` sem linguagem):
 
 ```
 TAD <Nome> de Inteiros
@@ -111,26 +111,28 @@ TAD <Nome> de Inteiros
 
 Após o bloco, **explicar pelo menos 1 axioma "coração"** em prosa — qual deles captura a essência da estrutura (ex.: A4 da Pilha é o LIFO; A6 da Fila é o FIFO).
 
-### `#### A representação interna como tupla`
+### A representação interna como tupla
 
 Quando a aula tem código C (implementação), descrever a tupla matemática da representação:
 
 `P = (N, valor, proximo, topo)`
 
-E listar cada componente em bullet com **explicação por extenso**:
+E listar cada componente em bullet com **explicação por extenso**, em português:
 
-- **N** é o conjunto (possivelmente vazio) dos nós da pilha.
-- **valor: N → V** associa cada nó a um inteiro.
-- **proximo: N → N ∪ {NULL}** associa cada nó ao seguinte (mais perto do fundo).
-- **topo ∈ N ∪ {NULL}** é o ponteiro externo para o último elemento empilhado.
+- **N** — o conjunto (possivelmente vazio) dos nós da pilha.
+- **valor** — associa cada nó ao inteiro que ele guarda.
+- **proximo** — associa cada nó ao seguinte (mais perto do fundo), ou a `NULL`.
+- **topo** — o ponteiro externo para o último elemento empilhado, ou `NULL`.
 
-Encerrar com a frase de fechamento que liga estado lógico a estado físico: "A invariante `vazia ⇔ topo = NULL` liga formalmente o estado lógico da pilha ao estado físico do ponteiro."
+Encerrar com a frase de fechamento que liga estado lógico a estado físico: "A pilha está vazia exatamente quando `topo` é `NULL`: essa invariante liga formalmente o estado lógico da pilha ao estado físico do ponteiro."
+
+A notação simbólica completa (funções entre conjuntos, quantificadores, ⇔) fica fora do slide e é remetida à bibliografia, conforme *Matemática nos slides* em `estrutura-slides.md`.
 
 ---
 
 ## Camada 5 — Análise de complexidade
 
-**Tamanho**: 1 a 3 parágrafos + tabela.
+**Tamanho**: 1–2 slides: a tabela e a comparação.
 
 **Objetivo**: complexidade de cada operação em **O(·)**, comparação entre representações quando relevante.
 
@@ -145,11 +147,11 @@ Encerrar com a frase de fechamento que liga estado lógico a estado físico: "A 
 
 A representação **escolhida pela aula** vai em **negrito** na coluna correspondente.
 
-Marcar com `*` (ou similar) custos amortizados, e explicar a nota abaixo da tabela em itálico.
+Marcar com `*` (ou similar) custos amortizados, e explicar a marca na `nota-rodape` do slide.
 
 ### Comparação entre alternativas
 
-Em 1–2 parágrafos após a tabela, justificar a escolha da representação implementada **em termos do que o aluno já viu**:
+No slide seguinte à tabela, justificar a escolha da representação implementada **em termos do que o aluno já viu**:
 
 - ✅ "O vetor faz uma única alocação (mais econômico em memória) mas tem capacidade fixa ou paga `realloc`."
 - ✅ "A lista encadeada paga 8 bytes de ponteiro por nó e exige uma chamada a `malloc` por elemento empilhado."
@@ -159,7 +161,7 @@ Em 1–2 parágrafos após a tabela, justificar a escolha da representação imp
 
 ## Camada 6 — Conexões e variantes
 
-**Tamanho**: lista de bullets + parágrafo final opcional.
+**Tamanho**: 1–2 slides: as conexões e as variantes.
 
 **Objetivo**: mostrar onde a estrutura aparece no mundo real e quais variantes existem.
 
@@ -175,6 +177,6 @@ Em 1–2 parágrafos após a tabela, justificar a escolha da representação imp
 
 ### Variantes da própria estrutura
 
-Parágrafo final listando 2–3 variantes principais (vetor × lista, dupla × simples, circular × linear) — apenas **sinalizando** que existem e o que motivaria escolher uma. Não desenvolver aqui.
+Slide final listando 2–3 variantes principais (vetor × lista, dupla × simples, circular × linear) — apenas **sinalizando** que existem e o que motivaria escolher uma. Não desenvolver aqui.
 
 Encerrar (opcional) nomeando **outros temas da computação** em que a estrutura reaparece ("é a base da travessia de grafos e árvores"). Nomear o tema é permitido; **anunciar aula** ("veremos na próxima aula", "tema de aula futura") não é — a aula não se posiciona numa sequência.

@@ -1,6 +1,7 @@
 # Estrutura dos blocos da aula
 
-Este documento detalha o que entra em cada bloco. As regras vêm do `CLAUDE.md` da raiz; aqui estão organizadas como **checklist de execução**.
+Este documento detalha **o que** entra em cada bloco da aula, como checklist de execução.
+A forma de cada bloco em slides (`<section>`, classes, limites de texto) está em `estrutura-slides.md`; as regras gerais, no perfil da disciplina.
 
 A numeração canônica abaixo é a das **aulas de implementação (5 blocos)**. Em **aulas conceituais**, o bloco 4 (Código em C) é **omitido** e Referências passa a ser o bloco 4:
 
@@ -14,25 +15,17 @@ A numeração canônica abaixo é a das **aulas de implementação (5 blocos)**.
 
 ---
 
-## Preâmbulo (antes do bloco 1)
+## Slide-título (antes do bloco 1)
 
-Antes do "## 1. Conceito", a aula traz um único `>` (blockquote) curto:
+Traz o tipo da aula e uma linha curta de framing: a justificativa da representação interna escolhida (implementação) ou o lugar do conceito na computação (conceitual).
 
-```
-> **Tipo desta aula**: implementação | conceitual. <Frase curta justificando a escolha da representação interna, OU situando o conceito no mapa da disciplina.>
-```
-
-Exemplo (Pilha): `> **Tipo desta aula**: implementação. A Pilha é o gêmeo conceitual da Fila — mesma família, política oposta. Representação escolhida: lista simplesmente encadeada com um único ponteiro topo.`
+Exemplo (Pilha): *Aula de implementação — lista simplesmente encadeada com um único ponteiro `topo`.*
 
 ---
 
 ## Bloco 1 — Conceito (Aprofundamento Progressivo)
 
-**6 camadas, todas obrigatórias e em ordem**. Detalhes de cada camada em `camadas-bloco1.md`.
-
-Cabeçalho do bloco: `## 1. Conceito — Aprofundamento Progressivo`
-
-Cada camada vira um subheading: `### Camada N — <Nome da camada>`.
+**6 camadas, todas obrigatórias e em ordem**. O conteúdo de cada camada está em `camadas-bloco1.md`.
 
 Nomes canônicos das camadas:
 
@@ -43,20 +36,15 @@ Nomes canônicos das camadas:
 5. Análise de complexidade
 6. Conexões e variantes
 
-**Citações inline** da bibliografia já a partir da camada 2 (Backes cap. X; Veloso & Pereira cap. Y).
+**Citações inline** da bibliografia já a partir da camada 2 (Backes cap. X; Veloso & Pereira cap. Y), no corpo, na `nota-rodape` ou na fala do Eddy.
 
 ---
 
 ## Bloco 2 — Visualização Gráfica
 
-Cabeçalho: `## 2. Visualização Gráfica`
+Abre com uma frase descrevendo o ciclo a ser ilustrado (ex.: "Ciclo de vida completo: criação, três `empilhar`, uma consulta `topo`, dois `desempilhar` até esvaziar.").
 
-Uma frase introdutória curta descrevendo o ciclo a ser ilustrado (ex.: "Ciclo de vida completo: criação, três `empilhar`, uma consulta `topo`, dois `desempilhar` até esvaziar.").
-
-Cada passo é um subheading `### Passo N: nome_da_operacao(args)`, seguido de:
-
-1. Um `![alt descritivo](img/NN_descritor.svg)`.
-2. **1 ou 2 frases** explicando o que mudou em relação ao passo anterior — destacando ponteiros que se alteraram.
+Cada passo é um slide `Passo N — nome_da_operacao(args)` com o diagrama do estado e **1 ou 2 frases** dizendo o que mudou em relação ao passo anterior, destacando os ponteiros que se alteraram.
 
 **Convenção dos passos**:
 
@@ -74,15 +62,13 @@ Cada passo é um subheading `### Passo N: nome_da_operacao(args)`, seguido de:
 
 ## Bloco 3 — Problema Motivador
 
-Cabeçalho: `## 3. Problema Motivador`
-
-Começa com uma **citação destacada** (`>`) contendo uma pergunta concreta no formato *"Como o X faz Y?"*. Exemplos:
+Abre com uma **pergunta concreta** em destaque, no formato *"Como o X faz Y?"*. Exemplos:
 
 - *"Como o botão Ctrl+Z funciona?"*
 - *"Como o Spotify mantém o histórico de músicas tocadas?"*
 - *"Como o Git detecta conflitos entre branches?"*
 
-Depois, **2 a 4 parágrafos** explicando como a estrutura/algoritmo da aula resolve esse problema. Sempre que possível, dar um **segundo exemplo** num parágrafo final (a pilha de chamadas reforça o Ctrl+Z; o histórico do navegador reforça a pilha de páginas).
+Depois, como a estrutura ou o algoritmo da aula resolve esse problema, em passos. Sempre que possível, um **segundo exemplo** (a pilha de chamadas reforça o Ctrl+Z; o histórico do navegador reforça a pilha de páginas).
 
 O aluno deve sair pensando: *"ah, então é por isso que isso existe."*
 
@@ -90,48 +76,28 @@ O aluno deve sair pensando: *"ah, então é por isso que isso existe."*
 
 ## Bloco 4 — Código em C *(SOMENTE em aulas de implementação)*
 
-Cabeçalho: `## 4. Código em C`
+O código vive no arquivo `tema.c` da pasta da aula e é **exatamente** o que os slides mostram.
 
-Frase introdutória curta. Em seguida um `>` blockquote explicando que **tudo vive em um único arquivo `tema.c`** — `#include`s, structs, funções e `main()` — para que o aluno leia o programa inteiro de cima a baixo. **Não** anunciar aula futura sobre modularização: a aula é uma unidade fechada.
-
-Subheading `### tema.c — arquivo único` (ou similar) seguido do bloco de código completo em fence ` ```c `:
-
-```c
-#include <stdio.h>
-#include <stdlib.h>
-
-// typedef struct No { ... } No;
-// typedef struct Tema { ... } Tema;
-
-// funcoes do TAD na ordem: criar, vazia, inserir, remover,
-// consulta, destruir.
-
-int main(void) {
-    // demonstracao do ciclo completo.
-}
-```
-
-Depois do código, subheading `### Compilando e rodando`:
+- Um slide explica que **tudo vive em um único arquivo `tema.c`** — `#include`s, structs, funções e `main()` — para que o aluno leia o programa inteiro de cima a baixo. A aula é uma unidade fechada: o slide não anuncia aula sobre modularização.
+- Funções do TAD na ordem: criar, vazia, inserir, remover, consulta, destruir.
+- A `main()` demonstra o ciclo completo do bloco 2.
+- O código aparece em fatias, uma por slide, seguidas de um slide com a compilação e a saída esperada, para o aluno comparar:
 
 ```sh
 gcc -Wall -Wextra -o tema_demo tema.c
 ./tema_demo
 ```
 
-E o **bloco de saída esperada** em fence simples (sem `c`), permitindo ao aluno comparar:
-
 ```
 Topo da pilha: 30
 Desempilhando: 30 20 10
 ```
 
-Regras de código detalhadas em `codigo-c-regras.md`.
+Regras de código detalhadas em `codigo-c-regras.md`; esqueleto do arquivo em `templates/algoritmos-e-estruturas-de-dados/codigo.c.template`.
 
 ---
 
 ## Bloco 5 — Referências *(bloco 4 em aulas conceituais)*
-
-Cabeçalho: `## 5. Referências` (ou `## 4.`).
 
 Sempre na ordem (bibliografia básica da ementa — citar as que forem pertinentes ao tema):
 
@@ -140,7 +106,7 @@ Sempre na ordem (bibliografia básica da ementa — citar as que forem pertinent
 3. **Toscani & Veloso** — *Complexidade de Algoritmos* — quando a aula envolver análise de complexidade.
 4. **Schildt** — *C Completo e Total* — quando a aula apoiar-se em recursos da linguagem C (ponteiros, structs, alocação).
 
-Em seguida, um separador `**Leituras complementares**:` e lista com as que agregarem (bibliografia complementar da ementa):
+Em seguida, **Leituras complementares**, com as que agregarem (bibliografia complementar da ementa):
 
 - **Wirth** — *Algoritmos e Estruturas de Dados* — visão clássica do tema.
 - **Damas** — *Linguagem C* — aprofundamento na linguagem.

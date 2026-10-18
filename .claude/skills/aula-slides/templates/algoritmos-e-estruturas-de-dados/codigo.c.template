@@ -4,11 +4,11 @@
 /*
  * Template do .c didatico da disciplina.
  *
- * Regras (ver references/codigo-c-regras.md):
+ * Regras (ver references/algoritmos-e-estruturas-de-dados/codigo-c-regras.md):
  *   - um unico arquivo .c, sem .h separado
  *   - sem <stdbool.h>, sem const, sem fprintf(stderr)
  *   - tratar erro de malloc com printf + exit(1)
- *   - comentarios autoexplicativos (NAO usar rotulos I1/I2 do .md)
+ *   - comentarios autoexplicativos (NAO usar rotulos I1/I2)
  *   - main() exercita o ciclo completo demonstrativo
  *   - compila limpo com: gcc -Wall -Wextra -o demo arquivo.c
  */
