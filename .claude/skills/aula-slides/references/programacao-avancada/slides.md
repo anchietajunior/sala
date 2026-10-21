@@ -5,7 +5,7 @@ O código que os slides constroem é o código de `projeto/`.
 
 ## Formato
 
-- Arquivo `.html` único, com o reveal.js do vendor `aulas/assets/reveal/`, referenciado pelo caminho relativo `../assets/reveal/`. Tema claro `white`.
+- Arquivo `.html` único, com o reveal.js do vendor da própria aula, `aula-NN/reveal/`, referenciado pelo caminho relativo `reveal/`. Aula nova copia o `reveal/` de uma aula existente. Tema claro `white`.
 - Título em pt-BR; código em inglês com syntax highlight.
 - **Capa com o repositório**: logo abaixo do título, a URL onde ficam os slides e o código da disciplina, como texto e link: `https://github.com/anchietajunior/sala/tree/main/disciplinas/programacao-avancada`.
 - Número de aula só na capa.

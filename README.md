@@ -11,7 +11,7 @@ Material de estudos e projetos construídos em sala de aula pelo professor José
 
 Cada aula é a sua apresentação: os slides são a única fonte da verdade, e o código de cada aula é o que eles mostram.
 Cada disciplina tem um `disciplina.html` com a visão geral das aulas.
-Os slides abrem direto no navegador e funcionam offline: o Reveal.js está vendorado em `aulas/assets/` de cada disciplina.
+Os slides abrem direto no navegador e funcionam offline: o Reveal.js está vendorado em `aulas/assets/` em Algoritmos e Estruturas de Dados e dentro de cada aula (`aula-NN/reveal/`) em Programação Avançada, onde baixar só a pasta da aula basta.
 
 ## Projetos
 

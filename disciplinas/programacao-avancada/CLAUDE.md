@@ -17,9 +17,9 @@ programacao-avancada/
 ├── aulas/
 │   ├── plano-de-aulas.md  ← escopo de cada aula e temas teóricos [T-n]
 │   ├── bibliografia.md    ← referências canônicas por tema [T-n]
-│   ├── assets/reveal/     ← reveal.js vendorado (offline)
 │   └── aula-NN/
 │       ├── slides.html    ← a aula
+│       ├── reveal/        ← reveal.js vendorado (offline), só o que os slides usam
 │       └── img/           ← diagramas em SVG e capturas de tela em PNG
 └── projeto/
     ├── CONTEXT.md         ← glossário do domínio
@@ -38,6 +38,7 @@ programacao-avancada/
 | README do projeto | `projeto/README.md` | estado do projeto até esta aula |
 
 - O título completo da aula fica no `<title>` e no `<h1>` dos slides.
+- Cada aula carrega o próprio `reveal/`, para que baixar só a pasta `aula-NN/` baste para abrir os slides com estilo. Aula nova copia o `reveal/` de uma aula existente.
 - O código evolui na `main`: cada aula parte do estado em que o projeto está.
 
 ## Regras da disciplina
