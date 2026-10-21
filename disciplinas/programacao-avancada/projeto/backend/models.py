@@ -3,7 +3,7 @@ import enum
 from datetime import datetime
 
 # Tipos e funções do SQLAlchemy usados para definir as colunas
-from sqlalchemy import Enum, ForeignKey, String, func
+from sqlalchemy import Enum, ForeignKey, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 # Classe-mãe declarativa, definida junto da infraestrutura de conexão
@@ -59,6 +59,9 @@ class Book(Base):
     # basta — Mapped[int] vira INTEGER NOT NULL
     pages: Mapped[int]
     current_page: Mapped[int]
+    # AI Summary: o resumo gerado pelo modelo de linguagem; TEXT comporta
+    # textos longos, e "| None" vira NULL — todo livro nasce sem resumo
+    ai_summary: Mapped[str | None] = mapped_column(Text)
     # Chave estrangeira obrigatória: todo livro pertence a um usuário
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())

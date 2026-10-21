@@ -1,5 +1,7 @@
 # Testes de integração: rotas, schemas, regra de acesso e banco trabalhando
 # juntos; caixa preta, porque o teste só conhece o contrato HTTP da API
+from routers import books
+from schemas import BookSummary
 
 
 # Cria um livro pela API e devolve o JSON da resposta
@@ -73,3 +75,20 @@ def test_admin_updates_a_book_of_another_user(client, clarice, machado_admin):
     assert response.status_code == 200
     assert response.json()["progress"] == 100
     assert response.json()["user_id"] == book_of_clarice["user_id"]
+
+
+# O Gemini é trocado por um dublê que responde como ele: o teste não gasta cota,
+# não depende da rede e sabe exatamente o que a IA responde
+def test_ai_summary_is_saved_in_the_book(client, clarice, monkeypatch):
+    def fake_generate_book_summary(book):
+        return BookSummary(known_book=True, summary="Bentinho narra a sua vida com Capitu.")
+
+    # Troca o nome onde a rota o procura: no módulo routers.books
+    monkeypatch.setattr(books, "generate_book_summary", fake_generate_book_summary)
+    book = create_book(client, clarice)
+
+    response = client.post(f"/api/books/{book['id']}/summary", headers=clarice)
+
+    assert response.status_code == 200
+    stored_book = client.get(f"/api/books/{book['id']}", headers=clarice).json()
+    assert stored_book["ai_summary"] == "Bentinho narra a sua vida com Capitu."

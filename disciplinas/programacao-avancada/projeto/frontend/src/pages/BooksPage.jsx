@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import Card from "../components/Card";
 import ErrorMessage from "../components/ErrorMessage";
 import TextLink from "../components/TextLink";
-import { createBook, deleteBook, listBooks, updateBook } from "../services/bookService";
+import { createBook, deleteBook, listBooks, summarizeBook, updateBook } from "../services/bookService";
 
 // Formulário vazio: o estado inicial e o estado após salvar
 const emptyForm = { name: "", pages: "", current_page: "" };
@@ -17,6 +17,8 @@ export default function BooksPage({ isAdmin, onLogout }) {
   const [form, setForm] = useState(emptyForm);
   // id do livro em edição; null significa que o formulário cria um livro novo
   const [editingId, setEditingId] = useState(null);
+  // id do livro cujo AI Summary está sendo gerado; null quando nenhum está
+  const [summarizingId, setSummarizingId] = useState(null);
   const [error, setError] = useState("");
 
   // Efeito: roda uma vez, quando a página entra na tela, e busca os livros
@@ -78,6 +80,21 @@ export default function BooksPage({ isAdmin, onLogout }) {
     }
   }
 
+  // Pede o AI Summary e recarrega a lista; a geração leva segundos, e o
+  // summarizingId mantém o botão daquele livro desabilitado até a resposta
+  async function handleSummarize(id) {
+    setSummarizingId(id);
+    try {
+      await summarizeBook(id);
+      setError("");
+      loadBooks();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSummarizingId(null);
+    }
+  }
+
   // Cabeçalho, o formulário (criar ou editar), o erro e a lista de livros
   return (
     <main className="mx-auto grid max-w-lg gap-6 px-4 py-10">
@@ -99,7 +116,8 @@ export default function BooksPage({ isAdmin, onLogout }) {
 
       <ul className="grid gap-4">
         {books.map((book) => (
-          <BookItem key={book.id} book={book} onEdit={startEditing} onDelete={handleDelete} />
+          <BookItem key={book.id} book={book} isSummarizing={summarizingId === book.id}
+                    onEdit={startEditing} onDelete={handleDelete} onSummarize={handleSummarize} />
         ))}
       </ul>
     </main>

@@ -38,7 +38,16 @@ class BookRead(BaseModel):
     current_page: int
     # progress é uma property do model: from_attributes a lê como um campo
     progress: int
+    # None enquanto o User não pedir o AI Summary
+    ai_summary: str | None
     user_id: int
+
+
+# Schema da resposta do Gemini: o formato que exigimos do modelo de linguagem.
+# As descrições entram no JSON Schema enviado e o modelo as lê como instruções
+class BookSummary(BaseModel):
+    known_book: bool = Field(description="True only if you know a book with exactly this name.")
+    summary: str = Field(description="The summary, or an empty string if known_book is false.")
 
 
 # Schema de entrada do cadastro de usuário

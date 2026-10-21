@@ -19,3 +19,9 @@ export function updateBook(id, book) {
 export function deleteBook(id) {
   return request(`/api/books/${id}`, { method: "DELETE" });
 }
+
+// Pede o AI Summary de um livro: POST /api/books/{id}/summary, sem corpo; a
+// resposta é o livro com o resumo já gravado
+export function summarizeBook(id) {
+  return request(`/api/books/${id}/summary`, { method: "POST" });
+}

@@ -100,6 +100,27 @@ Referências renomadas para citar nos slides, mapeadas aos temas teóricos **[T-
 - DODDS, K. C. Testing Library - testing-library.com (*Guiding Principles*).
 - Documentação oficial do pytest - docs.pytest.org; do Vitest - vitest.dev; do Playwright - playwright.dev; do FastAPI - *Testing* e *Testing Dependencies with Overrides*.
 
+## Consumo de APIs e modelos de linguagem (aula 09)
+
+- WIGGINS, A. *The Twelve-Factor App* - fator III, *Config*. 12factor.net, 2011. (configuração e segredos em variáveis de ambiente)
+- DEUTSCH, L. P. *Fallacies of Distributed Computing*. Sun Microsystems, 1994 (a oitava acrescentada por James Gosling, 1997). ("a rede é confiável")
+- SHANNON, C. E. *A Mathematical Theory of Communication*. Bell System Technical Journal, 1948. (aproximações do inglês por sequências de letras e palavras)
+- RFC 6585 - *Additional HTTP Status Codes*. IETF, 2012. (o 429 Too Many Requests)
+- RFC 9110 - *HTTP Semantics*. IETF, 2022. (o 502 Bad Gateway e a semântica do POST)
+- OWASP. *Secrets Management Cheat Sheet*. cheatsheetseries.owasp.org.
+- JURAFSKY, D.; MARTIN, J. H. *Speech and Language Processing*. 3ª ed., rascunho - web.stanford.edu/~jurafsky/slp3. (a definição de modelo de linguagem)
+- VASWANI, A. et al. *Attention Is All You Need*. NeurIPS, 2017. (o Transformer)
+- SENNRICH, R.; HADDOW, B.; BIRCH, A. *Neural Machine Translation of Rare Words with Subword Units*. ACL, 2016. (tokens de subpalavra, BPE)
+- BROWN, T. et al. *Language Models are Few-Shot Learners*. NeurIPS, 2020. (o GPT-3 e o prompt como forma de programar o modelo)
+- OUYANG, L. et al. *Training language models to follow instructions with human feedback*. NeurIPS, 2022. (modelos que seguem instruções)
+- JI, Z. et al. *Survey of Hallucination in Natural Language Generation*. ACM Computing Surveys, 2023. (alucinação)
+- GEMINI TEAM. *Gemini: A Family of Highly Capable Multimodal Models*. Google DeepMind, arXiv:2312.11805, 2023.
+- WILLISON, S. *Prompt injection attacks against GPT-3*. simonwillison.net, 12 set. 2022. (o nome do ataque, demonstrado por Riley Goodside)
+- OWASP. *Top 10 for LLM Applications 2025* - LLM01:2025 *Prompt Injection*. genai.owasp.org.
+- WILLARD, B.; LOUF, R. *Efficient Guided Generation for Large Language Models*. arXiv:2307.09702, 2023. (decodificação restrita a um schema)
+- JSON Schema - json-schema.org (especificação 2020-12).
+- Documentação oficial da Gemini API - ai.google.dev/gemini-api/docs (*API keys*, *Interactions API*, *Structured output*, *Models*, *Pricing*); do httpx2 - github.com/pydantic/httpx2; do pytest - docs.pytest.org (*monkeypatch*).
+
 ## [T-10] Upload e multipart/form-data
 
 - RFC 7578 — *Returning Values from Forms: multipart/form-data*. IETF, 2015.

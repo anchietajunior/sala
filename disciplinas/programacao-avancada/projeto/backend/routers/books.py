@@ -1,3 +1,5 @@
+# httpx2 entra só pelas exceções que a chamada ao Gemini pode lançar
+import httpx2
 # APIRouter registra rotas fora do main.py; Depends injeta as dependências
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
@@ -5,6 +7,7 @@ from sqlalchemy.orm import Session
 
 import models
 from database import get_session
+from gemini import generate_book_summary
 from schemas import BookCreate, BookRead
 from security import get_current_user
 
@@ -79,3 +82,26 @@ def delete_book(book_id: int, session: Session = Depends(get_session),
     # delete anota a remoção; commit executa o DELETE no banco
     session.delete(book)
     session.commit()
+
+
+# Gera o AI Summary de um livro que o usuário logado pode acessar e o grava no
+# banco; POST porque cada pedido gera um texto novo e consome cota da API
+@router.post("/{book_id}/summary", response_model=BookRead)
+def summarize_book(book_id: int, session: Session = Depends(get_session),
+                   current_user: models.User = Depends(get_current_user)):
+    book = session.get(models.Book, book_id)
+    if book is None or not current_user.can_access(book):
+        raise HTTPException(status_code=404, detail="Book not found")
+    # Falha do lado do Gemini (rede, timeout, 4xx/5xx, JSON fora do schema):
+    # 502, a API intermediária recebeu uma resposta inválida de quem consultou
+    try:
+        book_summary = generate_book_summary(book)
+    except (httpx2.HTTPError, ValueError):
+        raise HTTPException(status_code=502, detail="The AI service failed to summarize the book")
+    # O modelo declarou não conhecer o livro: nenhum resumo inventado vai ao banco
+    if not book_summary.known_book:
+        raise HTTPException(status_code=422, detail="The AI model does not know this book")
+    book.ai_summary = book_summary.summary
+    session.commit()
+    session.refresh(book)
+    return book

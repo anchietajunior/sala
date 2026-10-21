@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- ida: do schema Pydantic ao Gemini -->
+  <text x="400" y="26" text-anchor="middle" font-size="12" fill="#666">na requisição</text>
+  <rect x="20" y="40" width="160" height="64" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="100" y="68" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">BookSummary</text>
+  <text x="100" y="88" text-anchor="middle" font-size="12" fill="#555">classe Pydantic</text>
+
+  <text x="250" y="62" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#8a6508">model_json_schema()</text>
+  <path d="M 182 72 L 316 72" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <rect x="320" y="40" width="160" height="64" rx="8" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="400" y="68" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">JSON Schema</text>
+  <text x="400" y="88" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#555">response_format</text>
+
+  <path d="M 482 72 L 616 72" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <rect x="620" y="40" width="160" height="64" rx="8" fill="#2b2b2b"/>
+  <text x="700" y="68" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">Gemini</text>
+  <text x="700" y="88" text-anchor="middle" font-size="12" fill="#bbb">geração restrita</text>
+
+  <path d="M 700 106 L 700 176" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <!-- volta: do texto JSON à decisão da rota -->
+  <text x="400" y="164" text-anchor="middle" font-size="12" fill="#666">na resposta</text>
+  <rect x="620" y="180" width="160" height="64" rx="8" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="700" y="208" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">texto JSON</text>
+  <text x="700" y="228" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#555">{"known_book": true, …}</text>
+
+  <text x="550" y="202" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#8a6508">model_validate_json()</text>
+  <path d="M 618 212 L 484 212" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <rect x="320" y="180" width="160" height="64" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="400" y="208" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">BookSummary</text>
+  <text x="400" y="228" text-anchor="middle" font-size="12" fill="#555">objeto validado</text>
+
+  <path d="M 318 212 L 184 212" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+
+  <rect x="20" y="180" width="160" height="64" rx="8" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="100" y="208" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">rota</text>
+  <text x="100" y="228" text-anchor="middle" font-size="12" fill="#555">known_book decide</text>
+
+  <!-- desfechos -->
+  <rect x="20" y="262" width="230" height="30" rx="6" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.4"/>
+  <text x="135" y="282" text-anchor="middle" font-size="12" fill="#333">true → grava ai_summary, 200</text>
+  <rect x="285" y="262" width="230" height="30" rx="6" fill="#fdecea" stroke="#b03a2e" stroke-width="1.4"/>
+  <text x="400" y="282" text-anchor="middle" font-size="12" fill="#333">false → nada gravado, 422</text>
+  <rect x="550" y="262" width="230" height="30" rx="6" fill="#fdecea" stroke="#b03a2e" stroke-width="1.4"/>
+  <text x="665" y="282" text-anchor="middle" font-size="12" fill="#333">JSON fora do schema → 502</text>
+
+  <text x="400" y="330" text-anchor="middle" font-size="12" fill="#999">WILLARD, B.; LOUF, R. - Efficient Guided Generation for LLMs, 2023 · json-schema.org</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- as três partes -->
+  <rect x="10" y="110" width="140" height="90" rx="8" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="80" y="150" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Navegador</text>
+  <text x="80" y="172" text-anchor="middle" font-size="12.5" fill="#555">React</text>
+
+  <rect x="330" y="110" width="140" height="90" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="400" y="150" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Nossa API</text>
+  <text x="400" y="172" text-anchor="middle" font-size="12.5" fill="#555">FastAPI</text>
+
+  <rect x="650" y="110" width="140" height="90" rx="8" fill="#2b2b2b"/>
+  <text x="720" y="150" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Gemini API</text>
+  <text x="720" y="172" text-anchor="middle" font-size="12.5" fill="#bbb">Google</text>
+
+  <!-- navegador e nossa API -->
+  <text x="240" y="108" text-anchor="middle" font-size="11" font-family="monospace" fill="#333">POST /api/books/7/summary</text>
+  <text x="240" y="124" text-anchor="middle" font-size="11" font-family="monospace" fill="#8a6508">Bearer &lt;token do User&gt;</text>
+  <path d="M 152 135 L 326 135" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <path d="M 328 175 L 154 175" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="240" y="194" text-anchor="middle" font-size="11.5" fill="#333">200 · o livro com ai_summary</text>
+
+  <!-- nossa API e Gemini -->
+  <text x="560" y="108" text-anchor="middle" font-size="11" font-family="monospace" fill="#333">POST /v1beta/interactions</text>
+  <text x="560" y="124" text-anchor="middle" font-size="11" font-family="monospace" fill="#8a6508">x-goog-api-key: &lt;chave&gt;</text>
+  <path d="M 472 135 L 646 135" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <path d="M 648 175 L 474 175" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="560" y="194" text-anchor="middle" font-size="11.5" fill="#333">200 · o JSON do BookSummary</text>
+
+  <!-- papéis de cada parte -->
+  <text x="80" y="228" text-anchor="middle" font-size="12" fill="#333">o usuário lê tudo</text>
+  <text x="80" y="246" text-anchor="middle" font-size="12" fill="#333">o que chega aqui</text>
+  <text x="400" y="228" text-anchor="middle" font-size="12" fill="#333">servidor do React,</text>
+  <text x="400" y="246" text-anchor="middle" font-size="12" fill="#333">cliente do Gemini</text>
+  <text x="400" y="270" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#2e6da4">GEMINI_API_KEY no ambiente</text>
+  <text x="720" y="228" text-anchor="middle" font-size="12" fill="#333">cobra os tokens</text>
+  <text x="720" y="246" text-anchor="middle" font-size="12" fill="#333">de quem tem a chave</text>
+
+  <text x="400" y="302" text-anchor="middle" font-size="13" fill="#222">A chave do Gemini nunca sai do servidor; o navegador só conhece o token do próprio User.</text>
+  <text x="400" y="330" text-anchor="middle" font-size="12" fill="#999">Documentação da Gemini API - API keys</text>
+</svg>

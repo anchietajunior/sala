@@ -1,5 +1,6 @@
-// Classes comuns a todo botão: tamanho, fonte e o contorno de foco pelo teclado
-const baseClasses = "rounded-lg px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+// Classes comuns a todo botão: tamanho, fonte, o contorno de foco pelo teclado
+// e a aparência apagada enquanto o botão está desabilitado
+const baseClasses = "rounded-lg px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50";
 
 // A aparência de cada variante: as classes ficam escritas por inteiro para o
 // Tailwind encontrá-las ao gerar o CSS

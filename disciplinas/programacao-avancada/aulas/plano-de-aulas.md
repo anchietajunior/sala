@@ -57,17 +57,22 @@ Prática, do backend para o frontend:
 2. **Frontend, unidade** - Vitest com jsdom e Testing Library: teste de componente do `BookItem` (o que aparece e os callbacks dos botões) e teste do `authService.login` com o `fetch` trocado por um dublê.
 3. **Frontend, aceitação** - Playwright: dois testes de ponta a ponta num navegador de verdade, com backend e frontend rodando - o leitor cadastra um livro e acompanha o progresso; quem não é Admin não chega ao Admin Dashboard.
 
-**Aula 09 - Engenharia de software e arquitetura de software (proposta, escopo a confirmar)**
+**Aula 09 - Consumo de APIs e modelos de linguagem**
+Teoria, aprofundando cliente-servidor **[T-2]** e APIs **[T-3]**: o backend como cliente de uma API de terceiros - a chave de API, a configuração no ambiente (Wiggins, *The Twelve-Factor App*, 2011), a chamada direta do navegador que exporia a chave; chamadas remotas falham (Deutsch, falácias da computação distribuída, 1994) - timeout, 429 (RFC 6585) e o 502 que a nossa API devolve (RFC 9110); modelos de linguagem - definição (Jurafsky e Martin), Transformer (Vaswani et al., 2017), tokens (Sennrich et al., 2016), geração por amostragem e não determinismo, modelos que seguem instruções (Ouyang et al., 2022) e alucinação (Ji et al., 2023); o Gemini (Google DeepMind, 2023) e a Interactions API; prompt - instrução de sistema separada dos dados, restrições explícitas e uma saída para "não conheço"; injeção de prompt (Willison, 2022; OWASP Top 10 for LLM Applications, 2025); saída estruturada - JSON Schema, decodificação restrita (Willard e Louf, 2023) e a validação pelo Pydantic.
+Prática, na linha chave → banco de dados → backend → frontend:
+1. **Chave** - criação no Google AI Studio, restrição à Gemini API e a variável `GEMINI_API_KEY` no terminal (Mac e Windows).
+2. **Banco de dados** - coluna `ai_summary` (`TEXT`, `NULL`) no model `Book`; `DROP TABLE books` para o `create_all` recriar a tabela.
+3. **Backend** - schema `BookSummary` (`known_book`, `summary`), cujo JSON Schema vai na requisição; `gemini.py` com a instrução de sistema e o `httpx2.post` para a Interactions API (`gemini-3.5-flash-lite`, `response_format`, `store: false`, timeout de 30 s); `POST /api/books/{book_id}/summary` - 404 pela regra de acesso, 502 quando o Gemini falha, 422 quando o modelo declara não conhecer o livro; teste de integração com o Gemini trocado por um dublê (`monkeypatch`).
+4. **Frontend** - `summarizeBook` no `bookService`, o botão *AI summary* no `BookItem`, desabilitado durante a geração, e o resumo abaixo da barra de progresso.
+
+**Aula 10 - Engenharia de software e arquitetura de software (proposta, escopo a confirmar)**
 Teoria: engenharia de software (Conferência da OTAN, 1968; IEEE 610.12-1990); o produto antes da tecnologia - complexidade essencial e acidental (Brooks, 1986), integridade conceitual (Brooks, 1975), linguagem ubíqua (Evans, 2003), o mundo e a máquina (Jackson, 1995); arquitetura e a visão de conjunto (ISO/IEC/IEEE 42010; Bass, Clements e Kazman; modelo C4); separação de responsabilidades (Dijkstra, 1974; Parnas, 1972); Ports and Adapters (Cockburn, 2005) e a família Onion e Clean.
-Prática: refatoração do backend para Ports and Adapters protegida pelos testes automatizados existentes, que funcionam como testes de caracterização (Feathers, 2004), sem mudar o contrato da API; o fechamento é um pedido de mudança do produto que passa a tocar um único lugar do código. Pode ocupar também a aula 10.
+Prática: refatoração do backend para Ports and Adapters protegida pelos testes automatizados existentes, que funcionam como testes de caracterização (Feathers, 2004), sem mudar o contrato da API; o fechamento é um pedido de mudança do produto que passa a tocar um único lugar do código. Pode ocupar também a aula 11.
 
 ## Bloco 4 — Autenticação e autorização
 
-**Aula 10 — slot a reescopar**
-O conteúdo original (JWT em duas partes, **[T-8]**) foi antecipado para a aula 05, e a tela de login foi para o Bloco 3. Candidatos para o slot: a continuação da arquitetura, se ela ocupar duas aulas; model `ReadingUpdate` como histórico de leitura (segunda relação 1:N) com o Reading Progress derivado do update mais recente; tratamento do 401 e expiração do token no front (logout automático); busca por nome na tela de livros; aprofundamento de segurança (expiração e renovação de token); exercícios integradores.
-
 **Aula 11 — slot a reescopar**
-O conteúdo original (autorização e RBAC **[T-9]**, `require_admin` e a página restrita ao Admin) foi antecipado para a aula 07. Candidatos: rotas administrativas para listar os Users e os Books de cada um; exercícios integradores.
+O conteúdo original das aulas 10 e 11 (JWT em duas partes **[T-8]**; autorização e RBAC **[T-9]**) foi antecipado para as aulas 05 e 07, e a aula 09 passou a ser a de consumo de APIs e modelos de linguagem. Candidatos para o slot: a continuação da arquitetura, se ela ocupar duas aulas; model `ReadingUpdate` como histórico de leitura (segunda relação 1:N) com o Reading Progress derivado do update mais recente; tratamento do 401 e expiração do token no front (logout automático); busca por nome na tela de livros; aprofundamento de segurança (expiração e renovação de token); rotas administrativas para listar os Users e os Books de cada um; exercícios integradores.
 
 **Aula 12 — Admin Dashboard**
 Prática: navegação pelos Users e seus Books a partir do Admin Dashboard - as quantidades de Users e de Books já existem desde a aula 07.

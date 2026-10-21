@@ -17,6 +17,35 @@ senha? Ajuste para mysql+pymysql://root:SUASENHA@127.0.0.1:3306/reading_tracker
 
 Mudou um model? Dado de aula é descartável: `DROP TABLE books; DROP TABLE users;`
 no cliente mysql e deixe o `create_all` recriar as tabelas na próxima subida.
+O `create_all` só cria tabelas que não existem: uma coluna nova num model, como
+`books.ai_summary`, exige ao menos `DROP TABLE books;`.
+
+## Chave da API do Gemini
+
+O AI Summary de um livro é gerado pelo Gemini, a API de modelos de linguagem do
+Google. Cada pessoa cria a própria chave:
+
+1. Entre em https://aistudio.google.com/apikey com uma conta Google.
+2. Clique em **Create API key** e copie a chave.
+3. Em **Add restrictions**, escolha **Restrict to Gemini API only**.
+
+O nível gratuito basta para a disciplina. Nele, o Google usa o conteúdo enviado
+para melhorar os próprios produtos: não envie dados pessoais.
+
+A chave fica na variável de ambiente `GEMINI_API_KEY`, nunca no código nem no git.
+Defina-a no mesmo terminal em que vai subir o backend:
+
+    export GEMINI_API_KEY="sua-chave"       # Mac
+    $env:GEMINI_API_KEY="sua-chave"         # Windows (PowerShell)
+
+A variável vale até o terminal ser fechado. Sem ela, o `POST /api/books/{book_id}/summary`
+responde 500, e o terminal do uvicorn mostra `KeyError: 'GEMINI_API_KEY'`.
+
+## Variáveis de ambiente
+
+| Nome | Para que serve | Obrigatória |
+| ---- | -------------- | ----------- |
+| GEMINI_API_KEY | Chave da API do Gemini, enviada no header `x-goog-api-key` | Só para gerar o AI Summary |
 
 ## Papéis: User e Admin
 
@@ -93,12 +122,13 @@ com e-mails aleatórios (`leitor-<id>@exemplo.com`).
     ├── models.py        ← as tabelas (User, Book)
     ├── schemas.py       ← as classes Pydantic de entrada e saída
     ├── security.py      ← hash de senha, token JWT, get_current_user e require_admin
+    ├── gemini.py        ← chamada à API do Gemini: o prompt e a saída estruturada do AI Summary
     ├── routers/         ← as rotas de cada recurso (users.py, books.py, admin.py)
     ├── pytest.ini       ← configuração do pytest: onde estão os testes
     └── tests/
         ├── conftest.py       ← fixtures: banco SQLite de teste, cliente HTTP e usuários
         ├── test_models.py    ← unidade: Reading Progress e regra de acesso (caixa branca)
-        ├── test_books_api.py ← integração: rotas de books, inclusive o teste de regressão
+        ├── test_books_api.py ← integração: rotas de books, o teste de regressão e o AI Summary com o Gemini trocado por um dublê
         ├── test_admin_api.py ← integração: 401, 403 e 200 do Admin Dashboard
         └── test_users_api.py ← integração: cadastro e login
 
@@ -118,7 +148,7 @@ com e-mails aleatórios (`leitor-<id>@exemplo.com`).
         ├── services/          ← conversa com a API: URLs, verbos e formato das respostas
         │   ├── api.js          ← request(): fetch com JSON, token e tratamento de erro
         │   ├── authService.js  ← signup() e login()
-        │   ├── bookService.js  ← listBooks(), createBook(), updateBook(), deleteBook()
+        │   ├── bookService.js  ← listBooks(), createBook(), updateBook(), deleteBook(), summarizeBook()
         │   ├── adminService.js ← getStats(): as quantidades do Admin Dashboard
         │   └── authService.test.js ← teste do login com o fetch trocado por um dublê
         ├── pages/             ← telas inteiras: guardam o estado e chamam os services
@@ -127,13 +157,13 @@ com e-mails aleatórios (`leitor-<id>@exemplo.com`).
         │   ├── BooksPage.jsx          ← livros: listar, criar, editar e apagar
         │   └── AdminDashboardPage.jsx ← Admin Dashboard (/admin): quantidades de Users e Books
         └── components/        ← pedaços de tela: recebem props, não chamam a API
-            ├── Button.jsx       ← botão do sistema, com as variantes primary, secondary e danger
+            ├── Button.jsx       ← botão do sistema, com as variantes primary, secondary e danger e o estado desabilitado
             ├── TextInput.jsx    ← campo com rótulo, borda e foco padronizados
             ├── ErrorMessage.jsx ← mensagem de erro em destaque (role="alert")
             ├── Card.jsx         ← superfície branca que envolve formulários e livros
             ├── TextLink.jsx     ← link de navegação entre páginas (/admin e /)
             ├── BookForm.jsx     ← formulário de criar ou editar um livro
-            ├── BookItem.jsx     ← um livro da lista, com a barra de progresso
+            ├── BookItem.jsx     ← um livro da lista, com a barra de progresso e o AI Summary
             ├── BookItem.test.jsx ← teste de componente: o que aparece e os cliques
             └── StatCard.jsx     ← uma quantidade do Admin Dashboard
 
@@ -160,6 +190,7 @@ API, que responde 403 a quem não é Admin.
 | POST | /api/books | Bearer | Cria um livro do usuário logado; corpo `name`, `pages` (> 0) e `current_page` (opcional, ≥ 0 e ≤ pages), validado pelo schema BookCreate - o nome é gravado sem os espaços das pontas, e um nome só de espaços responde 422 |
 | PUT | /api/books/{book_id} | Bearer | Atualiza `name`, `pages` e `current_page` de um livro (404 se não existir ou se for de outro User e quem pede não for Admin) |
 | DELETE | /api/books/{book_id} | Bearer | Remove um livro; responde 204 sem corpo (404 se não existir ou se for de outro User e quem pede não for Admin) |
+| POST | /api/books/{book_id}/summary | Bearer | Gera o AI Summary do livro com o Gemini, grava em `ai_summary` e devolve o livro; sem corpo. 422 se o modelo não conhece o livro, 502 se a API do Gemini falhar, 404 nas mesmas condições das rotas acima |
 | GET | /api/admin/stats | Bearer, Admin | Quantidades de Users e de Books cadastrados (`users_count`, `books_count`); quem não é Admin recebe 403 |
 
 As rotas marcadas com **Bearer** exigem o header `Authorization: Bearer <token>`,
@@ -170,6 +201,11 @@ autenticado sem esse papel recebe **403**.
 Todo livro devolvido pela API traz `progress`: a porcentagem de leitura, calculada
 a partir de `current_page` e `pages` (100 = concluído). É dado derivado - não existe
 no banco.
+
+Todo livro traz também `ai_summary`: o AI Summary gravado no banco, ou `null`
+enquanto ninguém o pediu. Cada `POST /api/books/{book_id}/summary` gera um texto novo e
+substitui o anterior. O texto é escrito por um modelo de linguagem e pode conter
+erros.
 
 A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
 
@@ -189,7 +225,7 @@ A documentação interativa (Swagger) fica em http://127.0.0.1:8000/docs
 | fastapi | Framework web: rotas, validação e documentação automática | 0.139.2 |
 | h11 | Implementação do protocolo HTTP/1.1 (usada pelo uvicorn) | 0.16.0 |
 | httpcore2 | Núcleo de transporte HTTP (usado pelo httpx2) | 2.13.1 |
-| httpx2 | Cliente HTTP que o TestClient do FastAPI usa para chamar a API nos testes | 2.13.1 |
+| httpx2 | Cliente HTTP: o backend chama a API do Gemini com ele, e o TestClient do FastAPI o usa nos testes | 2.13.1 |
 | idna | Suporte a nomes de domínio internacionais | 3.18 |
 | iniconfig | Leitura de arquivos .ini (usada pelo pytest para o pytest.ini) | 2.3.1 |
 | packaging | Comparação de versões de pacotes (usada pelo pytest) | 26.3 |

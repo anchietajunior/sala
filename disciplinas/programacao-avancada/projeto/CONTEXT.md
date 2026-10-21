@@ -20,6 +20,10 @@ _Avoid_: superuser, staff
 Livro cadastrado por um User, com quantidade total de páginas informada no cadastro. Pertence exclusivamente ao User que o cadastrou.
 _Avoid_: título, obra
 
+**AI Summary**:
+Resumo curto de um Book, sem revelar o final, gerado por um modelo de linguagem a pedido do User. Fica gravado no Book, e cada novo pedido o substitui. Se o modelo declara não conhecer o livro, nenhum resumo é gravado.
+_Avoid_: sinopse, descrição, resenha
+
 **Cover**:
 Imagem da capa enviada pelo User para um Book.
 _Avoid_: imagem, foto, thumbnail
