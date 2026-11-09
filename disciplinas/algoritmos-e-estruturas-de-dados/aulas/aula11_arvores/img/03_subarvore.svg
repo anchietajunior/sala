@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 440"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="78" y="150" width="225" height="200" rx="14" fill="none" stroke="#5a7a9a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="190" y="375" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600">subárvore com raiz B</text>
+  <rect x="465" y="150" width="90" height="200" rx="14" fill="none" stroke="#5a7a9a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="510" y="375" text-anchor="middle" font-size="15" fill="#5a7a9a" font-weight="600">subárvore com raiz D</text>
+  <line x1="329.2" y1="85.6" x2="210.8" y2="174.4" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="350" y1="96" x2="350" y2="164" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="370.8" y1="85.6" x2="489.2" y2="174.4" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="176.899" y1="212.458" x2="133.101" y2="287.542" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="203.101" y1="212.458" x2="246.899" y2="287.542" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="510" y1="216" x2="510" y2="284" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="350" cy="70" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="77" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">A</text>
+  <circle cx="190" cy="190" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="190" y="197" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">B</text>
+  <circle cx="350" cy="190" r="26" fill="#fff" stroke="#2c5d8a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="350" y="197" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">C</text>
+  <circle cx="510" cy="190" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="510" y="197" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">D</text>
+  <circle cx="120" cy="310" r="26" fill="#fff" stroke="#2c5d8a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="120" y="317" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">E</text>
+  <circle cx="260" cy="310" r="26" fill="#fff" stroke="#2c5d8a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="260" y="317" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">F</text>
+  <circle cx="510" cy="310" r="26" fill="#fff" stroke="#2c5d8a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="510" y="317" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">G</text>
+  <line x1="100" y1="400" x2="600" y2="400" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="425" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">cada filho de A é a raiz de uma árvore menor, com as mesmas regras</text>
+</svg>

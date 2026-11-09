@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 405"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="412.2" y1="69" x2="235.8" y2="126" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="235.8" y1="164" x2="157.8" y2="221" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="157.8" y1="259" x2="157.8" y2="316" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="235.8" y1="164" x2="313.8" y2="221" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="412.2" y1="69" x2="456" y2="126" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="456" y1="164" x2="456" y2="221" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="412.2" y1="69" x2="588.6" y2="126" stroke="#2c5d8a" stroke-width="2"/>
+  <rect x="79.4" y="316" width="156.8" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="157.8" y="340.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">unirios.edu.br</text>
+  <rect x="116.2" y="221" width="83.2" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="157.8" y="245.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">edu.br</text>
+  <rect x="272.2" y="221" width="83.2" height="38" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="313.8" y="245.25" text-anchor="middle" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">gov.br</text>
+  <rect x="203.8" y="126" width="64" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="235.8" y="150.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">br</text>
+  <rect x="391.4" y="221" width="129.2" height="38" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="456" y="245.25" text-anchor="middle" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">exemplo.com</text>
+  <rect x="424" y="126" width="64" height="38" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="456" y="150.25" text-anchor="middle" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">com</text>
+  <rect x="556.6" y="126" width="64" height="38" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="588.6" y="150.25" text-anchor="middle" font-size="15" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">org</text>
+  <rect x="380.2" y="31" width="64" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="412.2" y="55.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">.</text>
+  <text x="456.2" y="55" text-anchor="start" font-size="15" fill="#5a7a9a" font-style="italic">← raiz</text>
+  <line x1="100" y1="365" x2="600" y2="365" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="390" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">unirios.edu.br se lê da folha para a raiz: unirios → edu → br → raiz</text>
+</svg>

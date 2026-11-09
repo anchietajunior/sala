@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 390"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="91.9872" y1="76.4702" x2="63.0128" y2="118.53" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="114.679" y1="76.4702" x2="143.654" y2="118.53" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="51.6667" cy="135" r="20" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="51.6667" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="155" cy="135" r="20" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="155" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="103.333" cy="60" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="103.333" y="65.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="103.333" y="300" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">inserir 30</text>
+  <text x="103.333" y="322" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">dois filhos vermelhos</text>
+  <line x1="212.667" y1="140" x2="228.667" y2="140" stroke="#2c5d8a" stroke-width="3"/>
+<polygon points="240.7,140.0 228.7,135.0 228.7,145.0" fill="#2c5d8a"/>
+  <line x1="338.654" y1="76.4702" x2="309.679" y2="118.53" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="361.346" y1="76.4702" x2="390.321" y2="118.53" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="298.333" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="298.333" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="401.667" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="401.667" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="350" cy="60" r="20" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="350" y="65.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="350" y="300" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">inversão de cores</text>
+  <text x="350" y="322" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">o vermelho sobe para o pai</text>
+  <line x1="459.333" y1="140" x2="475.333" y2="140" stroke="#2c5d8a" stroke-width="3"/>
+<polygon points="487.3,140.0 475.3,135.0 475.3,145.0" fill="#2c5d8a"/>
+  <line x1="585.321" y1="76.4702" x2="556.346" y2="118.53" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="608.013" y1="76.4702" x2="636.987" y2="118.53" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="545" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="545" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="648.333" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="648.333" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="596.667" cy="60" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="596.667" y="65.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="596.667" y="300" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">raiz pintada de preto</text>
+  <text x="596.667" y="322" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">a raiz é sempre preta</text>
+  <circle cx="260" cy="365" r="10" fill="#1a1a1a"/>
+  <text x="278" y="370" text-anchor="start" font-size="14" fill="#222">preto</text>
+  <circle cx="345" cy="365" r="10" fill="#b54040"/>
+  <text x="363" y="370" text-anchor="start" font-size="14" fill="#222">vermelho</text>
+</svg>

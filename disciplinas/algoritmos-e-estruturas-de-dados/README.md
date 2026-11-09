@@ -24,7 +24,7 @@ O livro-texto da disciplina é **Cormen, Leiserson, Rivest & Stein — Algoritmo
 | 08 | Listas Encadeadas (FIFO/LIFO, duplas, circulares) | Conceitual | [aulas/aula08_listas_encadeadas/apresentacao.html](aulas/aula08_listas_encadeadas/apresentacao.html) |
 | 09 | Fila (Queue) | Implementação | [aulas/aula09_fila/apresentacao.html](aulas/aula09_fila/apresentacao.html) |
 | 10 | Pilha (Stack) | Implementação | [aulas/aula10_pilha/apresentacao.html](aulas/aula10_pilha/apresentacao.html) |
-| 11 | Árvores e Árvores Binárias (BST + 3 travessias) | Implementação | [aulas/aula11_arvore_binaria/apresentacao.html](aulas/aula11_arvore_binaria/apresentacao.html) |
+| 11 | Árvores: árvore geral, árvore binária de busca (3 percursos) e árvore rubro-negra | Implementação | [aulas/aula11_arvores/apresentacao.html](aulas/aula11_arvores/apresentacao.html) |
 
 ## Convenções
 

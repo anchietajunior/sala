@@ -1,0 +1,1565 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula 11 — Árvores | Algoritmos e Estruturas de dados</title>
+
+    <!-- Reveal.js core -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reset.css">
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/reveal.css">
+
+    <!-- Tema claro -->
+    <link rel="stylesheet" href="../assets/vendor/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+    <!-- Highlight.js tema claro para blocos de código -->
+    <link rel="stylesheet" href="../assets/vendor/highlight.js@11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Eddy — assistente didático da disciplina -->
+    <link rel="stylesheet" href="../assets/bot/bot.css">
+
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --cor-destaque: #2c5d8a;
+            --cor-suave: #5a7a9a;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            color: var(--cor-destaque);
+            text-transform: none;
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .reveal h3 code {
+            font-size: 0.8em;
+        }
+
+        .reveal .slides section.capa h1 {
+            font-size: 2.4em;
+            margin-bottom: 0.2em;
+        }
+        .reveal .slides section.capa h2 {
+            font-size: 1.4em;
+            color: var(--cor-suave);
+            font-weight: 400;
+        }
+        .reveal .slides section.capa .rodape-capa {
+            margin-top: 2em;
+            font-size: 0.6em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.5em;
+            line-height: 1.35;
+            width: auto;
+            max-width: 100%;
+        }
+        .reveal pre code {
+            border-radius: 6px;
+            padding: 14px 18px;
+            max-height: 580px;
+        }
+        .reveal pre.codigo-medio {
+            font-size: 0.45em;
+        }
+        .reveal pre.codigo-longo {
+            font-size: 0.42em;
+        }
+
+        .reveal .diagrama {
+            max-width: 100%;
+            max-height: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .reveal .formula {
+            font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.9em;
+            color: #222;
+            background: #f7f9fc;
+            border: 1px solid #cfd6dd;
+            border-radius: 6px;
+            padding: 14px 22px;
+            display: inline-block;
+            margin: 0.4em 0;
+        }
+
+        .reveal .destaque {
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
+
+        .reveal .nota-rodape {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 1.2em;
+            font-style: italic;
+        }
+
+        .reveal blockquote {
+            background: #f7f9fc;
+            border-left: 4px solid var(--cor-destaque);
+            padding: 14px 22px;
+            font-size: 0.85em;
+            box-shadow: none;
+        }
+
+        .reveal ul, .reveal ol { display: block; }
+        .reveal li { margin-bottom: 0.4em; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0 auto;
+        }
+        .reveal table th, .reveal table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reveal table th {
+            background: #f0f4f8;
+            color: var(--cor-destaque);
+        }
+
+        .reveal section .titulo-bloco {
+            font-size: 0.5em;
+            color: var(--cor-suave);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal .duas-colunas {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+        .reveal .duas-colunas > div { flex: 1; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <!-- 1. CAPA INSTITUCIONAL -->
+        <section class="capa">
+            <h1>Algoritmos e Estruturas de dados</h1>
+            <h2>Unirios</h2>
+            <div class="rodape-capa">Prof. José Anchieta</div>
+        </section>
+
+        <!-- 2. TÍTULO DA AULA -->
+        <section>
+            <p class="titulo-bloco">Aula 11</p>
+            <h1>Árvores</h1>
+            <p style="font-size: 0.85em; color: #666; margin-top: 0.4em;">
+                Hierarquia · árvore binária de busca · árvore rubro-negra
+            </p>
+            <p style="margin-top: 1.5em; font-size: 0.7em; color: #666;">
+                Aula <strong>de implementação</strong> — cada nó é alocado com <code>malloc</code> e guarda
+                dois ponteiros, <code>esq</code> e <code>dir</code>; a árvore é o ponteiro para a raiz, e
+                <code>NULL</code> é a árvore vazia, sem nenhum caso especial.
+            </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 1 — CONCEITO (APROFUNDAMENTO PROGRESSIVO, 6 CAMADAS)   -->
+        <!-- ============================================================ -->
+        <section>
+            <!-- ----- CAMADA 1 — INTRODUÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 1</p>
+                <h3>Introdução</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Pense no organograma de uma empresa. A diretora está no topo; abaixo dela,
+                    dois gerentes; abaixo de cada gerente, a sua equipe.
+                </p>
+                <img class="diagrama" style="max-height: 290px;" src="img/01_organograma.svg"
+                     alt="Organograma: Diretora no topo; abaixo dela, Gerente comercial e Gerente de TI; abaixo do Gerente comercial, Vendas e Marketing; abaixo do Gerente de TI, Suporte e Desenvolvimento">
+                <blockquote>
+                    Cada pessoa responde a um único superior, e só quem está no topo não responde a ninguém.
+                </blockquote>
+            </section>
+
+            <!-- ----- CAMADA 2 — DEFINIÇÃO INFORMAL ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 2</p>
+                <h3>O que é uma árvore</h3>
+                <p style="text-align: left; font-size: 0.85em;">
+                    Essa forma de organizar tem nome: <span class="destaque">árvore</span> (<em>tree</em>).
+                    Uma árvore é formada por:
+                </p>
+                <ul style="font-size: 0.78em;">
+                    <li><strong>nós</strong> (<em>nodes</em>): os elementos guardados, como cada pessoa do organograma;</li>
+                    <li><strong>arestas</strong> (<em>edges</em>): as ligações entre um nó e os nós logo abaixo dele;</li>
+                    <li><strong>raiz</strong> (<em>root</em>): o único nó sem nenhum nó acima, no topo.</li>
+                </ul>
+                <blockquote>Cada nó, exceto a raiz, está ligado a exatamente um nó acima dele.</blockquote>
+                <p class="nota-rodape">Cormen et al., Apêndice B, seção B.5 — árvores enraizadas (<em>rooted trees</em>).</p>
+            </section>
+
+            <section>
+                <h3>Pai, filho e folha</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    O nó logo acima é o <strong>pai</strong> (<em>parent</em>); os nós logo abaixo são os
+                    <strong>filhos</strong> (<em>children</em>). Um nó sem filhos é uma <strong>folha</strong> (<em>leaf</em>);
+                    um nó com filhos é um <strong>nó interno</strong> (<em>internal node</em>).
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/02_vocabulario.svg"
+                     alt="Árvore com raiz A; A tem filhos B, C e D; B tem filhos E e F; D tem filho G. Rótulos indicam a raiz, uma aresta, B como pai de E e F, e as folhas C, E, F e G">
+            </section>
+
+            <section>
+                <h3>As operações</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Cada nó guarda uma <strong>chave</strong> (<em>key</em>), o valor que o identifica.
+                    Sobre as chaves, a árvore oferece quatro operações:
+                </p>
+                <ul style="font-size: 0.75em;">
+                    <li><strong>buscar</strong> (<em>search</em>): encontrar o nó que guarda uma chave;</li>
+                    <li><strong>inserir</strong> (<em>insert</em>): acrescentar um nó novo;</li>
+                    <li><strong>remover</strong> (<em>delete</em>): retirar um nó sem perder os demais;</li>
+                    <li><strong>percorrer</strong> (<em>traverse</em>): visitar todos os nós, cada um uma vez.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Note o que a árvore <strong>não</strong> oferece: um nó com dois pais, um caminho que volta
+                    ao ponto de partida (um <em>ciclo</em>) e acesso direto por posição, como <code>v[3]</code> em um vetor.
+                </p>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, Cormen define primeiro a <strong>árvore livre</strong>: um conjunto de nós
+                            em que há caminho entre quaisquer dois, sem direção e sem ciclos. Só depois ele escolhe um nó para
+                            ser a raiz, e é essa escolha que cria as relações de pai e filho.
+                            <cite>Cormen et al., Apêndice B, seção B.5 — Árvores</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 3 — PROPRIEDADES E COMPORTAMENTO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 3</p>
+                <h3>Uma árvore é feita de árvores</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Cada filho é, ele próprio, a raiz de uma árvore menor: uma
+                    <span class="destaque">subárvore</span> (<em>subtree</em>).
+                </p>
+                <img class="diagrama" style="max-height: 340px;" src="img/03_subarvore.svg"
+                     alt="A mesma árvore de raiz A, com B, E e F cercados por uma linha tracejada (subárvore com raiz B) e D e G cercados por outra (subárvore com raiz D)">
+                <p style="text-align: left; font-size: 0.72em;">
+                    Por isso os algoritmos de árvore se escrevem naturalmente de forma <strong>recursiva</strong>:
+                    a função trata a raiz e chama a si mesma para cada subárvore.
+                </p>
+            </section>
+
+            <section>
+                <h3>Profundidade e altura</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    A <strong>profundidade</strong> (<em>depth</em>) de um nó conta as arestas da raiz até ele;
+                    a <strong>altura</strong> (<em>height</em>) da árvore é a maior profundidade.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/04_altura.svg"
+                     alt="Árvore de raiz A em três níveis: A na profundidade 0; B, C e D na profundidade 1; E, F e G na profundidade 2. Uma chave à direita marca altura 2">
+                <p class="nota-rodape">Cormen et al., Apêndice B, seção B.5.</p>
+            </section>
+
+            <section>
+                <h3>Tipo 1 — Árvore geral</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    As árvores se distinguem pela regra que impõem aos filhos. A mais livre é a árvore geral:
+                    cada nó pode ter <strong>qualquer número de filhos</strong>. Ela modela hierarquias como
+                    pastas, organogramas e páginas web.
+                </p>
+                <img class="diagrama" style="max-height: 380px;" src="img/05_tipo_geral.svg"
+                     alt="Árvore geral: A tem quatro filhos, B, C, D e E; B tem três filhos, F, G e H; E tem um filho, I">
+            </section>
+
+            <section>
+                <h3>Tipo 2 — Árvore binária</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Cada nó tem <strong>no máximo dois filhos</strong>, com nome fixo: o filho
+                    <strong>esquerdo</strong> e o filho <strong>direito</strong>.
+                </p>
+                <img class="diagrama" style="max-height: 380px;" src="img/06_tipo_binaria.svg"
+                     alt="Árvore binária: A tem filho esquerdo B e filho direito C; B tem só o filho esquerdo D; C tem só o filho direito E">
+                <p class="nota-rodape">Cormen et al., Apêndice B, seção B.5: um filho único à esquerda é diferente de um filho único à direita.</p>
+            </section>
+
+            <section>
+                <h3>O que a árvore binária resolve</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Dois filhos representam uma escolha entre dois caminhos. Essa escolha aparece em
+                    problemas diferentes:
+                </p>
+                <ul style="font-size: 0.75em;">
+                    <li><strong>busca</strong>: a chave procurada é menor ou maior que a do nó; cada comparação descarta um lado;</li>
+                    <li><strong>expressões</strong>: cada operação, como a soma, tem dois operandos, um em cada filho;</li>
+                    <li><strong>decisões</strong>: cada pergunta de sim ou não abre dois ramos, até chegar a uma resposta.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Árvore binária de busca</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Entre as árvores binárias, a mais usada é a árvore binária de busca, ou ABB
+                    (<em>binary search tree</em>). Ela acrescenta uma regra de ordem: em <strong>todo</strong> nó,
+                    todas as chaves da subárvore esquerda são menores que a chave do nó, e todas as da subárvore
+                    direita são maiores.
+                </p>
+                <img class="diagrama" style="max-height: 380px;" src="img/07_tipo_abb.svg"
+                     alt="ABB com raiz 50; à esquerda, 30 com filhos 20 e 40, marcados como menores que 50; à direita, 70 com filhos 60 e 80, marcados como maiores que 50">
+                <p class="nota-rodape">Cormen et al., cap. 12 (árvores binárias de busca).</p>
+            </section>
+
+            <section>
+                <h3>Tipo 3 — Árvore balanceada</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    A forma da ABB depende da ordem de chegada. No <strong>pior caso</strong> (<em>worst case</em>),
+                    a ordem que exige mais trabalho, chaves crescentes formam uma cadeia. Uma ABB
+                    <strong>balanceada</strong> segue regras extras que mantêm a altura perto do mínimo possível.
+                </p>
+                <img class="diagrama" style="max-height: 380px;" src="img/08_tipo_balanceada.svg"
+                     alt="À esquerda, ABB sem regra de balanceamento: 10, 20, 30, 40 e 50 em cadeia para a direita, altura 4. À direita, árvore balanceada com as mesmas chaves: 40 na raiz, 20 com filhos 10 e 30, e 50; altura 2">
+                <p class="nota-rodape">Exemplos: árvore rubro-negra (Cormen et al., cap. 13) e árvore AVL. A árvore B (Cormen et al., cap. 18) aplica a mesma ideia a nós com muitas chaves.</p>
+            </section>
+
+            <section>
+                <h3>Por que existem tipos diferentes</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A árvore geral representa qualquer hierarquia, mas não ajuda a encontrar uma chave.
+                    Cada tipo acrescenta uma regra, e cada regra garante uma propriedade nova:
+                </p>
+                <table>
+                    <thead>
+                        <tr><th>Tipo</th><th>Regra</th><th>O que a regra garante</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Geral</td><td>qualquer número de filhos</td><td>representa qualquer hierarquia</td></tr>
+                        <tr><td>Binária</td><td>até dois filhos; na ABB, menores à esquerda e maiores à direita</td><td>cada comparação descarta um lado</td></tr>
+                        <tr><td>Balanceada</td><td>ABB com a altura perto do mínimo</td><td>busca curta também no pior caso: cerca de 40 comparações para 1 milhão de chaves</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h3>O nó em C</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Nesta aula, a árvore em C é binária. Cada nó é uma <code>struct</code>, um tipo que agrupa
+                    campos sob um nome: a chave e dois <strong>ponteiros</strong>, variáveis que guardam o
+                    endereço de memória de outro nó.
+                </p>
+                <pre><code class="language-c" data-trim>
+// Cada no guarda uma chave e dois ponteiros: um para o filho da
+// esquerda e outro para o filho da direita. Filho ausente vale NULL.
+typedef struct No {
+    int chave;
+    struct No* esq;
+    struct No* dir;
+} No;
+                </code></pre>
+                <p style="text-align: left; font-size: 0.75em;">
+                    <code>NULL</code> é o valor do ponteiro que não aponta para nenhum nó, e <code>typedef</code>
+                    permite escrever <code>No</code> no lugar de <code>struct No</code>. A árvore inteira é acessada
+                    por um único ponteiro externo, <code>raiz</code>, e está vazia quando <code>raiz</code> vale <code>NULL</code>.
+                </p>
+                <p class="nota-rodape">Backes, capítulo de árvores: a árvore binária em C com a mesma <code>struct</code> de dois ponteiros.</p>
+            </section>
+
+            <section>
+                <h3>As operações em detalhe</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Na ABB, buscar, inserir e remover seguem o mesmo caminho de comparações, da raiz para baixo:
+                </p>
+                <ul style="font-size: 0.72em;">
+                    <li><strong>buscar</strong>: compara e desce por um lado só; para na chave ou em <code>NULL</code>.</li>
+                    <li><strong>inserir</strong>: desce como na busca e liga o nó novo no lugar do <code>NULL</code> encontrado.</li>
+                    <li><strong>remover</strong>: o tratamento depende de o nó ter zero, um ou dois filhos.</li>
+                    <li><strong>percorrer</strong>: visita o nó e as duas subárvores; a posição do nó (antes, entre ou depois delas) define a ordem.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.72em;">
+                    O trabalho de buscar, inserir e remover cresce com a <strong>altura</strong> da árvore,
+                    e não com o total de nós.
+                </p>
+            </section>
+
+            <section>
+                <h3>Invariantes — o que sempre vale</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Toda operação começa e termina com estas propriedades verdadeiras:
+                </p>
+                <ul style="font-size: 0.74em;">
+                    <li>Cada nó, exceto a raiz, tem exatamente um pai.</li>
+                    <li>Existe um único caminho da raiz até cada nó.</li>
+                    <li>Uma árvore <strong>não vazia</strong> com <em>n</em> nós tem <em>n</em> − 1 arestas.</li>
+                    <li>Na ABB, em todo nó: todas as chaves da subárvore esquerda são menores, e todas as da direita, maiores.</li>
+                </ul>
+            </section>
+
+            <!-- ----- CAMADA 4 — DEFINIÇÃO FORMAL E NOTAÇÃO ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 4</p>
+                <h3>Definição recursiva</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Cormen define a árvore binária usando a própria árvore binária. Uma árvore binária é:
+                </p>
+                <ul style="font-size: 0.78em;">
+                    <li><strong>vazia</strong>, sem nenhum nó; ou</li>
+                    <li>uma <strong>raiz</strong> ligada a duas árvores binárias: a subárvore <strong>esquerda</strong> e a subárvore <strong>direita</strong>.</li>
+                </ul>
+                <blockquote>
+                    Em C, o primeiro caso é <code>NULL</code>; o segundo é um <code>No</code> com <code>esq</code> e
+                    <code>dir</code>. Toda função recursiva desta aula trata esses dois casos.
+                </blockquote>
+                <p class="nota-rodape">Cormen et al., Apêndice B, seção B.5 (árvores binárias).</p>
+            </section>
+
+            <section>
+                <h3>O TAD Árvore Binária de Busca</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    O tipo abstrato de dados (TAD) descreve o que cada operação faz, sem dizer como.
+                    Os <strong>axiomas</strong>, igualdades que toda implementação correta precisa satisfazer,
+                    fixam o comportamento:
+                </p>
+                <pre><code class="language-plaintext" data-trim>
+TAD ABB de Inteiros
+
+  Constante:
+    VAZIA                        (em C: NULL)
+  Operações:
+    inserir(ABB, Inteiro)   -> ABB
+    remover(ABB, Inteiro)   -> ABB
+    buscar(ABB, Inteiro)    -> Booleano
+    pre_ordem(ABB)          -> Sequência de Inteiros
+    em_ordem(ABB)           -> Sequência de Inteiros
+    pos_ordem(ABB)          -> Sequência de Inteiros
+
+  Axiomas (para toda ABB A e inteiros x e y, com x ≠ y):
+    A1. buscar(VAZIA, x) = falso
+    A2. buscar(inserir(A, x), x) = verdadeiro
+    A3. buscar(remover(A, x), x) = falso
+    A4. buscar(inserir(A, y), x) = buscar(A, x)
+    A5. em_ordem(A) lista as chaves de A em ordem crescente
+                </code></pre>
+                <p style="text-align: left; font-size: 0.7em;">
+                    <strong>A5</strong> é o axioma que define a ABB: a regra de ordem faz o percurso em ordem sair ordenado.
+                    Em C, <code>buscar</code> devolve o nó encontrado, ou <code>NULL</code>, que faz o papel de falso.
+                </p>
+                <p class="nota-rodape">Especificação de TAD por operações e axiomas: ver Veloso &amp; Pereira, capítulo de árvores.</p>
+            </section>
+
+            <section>
+                <h3>Representação interna como tupla</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Uma <strong>tupla</strong> é uma lista ordenada de componentes. A implementação em C é
+                    descrita por uma tupla de cinco:
+                </p>
+                <p><span class="formula">A = (N, chave, esq, dir, raiz)</span></p>
+                <ul style="font-size: 0.72em;">
+                    <li><strong>N</strong>: o conjunto, possivelmente vazio, dos nós alocados;</li>
+                    <li><strong>chave</strong>: associa cada nó ao inteiro que ele guarda;</li>
+                    <li><strong>esq</strong> e <strong>dir</strong>: associam cada nó aos seus filhos, ou a <code>NULL</code>;</li>
+                    <li><strong>raiz</strong>: o ponteiro externo para o nó do topo, ou <code>NULL</code>.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.7em;">
+                    A árvore está vazia exatamente quando <code>raiz</code> é <code>NULL</code>: essa invariante liga
+                    o estado lógico da árvore ao estado do ponteiro.
+                </p>
+            </section>
+
+            <section>
+                <h3>Árvore rubro-negra: as cinco propriedades</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    A árvore rubro-negra (<em>red-black tree</em>) é uma ABB em que cada nó tem uma cor.
+                    Cinco propriedades limitam a forma da árvore:
+                </p>
+                <div class="duas-colunas">
+                    <div>
+                        <ol style="font-size: 0.62em;">
+                            <li>todo nó é vermelho ou preto;</li>
+                            <li>a raiz é preta;</li>
+                            <li>todo NIL (o <code>NULL</code> do código, a posição vazia abaixo de um nó) é preto;</li>
+                            <li>um nó vermelho tem os dois filhos pretos;</li>
+                            <li>de um nó até qualquer NIL abaixo dele, todo caminho tem o mesmo número de nós pretos.</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <img class="diagrama" style="max-height: 360px;" src="img/09_rubro_negra.svg"
+                             alt="Árvore rubro-negra: raiz 40 preta; filho esquerdo 20 vermelho, com filhos 10 e 30 pretos; filho direito 50 preto; cada folha tem dois NIL pretos abaixo">
+                    </div>
+                </div>
+                <p class="nota-rodape">Cormen et al., cap. 13.</p>
+            </section>
+
+            <section>
+                <h3>Como a árvore se corrige</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    O nó novo nasce vermelho e não muda a contagem de pretos de nenhum caminho. O risco é um
+                    vermelho com filho vermelho (propriedade 4). Duas ferramentas corrigem:
+                </p>
+                <ul style="font-size: 0.68em;">
+                    <li><strong>rotação</strong> (<em>rotation</em>): muda três ponteiros e preserva a ordem das chaves;</li>
+                    <li><strong>inversão de cores</strong> (<em>color flip</em>): o pai fica vermelho e os dois filhos, pretos.</li>
+                </ul>
+                <img class="diagrama" style="max-height: 290px;" src="img/10_rotacoes.svg"
+                     alt="Rotação: à esquerda, 10 com filho direito 20; à direita, 20 com filho esquerdo 10. As subárvores A (menores que 10), B (entre 10 e 20) e C (maiores que 20) trocam de pai, mas mantêm a ordem">
+            </section>
+
+            <section>
+                <h3>A variante implementada: caída para a esquerda</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    O código usa a rubro-negra <strong>caída para a esquerda</strong> (<em>left-leaning red-black tree</em>),
+                    que acrescenta uma regra: <strong>um nó vermelho é sempre filho esquerdo</strong>.
+                    A correção se reduz a três testes, feitos em cada nó do caminho de volta:
+                </p>
+                <ul style="font-size: 0.74em;">
+                    <li>filho direito vermelho e esquerdo preto → <strong>rotação à esquerda</strong>;</li>
+                    <li>dois vermelhos seguidos à esquerda → <strong>rotação à direita</strong>;</li>
+                    <li>dois filhos vermelhos → <strong>inversão de cores</strong>.</li>
+                </ul>
+                <p class="nota-rodape">Sedgewick, <em>Left-leaning Red-Black Trees</em> (2008). A versão clássica de Cormen et al., cap. 13, trata seis casos.</p>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, a árvore rubro-negra foi criada por Rudolf Bayer, em 1972, com o nome de
+                            árvore B binária simétrica. A convenção das cores vermelho e preto veio depois,
+                            no estudo de Leonidas Guibas e Robert Sedgewick, em 1978.
+                            <cite>Cormen et al., notas do cap. 13</cite>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----- CAMADA 5 — ANÁLISE DE COMPLEXIDADE ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 5</p>
+                <h3>Análise — tudo depende da altura</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    A notação O(·) indica o ritmo em que o custo cresce com o número de nós <em>n</em>; como as
+                    operações descem um caminho, esse ritmo é o da altura. log <em>n</em>, o número de vezes que
+                    <em>n</em> pode ser dividido por 2 até chegar a 1, cresce muito devagar:
+                </p>
+                <table>
+                    <thead>
+                        <tr><th>Operação</th><th>ABB balanceada</th><th>ABB em cadeia</th><th>Rubro-negra</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>buscar</code></td><td>O(log n)</td><td>O(n)</td><td><strong>O(log n)</strong></td></tr>
+                        <tr><td><code>inserir</code></td><td>O(log n)</td><td>O(n)</td><td><strong>O(log n)</strong></td></tr>
+                        <tr><td><code>remover</code></td><td>O(log n)</td><td>O(n)</td><td><strong>O(log n)</strong></td></tr>
+                        <tr><td>percorrer</td><td>O(n)</td><td>O(n)</td><td><strong>O(n)</strong></td></tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape">
+                    A definição completa de O está em Cormen et al., cap. 3, e em Toscani &amp; Veloso. A remoção na rubro-negra (Cormen et al., cap. 13)
+                    não faz parte do código desta aula.
+                </p>
+            </section>
+
+            <section>
+                <h3>Por que as cores limitam a altura</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Todo caminho tem o mesmo número de pretos, e dois vermelhos nunca aparecem seguidos.
+                    Logo, o caminho mais longo tem no máximo o dobro do mais curto.
+                </p>
+                <img class="diagrama" style="max-height: 165px;" src="img/11_caminhos_rb.svg"
+                     alt="Dois caminhos: o mais curto tem 3 nós pretos; o mais longo tem 6 nós, alternando preto e vermelho, com os mesmos 3 pretos">
+                <p><span class="formula">h ≤ 2 · log₂(n + 1)</span></p>
+                <p style="text-align: left; font-size: 0.68em;">Lê-se: a altura nunca passa do dobro do logaritmo de n. Para 1 milhão de chaves:</p>
+                <table>
+                    <thead>
+                        <tr><th></th><th>ABB inserida em ordem</th><th>Rubro-negra</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>altura</td><td>999.999</td><td>no máximo 39</td></tr>
+                        <tr><td>comparações em uma busca</td><td>até 1.000.000</td><td>até 40</td></tr>
+                    </tbody>
+                </table>
+                <p class="nota-rodape">Cormen et al., cap. 13, Lema 13.1.</p>
+            </section>
+
+            <!-- ----- CAMADA 6 — CONEXÕES E VARIANTES ----- -->
+            <section>
+                <p class="titulo-bloco">Camada 6</p>
+                <h3>Onde as árvores aparecem</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    A mesma estrutura resolve problemas em áreas diferentes da computação:
+                </p>
+                <ul style="font-size: 0.74em;">
+                    <li><strong>sistemas de arquivos</strong>: pastas dentro de pastas;</li>
+                    <li><strong>bibliotecas padrão</strong>: <code>std::map</code> (C++) e <code>TreeMap</code> (Java) guardam pares chave-valor em ordem numa árvore rubro-negra;</li>
+                    <li><strong>compiladores</strong>: cada expressão é representada por uma árvore sintática;</li>
+                    <li><strong>bancos de dados</strong>: índices em árvore B;</li>
+                    <li><strong>redes</strong>: a hierarquia de nomes do DNS.</li>
+                </ul>
+                <p class="nota-rodape">DNS: sistema de nomes de domínio (<em>Domain Name System</em>).</p>
+            </section>
+
+            <section>
+                <h3>Variantes</h3>
+                <p style="text-align: left; font-size: 0.8em;">
+                    Cada variante muda uma regra para atender a uma necessidade diferente:
+                </p>
+                <ul style="font-size: 0.74em;">
+                    <li><strong>AVL</strong> (iniciais de Adelson-Velsky e Landis): balanceamento mais rígido; buscas mais curtas, inserções com mais rotações;</li>
+                    <li><strong>árvore B</strong>: muitas chaves e filhos por nó; poucas leituras de disco;</li>
+                    <li><strong><em>heap</em></strong>: árvore binária com o maior elemento sempre na raiz;</li>
+                    <li><strong><em>trie</em></strong> (árvore de prefixos): cada aresta é uma letra; serve ao preenchimento automático.</li>
+                </ul>
+                <p style="text-align: left; font-size: 0.72em;">
+                    A árvore também é um caso particular de <strong>grafo</strong>: nós ligados por arestas, sem ciclos.
+                </p>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 2 — VISUALIZAÇÃO GRÁFICA                                -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 2</p>
+                <h2>Visualização gráfica</h2>
+                <p style="font-size: 0.75em; text-align: left;">
+                    Quatro sequências, do concreto ao código: um sistema de arquivos; uma árvore binária
+                    montada à mão e os seus três percursos; a ABB buscando, inserindo e removendo; e a
+                    rubro-negra se corrigindo a cada inserção.
+                </p>
+            </section>
+
+            <section>
+                <h3>Passo 1 — pastas dentro de pastas</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Todo sistema de arquivos começa numa pasta raiz, escrita <code>/</code> no Linux e no macOS.
+                    Uma pasta contém pastas e arquivos. Um arquivo guarda dados, mas não contém pastas nem arquivos:
+                    é sempre uma <strong>folha</strong>.
+                </p>
+                <img class="diagrama" style="max-height: 440px;" src="img/12_fs_completo.svg"
+                     alt="Sistema de arquivos completo: / contém home/ e etc/; home/ contém ana/ e bruno/; ana/ contém aed/ e notas.txt; aed/ contém arvores.c; bruno/ contém foto.png; etc/ contém hosts. Arquivos aparecem com borda tracejada">
+            </section>
+
+            <section>
+                <h3>Passo 2 — o caminho de um arquivo</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    O endereço <code>/home/ana/aed/arvores.c</code> lista os nós da raiz até o arquivo.
+                    Como cada pasta tem um único pai, esse caminho é único.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/13_fs_caminho.svg"
+                     alt="O caminho /, home/, ana/, aed/, arvores.c aparece destacado em azul; os demais nós ficam esmaecidos">
+            </section>
+
+            <section>
+                <h3>Passo 3 — a mesma árvore em texto</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    O comando <code>tree</code> imprime a árvore com recuo: cada nível de profundidade desloca o nome
+                    para a direita, e cada pasta aparece antes do seu conteúdo.
+                </p>
+                <pre><code class="language-plaintext" data-trim>
+/
+├── etc
+│   └── hosts
+└── home
+    ├── ana
+    │   ├── aed
+    │   │   └── arvores.c
+    │   └── notas.txt
+    └── bruno
+        └── foto.png
+
+5 directories, 4 files
+                </code></pre>
+                <p class="nota-rodape">O <code>tree</code> lista os filhos em ordem alfabética. A função <code>imprimir_arvore</code> do código usa a mesma ideia: recuo por profundidade, nó antes dos filhos.</p>
+            </section>
+
+            <section>
+                <h3>Passo 4 — sete nós soltos</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Agora em C. Cada chamada <code>criar_no(chave)</code> reserva memória para um nó (a
+                    <strong>alocação</strong>) e deixa <code>esq</code> e <code>dir</code> em <code>NULL</code>:
+                    os nós existem, mas ainda não formam uma árvore.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/14_nos_soltos.svg"
+                     alt="Sete caixas soltas, n50, n30, n70, n20, n40, n60 e n80, cada uma com os campos esq, chave e dir; todos os ponteiros valem NULL">
+            </section>
+
+            <section>
+                <h3>Passo 5 — ligando os ponteiros</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Seis atribuições, como <code>n50-&gt;esq = n30</code>, ligam cada nó ao seu pai; o operador
+                    <code>-&gt;</code> acessa um campo do nó apontado. O nó <code>n50</code>, sem pai, é a raiz.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/15_nos_ligados.svg"
+                     alt="As mesmas sete caixas ligadas por setas: n50 aponta para n30 e n70; n30 aponta para n20 e n40; n70 aponta para n60 e n80; as folhas mantêm os ponteiros em NULL">
+            </section>
+
+            <section>
+                <h3>Passo 6 — percurso em pré-ordem</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Percorrer é visitar cada nó uma vez. Há três ordens clássicas de percurso em profundidade
+                    (<em>depth-first</em>). Na <strong>pré-ordem</strong> (<em>preorder</em>), o nó vem antes dos filhos.
+                </p>
+                <img class="diagrama" style="max-height: 400px;" src="img/16_pre_ordem.svg"
+                     alt="ABB com raiz 50 numerada na ordem de visita da pré-ordem: 50, 30, 20, 40, 70, 60, 80">
+            </section>
+
+            <section>
+                <h3>Passo 7 — percurso em ordem</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    No percurso <strong>em ordem</strong> (<em>inorder</em>), o nó fica entre a subárvore esquerda e a
+                    direita. Na ABB, as chaves saem ordenadas.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/17_em_ordem.svg"
+                     alt="ABB com raiz 50 numerada na ordem de visita do percurso em ordem: 20, 30, 40, 50, 60, 70, 80">
+            </section>
+
+            <section>
+                <h3>Passo 8 — percurso em pós-ordem</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Na <strong>pós-ordem</strong> (<em>postorder</em>), o nó vem depois dos filhos. É a ordem certa
+                    para <strong>liberar</strong> a memória, isto é, devolvê-la ao sistema: os filhos saem antes do pai.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/18_pos_ordem.svg"
+                     alt="ABB com raiz 50 numerada na ordem de visita da pós-ordem: 20, 40, 30, 60, 80, 70, 50">
+            </section>
+
+            <section>
+                <h3>Passo 9 — buscar(60)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Inseridas na ordem 50, 30, 70, 20, 40, 60, 80 pela regra da ABB, as chaves formam a mesma
+                    árvore montada à mão. A busca compara e desce por um lado só.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/19_abb_buscar_60.svg"
+                     alt="Busca por 60: o caminho 50, 70, 60 aparece destacado; 60 maior que 50 vai à direita, 60 menor que 70 vai à esquerda, e 60 é encontrado">
+            </section>
+
+            <section>
+                <h3>Passo 10 — inserir(65)</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    A inserção repete o caminho da busca. Onde a busca encontraria <code>NULL</code>, entra o nó novo.
+                </p>
+                <img class="diagrama" style="max-height: 450px;" src="img/20_abb_inserir_65.svg"
+                     alt="Inserção de 65: o caminho 50, 70, 60 aparece destacado e 65 entra como filho direito de 60">
+            </section>
+
+            <section>
+                <h3>Passo 11 — remover(20): nó sem filhos</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Remover uma folha é o caso mais simples: o pai passa a apontar para <code>NULL</code> e o nó é liberado.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/21_abb_remover_20.svg"
+                     alt="Antes: 20 marcado para remoção como filho esquerdo de 30. Depois: 30 fica só com o filho direito 40">
+            </section>
+
+            <section>
+                <h3>Passo 12 — remover(30): nó com um filho</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Agora 30 tem só o filho 40. O filho ocupa o lugar do nó removido, e a regra de ordem continua valendo.
+                </p>
+                <img class="diagrama" style="max-height: 420px;" src="img/22_abb_remover_30.svg"
+                     alt="Antes: 30, com o único filho 40, marcado para remoção. Depois: 40 passa a ser o filho esquerdo de 50">
+            </section>
+
+            <section>
+                <h3>Passo 13 — remover(50): nó com dois filhos</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    A raiz recebe a chave do <strong>sucessor</strong>, a menor chave da subárvore direita (60).
+                    Depois o sucessor é removido da subárvore direita, onde tem no máximo um filho.
+                </p>
+                <img class="diagrama" style="max-height: 400px;" src="img/23_abb_remover_50.svg"
+                     alt="Antes: a raiz 50 marcada para remoção e o sucessor 60 destacado. Depois: 60 é a raiz, e 65 ocupa o antigo lugar de 60 como filho esquerdo de 70">
+                <p class="nota-rodape">Cormen et al., cap. 12: a remoção na ABB com os mesmos três casos.</p>
+            </section>
+
+            <section>
+                <h3>Passo 14 — rubro-negra: inserir 10 e 20</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    As chaves 10, 20, 30, 40 e 50 chegam em ordem crescente, o pior caso da ABB.
+                    Todo nó novo nasce <strong>vermelho</strong>.
+                </p>
+                <img class="diagrama" style="max-height: 400px;" src="img/24_rb_inserir_10_20.svg"
+                     alt="Três etapas: 10 preto sozinho; 20 entra vermelho à direita de 10; após a rotação à esquerda, 20 preto é a raiz e 10 vermelho é seu filho esquerdo">
+            </section>
+
+            <section>
+                <h3>Passo 15 — inserir 30</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    O 30 entra vermelho à direita de 20, que fica com dois filhos vermelhos. A inversão de cores leva
+                    o vermelho para cima, e a raiz volta a ser preta.
+                </p>
+                <img class="diagrama" style="max-height: 400px;" src="img/25_rb_inserir_30.svg"
+                     alt="Três etapas: 20 preto com filhos 10 e 30 vermelhos; após a inversão, 20 vermelho com filhos pretos; por fim, 20 pintado de preto">
+            </section>
+
+            <section>
+                <h3>Passo 16 — inserir 40</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    O 40 nasce vermelho à direita de 30. A rotação à esquerda em 30 corrige o vermelho à direita, que a variante caída para a esquerda proíbe, sem mudar a ordem das chaves.
+                </p>
+                <img class="diagrama" style="max-height: 400px;" src="img/26_rb_inserir_40.svg"
+                     alt="Duas etapas: 40 vermelho à direita de 30; após a rotação à esquerda em 30, 40 preto tem 30 vermelho como filho esquerdo">
+            </section>
+
+            <section>
+                <h3>Passo 17 — inserir 50</h3>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Duas correções em sequência: a inversão de cores em 40 e, um nível acima, a rotação à esquerda em 20.
+                </p>
+                <img class="diagrama" style="max-height: 400px;" src="img/27_rb_inserir_50.svg"
+                     alt="Três etapas: 40 com filhos 30 e 50 vermelhos; após a inversão, 40 vermelho com filhos pretos; após a rotação à esquerda em 20, 40 preto é a raiz, com 20 vermelho (filhos 10 e 30 pretos) e 50 preto">
+                <p class="nota-rodape">Resultado: altura 2. A ABB sem regra de balanceamento, com as mesmas inserções, fica com altura 4. A ordem crescente nunca produz dois vermelhos seguidos à esquerda; a rotação à direita aparece na ordem decrescente (Exercício 3).</p>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 3 — PROBLEMA MOTIVADOR                                  -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 3</p>
+                <h2>Por que as árvores existem?</h2>
+                <p style="font-size: 0.8em;">
+                    Três problemas reais, de três áreas, resolvidos pela mesma estrutura.
+                </p>
+            </section>
+
+            <section>
+                <h3>Como um banco de dados encontra um registro entre milhões?</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Uma tabela guarda milhões de registros, e ler todos exige milhões de leituras. O banco mantém um
+                    <strong>índice</strong>, estrutura auxiliar que leva da chave ao registro, em <strong>árvore B</strong>
+                    (<em>B-tree</em>): cada nó guarda várias chaves e tem vários filhos, e a busca desce comparando, como na ABB.
+                </p>
+                <img class="diagrama" style="max-height: 300px;" src="img/28_indice_arvore_b.svg"
+                     alt="Árvore B: raiz com as chaves 30 e 60; filhos com 10 e 20, 40 e 50, 70, 80 e 90. A busca por 50 desce pelo filho do meio e encontra 50 lendo 2 nós">
+                <p style="text-align: left; font-size: 0.7em;">
+                    Com 100 filhos por nó, 4 níveis já guardam mais de 1 milhão de chaves: a busca lê só 4 nós.
+                </p>
+                <p class="nota-rodape">Cormen et al., cap. 18. PostgreSQL e SQLite guardam os seus índices em árvores B.</p>
+            </section>
+
+            <section>
+                <h3>Como o computador descobre onde fica <code>unirios.edu.br</code>?</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Os nomes da internet formam uma árvore, o <strong>DNS</strong>. A consulta desce da raiz:
+                    cada nível indica os servidores responsáveis pelo nível de baixo, até chegar ao endereço IP, o número que identifica o computador na rede.
+                </p>
+                <img class="diagrama" style="max-height: 380px;" src="img/29_dns.svg"
+                     alt="Árvore do DNS: a raiz tem os filhos br, com e org; br tem edu.br e gov.br; edu.br tem unirios.edu.br; com tem exemplo.com. O caminho da raiz até unirios.edu.br aparece destacado">
+                <p class="nota-rodape">A raiz do DNS é atendida por 13 conjuntos de servidores, de a.root-servers.net a m.root-servers.net.</p>
+            </section>
+
+            <section>
+                <h3>Como o compilador sabe que 2 + 3 * 4 vale 14?</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    O compilador transforma a expressão em uma <strong>árvore sintática</strong> (<em>syntax tree</em>).
+                    A multiplicação tem <strong>precedência</strong> maior (é calculada primeiro), por isso fica mais profunda; o valor sai de um percurso em pós-ordem.
+                </p>
+                <img class="diagrama" style="max-height: 360px;" src="img/30_expressao.svg"
+                     alt="Árvore da expressão: + na raiz com filhos 2 e *; * com filhos 3 e 4. A pós-ordem visita 2, 3, 4, *, +: primeiro 3 * 4 = 12, depois 2 + 12 = 14">
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card eddy-card--longo">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, as redes locais também dependem de árvores. Quando comutadores (<em>switches</em>)
+                            são ligados por caminhos redundantes, uma mensagem pode circular sem fim em um ciclo.
+                            O protocolo <em>Spanning Tree</em>, criado por Radia Perlman em 1985, desativa ligações até
+                            restar uma árvore: sem ciclos, há um único caminho entre dois pontos da rede.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 4 — CÓDIGO EM C                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 4</p>
+                <h2>Código em C</h2>
+            </section>
+
+            <section>
+                <h3>Um único arquivo: <code>arvores.c</code></h3>
+                <blockquote>
+                    Todo o código desta aula está em <code>arvores.c</code>: <code>#include</code>s, structs, funções e
+                    <code>main</code>, na ordem em que aparecem nos próximos slides, para ler o programa inteiro de cima a baixo.
+                </blockquote>
+                <p style="text-align: left; font-size: 0.72em;">
+                    O arquivo tem três partes: a árvore binária e os percursos, as operações da ABB e a rubro-negra.
+                    No fim, três funções de demonstração e a <code>main</code>.
+                </p>
+            </section>
+
+            <section>
+                <h3>O nó e <code>criar_no</code></h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    <code>malloc</code> reserva memória para um nó durante a execução e devolve o endereço dela, ou
+                    <code>NULL</code> se faltar memória. <code>criar_no</code> trata esse caso e deixa os dois filhos em <code>NULL</code>.
+                </p>
+                <pre><code class="language-c" data-trim>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Cada no guarda uma chave e dois ponteiros: um para o filho da
+// esquerda e outro para o filho da direita. Filho ausente vale NULL.
+typedef struct No {
+    int chave;
+    struct No* esq;
+    struct No* dir;
+} No;
+
+// Aloca um no sem filhos. Quem chama decide onde ligar o no.
+No* criar_no(int chave) {
+    No* novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo-&gt;chave = chave;
+    novo-&gt;esq = NULL;
+    novo-&gt;dir = NULL;
+    return novo;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Imprimir a árvore</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    A função imprime o nó com o recuo do seu nível e chama a si mesma para os filhos, um nível
+                    mais fundo: o nó sai antes dos filhos, como no comando <code>tree</code>.
+                </p>
+                <pre><code class="language-c" data-trim>
+// Imprime a arvore como um sumario: cada nivel recua 4 espacos e o
+// rotulo diz se o no e' filho da esquerda (E) ou da direita (D).
+void imprimir_arvore(No* no, int nivel, char* rotulo) {
+    if (no == NULL) return;
+    for (int i = 0; i &lt; nivel; i++) {
+        printf("    ");
+    }
+    printf("%s%d\n", rotulo, no-&gt;chave);
+    imprimir_arvore(no-&gt;esq, nivel + 1, "E: ");
+    imprimir_arvore(no-&gt;dir, nivel + 1, "D: ");
+}
+                </code></pre>
+                <p style="text-align: left; font-size: 0.7em;">Chamada para a árvore toda: <code>imprimir_arvore(raiz, 0, "raiz: ")</code>.</p>
+            </section>
+
+            <section>
+                <h3>Os três percursos — o mesmo esqueleto</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    As três funções diferem só na posição do <code>printf</code>: antes, entre ou depois das duas chamadas recursivas.
+                </p>
+                <pre class="codigo-medio"><code class="language-c" data-trim>
+// Pre-ordem: o no e' visitado antes dos seus filhos.
+void pre_ordem(No* no) {
+    if (no == NULL) return;
+    printf("%d ", no-&gt;chave);
+    pre_ordem(no-&gt;esq);
+    pre_ordem(no-&gt;dir);
+}
+
+// Em ordem: a esquerda inteira, depois o no, depois a direita.
+// Numa arvore binaria de busca, as chaves saem em ordem crescente.
+void em_ordem(No* no) {
+    if (no == NULL) return;
+    em_ordem(no-&gt;esq);
+    printf("%d ", no-&gt;chave);
+    em_ordem(no-&gt;dir);
+}
+
+// Pos-ordem: o no e' visitado depois dos seus filhos.
+void pos_ordem(No* no) {
+    if (no == NULL) return;
+    pos_ordem(no-&gt;esq);
+    pos_ordem(no-&gt;dir);
+    printf("%d ", no-&gt;chave);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3><code>destruir_arvore</code> e <code>abb_buscar</code></h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    Destruir é um percurso em pós-ordem: <code>free</code> devolve ao sistema a memória de cada nó, que
+                    depois não pode mais ser lido. Buscar segue as comparações da ABB e devolve o nó, ou <code>NULL</code>.
+                </p>
+                <pre><code class="language-c" data-trim>
+// Libera os filhos antes do pai: depois do free do pai, os campos
+// esq e dir nao podem mais ser lidos.
+void destruir_arvore(No* no) {
+    if (no == NULL) return;
+    destruir_arvore(no-&gt;esq);
+    destruir_arvore(no-&gt;dir);
+    free(no);
+}
+
+// Desce comparando: cada comparacao descarta um dos lados inteiro.
+No* abb_buscar(No* raiz, int chave) {
+    if (raiz == NULL) return NULL;
+    if (chave == raiz-&gt;chave) {
+        return raiz;
+    }
+    if (chave &lt; raiz-&gt;chave) {
+        return abb_buscar(raiz-&gt;esq, chave);
+    }
+    return abb_buscar(raiz-&gt;dir, chave);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3><code>abb_inserir</code> e <code>abb_minimo</code></h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    A inserção devolve a raiz da subárvore; quem chama guarda o retorno, porque a árvore vazia ganha uma raiz nova.
+                    Chave repetida não entra: nenhum dos dois testes vale, e a raiz volta sem mudança.
+                </p>
+                <pre><code class="language-c" data-trim>
+// Desce como na busca ate um lugar vazio (NULL) e liga ali o no
+// novo. Devolve a raiz da subarvore, que so muda se ela estava vazia.
+No* abb_inserir(No* raiz, int chave) {
+    if (raiz == NULL) return criar_no(chave);
+    if (chave &lt; raiz-&gt;chave) {
+        raiz-&gt;esq = abb_inserir(raiz-&gt;esq, chave);
+    } else if (chave &gt; raiz-&gt;chave) {
+        raiz-&gt;dir = abb_inserir(raiz-&gt;dir, chave);
+    }
+    return raiz;
+}
+
+// Pre-condicao: raiz diferente de NULL. A menor chave esta no fim do
+// caminho que sempre segue para a esquerda.
+No* abb_minimo(No* raiz) {
+    No* atual = raiz;
+    while (atual-&gt;esq != NULL) {
+        atual = atual-&gt;esq;
+    }
+    return atual;
+}
+                </code></pre>
+            </section>
+
+            <section class="eddy-slide">
+                <div class="eddy-card">
+                    <div class="eddy-avatar">
+                        <img src="../assets/bot/eddy.svg" alt="Eddy">
+                    </div>
+                    <div class="eddy-balao">
+                        <strong class="eddy-nome">Eddy</strong>
+                        <p class="eddy-fala">
+                            Turma, um erro comum aqui é chamar <code>abb_inserir(raiz, 10)</code> sem guardar o retorno.
+                            Com a árvore vazia, o nó novo é criado, mas <code>raiz</code> continua <code>NULL</code> e o nó se perde.
+                            O padrão é sempre <code>raiz = abb_inserir(raiz, chave)</code>; o mesmo vale para
+                            <code>abb_remover</code> e <code>rb_inserir</code>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3><code>abb_remover</code> — os três casos</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    Primeiro a função desce até a chave; depois trata zero ou um filho de uma vez, e dois filhos com o sucessor.
+                </p>
+                <pre class="codigo-longo"><code class="language-c" data-trim>
+// Remove a chave e devolve a nova raiz da subarvore.
+No* abb_remover(No* raiz, int chave) {
+    if (raiz == NULL) return NULL;
+    if (chave &lt; raiz-&gt;chave) {
+        raiz-&gt;esq = abb_remover(raiz-&gt;esq, chave);
+        return raiz;
+    }
+    if (chave &gt; raiz-&gt;chave) {
+        raiz-&gt;dir = abb_remover(raiz-&gt;dir, chave);
+        return raiz;
+    }
+    // Zero ou um filho: o filho que existe (ou NULL) ocupa o lugar do no.
+    if (raiz-&gt;esq == NULL) {
+        No* filho = raiz-&gt;dir;
+        free(raiz);
+        return filho;
+    }
+    if (raiz-&gt;dir == NULL) {
+        No* filho = raiz-&gt;esq;
+        free(raiz);
+        return filho;
+    }
+    // Dois filhos: o sucessor, menor chave da direita, copia a chave para
+    // ca e sai da subarvore direita, onde tem no maximo um filho.
+    No* sucessor = abb_minimo(raiz-&gt;dir);
+    raiz-&gt;chave = sucessor-&gt;chave;
+    raiz-&gt;dir = abb_remover(raiz-&gt;dir, sucessor-&gt;chave);
+    return raiz;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Rubro-negra: o nó com cor</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    O nó ganha o campo <code>cor</code>. As constantes <code>PRETO</code> e <code>VERMELHO</code> dão nome aos valores 0 e 1.
+                </p>
+                <pre class="codigo-medio"><code class="language-c" data-trim>
+#define PRETO 0
+#define VERMELHO 1
+
+// O no da arvore rubro-negra e' o no da arvore binaria com uma cor.
+typedef struct NoRB {
+    int chave;
+    int cor;
+    struct NoRB* esq;
+    struct NoRB* dir;
+} NoRB;
+
+// Todo no novo nasce vermelho: assim ele nao altera a quantidade
+// de nos pretos de nenhum caminho da arvore.
+NoRB* rb_criar_no(int chave) {
+    NoRB* novo = malloc(sizeof(NoRB));
+    if (novo == NULL) {
+        printf("erro: memoria insuficiente\n");
+        exit(1);
+    }
+    novo-&gt;chave = chave;
+    novo-&gt;cor = VERMELHO;
+    novo-&gt;esq = NULL;
+    novo-&gt;dir = NULL;
+    return novo;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3><code>eh_vermelho</code> e as rotações</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    Cada rotação muda dois ponteiros e devolve a nova raiz da subárvore, que quem chama liga ao pai;
+                    a cor do nó passa para o filho que sobe.
+                </p>
+                <pre class="codigo-medio"><code class="language-c" data-trim>
+// NULL conta como preto: e' o NIL da definicao.
+int eh_vermelho(NoRB* no) {
+    if (no == NULL) return 0;
+    return no-&gt;cor == VERMELHO;
+}
+
+// O filho da direita sobe e o no desce para a esquerda dele.
+// A ordem das chaves (esquerda &lt; no &lt; direita) continua valendo.
+NoRB* rotacionar_esquerda(NoRB* no) {
+    NoRB* filho = no-&gt;dir;
+    no-&gt;dir = filho-&gt;esq;
+    filho-&gt;esq = no;
+    filho-&gt;cor = no-&gt;cor;
+    no-&gt;cor = VERMELHO;
+    return filho;
+}
+
+// Espelho da rotacao anterior: o filho da esquerda sobe.
+NoRB* rotacionar_direita(NoRB* no) {
+    NoRB* filho = no-&gt;esq;
+    no-&gt;esq = filho-&gt;dir;
+    filho-&gt;dir = no;
+    filho-&gt;cor = no-&gt;cor;
+    no-&gt;cor = VERMELHO;
+    return filho;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Inserir na rubro-negra</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    A descida é a da ABB. Na volta da recursão, os três testes corrigem cada nó do caminho, nesta ordem.
+                </p>
+                <pre class="codigo-longo"><code class="language-c" data-trim>
+// Dois filhos vermelhos: o vermelho sobe para o pai.
+void inverter_cores(NoRB* no) {
+    no-&gt;cor = VERMELHO;
+    no-&gt;esq-&gt;cor = PRETO;
+    no-&gt;dir-&gt;cor = PRETO;
+}
+
+// Insere como na arvore de busca e, na volta da recursao, corrige as
+// cores de baixo para cima, sempre nesta ordem.
+NoRB* rb_inserir_no(NoRB* no, int chave) {
+    if (no == NULL) return rb_criar_no(chave);
+    if (chave &lt; no-&gt;chave) {
+        no-&gt;esq = rb_inserir_no(no-&gt;esq, chave);
+    } else if (chave &gt; no-&gt;chave) {
+        no-&gt;dir = rb_inserir_no(no-&gt;dir, chave);
+    }
+    if (eh_vermelho(no-&gt;dir) &amp;&amp; !eh_vermelho(no-&gt;esq)) {
+        no = rotacionar_esquerda(no);
+    }
+    if (eh_vermelho(no-&gt;esq) &amp;&amp; eh_vermelho(no-&gt;esq-&gt;esq)) {
+        no = rotacionar_direita(no);
+    }
+    if (eh_vermelho(no-&gt;esq) &amp;&amp; eh_vermelho(no-&gt;dir)) {
+        inverter_cores(no);
+    }
+    return no;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3><code>rb_inserir</code>, impressão e destruição</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    <code>rb_inserir</code> pinta a raiz de preto. A impressão é a de <code>imprimir_arvore</code>, com a cor de cada nó.
+                </p>
+                <pre class="codigo-longo"><code class="language-c" data-trim>
+// A raiz e' sempre preta.
+NoRB* rb_inserir(NoRB* raiz, int chave) {
+    raiz = rb_inserir_no(raiz, chave);
+    raiz-&gt;cor = PRETO;
+    return raiz;
+}
+
+// Mesmo sumario de imprimir_arvore, com a cor de cada no.
+void imprimir_rubro_negra(NoRB* no, int nivel, char* rotulo) {
+    if (no == NULL) return;
+    for (int i = 0; i &lt; nivel; i++) {
+        printf("    ");
+    }
+    if (no-&gt;cor == VERMELHO) {
+        printf("%s%d (vermelho)\n", rotulo, no-&gt;chave);
+    } else {
+        printf("%s%d (preto)\n", rotulo, no-&gt;chave);
+    }
+    imprimir_rubro_negra(no-&gt;esq, nivel + 1, "E: ");
+    imprimir_rubro_negra(no-&gt;dir, nivel + 1, "D: ");
+}
+
+void destruir_rubro_negra(NoRB* no) {
+    if (no == NULL) return;
+    destruir_rubro_negra(no-&gt;esq);
+    destruir_rubro_negra(no-&gt;dir);
+    free(no);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Demonstração 1 — a árvore montada à mão</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    Os passos 4 a 8 da visualização, em código: sete nós, seis ligações, a impressão e os três percursos.
+                </p>
+                <pre class="codigo-longo"><code class="language-c" data-trim>
+// Sete nos criados um a um e ligados pelos ponteiros esq e dir.
+void demonstrar_arvore_montada_a_mao(void) {
+    No* n50 = criar_no(50);
+    No* n30 = criar_no(30);
+    No* n70 = criar_no(70);
+    No* n20 = criar_no(20);
+    No* n40 = criar_no(40);
+    No* n60 = criar_no(60);
+    No* n80 = criar_no(80);
+
+    n50-&gt;esq = n30;
+    n50-&gt;dir = n70;
+    n30-&gt;esq = n20;
+    n30-&gt;dir = n40;
+    n70-&gt;esq = n60;
+    n70-&gt;dir = n80;
+
+    printf("== Arvore montada a mao ==\n");
+    imprimir_arvore(n50, 0, "raiz: ");
+    printf("Pre-ordem: ");
+    pre_ordem(n50);
+    printf("\nEm ordem:  ");
+    em_ordem(n50);
+    printf("\nPos-ordem: ");
+    pos_ordem(n50);
+    printf("\n");
+    destruir_arvore(n50);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Demonstração 2 — a ABB</h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    Os passos 9 a 13: inserir as sete chaves, buscar 60 e 65, inserir 65 e remover 20, 30 e 50.
+                </p>
+                <pre class="codigo-longo"><code class="language-c" data-trim>
+void mostrar_busca(No* raiz, int chave) {
+    if (abb_buscar(raiz, chave) != NULL) {
+        printf("Buscar %d: encontrado\n", chave);
+    } else {
+        printf("Buscar %d: nao encontrado\n", chave);
+    }
+}
+
+// As mesmas chaves, agora posicionadas pela regra da arvore de busca.
+void demonstrar_arvore_de_busca(void) {
+    int chaves[] = {50, 30, 70, 20, 40, 60, 80};
+    No* raiz = NULL;
+    for (int i = 0; i &lt; 7; i++) {
+        raiz = abb_inserir(raiz, chaves[i]);
+    }
+    printf("\n== Arvore binaria de busca ==\n");
+    mostrar_busca(raiz, 60);
+    mostrar_busca(raiz, 65);
+
+    raiz = abb_inserir(raiz, 65);
+    raiz = abb_remover(raiz, 20);
+    raiz = abb_remover(raiz, 30);
+    raiz = abb_remover(raiz, 50);
+    printf("Depois de inserir 65 e remover 20, 30 e 50:\n");
+    imprimir_arvore(raiz, 0, "raiz: ");
+    destruir_arvore(raiz);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Demonstração 3 — rubro-negra e <code>main</code></h3>
+                <p style="text-align: left; font-size: 0.72em;">
+                    As mesmas cinco chaves crescentes nas duas árvores, para comparar as formas.
+                </p>
+                <pre><code class="language-c" data-trim>
+// Chaves em ordem crescente: o pior caso da arvore de busca comum.
+void demonstrar_rubro_negra(void) {
+    No* abb = NULL;
+    NoRB* rubro_negra = NULL;
+    for (int chave = 10; chave &lt;= 50; chave = chave + 10) {
+        abb = abb_inserir(abb, chave);
+        rubro_negra = rb_inserir(rubro_negra, chave);
+    }
+    printf("\n== Inserindo 10, 20, 30, 40, 50 ==\n");
+    printf("Arvore de busca comum:\n");
+    imprimir_arvore(abb, 0, "raiz: ");
+    printf("Arvore rubro-negra:\n");
+    imprimir_rubro_negra(rubro_negra, 0, "raiz: ");
+    destruir_arvore(abb);
+    destruir_rubro_negra(rubro_negra);
+}
+
+int main(void) {
+    demonstrar_arvore_montada_a_mao();
+    demonstrar_arvore_de_busca();
+    demonstrar_rubro_negra();
+    return 0;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Compilação e saída esperada</h3>
+                <p style="text-align: left; font-size: 0.7em;">
+                    Compile com os avisos ativados e compare a saída do programa com o texto abaixo, linha a linha.
+                </p>
+                <pre><code class="language-sh" data-trim>
+gcc -Wall -Wextra -o arvores arvores.c
+./arvores
+                </code></pre>
+                <div class="duas-colunas">
+                    <div>
+                <pre class="codigo-longo"><code class="language-plaintext" data-trim>
+== Arvore montada a mao ==
+raiz: 50
+    E: 30
+        E: 20
+        D: 40
+    D: 70
+        E: 60
+        D: 80
+Pre-ordem: 50 30 20 40 70 60 80 
+Em ordem:  20 30 40 50 60 70 80 
+Pos-ordem: 20 40 30 60 80 70 50 
+
+== Arvore binaria de busca ==
+Buscar 60: encontrado
+Buscar 65: nao encontrado
+Depois de inserir 65 e remover 20, 30 e 50:
+raiz: 60
+    E: 40
+    D: 70
+        E: 65
+        D: 80
+                </code></pre>
+                    </div>
+                    <div>
+                <pre class="codigo-longo"><code class="language-plaintext" data-trim>
+== Inserindo 10, 20, 30, 40, 50 ==
+Arvore de busca comum:
+raiz: 10
+    D: 20
+        D: 30
+            D: 40
+                D: 50
+Arvore rubro-negra:
+raiz: 40 (preto)
+    E: 20 (vermelho)
+        E: 10 (preto)
+        D: 30 (preto)
+    D: 50 (preto)
+                </code></pre>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- EXERCÍCIO EM SALA — INVESTIGAÇÃO COM IA                       -->
+        <!-- ============================================================ -->
+        <section>
+            <section>
+                <p class="titulo-bloco">Bloco 6</p>
+                <h2>Exercícios práticos — investigação com IA</h2>
+                <p style="text-align: left; font-size: 0.78em;">
+                    Em duplas, usem um assistente de IA (ChatGPT, Gemini, Claude ou outro) para investigar árvores.
+                    A IA propõe; a dupla confere.
+                </p>
+                <ul style="font-size: 0.72em;">
+                    <li>Registrem cada pergunta feita (o <em>prompt</em>) e a resposta recebida.</li>
+                    <li>Confiram toda afirmação: executando <code>arvores.c</code> ou no Cormen.</li>
+                    <li>Anotem onde a IA acertou e onde errou.</li>
+                    <li>Entrega: o registro e as conclusões da dupla.</li>
+                </ul>
+                <p style="font-size: 0.6em; color: #666;">A resposta mínima aceitável de cada exercício aparece com um clique.</p>
+            </section>
+
+            <section>
+                <h3>Exercício 1 — a ABB à mão</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Peçam à IA a ABB formada pela inserção de <code>45, 15, 79, 90, 10, 55, 12</code> e os três percursos.
+                    Desenhem a árvore à mão, alterem o vetor <code>chaves</code> de <code>demonstrar_arvore_de_busca</code>,
+                    chamem <code>pre_ordem</code>, <code>em_ordem</code> e <code>pos_ordem</code> logo após o laço de inserção
+                    e comparem as três versões.
+                </p>
+                <div class="fragment" style="text-align: left; font-size: 0.65em;">
+                    <p><strong>Resposta mínima aceitável:</strong> 45 na raiz; à esquerda, 15, com o filho 10, que tem o filho direito 12;
+                    à direita, 79, com os filhos 55 e 90.</p>
+                    <p>Pré-ordem <code>45 15 10 12 79 55 90</code> · em ordem <code>10 12 15 45 55 79 90</code> ·
+                    pós-ordem <code>12 10 15 55 90 79 45</code>.</p>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 2 — a altura</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Peçam à IA uma função <code>int altura(No* raiz)</code>. Antes de usar, a dupla explica cada linha.
+                    Testem com a árvore vazia, com um nó e com a ABB de 10, 20, 30, 40, 50.
+                    Por que fontes diferentes dão alturas diferentes para a mesma árvore?
+                </p>
+                <div class="fragment" style="text-align: left; font-size: 0.65em;">
+                    <p><strong>Resposta mínima aceitável:</strong> função recursiva; a árvore vazia devolve −1, e um nó devolve
+                    1 + o maior valor entre <code>altura(raiz-&gt;esq)</code> e <code>altura(raiz-&gt;dir)</code>.
+                    Resultados: −1, 0 e 4.</p>
+                    <p>A diferença é de convenção: contar arestas, como nesta aula, ou contar nós (vazia 0, um nó 1, cadeia 5).</p>
+                </div>
+            </section>
+
+            <section>
+                <h3>Exercício 3 — a ordem decrescente</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Perguntem à IA como fica a rubro-negra caída para a esquerda depois de inserir <code>50, 40, 30, 20, 10</code>.
+                    Executem com <code>rb_inserir</code> e comparem. Qual correção aparece que não apareceu na ordem crescente?
+                </p>
+                <div class="fragment" style="text-align: left; font-size: 0.65em;">
+                    <p><strong>Resposta mínima aceitável:</strong> a <strong>rotação à direita</strong> (dois vermelhos seguidos à esquerda),
+                    seguida de inversão de cores.</p>
+                    <p>A árvore final é a mesma da ordem crescente: 40 preto na raiz; 20 vermelho, com 10 e 30 pretos; 50 preto.</p>
+                </div>
+            </section>
+
+            <section>
+                <h3>Desafio — árvore B ou rubro-negra?</h3>
+                <p style="text-align: left; font-size: 0.75em;">
+                    Perguntem à IA por que bancos de dados usam árvore B, e não rubro-negra, nos índices.
+                    Confiram no capítulo 18 do Cormen e escrevam a conclusão em três frases que usem as palavras
+                    <strong>altura</strong>, <strong>disco</strong> e <strong>filhos por nó</strong>.
+                </p>
+                <div class="fragment" style="text-align: left; font-size: 0.65em;">
+                    <p><strong>Resposta mínima aceitável:</strong> a árvore B tem centenas de filhos por nó, então a sua altura é
+                    muito menor que a da rubro-negra. Cada nó visitado é uma leitura do disco, que é lenta.
+                    Menos níveis significam menos leituras em cada busca.</p>
+                </div>
+            </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- BLOCO 5 — REFERÊNCIAS                                         -->
+        <!-- ============================================================ -->
+        <section>
+            <h2>Referências</h2>
+            <ul style="text-align: left; font-size: 0.62em;">
+                <li><strong>Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.</strong> — <em>Algoritmos: Teoria e Prática</em>.
+                    Apêndice B, seção B.5 (árvores); cap. 10 (representação de árvores enraizadas); cap. 12 (árvores binárias de busca);
+                    cap. 13 (árvores rubro-negras); cap. 18 (árvores B). Referência principal da aula.</li>
+                <li><strong>Backes, A. R.</strong> — <em>Algoritmos e Estruturas de Dados em Linguagem C</em> (LTC, 2023).
+                    Capítulo de árvores: árvore binária e ABB implementadas em C.</li>
+                <li><strong>Veloso, P.; Pereira, S. do L.</strong> — <em>Estruturas de Dados em C: Uma Abordagem Didática</em> (Saraiva, 2016).
+                    Árvores como tipo abstrato de dados.</li>
+                <li><strong>Toscani, L. V.; Veloso, P. A. S.</strong> — <em>Complexidade de Algoritmos</em> (Bookman, 2012).
+                    Análise de custo e notação O.</li>
+                <li><strong>Schildt, H.</strong> — <em>C Completo e Total</em> (Makron Books, 1997). Ponteiros, structs e alocação dinâmica.</li>
+            </ul>
+            <p class="nota-rodape" style="text-align: left;">Leituras complementares:</p>
+            <ul style="text-align: left; font-size: 0.55em; color: #666;">
+                <li>Sedgewick, R. — <em>Left-leaning Red-Black Trees</em> (2008). A variante rubro-negra implementada nesta aula.</li>
+                <li>Sedgewick, R.; Wayne, K. — <em>Algorithms</em>, 4ª ed. (Addison-Wesley, 2011), seção 3.3. Árvores de busca balanceadas.</li>
+                <li>Wirth, N. — <em>Algoritmos e Estruturas de Dados</em> (LTC, 1999). Visão clássica de árvores.</li>
+            </ul>
+        </section>
+
+        <!-- ENCERRAMENTO -->
+        <section class="capa">
+            <h1>Fim — Árvores</h1>
+            <h2>Perguntas</h2>
+            <p style="margin-top: 2em; font-size: 0.7em; color: #666;">
+                Uma regra de forma faz da árvore uma hierarquia; uma regra de ordem faz dela uma estrutura de busca;
+                uma regra de cores garante que essa busca seja rápida em qualquer caso.
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<script src="../assets/vendor/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+
+        plugins: [ RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>

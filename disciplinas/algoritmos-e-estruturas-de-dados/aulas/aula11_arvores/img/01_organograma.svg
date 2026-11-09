@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 360"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="323.125" y1="82" x2="194.95" y2="143" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="194.95" y1="187" x2="135.7" y2="248" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="194.95" y1="187" x2="254.2" y2="248" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="323.125" y1="82" x2="451.3" y2="143" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="451.3" y1="187" x2="377" y2="248" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="451.3" y1="187" x2="525.6" y2="248" stroke="#2c5d8a" stroke-width="2"/>
+  <rect x="95.9" y="248" width="79.6" height="44" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="135.7" y="275.6" text-anchor="middle" font-size="16" fill="#222">Vendas</text>
+  <rect x="201.5" y="248" width="105.4" height="44" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="254.2" y="275.6" text-anchor="middle" font-size="16" fill="#222">Marketing</text>
+  <rect x="107.85" y="143" width="174.2" height="44" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="194.95" y="170.6" text-anchor="middle" font-size="16" fill="#222">Gerente comercial</text>
+  <rect x="332.9" y="248" width="88.2" height="44" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="377" y="275.6" text-anchor="middle" font-size="16" fill="#222">Suporte</text>
+  <rect x="447.1" y="248" width="157" height="44" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="525.6" y="275.6" text-anchor="middle" font-size="16" fill="#222">Desenvolvimento</text>
+  <rect x="381.4" y="143" width="139.8" height="44" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="451.3" y="170.6" text-anchor="middle" font-size="16" fill="#222">Gerente de TI</text>
+  <rect x="274.725" y="38" width="96.8" height="44" rx="6" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="323.125" y="65.6" text-anchor="middle" font-size="16" fill="#222">Diretora</text>
+  <line x1="100" y1="320" x2="600" y2="320" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="345" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">cada pessoa responde a um único superior · só a diretora não tem superior</text>
+</svg>

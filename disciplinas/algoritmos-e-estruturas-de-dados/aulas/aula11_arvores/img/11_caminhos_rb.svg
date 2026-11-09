@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <circle cx="280" cy="28" r="10" fill="#1a1a1a"/>
+  <text x="298" y="33" text-anchor="start" font-size="14" fill="#222">preto</text>
+  <circle cx="365" cy="28" r="10" fill="#b54040"/>
+  <text x="383" y="33" text-anchor="start" font-size="14" fill="#222">vermelho</text>
+  <text x="20" y="96" text-anchor="start" font-size="18" fill="#2c5d8a" font-weight="600">mais curto</text>
+  <line x1="192" y1="90" x2="214" y2="90" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="258" y1="90" x2="280" y2="90" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="170" cy="90" r="22" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="170" y="95.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <circle cx="236" cy="90" r="22" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="236" y="95.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <circle cx="302" cy="90" r="22" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="302" y="95.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <text x="338" y="96" text-anchor="start" font-size="17" fill="#5a7a9a" font-style="italic">3 nós, 3 pretos</text>
+  <text x="20" y="171" text-anchor="start" font-size="18" fill="#2c5d8a" font-weight="600">mais longo</text>
+  <line x1="192" y1="165" x2="214" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="258" y1="165" x2="280" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="324" y1="165" x2="346" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="390" y1="165" x2="412" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="456" y1="165" x2="478" y2="165" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="170" cy="165" r="22" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="170" y="170.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <circle cx="236" cy="165" r="22" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="236" y="170.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <circle cx="302" cy="165" r="22" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="302" y="170.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <circle cx="368" cy="165" r="22" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="368" y="170.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <circle cx="434" cy="165" r="22" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="434" y="170.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <circle cx="500" cy="165" r="22" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="500" y="170.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"></text>
+  <text x="536" y="171" text-anchor="start" font-size="17" fill="#5a7a9a" font-style="italic">6 nós, 3 pretos</text>
+</svg>

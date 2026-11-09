@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 405"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="168.385" y1="108.385" x2="226.615" y2="166.615" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="130" y1="110" x2="95" y2="177" stroke="#5a7a9a" stroke-width="2"/>
+  <line x1="230" y1="205" x2="200" y2="257" stroke="#5a7a9a" stroke-width="2"/>
+  <line x1="260" y1="205" x2="290" y2="257" stroke="#5a7a9a" stroke-width="2"/>
+  <line x1="531.615" y1="108.385" x2="473.385" y2="166.615" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="440" y1="205" x2="410" y2="257" stroke="#5a7a9a" stroke-width="2"/>
+  <line x1="470" y1="205" x2="500" y2="257" stroke="#5a7a9a" stroke-width="2"/>
+  <line x1="570" y1="110" x2="605" y2="177" stroke="#5a7a9a" stroke-width="2"/>
+  <circle cx="150" cy="90" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="150" y="97" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="245" cy="185" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="245" y="192" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <polygon points="95,177 63,233 127,233" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2"/>
+  <text x="95" y="223" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">A</text>
+  <text x="95" y="255" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">&lt; 10</text>
+  <polygon points="200,257 168,313 232,313" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2"/>
+  <text x="200" y="303" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">B</text>
+  <text x="200" y="335" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">10 a 20</text>
+  <polygon points="290,257 258,313 322,313" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2"/>
+  <text x="290" y="303" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">C</text>
+  <text x="290" y="335" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">&gt; 20</text>
+  <circle cx="550" cy="90" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="550" y="97" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="455" cy="185" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="455" y="192" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <polygon points="410,257 378,313 442,313" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2"/>
+  <text x="410" y="303" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">A</text>
+  <text x="410" y="335" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">&lt; 10</text>
+  <polygon points="500,257 468,313 532,313" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2"/>
+  <text x="500" y="303" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">B</text>
+  <text x="500" y="335" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">10 a 20</text>
+  <polygon points="605,177 573,233 637,233" fill="#f7f9fc" stroke="#5a7a9a" stroke-width="2"/>
+  <text x="605" y="223" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">C</text>
+  <text x="605" y="255" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">&gt; 20</text>
+  <line x1="300" y1="70" x2="388" y2="70" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="400.0,70.0 388.0,65.0 388.0,75.0" fill="#2c5d8a"/>
+  <text x="350" y="56" text-anchor="middle" font-size="14" fill="#2c5d8a" font-weight="600">rotação à esquerda</text>
+  <line x1="400" y1="130" x2="312" y2="130" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="300.0,130.0 312.0,135.0 312.0,125.0" fill="#2c5d8a"/>
+  <text x="350" y="155" text-anchor="middle" font-size="14" fill="#2c5d8a" font-weight="600">rotação à direita</text>
+  <line x1="100" y1="365" x2="600" y2="365" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="390" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">só a forma muda: a ordem A &lt; 10 &lt; B &lt; 20 &lt; C continua valendo</text>
+</svg>

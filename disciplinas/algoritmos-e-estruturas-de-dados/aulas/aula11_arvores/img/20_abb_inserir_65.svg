@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 530"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="326.294" y1="84.9008" x2="198.706" y2="165.099" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="157.569" y1="201.913" x2="104.931" y2="268.087" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="192.431" y1="201.913" x2="245.069" y2="268.087" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="373.706" y1="84.9008" x2="501.294" y2="165.099" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="507.569" y1="201.913" x2="454.931" y2="268.087" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="447.848" y1="316.018" x2="470.902" y2="373.982" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="542.431" y1="201.913" x2="595.069" y2="268.087" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="87.5" cy="290" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="87.5" y="297" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="262.5" cy="290" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="262.5" y="297" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="175" cy="180" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="175" y="187" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="481.25" cy="400" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="4"/>
+  <text x="481.25" y="407" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">65</text>
+  <circle cx="437.5" cy="290" r="28" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="437.5" y="297" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">60</text>
+  <circle cx="612.5" cy="290" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="612.5" y="297" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">80</text>
+  <circle cx="525" cy="180" r="28" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="525" y="187" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+  <circle cx="350" cy="70" r="28" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="77" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <text x="390" y="76" text-anchor="start" font-size="15" fill="#5a7a9a" font-style="italic">65 &gt; 50: direita</text>
+  <text x="565" y="186" text-anchor="start" font-size="15" fill="#5a7a9a" font-style="italic">65 &lt; 70: esquerda</text>
+  <text x="415" y="350" text-anchor="end" font-size="15" fill="#5a7a9a" font-style="italic">65 &gt; 60: direita</text>
+  <text x="481" y="465" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">lugar vazio (NULL): o nó novo entra aqui</text>
+  <line x1="100" y1="490" x2="600" y2="490" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="515" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">o nó novo sempre entra como folha</text>
+</svg>

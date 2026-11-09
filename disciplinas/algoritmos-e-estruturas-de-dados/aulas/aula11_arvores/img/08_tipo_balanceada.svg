@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 460"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <text x="175" y="36" text-anchor="middle" font-size="16" fill="#2c5d8a" font-weight="600">sem regra de balanceamento</text>
+  <text x="525" y="36" text-anchor="middle" font-size="16" fill="#2c5d8a" font-weight="600">com regra de balanceamento</text>
+  <line x1="187.787" y1="92.9021" x2="212.213" y2="127.098" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="237.787" y1="162.902" x2="262.213" y2="197.098" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="287.787" y1="232.902" x2="312.213" y2="267.098" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="337.787" y1="302.902" x2="362.213" y2="337.098" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="375" cy="355" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="375" y="360.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <circle cx="325" cy="285" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="325" y="290.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="275" cy="215" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="275" y="220.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="225" cy="145" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="225" y="150.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="175" cy="75" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="175" y="80.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <line x1="516.368" y1="92.2674" x2="468.632" y2="152.733" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="446.922" y1="190.463" x2="425.578" y2="244.537" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="463.078" y1="190.463" x2="484.422" y2="244.537" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="543.632" y1="92.2674" x2="591.368" y2="152.733" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="417.5" cy="265" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="417.5" y="270.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="492.5" cy="265" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="492.5" y="270.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="455" cy="170" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="455" y="175.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="605" cy="170" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="605" y="175.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <circle cx="530" cy="75" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="530" y="80.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <line x1="350" y1="60" x2="350" y2="380" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="175" y="400" text-anchor="middle" font-size="16" fill="#5a7a9a" font-style="italic">altura 4</text>
+  <text x="525" y="400" text-anchor="middle" font-size="16" fill="#5a7a9a" font-style="italic">altura 2</text>
+  <line x1="100" y1="420" x2="600" y2="420" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="445" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">as mesmas chaves, inseridas na mesma ordem: 10, 20, 30, 40, 50</text>
+</svg>

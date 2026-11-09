@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 445"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="326.294" y1="84.9008" x2="198.706" y2="165.099" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="157.569" y1="201.913" x2="104.931" y2="268.087" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="192.431" y1="201.913" x2="245.069" y2="268.087" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="373.706" y1="84.9008" x2="501.294" y2="165.099" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="507.569" y1="201.913" x2="454.931" y2="268.087" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="542.431" y1="201.913" x2="595.069" y2="268.087" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="87.5" cy="290" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="87.5" y="297" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="262.5" cy="290" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="262.5" y="297" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="175" cy="180" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="175" y="187" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="437.5" cy="290" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="437.5" y="297" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">60</text>
+  <circle cx="612.5" cy="290" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="612.5" y="297" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">80</text>
+  <circle cx="525" cy="180" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="525" y="187" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+  <circle cx="350" cy="70" r="28" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="77" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <circle cx="308" cy="70" r="13" fill="#2c5d8a"/>
+  <text x="308" y="75" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">1</text>
+  <circle cx="133" cy="180" r="13" fill="#2c5d8a"/>
+  <text x="133" y="185" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">2</text>
+  <circle cx="45.5" cy="290" r="13" fill="#2c5d8a"/>
+  <text x="45.5" y="295" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">3</text>
+  <circle cx="220.5" cy="290" r="13" fill="#2c5d8a"/>
+  <text x="220.5" y="295" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">4</text>
+  <circle cx="483" cy="180" r="13" fill="#2c5d8a"/>
+  <text x="483" y="185" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">5</text>
+  <circle cx="395.5" cy="290" r="13" fill="#2c5d8a"/>
+  <text x="395.5" y="295" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">6</text>
+  <circle cx="570.5" cy="290" r="13" fill="#2c5d8a"/>
+  <text x="570.5" y="295" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">7</text>
+  <text x="350" y="385" text-anchor="middle" font-size="18" fill="#2c5d8a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">pré-ordem: 50  30  20  40  70  60  80</text>
+  <line x1="100" y1="405" x2="600" y2="405" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="430" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">o nó antes dos filhos: nó · esquerda · direita</text>
+</svg>

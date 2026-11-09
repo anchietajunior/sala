@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 430"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="330.259" y1="86.9206" x2="229.741" y2="173.079" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="264" y="124" text-anchor="end" font-size="15" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">esq</text>
+  <line x1="369.741" y1="86.9206" x2="470.259" y2="173.079" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="436" y="124" text-anchor="start" font-size="15" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">dir</text>
+  <line x1="195.578" y1="211.633" x2="144.422" y2="288.367" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="154" y="244" text-anchor="end" font-size="15" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">esq</text>
+  <line x1="504.422" y1="211.633" x2="555.578" y2="288.367" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="546" y="244" text-anchor="start" font-size="15" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">dir</text>
+  <circle cx="350" cy="70" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="77" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">A</text>
+  <circle cx="210" cy="190" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="210" y="197" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">B</text>
+  <circle cx="490" cy="190" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="490" y="197" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">C</text>
+  <circle cx="130" cy="310" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="130" y="317" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">D</text>
+  <circle cx="570" cy="310" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="570" y="317" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">E</text>
+  <line x1="100" y1="365" x2="600" y2="365" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="390" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">no máximo dois filhos, chamados esquerdo e direito</text>
+  <text x="350" y="410" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">D é filho esquerdo de B; E é filho direito de C: a posição faz parte da árvore</text>
+</svg>

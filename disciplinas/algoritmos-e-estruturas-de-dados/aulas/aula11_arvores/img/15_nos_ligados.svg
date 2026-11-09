@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 430"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect x="284" y="45" width="132" height="50" rx="4" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="320" y1="45" x2="320" y2="95" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="380" y1="45" x2="380" y2="95" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="78" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <text x="350" y="36" text-anchor="middle" font-size="14" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">n50</text>
+  <circle cx="302" cy="70" r="4" fill="#2c5d8a"/>
+  <circle cx="398" cy="70" r="4" fill="#2c5d8a"/>
+  <rect x="109" y="165" width="132" height="50" rx="4" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="145" y1="165" x2="145" y2="215" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="205" y1="165" x2="205" y2="215" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="175" y="198" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <text x="175" y="156" text-anchor="middle" font-size="14" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">n30</text>
+  <circle cx="127" cy="190" r="4" fill="#2c5d8a"/>
+  <circle cx="223" cy="190" r="4" fill="#2c5d8a"/>
+  <rect x="459" y="165" width="132" height="50" rx="4" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="495" y1="165" x2="495" y2="215" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="555" y1="165" x2="555" y2="215" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="525" y="198" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+  <text x="525" y="156" text-anchor="middle" font-size="14" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">n70</text>
+  <circle cx="477" cy="190" r="4" fill="#2c5d8a"/>
+  <circle cx="573" cy="190" r="4" fill="#2c5d8a"/>
+  <rect x="21.5" y="285" width="132" height="50" rx="4" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="57.5" y1="285" x2="57.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="117.5" y1="285" x2="117.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="87.5" y="318" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="87.5" y="276" text-anchor="middle" font-size="14" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">n20</text>
+  <text x="39.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <text x="135.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <rect x="196.5" y="285" width="132" height="50" rx="4" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="232.5" y1="285" x2="232.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="292.5" y1="285" x2="292.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="262.5" y="318" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <text x="262.5" y="276" text-anchor="middle" font-size="14" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">n40</text>
+  <text x="214.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <text x="310.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <rect x="371.5" y="285" width="132" height="50" rx="4" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="407.5" y1="285" x2="407.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="467.5" y1="285" x2="467.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="437.5" y="318" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">60</text>
+  <text x="437.5" y="276" text-anchor="middle" font-size="14" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">n60</text>
+  <text x="389.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <text x="485.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <rect x="546.5" y="285" width="132" height="50" rx="4" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="582.5" y1="285" x2="582.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="642.5" y1="285" x2="642.5" y2="335" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="612.5" y="318" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">80</text>
+  <text x="612.5" y="276" text-anchor="middle" font-size="14" fill="#5a7a9a" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">n80</text>
+  <text x="564.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <text x="660.5" y="316" text-anchor="middle" font-size="16" fill="#888">∅</text>
+  <line x1="302" y1="74" x2="185.509" y2="138.207" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="175.0,144.0 187.9,142.6 183.1,133.8" fill="#2c5d8a"/>
+  <line x1="398" y1="74" x2="514.491" y2="138.207" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="525.0,144.0 516.9,133.8 512.1,142.6" fill="#2c5d8a"/>
+  <line x1="127" y1="194" x2="93.3973" y2="253.549" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="87.5,264.0 97.8,256.0 89.0,251.1" fill="#2c5d8a"/>
+  <line x1="223" y1="194" x2="256.603" y2="253.549" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="262.5,264.0 261.0,251.1 252.2,256.0" fill="#2c5d8a"/>
+  <line x1="477" y1="194" x2="443.397" y2="253.549" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="437.5,264.0 447.8,256.0 439.0,251.1" fill="#2c5d8a"/>
+  <line x1="573" y1="194" x2="606.603" y2="253.549" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="612.5,264.0 611.0,251.1 602.2,256.0" fill="#2c5d8a"/>
+  <text x="350" y="370" text-anchor="middle" font-size="14" fill="#5a7a9a">cada caixa: esq | chave | dir</text>
+  <line x1="100" y1="390" x2="600" y2="390" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="415" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">seis atribuições: n50-&gt;esq = n30, n50-&gt;dir = n70, ...</text>
+</svg>

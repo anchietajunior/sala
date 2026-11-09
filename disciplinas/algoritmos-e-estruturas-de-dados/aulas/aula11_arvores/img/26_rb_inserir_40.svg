@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 390"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="150.201" y1="73.4535" x2="97.2988" y2="121.547" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="179.799" y1="73.4535" x2="232.701" y2="121.547" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="257.138" y1="152.524" x2="279.112" y2="192.476" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="82.5" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="82.5" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="288.75" cy="210" r="20" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="288.75" y="215.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="247.5" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="247.5" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="165" cy="60" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="165" y="65.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="165" y="300" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">inserir 40</text>
+  <text x="165" y="322" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">nasce vermelho, à direita de 30</text>
+  <line x1="336" y1="140" x2="352" y2="140" stroke="#2c5d8a" stroke-width="3"/>
+<polygon points="364.0,140.0 352.0,135.0 352.0,145.0" fill="#2c5d8a"/>
+  <line x1="520.201" y1="73.4535" x2="467.299" y2="121.547" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="549.799" y1="73.4535" x2="602.701" y2="121.547" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="607.862" y1="152.524" x2="585.888" y2="192.476" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="452.5" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="452.5" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="576.25" cy="210" r="20" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="576.25" y="215.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="617.5" cy="135" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="617.5" y="140.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="535" cy="60" r="20" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="535" y="65.6" text-anchor="middle" font-size="16" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <text x="535" y="300" text-anchor="middle" font-size="15" fill="#2c5d8a" font-weight="600">rotação à esquerda em 30</text>
+  <text x="535" y="322" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">40 sobe; 30 desce à esquerda</text>
+  <circle cx="260" cy="365" r="10" fill="#1a1a1a"/>
+  <text x="278" y="370" text-anchor="start" font-size="14" fill="#222">preto</text>
+  <circle cx="345" cy="365" r="10" fill="#b54040"/>
+  <text x="363" y="370" text-anchor="start" font-size="14" fill="#222">vermelho</text>
+</svg>

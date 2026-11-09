@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 480"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="99.5" y1="302" x2="75.5" y2="353" stroke="#888" stroke-width="1.5"/>
+  <rect x="55.5" y="353" width="40" height="24" rx="3" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="75.5" y="370" text-anchor="middle" font-size="14" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">NIL</text>
+  <line x1="135.5" y1="302" x2="159.5" y2="353" stroke="#888" stroke-width="1.5"/>
+  <rect x="139.5" y="353" width="40" height="24" rx="3" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="159.5" y="370" text-anchor="middle" font-size="14" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">NIL</text>
+  <line x1="254.5" y1="302" x2="230.5" y2="353" stroke="#888" stroke-width="1.5"/>
+  <rect x="210.5" y="353" width="40" height="24" rx="3" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="230.5" y="370" text-anchor="middle" font-size="14" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">NIL</text>
+  <line x1="290.5" y1="302" x2="314.5" y2="353" stroke="#888" stroke-width="1.5"/>
+  <rect x="294.5" y="353" width="40" height="24" rx="3" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="314.5" y="370" text-anchor="middle" font-size="14" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">NIL</text>
+  <line x1="487" y1="197" x2="463" y2="248" stroke="#888" stroke-width="1.5"/>
+  <rect x="443" y="248" width="40" height="24" rx="3" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="463" y="265" text-anchor="middle" font-size="14" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">NIL</text>
+  <line x1="523" y1="197" x2="547" y2="248" stroke="#888" stroke-width="1.5"/>
+  <rect x="527" y="248" width="40" height="24" rx="3" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="547" y="265" text-anchor="middle" font-size="14" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">NIL</text>
+  <line x1="326.818" y1="85.7037" x2="218.182" y2="159.296" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="178.372" y1="197.528" x2="134.128" y2="257.472" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="211.628" y1="197.528" x2="255.872" y2="257.472" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="373.182" y1="85.7037" x2="481.818" y2="159.296" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="117.5" cy="280" r="28" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="117.5" y="287" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <circle cx="272.5" cy="280" r="28" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="272.5" y="287" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="195" cy="175" r="28" fill="#b54040" stroke="#b54040" stroke-width="2"/>
+  <text x="195" y="182" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <circle cx="505" cy="175" r="28" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="505" y="182" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <circle cx="350" cy="70" r="28" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="350" y="77" text-anchor="middle" font-size="20" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="470" cy="420" r="10" fill="#1a1a1a"/>
+  <text x="488" y="425" text-anchor="start" font-size="14" fill="#222">preto</text>
+  <circle cx="555" cy="420" r="10" fill="#b54040"/>
+  <text x="573" y="425" text-anchor="start" font-size="14" fill="#222">vermelho</text>
+  <line x1="100" y1="440" x2="600" y2="440" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="465" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">abaixo de 40, todo caminho até um NIL tem 2 nós pretos, contando o NIL</text>
+</svg>

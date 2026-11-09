@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 425"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <text x="165" y="30" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">antes</text>
+  <text x="535" y="30" text-anchor="middle" font-size="16" fill="#5a7a9a" font-weight="600">depois</text>
+  <line x1="335" y1="165" x2="356" y2="165" stroke="#2c5d8a" stroke-width="3"/>
+<polygon points="368.0,165.0 356.0,160.0 356.0,170.0" fill="#2c5d8a"/>
+  <line x1="150.575" y1="86.6107" x2="96.9251" y2="148.389" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="73.7377" y1="185.18" x2="50.0123" y2="239.82" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="91.2623" y1="185.18" x2="114.988" y2="239.82" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="179.425" y1="86.6107" x2="233.075" y2="148.389" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="238.738" y1="185.18" x2="215.012" y2="239.82" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="210.918" y1="281.499" x2="222.207" y2="333.501" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="256.262" y1="185.18" x2="279.988" y2="239.82" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="41.25" cy="260" r="22" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="41.25" y="265.6" text-anchor="middle" font-size="16" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <line x1="53.35" y1="228.1" x2="73.15" y2="247.9" stroke="#b54040" stroke-width="2.5"/>
+  <line x1="53.35" y1="247.9" x2="73.15" y2="228.1" stroke="#b54040" stroke-width="2.5"/>
+  <circle cx="123.75" cy="260" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="123.75" y="265.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="82.5" cy="165" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="82.5" y="170.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="226.875" cy="355" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="226.875" y="360.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">65</text>
+  <circle cx="206.25" cy="260" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="206.25" y="265.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">60</text>
+  <circle cx="288.75" cy="260" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="288.75" y="265.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">80</text>
+  <circle cx="247.5" cy="165" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="247.5" y="170.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+  <circle cx="165" cy="70" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="165" y="75.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <line x1="520.575" y1="86.6107" x2="466.925" y2="148.389" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="461.262" y1="185.18" x2="484.988" y2="239.82" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="549.425" y1="86.6107" x2="603.075" y2="148.389" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="608.738" y1="185.18" x2="585.012" y2="239.82" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="580.918" y1="281.499" x2="592.207" y2="333.501" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="626.262" y1="185.18" x2="649.988" y2="239.82" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="493.75" cy="260" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="493.75" y="265.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <circle cx="452.5" cy="165" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="452.5" y="170.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <circle cx="596.875" cy="355" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="596.875" y="360.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">65</text>
+  <circle cx="576.25" cy="260" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="576.25" y="265.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">60</text>
+  <circle cx="658.75" cy="260" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="658.75" y="265.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">80</text>
+  <circle cx="617.5" cy="165" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="617.5" y="170.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+  <circle cx="535" cy="70" r="22" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="535" y="75.6" text-anchor="middle" font-size="16" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <line x1="100" y1="385" x2="600" y2="385" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="410" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">folha: o pai passa a apontar para NULL (30-&gt;esq = NULL)</text>
+</svg>

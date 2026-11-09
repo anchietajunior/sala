@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 355"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="298" y1="114" x2="175.215" y2="189.702" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="165.0,196.0 177.8,194.0 172.6,185.4" fill="#2c5d8a"/>
+  <line x1="350" y1="114" x2="350" y2="184" stroke="#2c5d8a" stroke-width="4.5"/>
+<polygon points="350.0,196.0 355.0,184.0 345.0,184.0" fill="#2c5d8a"/>
+  <line x1="402" y1="114" x2="544.423" y2="190.331" stroke="#2c5d8a" stroke-width="2.5"/>
+<polygon points="555.0,196.0 546.8,185.9 542.1,194.7" fill="#2c5d8a"/>
+  <rect x="298" y="70" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="324" y="99" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">30</text>
+  <rect x="350" y="70" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="376" y="99" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">60</text>
+  <rect x="292" y="64" width="116" height="56" rx="6" fill="none" stroke="#2c5d8a" stroke-width="2.5" stroke-dasharray="6,4"/>
+  <rect x="113" y="200" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="139" y="229" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">10</text>
+  <rect x="165" y="200" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="191" y="229" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">20</text>
+  <rect x="298" y="200" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="324" y="229" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">40</text>
+  <rect x="350" y="200" width="52" height="44" rx="2" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="376" y="229" text-anchor="middle" font-size="18" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">50</text>
+  <rect x="292" y="194" width="116" height="56" rx="6" fill="none" stroke="#2c5d8a" stroke-width="2.5" stroke-dasharray="6,4"/>
+  <rect x="489" y="200" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="515" y="229" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">70</text>
+  <rect x="541" y="200" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="567" y="229" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">80</text>
+  <rect x="593" y="200" width="52" height="44" rx="2" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="619" y="229" text-anchor="middle" font-size="18" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">90</text>
+  <text x="420" y="82" text-anchor="start" font-size="15" fill="#5a7a9a" font-style="italic">30 &lt; 50 &lt; 60:</text>
+  <text x="420" y="102" text-anchor="start" font-size="15" fill="#5a7a9a" font-style="italic">desce pelo meio</text>
+  <text x="350" y="285" text-anchor="middle" font-size="16" fill="#2c5d8a" font-weight="600">50 encontrado: 2 nós lidos</text>
+  <line x1="100" y1="315" x2="600" y2="315" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="340" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">cada nó guarda várias chaves e tem vários filhos: a árvore fica baixa</text>
+</svg>

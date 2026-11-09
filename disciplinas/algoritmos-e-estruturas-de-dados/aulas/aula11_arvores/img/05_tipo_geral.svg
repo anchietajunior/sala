@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 420"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="328.922" y1="85.2228" x2="191.078" y2="184.777" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="340.667" y1="94.267" x2="309.333" y2="175.733" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="362.327" y1="92.8922" x2="407.673" y2="177.108" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="371.8" y1="84.1697" x2="528.2" y2="185.83" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="155.201" y1="221.377" x2="94.7995" y2="308.623" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="170" y1="226" x2="170" y2="304" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="184.799" y1="221.377" x2="245.201" y2="308.623" stroke="#2c5d8a" stroke-width="2"/>
+  <line x1="550" y1="226" x2="550" y2="304" stroke="#2c5d8a" stroke-width="2"/>
+  <circle cx="350" cy="70" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="350" y="77" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">A</text>
+  <circle cx="170" cy="200" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="170" y="207" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">B</text>
+  <circle cx="300" cy="200" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="300" y="207" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">C</text>
+  <circle cx="420" cy="200" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="420" y="207" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">D</text>
+  <circle cx="550" cy="200" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="550" y="207" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">E</text>
+  <circle cx="80" cy="330" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="80" y="337" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">F</text>
+  <circle cx="170" cy="330" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="170" y="337" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">G</text>
+  <circle cx="260" cy="330" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="260" y="337" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">H</text>
+  <circle cx="550" cy="330" r="26" fill="#e8f0f8" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="550" y="337" text-anchor="middle" font-size="20" fill="#222" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">I</text>
+  <text x="395" y="64" text-anchor="start" font-size="15" fill="#5a7a9a" font-style="italic">4 filhos</text>
+  <text x="124" y="205" text-anchor="end" font-size="15" fill="#5a7a9a" font-style="italic">3 filhos</text>
+  <text x="596" y="205" text-anchor="start" font-size="15" fill="#5a7a9a" font-style="italic">1 filho</text>
+  <line x1="100" y1="380" x2="600" y2="380" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="405" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">cada nó pode ter qualquer número de filhos</text>
+</svg>

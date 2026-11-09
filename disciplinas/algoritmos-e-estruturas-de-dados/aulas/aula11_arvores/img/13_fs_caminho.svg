@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 460"
+     font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <line x1="452.3" y1="69" x2="333" y2="116" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="333" y1="154" x2="222.2" y2="201" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="222.2" y1="239" x2="146.8" y2="286" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="146.8" y1="324" x2="146.8" y2="371" stroke="#2c5d8a" stroke-width="4"/>
+  <line x1="222.2" y1="239" x2="297.6" y2="286" stroke="#cfd6dd" stroke-width="2"/>
+  <line x1="333" y1="154" x2="443.8" y2="201" stroke="#cfd6dd" stroke-width="2"/>
+  <line x1="443.8" y1="239" x2="443.8" y2="286" stroke="#cfd6dd" stroke-width="2"/>
+  <line x1="452.3" y1="69" x2="571.6" y2="116" stroke="#cfd6dd" stroke-width="2"/>
+  <line x1="571.6" y1="154" x2="571.6" y2="201" stroke="#cfd6dd" stroke-width="2"/>
+  <rect x="91.4" y="371" width="110.8" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="146.8" y="395.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">arvores.c</text>
+  <rect x="114.4" y="286" width="64.8" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="146.8" y="310.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">aed/</text>
+  <rect x="242.2" y="286" width="110.8" height="38" rx="6" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5"/>
+  <text x="297.6" y="310.25" text-anchor="middle" font-size="15" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">notas.txt</text>
+  <rect x="189.8" y="201" width="64.8" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="222.2" y="225.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">ana/</text>
+  <rect x="393" y="286" width="101.6" height="38" rx="6" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5"/>
+  <text x="443.8" y="310.25" text-anchor="middle" font-size="15" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">foto.png</text>
+  <rect x="402.2" y="201" width="83.2" height="38" rx="6" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5"/>
+  <text x="443.8" y="225.25" text-anchor="middle" font-size="15" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">bruno/</text>
+  <rect x="296" y="116" width="74" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="333" y="140.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">home/</text>
+  <rect x="534.6" y="201" width="74" height="38" rx="6" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5"/>
+  <text x="571.6" y="225.25" text-anchor="middle" font-size="15" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">hosts</text>
+  <rect x="539.2" y="116" width="64.8" height="38" rx="6" fill="#f7f9fc" stroke="#cfd6dd" stroke-width="1.5"/>
+  <text x="571.6" y="140.25" text-anchor="middle" font-size="15" fill="#888" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">etc/</text>
+  <rect x="420.3" y="31" width="64" height="38" rx="6" fill="#2c5d8a" stroke="#2c5d8a" stroke-width="2"/>
+  <text x="452.3" y="55.25" text-anchor="middle" font-size="15" fill="#fff" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">/</text>
+  <line x1="100" y1="420" x2="600" y2="420" stroke="#cfd6dd" stroke-width="1"/>
+  <text x="350" y="445" text-anchor="middle" font-size="14" fill="#5a7a9a" font-style="italic">/home/ana/aed/arvores.c: o caminho único da raiz até o arquivo</text>
+</svg>
