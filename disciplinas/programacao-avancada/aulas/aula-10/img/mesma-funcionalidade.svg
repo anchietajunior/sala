@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 402">
+  <line x1="400" y1="16" x2="400" y2="356" stroke="#ddd" stroke-width="1.5"/>
+
+  <!-- esquerda: a organização atual -->
+  <text x="200" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">MVC, por tipo de arquivo</text>
+  <text x="200" y="50" text-anchor="middle" font-size="12" fill="#666">a organização atual do projeto</text>
+
+  <rect x="22" y="70" width="356" height="38" rx="6" fill="#fdecea" stroke="#b03a2e" stroke-width="1.4"/>
+  <text x="34" y="86" font-size="11.5" font-family="monospace" fill="#222">routers/books.py</text>
+  <text x="34" y="101" font-size="11" fill="#555">HTTP, acesso, sequência do resumo e falhas do Gemini</text>
+
+  <rect x="22" y="110" width="356" height="38" rx="6" fill="#fff" stroke="#555" stroke-width="1.2"/>
+  <text x="34" y="126" font-size="11.5" font-family="monospace" fill="#222">models.py</text>
+  <text x="34" y="141" font-size="11" fill="#555">Book, User e a regra can_access</text>
+
+  <rect x="22" y="150" width="356" height="38" rx="6" fill="#fff" stroke="#555" stroke-width="1.2"/>
+  <text x="34" y="166" font-size="11.5" font-family="monospace" fill="#222">schemas.py</text>
+  <text x="34" y="181" font-size="11" fill="#555">BookRead e BookSummary</text>
+
+  <rect x="22" y="190" width="356" height="38" rx="6" fill="#fff" stroke="#555" stroke-width="1.2"/>
+  <text x="34" y="206" font-size="11.5" font-family="monospace" fill="#222">gemini.py</text>
+  <text x="34" y="221" font-size="11" fill="#555">a requisição à API do Gemini</text>
+
+  <text x="34" y="258" font-size="12" font-weight="bold" fill="#333">A rota summarize_book reúne:</text>
+  <text x="34" y="278" font-size="12" fill="#333">· o HTTP: status e schema de saída;</text>
+  <text x="34" y="296" font-size="12" fill="#333">· a regra de acesso: a chamada a can_access;</text>
+  <text x="34" y="314" font-size="12" fill="#333">· a sequência: gerar, decidir e gravar;</text>
+  <text x="34" y="332" font-size="12" fill="#333">· as falhas da integração: httpx2.HTTPError.</text>
+
+  <!-- direita: a mesma funcionalidade em Ports and Adapters -->
+  <text x="600" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Ports and Adapters</text>
+  <text x="600" y="50" text-anchor="middle" font-size="12" fill="#666">organização ilustrativa, fora do projeto</text>
+
+  <rect x="422" y="70" width="356" height="38" rx="6" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.4"/>
+  <text x="434" y="86" font-size="11.5" font-family="monospace" fill="#222">domain/book.py</text>
+  <text x="434" y="101" font-size="11" fill="#555">Book e a regra de acesso, sem framework</text>
+
+  <rect x="422" y="110" width="356" height="38" rx="6" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.4"/>
+  <text x="434" y="126" font-size="11.5" font-family="monospace" fill="#222">application/ports.py</text>
+  <text x="434" y="141" font-size="11" fill="#555">as portas: BookRepository e BookSummarizer</text>
+
+  <rect x="422" y="150" width="356" height="38" rx="6" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.4"/>
+  <text x="434" y="166" font-size="11.5" font-family="monospace" fill="#222">application/summarize_book.py</text>
+  <text x="434" y="181" font-size="11" fill="#555">o caso de uso: gerar, decidir e gravar</text>
+
+  <rect x="422" y="190" width="356" height="38" rx="6" fill="#fff" stroke="#555" stroke-width="1.2"/>
+  <text x="434" y="206" font-size="11.5" font-family="monospace" fill="#222">adapters/http/books.py</text>
+  <text x="434" y="221" font-size="11" fill="#555">a rota FastAPI: traduz HTTP para o caso de uso</text>
+
+  <rect x="422" y="230" width="356" height="38" rx="6" fill="#fff" stroke="#555" stroke-width="1.2"/>
+  <text x="434" y="246" font-size="11.5" font-family="monospace" fill="#222">adapters/db/books.py</text>
+  <text x="434" y="261" font-size="11" fill="#555">SQLAlchemy: implementa BookRepository</text>
+
+  <rect x="422" y="270" width="356" height="38" rx="6" fill="#fff" stroke="#555" stroke-width="1.2"/>
+  <text x="434" y="286" font-size="11.5" font-family="monospace" fill="#222">adapters/ai/gemini.py</text>
+  <text x="434" y="301" font-size="11" fill="#555">httpx2: implementa BookSummarizer</text>
+
+  <rect x="422" y="310" width="356" height="38" rx="6" fill="#fff" stroke="#555" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text x="434" y="326" font-size="11.5" font-family="monospace" fill="#222">main.py</text>
+  <text x="434" y="341" font-size="11" fill="#555">liga cada porta ao seu adaptador</text>
+
+  <text x="200" y="376" text-anchor="middle" font-size="13" fill="#222">4 arquivos · a rota concentra quatro responsabilidades</text>
+  <text x="600" y="376" text-anchor="middle" font-size="13" fill="#222">7 arquivos · uma responsabilidade por arquivo</text>
+  <text x="400" y="396" text-anchor="middle" font-size="12" fill="#999">Funcionalidade comparada: o AI Summary, POST /api/books/{book_id}/summary</text>
+</svg>

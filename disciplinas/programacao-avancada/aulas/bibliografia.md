@@ -121,6 +121,32 @@ Referências renomadas para citar nos slides, mapeadas aos temas teóricos **[T-
 - JSON Schema - json-schema.org (especificação 2020-12).
 - Documentação oficial da Gemini API - ai.google.dev/gemini-api/docs (*API keys*, *Interactions API*, *Structured output*, *Models*, *Pricing*); do httpx2 - github.com/pydantic/httpx2; do pytest - docs.pytest.org (*monkeypatch*).
 
+## Engenharia e arquitetura de software, e agentes de codificação (aula 10)
+
+- NAUR, P.; RANDELL, B. (eds.). *Software Engineering: Report on a Conference Sponsored by the NATO Science Committee*. Garmisch, 7-11 out. 1968; OTAN, 1969. (a origem do termo "engenharia de software")
+- IEEE Std 610.12-1990 - *IEEE Standard Glossary of Software Engineering Terminology*. (as definições de engenharia de software e de especificação)
+- IEEE COMPUTER SOCIETY. *Guide to the Software Engineering Body of Knowledge (SWEBOK Guide)*, versão 4.0, 2024. (18 áreas de conhecimento; a arquitetura é uma delas)
+- BROOKS, F. P. *No Silver Bullet: Essence and Accidents of Software Engineering*. IEEE Computer, abr. 1987. (essência e acidente; "decidir precisamente o que construir")
+- EVANS, E. *Domain-Driven Design: Tackling Complexity in the Heart of Software*. Addison-Wesley, 2003; *Domain-Driven Design Reference: Definitions and Pattern Summaries*. domainlanguage.com, 2015. (as definições de domínio, modelo, linguagem ubíqua e contexto delimitado)
+- ALEXANDER, C. et al. *A Pattern Language*. Oxford University Press, 1977; GAMMA, E. et al. *Design Patterns*. Addison-Wesley, 1994. (o que é um padrão: nome, problema, solução e consequências)
+- ISO/IEC/IEEE 42010:2011 - *Systems and software engineering - Architecture description*. (a definição de arquitetura; a edição de 2022 mudou a redação)
+- BASS, L.; CLEMENTS, P.; KAZMAN, R. *Software Architecture in Practice*. 2ª ed., Addison-Wesley, 2003. (a definição da 2ª edição; a das edições seguintes não foi conferida no texto)
+- FOWLER, M. *Who Needs an Architect?*. IEEE Software, 2003. (Ralph Johnson: o entendimento compartilhado; Fowler: o que é difícil de mudar)
+- RICHARDS, M.; FORD, N. *Fundamentals of Software Architecture*. O'Reilly, 2020. (as duas leis: tudo é uma troca; o porquê importa mais que o como)
+- BUSCHMANN, F. et al. *Pattern-Oriented Software Architecture, Volume 1: A System of Patterns*. Wiley, 1996. (a definição de padrão arquitetural)
+- REENSKAUG, T. *Thing-Model-View-Editor* (12 maio 1979) e *Models-Views-Controllers* (10 dez. 1979). Notas técnicas, Xerox PARC. (a origem do MVC)
+- COCKBURN, A. *Hexagonal Architecture*. alistair.cockburn.us, 2005. (Ports and Adapters: a intenção, a porta, o adaptador e o hexágono)
+- MARTIN, R. C. *The Dependency Inversion Principle*. C++ Report, 1996; *The Clean Architecture*. blog.cleancoder.com, 13 ago. 2012. PALERMO, J. *The Onion Architecture*. jeffreypalermo.com, 2008. (a regra de dependência)
+- NAUR, P. *Programming as Theory Building*. Microprocessing and Microprogramming 15(5), 1985. (o programa como teoria da equipe)
+- PERRY, N.; SRIVASTAVA, M.; KUMAR, D.; BONEH, D. *Do Users Write More Insecure Code with AI Assistants?*. ACM CCS, 2023. (código menos seguro e mais confiança)
+- SHEN, J. H.; TAMKIN, A. *How AI Impacts Skill Formation*. arXiv:2601.20245, 2026. (nota 17% menor na prova de compreensão)
+- GLOAGUEN, T. et al. *Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?*. arXiv:2602.11988, versão 3, 2026. (efeito marginal dos arquivos de contexto; os números da versão 1 são outros)
+- FAGAN, M. E. *Design and code inspections to reduce errors in program development*. IBM Systems Journal, 1976; BACCHELLI, A.; BIRD, C. *Expectations, Outcomes, and Challenges of Modern Code Review*. ICSE, 2013. (revisão de código)
+- NYGARD, M. *Documenting Architecture Decisions*. cognitect.com, 15 nov. 2011. (o ADR)
+- IEEE Std 830-1998 - *IEEE Recommended Practice for Software Requirements Specifications*; NORTH, D. *Introducing BDD*. Better Software, mar. 2006. (qualidades de uma especificação; dado-quando-então)
+- GITHUB. *Spec-driven development with AI: Get started with a new open source toolkit*. github.blog, 2025. (o Spec Kit)
+- AGENTS.md - agents.md; Agent Skills - agentskills.io/specification; documentação do OpenCode - opencode.ai/docs (*Instructions*, *Rules*, *Skills*, *Config*); do Codex - learn.chatgpt.com/docs; do Claude Code - code.claude.com/docs (*Memory*); do Cursor - cursor.com/docs; do GitHub Copilot - docs.github.com/copilot; do Gemini CLI - geminicli.com/docs. (consultadas em nov. 2026)
+
 ## [T-10] Upload e multipart/form-data
 
 - RFC 7578 — *Returning Values from Forms: multipart/form-data*. IETF, 2015.

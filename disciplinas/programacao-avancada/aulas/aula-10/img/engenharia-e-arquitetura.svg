@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350">
+  <!-- a disciplina inteira -->
+  <rect x="15" y="14" width="770" height="238" rx="10" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="400" y="42" text-anchor="middle" font-size="16" font-weight="bold" fill="#222">Engenharia de software: as áreas de conhecimento</text>
+
+  <!-- linha 1 -->
+  <rect x="27" y="60" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="100" y="85" text-anchor="middle" font-size="12.5" fill="#222">Requisitos</text>
+  <rect x="177" y="60" width="146" height="40" rx="6" fill="#2e6da4" stroke="#2e6da4" stroke-width="1.2"/>
+  <text x="250" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">Arquitetura</text>
+  <rect x="327" y="60" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="400" y="85" text-anchor="middle" font-size="12.5" fill="#222">Projeto</text>
+  <rect x="477" y="60" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="550" y="85" text-anchor="middle" font-size="12.5" fill="#222">Construção</text>
+  <rect x="627" y="60" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="700" y="85" text-anchor="middle" font-size="12.5" fill="#222">Testes</text>
+
+  <!-- linha 2 -->
+  <rect x="27" y="106" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="100" y="131" text-anchor="middle" font-size="12.5" fill="#222">Operações</text>
+  <rect x="177" y="106" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="250" y="131" text-anchor="middle" font-size="12.5" fill="#222">Manutenção</text>
+  <rect x="327" y="106" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="400" y="131" text-anchor="middle" font-size="12.5" fill="#222">Gerência de configuração</text>
+  <rect x="477" y="106" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="550" y="131" text-anchor="middle" font-size="12.5" fill="#222">Gerência de engenharia</text>
+  <rect x="627" y="106" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="700" y="131" text-anchor="middle" font-size="12.5" fill="#222">Processo</text>
+
+  <!-- linha 3 -->
+  <rect x="27" y="152" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="100" y="177" text-anchor="middle" font-size="12.5" fill="#222">Modelos e métodos</text>
+  <rect x="177" y="152" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="250" y="177" text-anchor="middle" font-size="12.5" fill="#222">Qualidade</text>
+  <rect x="327" y="152" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="400" y="177" text-anchor="middle" font-size="12.5" fill="#222">Segurança</text>
+  <rect x="477" y="152" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="550" y="177" text-anchor="middle" font-size="12.5" fill="#222">Prática profissional</text>
+  <rect x="627" y="152" width="146" height="40" rx="6" fill="#f4f4f4" stroke="#999" stroke-width="1.2"/>
+  <text x="700" y="177" text-anchor="middle" font-size="12.5" fill="#222">Economia</text>
+
+  <text x="400" y="226" text-anchor="middle" font-size="12.5" fill="#666">e três áreas de fundamentos: de computação, de matemática e de engenharia</text>
+
+  <text x="400" y="284" text-anchor="middle" font-size="13" fill="#222">A engenharia trata de todo o ciclo de vida: dos requisitos à operação e à manutenção.</text>
+  <text x="400" y="306" text-anchor="middle" font-size="13" fill="#222">A arquitetura trata da estrutura: as partes do sistema e as relações entre elas.</text>
+  <text x="400" y="338" text-anchor="middle" font-size="12" fill="#999">IEEE COMPUTER SOCIETY - SWEBOK Guide, versão 4.0, 2024 (18 áreas de conhecimento)</text>
+</svg>

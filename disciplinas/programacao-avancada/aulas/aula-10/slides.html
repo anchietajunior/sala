@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula 10 - Engenharia de software e arquitetura de software</title>
+<link rel="stylesheet" href="reveal/dist/reset.css">
+<link rel="stylesheet" href="reveal/dist/reveal.css">
+<link rel="stylesheet" href="reveal/dist/theme/white.css">
+<link rel="stylesheet" href="reveal/plugin/highlight/monokai.css">
+<style>
+  .reveal { font-size: 34px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+  .reveal h2 { font-size: 1.35em; }
+  .reveal ul { display: block; }
+  .reveal li { margin: .35em 0; }
+  .reveal pre { box-shadow: none; width: 100%; }
+  .reveal pre code { padding: .8em 1em; border-radius: 6px; max-height: 480px; }
+  .cite { font-size: .45em; color: #999; margin-top: 1.6em; }
+  .duas-colunas { display: flex; gap: 1em; align-items: flex-start; text-align: left; }
+  .duas-colunas > div { flex: 1; min-width: 0; }
+  .os-label { font-size: .55em; font-weight: bold; color: #666; margin: 0 0 .2em .1em; }
+  .nota { font-size: .6em; background: #fdf6e3; border: 1px solid #e8d9a0; border-radius: 6px; padding: .6em .9em; margin-top: .8em; }
+  .destaque { color: #2e6da4; font-weight: bold; }
+  .recap { background: #eef7ee; border-radius: 8px; padding: .5em 1em; }
+  .status-tab { font-size: .64em; border-collapse: collapse; margin: 0 auto; }
+  .status-tab td, .status-tab th { border: 1px solid #ddd; padding: .3em .7em; text-align: left; }
+  .reveal pre.quebra code { white-space: pre-wrap; }
+  .definicao { font-size: .8em; background: #eef4fa; border-left: 5px solid #2e6da4; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; font-style: italic; }
+  .etapa { font-size: .45em; font-weight: bold; color: #2e6da4; text-transform: uppercase; letter-spacing: .06em; margin: 0 0 -.4em 0; }
+  .pergunta { font-size: .8em; background: #fdf6e3; border-left: 5px solid #b8962e; border-radius: 0 8px 8px 0; padding: .7em 1em; text-align: left; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ Abertura ============ -->
+
+<section>
+  <h1 style="font-size:1.6em">Engenharia de software e arquitetura de software</h1>
+  <p>Programação Avançada - Aula 10</p>
+  <p style="font-size:.55em"><a href="https://github.com/anchietajunior/sala/tree/main/disciplinas/programacao-avancada">https://github.com/anchietajunior/sala/tree/main/disciplinas/programacao-avancada</a></p>
+  <p style="font-size:.55em;color:#888">Universidade Unirios</p>
+</section>
+
+<section>
+  <h2>Objetivos da aula</h2>
+  <ul style="font-size:.6em">
+    <li>Distinguir <strong>engenharia de software</strong> de <strong>arquitetura de software</strong> pelo foco de cada uma;</li>
+    <li>Descrever como o <strong>MVC</strong> e o <strong>Ports and Adapters</strong> separam as responsabilidades do código, com o ganho e o custo de cada um;</li>
+    <li>Localizar no projeto o <strong>domínio</strong>, a decisão de arquitetura em vigor e a responsabilidade de cada arquivo;</li>
+    <li>Escrever as decisões do projeto para um agente de IA: o <strong>AGENTS.md</strong>, as <strong>rules</strong>, uma <strong>skill</strong> de revisão de código, um <strong>ADR</strong> e uma <strong>spec</strong>;</li>
+    <li>Avaliar a análise que o agente faz do projeto: aceitar ou recusar cada achado com base na regra e no motivo dela.</li>
+  </ul>
+</section>
+
+<!-- ============ Ponto de partida ============ -->
+
+<section>
+  <h2>A rota summarize_book reúne quatro responsabilidades</h2>
+  <pre class="quebra"><code class="language-python" data-trim>
+    book = session.get(models.Book, book_id)
+    if book is None or not current_user.can_access(book):
+        raise HTTPException(status_code=404, detail="Book not found")
+    try:
+        book_summary = generate_book_summary(book)
+    except (httpx2.HTTPError, ValueError):
+        raise HTTPException(status_code=502, detail="The AI service failed to summarize the book")
+    if not book_summary.known_book:
+        raise HTTPException(status_code=422, detail="The AI model does not know this book")
+    book.ai_summary = book_summary.summary
+    session.commit()
+    session.refresh(book)
+    return book
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li>Em <code>routers/books.py</code>, a função responde em HTTP (404, 502, 422), aplica a regra de acesso, conduz a sequência gerar, decidir e gravar, e trata as falhas da biblioteca que chama o Gemini;</li>
+    <li>Nenhum arquivo do projeto registra se essa é a organização pretendida.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>As decisões do projeto estão escritas para pessoas</h2>
+  <table class="status-tab">
+    <tr><th>Arquivo</th><th>O que registra</th></tr>
+    <tr><td><code>README.md</code></td><td>como executar, os endpoints e as dependências</td></tr>
+    <tr><td><code>CONTEXT.md</code></td><td>o glossário do domínio, o assunto de que o sistema trata: User, Book, Reading Progress</td></tr>
+    <tr><td><code>docs/adr/</code></td><td>as decisões e o motivo de cada uma: convenções da API, <code>async def</code> ou <code>def</code>, ferramentas de teste</td></tr>
+  </table>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li>Nenhum deles declara em qual arquivo fica uma regra do domínio nem qual módulo pode importar qual;</li>
+    <li>Quem acrescenta uma rota, uma pessoa ou um agente de IA, repete o que encontra ou adota outra organização;</li>
+    <li>Nada obriga um agente de IA a ler esses arquivos: o que o pedido não cita, ele infere do código.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 1: engenharia de software ============ -->
+
+<section>
+  <h2>O termo "engenharia de software" nasceu de uma crise</h2>
+  <ul style="font-size:.6em">
+    <li>Outubro de 1968, Garmisch, Alemanha: uma conferência do Comitê de Ciência da OTAN reúne a academia e a indústria para discutir projetos de software atrasados, acima do orçamento e pouco confiáveis - a "crise do software";</li>
+    <li>O nome da conferência foi escolhido para provocar:</li>
+  </ul>
+  <p class="definicao" style="font-size:.66em">A expressão "engenharia de software" foi escolhida deliberadamente por ser provocativa, ao implicar a necessidade de a fabricação de software se basear nos tipos de fundamentos teóricos e de disciplinas práticas que são tradicionais nos ramos estabelecidos da engenharia.</p>
+  <p class="cite">NAUR, P.; RANDELL, B. (eds.) - Software Engineering: Report on a Conference Sponsored by the NATO Science Committee, 1969, tradução livre</p>
+</section>
+
+<section>
+  <h2>Uma abordagem sistemática, disciplinada e quantificável</h2>
+  <p class="definicao" style="font-size:.7em">Engenharia de software: a aplicação de uma abordagem sistemática, disciplinada e quantificável ao desenvolvimento, à operação e à manutenção de software; isto é, a aplicação da engenharia ao software.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li><strong>Sistemática</strong>: segue um método que pode ser repetido e ensinado;</li>
+    <li><strong>Disciplinada</strong>: a equipe cumpre as regras que ela mesma definiu;</li>
+    <li><strong>Quantificável</strong>: o resultado é medido - testes que passam, defeitos encontrados, tempo de resposta;</li>
+    <li><strong>Desenvolvimento, operação e manutenção</strong>: o objeto é a vida inteira do software, não só a escrita do código.</li>
+  </ul>
+  <p class="cite">IEEE Std 610.12-1990 - IEEE Standard Glossary of Software Engineering Terminology, tradução livre</p>
+</section>
+
+<section>
+  <h2>A arquitetura é uma das áreas da engenharia de software</h2>
+  <img src="img/engenharia-e-arquitetura.svg" alt="Um quadro com o título Engenharia de software reúne as áreas de conhecimento do guia SWEBOK, versão 4: requisitos, arquitetura, projeto, construção, testes, operações, manutenção, gerência de configuração, gerência de engenharia, processo, modelos e métodos, qualidade, segurança, prática profissional e economia. A área Arquitetura de software está destacada. Legenda: a engenharia trata de todo o ciclo de vida; a arquitetura, da estrutura do sistema." style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <h2>A parte mais difícil é decidir o que construir</h2>
+  <p class="definicao" style="font-size:.7em">A parte mais difícil de construir um sistema de software é decidir precisamente o que construir.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li>Frederick Brooks, <em>No Silver Bullet</em> (1986): o trabalho tem uma parte <strong>essencial</strong> - conceber a estrutura conceitual do software: os dados, as relações entre eles, os algoritmos - e uma parte <strong>acidental</strong> - representar essa estrutura numa linguagem de programação;</li>
+    <li>As linguagens de alto nível e os ambientes de desenvolvimento reduziram o trabalho acidental. O trabalho essencial continua com a equipe;</li>
+    <li>Entre as promessas que Brooks examinou no artigo estão a inteligência artificial e a "programação automática".</li>
+  </ul>
+  <p class="cite">BROOKS, F. P. - No Silver Bullet: Essence and Accidents of Software Engineering, IEEE Computer, 1987, tradução livre</p>
+</section>
+
+<section>
+  <h2>Domínio: o assunto a que o usuário aplica o programa</h2>
+  <p class="definicao" style="font-size:.7em">Domínio: uma esfera de conhecimento, influência ou atividade. A área de assunto à qual o usuário aplica um programa é o domínio do software.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li>Eric Evans, <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em> (2003) - a definição, em tradução livre;</li>
+    <li><strong>DDD</strong> (<em>domain-driven design</em>, projeto guiado pelo domínio): a abordagem em que a equipe concentra o esforço no domínio, constrói o modelo junto de quem conhece o assunto e usa uma só linguagem;</li>
+    <li>O domínio do Reading Tracker é o acompanhamento de leituras: leitores, livros, páginas lidas, resumos. FastAPI, MySQL e React não fazem parte dele;</li>
+    <li><strong>Modelo</strong> (<em>model</em>): um sistema de abstrações que descreve aspectos selecionados de um domínio. No código, as classes <code>User</code> e <code>Book</code>.</li>
+  </ul>
+  <p class="cite">EVANS, E. - Domain-Driven Design, Addison-Wesley, 2003 · EVANS, E. - Domain-Driven Design Reference, 2015</p>
+</section>
+
+<section>
+  <h2>O mesmo domínio, dito de duas formas</h2>
+  <table class="status-tab" style="font-size:.54em">
+    <tr><th>Termo técnico</th><th>Para quem não é da área</th><th>No Reading Tracker</th></tr>
+    <tr><td>domínio (<em>domain</em>)</td><td>o assunto de que o sistema trata</td><td>o acompanhamento de leituras</td></tr>
+    <tr><td>regra do domínio, ou regra de negócio (<em>business rule</em>)</td><td>o que o assunto exige, com computador ou sem</td><td>cada leitor vê só os próprios livros: <code>User.can_access</code></td></tr>
+    <tr><td>modelo do domínio (<em>domain model</em>)</td><td>a descrição do assunto dentro do sistema</td><td><code>User</code>, <code>Book</code> e <code>Book.progress</code>, em <code>models.py</code></td></tr>
+    <tr><td>especialista do domínio (<em>domain expert</em>)</td><td>quem conhece o assunto</td><td>um leitor, um bibliotecário</td></tr>
+  </table>
+  <ul style="font-size:.58em;margin-top:.8em">
+    <li>O critério para reconhecer uma regra do domínio: ela continua verdadeira se o sistema trocar de linguagem, de banco de dados ou de framework;</li>
+    <li>"Responder 404" não é regra do domínio: é HTTP. "O leitor não acessa o livro de outro leitor" é.</li>
+  </ul>
+  <p class="cite">EVANS, E. - Domain-Driven Design, 2003</p>
+</section>
+
+<section>
+  <h2>Linguagem ubíqua: um nome por conceito, em toda parte</h2>
+  <p class="definicao" style="font-size:.6em">Linguagem ubíqua: uma linguagem estruturada em torno do modelo do domínio e usada por todos os membros da equipe, dentro de um contexto delimitado, para conectar todas as atividades da equipe com o software.</p>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+**User**:
+Pessoa cadastrada no sistema, dona dos próprios livros. Um User comum só enxerga os Books que ele mesmo cadastrou.
+_Avoid_: conta, account, member
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li><em>Ubíqua</em>: presente em toda parte. Evans pede a mesma linguagem nos diagramas, na escrita, na fala e no código: <code>User</code> é o termo do glossário, a classe em <code>models.py</code> e a tabela <code>users</code>;</li>
+    <li>O <code>CONTEXT.md</code> é a linguagem ubíqua do projeto, por escrito. A linha <em>Avoid</em> lista os sinônimos recusados: dois nomes para um conceito viram dois conceitos no código;</li>
+    <li><strong>Contexto delimitado</strong> (<em>bounded context</em>): a fronteira dentro da qual um modelo vale. Aqui, o projeto inteiro.</li>
+  </ul>
+  <p class="cite">EVANS, E. - Domain-Driven Design Reference, 2015, tradução livre</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - engenharia de software</span></h2>
+  <ul style="font-size:.74em">
+    <li>O termo vem da conferência da OTAN de 1968, em resposta a projetos atrasados e pouco confiáveis;</li>
+    <li>É a aplicação de uma abordagem sistemática, disciplinada e quantificável ao desenvolvimento, à operação e à manutenção (IEEE 610.12);</li>
+    <li>A arquitetura é uma das áreas da engenharia (SWEBOK);</li>
+    <li>O essencial é decidir o que construir; escrever o código é a parte acidental (Brooks, 1986);</li>
+    <li>O domínio é o assunto a que o usuário aplica o programa, e a linguagem ubíqua dá um só nome a cada conceito dele (Evans, 2003).</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 2: arquitetura de software ============ -->
+
+<section>
+  <h2>Arquitetura: elementos, relações e princípios de evolução</h2>
+  <p class="definicao" style="font-size:.68em">Arquitetura: os conceitos ou propriedades fundamentais de um sistema em seu ambiente, incorporados em seus elementos, em suas relações e nos princípios de seu projeto e de sua evolução.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li><strong>Elementos</strong>: as partes - no projeto, <code>routers/</code>, <code>models.py</code>, <code>schemas.py</code>, o banco de dados e o frontend;</li>
+    <li><strong>Relações</strong>: qual parte aciona qual, e qual módulo importa qual;</li>
+    <li><strong>Princípios</strong>: as regras que cada mudança futura deve respeitar;</li>
+    <li>Bass, Clements e Kazman (2003): a estrutura ou as estruturas do sistema, que compreendem os elementos de software, as propriedades externamente visíveis desses elementos e as relações entre eles.</li>
+  </ul>
+  <p class="cite">ISO/IEC/IEEE 42010:2011 - Architecture description, tradução livre · BASS, L.; CLEMENTS, P.; KAZMAN, R. - Software Architecture in Practice, 2ª ed., 2003</p>
+</section>
+
+<section>
+  <h2>Arquitetura são as decisões difíceis de mudar</h2>
+  <ul style="font-size:.6em">
+    <li>Ralph Johnson, citado por Martin Fowler (2003): nos projetos bem-sucedidos, os desenvolvedores experientes compartilham um entendimento do projeto do sistema, e esse entendimento é a arquitetura - as decisões que se gostaria de acertar cedo;</li>
+    <li>Fowler conclui: arquitetura é o que as pessoas percebem como difícil de mudar.</li>
+  </ul>
+  <table class="status-tab" style="margin-top:.4em">
+    <tr><th>Decisão</th><th>O que a mudança altera</th></tr>
+    <tr><td>o texto de uma mensagem de erro</td><td>uma linha</td></tr>
+    <tr><td>o nome de um campo do Book</td><td>o model, o schema, o banco e o frontend</td></tr>
+    <tr><td>o arquivo em que ficam as regras do domínio</td><td>todas as rotas e todos os testes</td></tr>
+  </table>
+  <p style="font-size:.55em;margin-top:.8em">Quanto mais partes do sistema uma mudança alcança, mais arquitetural é a decisão.</p>
+  <p class="cite">FOWLER, M. - Who Needs an Architect?, IEEE Software, 2003</p>
+</section>
+
+<section>
+  <h2>Toda decisão de arquitetura é uma troca</h2>
+  <ul style="font-size:.62em">
+    <li>Mark Richards e Neal Ford (2020) enunciam duas leis da arquitetura de software: "tudo em arquitetura de software é uma troca" e "o porquê é mais importante que o como";</li>
+    <li><strong>Troca</strong> (<em>trade-off</em>): obter uma propriedade custa outra. Mais camadas isolam as regras do domínio e multiplicam os arquivos;</li>
+    <li>Uma organização adotada sem o porquê tem o custo certo e o benefício desconhecido.</li>
+  </ul>
+  <p class="cite">RICHARDS, M.; FORD, N. - Fundamentals of Software Architecture, O'Reilly, 2020, tradução livre</p>
+</section>
+
+<section>
+  <h2>Engenharia e arquitetura: focos diferentes</h2>
+  <table class="status-tab" style="font-size:.5em">
+    <tr><th></th><th>Engenharia de software</th><th>Arquitetura de software</th></tr>
+    <tr><td><strong>Pergunta</strong></td><td>Como construir, verificar, entregar e manter o software de forma sistemática?</td><td>Quais são as partes, o que cabe a cada uma e qual depende de qual?</td></tr>
+    <tr><td><strong>Abrange</strong></td><td>requisitos, arquitetura, construção, testes, operação, manutenção e gerência</td><td>a estrutura do sistema e as regras da evolução dela</td></tr>
+    <tr><td><strong>No projeto</strong></td><td><code>pytest</code>, git, <code>requirements.txt</code>, os ADRs e o README</td><td>a divisão em <code>routers/</code>, <code>models.py</code> e <code>schemas.py</code>; a direção das dependências</td></tr>
+    <tr><td><strong>Falha típica</strong></td><td>código sem teste, sem controle de versão, sem registro das decisões</td><td>regra do domínio repetida em vários arquivos; módulo que depende de todos os outros</td></tr>
+  </table>
+  <p style="font-size:.55em;margin-top:.8em">Decidir a estrutura é uma das atividades da engenharia; verificar, entregar e manter são as outras.</p>
+</section>
+
+<section>
+  <h2>Separar responsabilidades: cada módulo esconde uma decisão</h2>
+  <ul style="font-size:.58em">
+    <li><strong>Separação de responsabilidades</strong> (<em>separation of concerns</em>): estudar um aspecto do problema por vez, isolado dos demais (Dijkstra, 1974);</li>
+    <li><strong>Ocultação de informação</strong> (<em>information hiding</em>): cada módulo esconde uma decisão de projeto que pode mudar; os outros módulos conhecem só a interface dele (Parnas, 1972);</li>
+    <li>No projeto, <code>gemini.py</code> esconde como o Gemini é chamado: a URI, o modelo e o header da chave;</li>
+    <li>A rota, porém, importa <code>httpx2</code> para capturar <code>httpx2.HTTPError</code>: a decisão "qual cliente HTTP" saiu do módulo que deveria escondê-la.</li>
+  </ul>
+  <p class="cite">DIJKSTRA, E. W. - On the role of scientific thought (EWD 447), 1974 · PARNAS, D. - On the Criteria To Be Used in Decomposing Systems into Modules, CACM, 1972</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - arquitetura de software</span></h2>
+  <ul style="font-size:.78em">
+    <li>Arquitetura: os elementos, as relações e os princípios de evolução de um sistema (ISO/IEC/IEEE 42010);</li>
+    <li>São as decisões difíceis de mudar (Fowler, 2003), e cada uma é uma troca com um porquê (Richards e Ford, 2020);</li>
+    <li>O critério para dividir: cada módulo esconde uma decisão (Parnas, 1972);</li>
+    <li>A engenharia trata de todo o ciclo de vida; a arquitetura, da estrutura.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 3: dois padrões arquiteturais ============ -->
+
+<section>
+  <h2>Padrão: uma solução conhecida para um problema que se repete</h2>
+  <p class="definicao" style="font-size:.62em">Cada padrão descreve um problema que ocorre repetidas vezes em nosso ambiente e, em seguida, descreve o núcleo da solução para esse problema, de modo que se possa usar essa solução um milhão de vezes, sem nunca fazê-lo da mesma maneira duas vezes.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li>Christopher Alexander, arquiteto de edifícios, em <em>A Pattern Language</em> (1977) - em tradução livre. A engenharia de software adotou a ideia nos catálogos de Gamma e colegas (1994) e de Buschmann e colegas (1996);</li>
+    <li>Um <strong>padrão</strong> (<em>pattern</em>) tem quatro elementos: o nome, o problema, a solução e as consequências - o que a solução resolve e o que ela custa;</li>
+    <li>Um padrão não é código pronto, biblioteca nem framework: é uma forma de organização, que cada projeto escreve no próprio código. Um framework pode adotar um padrão: o Ruby on Rails adota o MVC.</li>
+  </ul>
+  <p class="cite">ALEXANDER, C. et al. - A Pattern Language, Oxford University Press, 1977 · GAMMA, E. et al. - Design Patterns, Addison-Wesley, 1994</p>
+</section>
+
+<section>
+  <h2>Padrão arquitetural: como dividir o sistema inteiro</h2>
+  <p style="font-size:.62em">Um <strong>padrão arquitetural</strong> é o padrão que organiza o sistema inteiro. Ele responde a três perguntas:</p>
+  <table class="status-tab" style="font-size:.56em">
+    <tr><th>Pergunta</th><th>O que o padrão entrega</th><th>No projeto</th></tr>
+    <tr><td>Em quais partes o sistema se divide?</td><td>os nomes das partes</td><td><code>routers/</code>, <code>models.py</code> e <code>schemas.py</code></td></tr>
+    <tr><td>O que cabe a cada parte?</td><td>a responsabilidade de cada uma</td><td><code>models.py</code> guarda as regras do domínio</td></tr>
+    <tr><td>Qual parte pode depender de qual?</td><td>as regras das relações</td><td><code>models.py</code> não importa <code>routers</code></td></tr>
+  </table>
+  <p class="definicao" style="font-size:.54em;margin-top:.8em">Um padrão arquitetural expressa um esquema fundamental de organização estrutural para sistemas de software. Ele fornece um conjunto de subsistemas predefinidos, especifica as responsabilidades deles e inclui regras e diretrizes para organizar as relações entre eles.</p>
+  <p class="cite">BUSCHMANN, F. et al. - Pattern-Oriented Software Architecture, Volume 1: A System of Patterns, Wiley, 1996, tradução livre</p>
+</section>
+
+<section>
+  <h2>MVC: as regras separadas da apresentação</h2>
+  <ul style="font-size:.62em">
+    <li><strong>O que é</strong>: um padrão arquitetural que divide em três papéis o código que atende o usuário - Model, View e Controller;</li>
+    <li><strong>A ideia principal</strong>: o que o sistema sabe e decide, as regras do domínio, fica separado de como isso é mostrado e de como o usuário o comanda;</li>
+    <li><strong>O efeito</strong>: a apresentação muda sem alterar as regras. A mesma regra de acesso a Books serve ao JSON da API, a uma tela e a um relatório;</li>
+    <li><strong>A regra das relações</strong>: a View e o Controller conhecem o Model; o Model não conhece nenhum dos dois.</li>
+  </ul>
+  <p class="cite">FOWLER, M. - Patterns of Enterprise Application Architecture, 2002 (padrão Model View Controller)</p>
+</section>
+
+<section>
+  <h2>Os três papéis do MVC</h2>
+  <p class="definicao" style="font-size:.66em">O propósito essencial do MVC é transpor a distância entre o modelo mental do usuário humano e o modelo digital que existe no computador.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li>Trygve Reenskaug, cientista visitante no Xerox PARC entre 1978 e 1979, no ambiente Smalltalk - em tradução livre;</li>
+    <li><strong>Model</strong> (modelo): representa o conhecimento - os dados e as regras do domínio;</li>
+    <li><strong>View</strong> (visão): uma representação do model para quem o consulta;</li>
+    <li><strong>Controller</strong> (controlador): a ligação entre o usuário e o sistema - recebe a entrada e aciona o model e a view.</li>
+  </ul>
+  <p class="cite">REENSKAUG, T. - Models-Views-Controllers, nota técnica, Xerox PARC, 1979 · FOWLER, M. - Patterns of Enterprise Application Architecture, 2002</p>
+</section>
+
+<section>
+  <h2>Na web, cada requisição passa pelo Controller</h2>
+  <img src="img/mvc.svg" alt="Fluxo do MVC numa aplicação web, em cinco passos. Um: o cliente envia a requisição HTTP ao Controller, que no projeto é a pasta routers. Dois: o Controller consulta ou altera o Model, que guarda os dados e as regras do domínio em models.py. Três: o Model envia SQL ao MySQL. Quatro: o Controller entrega os dados à View, a representação definida em schemas.py e devolvida como JSON. Cinco: a resposta volta ao cliente. Legenda: o Model não conhece o Controller nem a View; as regras do domínio não dependem de HTTP." style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <h2>O Reading Tracker segue a separação do MVC</h2>
+  <table class="status-tab">
+    <tr><th>Papel</th><th>Arquivo</th><th>Exemplo</th></tr>
+    <tr><td>Controller</td><td><code>routers/</code></td><td><code>read_book</code>: recebe o <code>book_id</code>, busca o Book e responde 200 ou 404</td></tr>
+    <tr><td>Model</td><td><code>models.py</code></td><td><code>User.can_access</code> e <code>Book.progress</code></td></tr>
+    <tr><td>View</td><td><code>schemas.py</code></td><td><code>BookRead</code>: o JSON que a API devolve</td></tr>
+  </table>
+  <ul style="font-size:.58em;margin-top:.8em">
+    <li>Numa API, a View é a representação em JSON. A tela fica com o React, que consome essa representação;</li>
+    <li>A decisão está registrada no ADR-0002: estrutura por tipo de arquivo.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>MVC: o ganho e o custo</h2>
+  <div class="duas-colunas">
+    <div>
+      <p class="os-label">Ganho</p>
+      <ul style="font-size:.56em">
+        <li>Poucos conceitos: três papéis;</li>
+        <li>Caminho curto da requisição ao banco de dados;</li>
+        <li>Frameworks web como Ruby on Rails, Laravel e Spring MVC já organizam o projeto nesses papéis.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="os-label">Custo</p>
+      <ul style="font-size:.56em">
+        <li>O Model conhece o banco: as classes de <code>models.py</code> herdam da <code>Base</code> do SQLAlchemy;</li>
+        <li>Testar a regra escrita numa rota exige HTTP e banco de dados;</li>
+        <li>O padrão não impede que uma regra do domínio seja escrita no Controller.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Ports and Adapters: as regras no centro, a tecnologia na borda</h2>
+  <ul style="font-size:.62em">
+    <li><strong>O que é</strong>: um padrão arquitetural que divide o sistema em duas regiões - a aplicação, no centro, e os adaptadores, em volta dela;</li>
+    <li><strong>A ideia principal</strong>: a aplicação contém as regras do domínio e não conhece nenhuma tecnologia. Ela conversa com o exterior por portas, e cada tecnologia se liga a uma porta por um adaptador;</li>
+    <li><strong>O efeito</strong>: a tecnologia muda sem alterar as regras, e as regras são testadas sem a tecnologia;</li>
+    <li><strong>A regra das relações</strong>: os adaptadores conhecem a aplicação; a aplicação não conhece os adaptadores.</li>
+  </ul>
+  <p class="cite">COCKBURN, A. - Hexagonal Architecture, alistair.cockburn.us, 2005</p>
+</section>
+
+<section>
+  <h2>A intenção do padrão, segundo Cockburn</h2>
+  <p class="definicao" style="font-size:.68em">Permitir que uma aplicação seja conduzida igualmente por usuários, programas, testes automatizados ou scripts em lote, e que seja desenvolvida e testada de forma isolada dos dispositivos e bancos de dados em que será executada.</p>
+  <ul style="font-size:.6em;margin-top:.6em">
+    <li>Alistair Cockburn, 2005, com o nome <em>Hexagonal Architecture</em> - a intenção do padrão, em tradução livre;</li>
+    <li>O problema de origem: a regra de negócio escrita dentro do código da interface com o usuário ou do acesso ao banco, que não pode ser testada sem eles.</li>
+  </ul>
+  <p class="cite">COCKBURN, A. - Hexagonal Architecture, alistair.cockburn.us, 2005</p>
+</section>
+
+<section>
+  <h2>Porta e adaptador</h2>
+  <ul style="font-size:.6em">
+    <li><strong>Porta</strong> (<em>port</em>): "uma porta identifica uma conversa com propósito" entre a aplicação e o exterior, descrita no vocabulário do domínio - "resumir um livro", "buscar um Book pelo id";</li>
+    <li><strong>Adaptador</strong> (<em>adapter</em>): para cada dispositivo externo, o código que converte a interface da porta nos sinais de que esse dispositivo precisa, e vice-versa - HTTP, SQL, a API do Gemini;</li>
+    <li>Adaptadores de <strong>entrada</strong> acionam a aplicação: a rota HTTP, um teste automatizado;</li>
+    <li>Adaptadores de <strong>saída</strong> são acionados por ela: o banco de dados, um serviço externo;</li>
+    <li>O hexágono não é um hexágono porque o número seis importa: a figura dá espaço para desenhar as portas e os adaptadores necessários.</li>
+  </ul>
+  <p class="cite">COCKBURN, A. - Hexagonal Architecture, 2005, tradução livre</p>
+</section>
+
+<section>
+  <h2>As dependências apontam para a aplicação</h2>
+  <img src="img/ports-and-adapters.svg" alt="Um hexágono central representa a aplicação: as regras do domínio e os casos de uso, com Book, User e can_access. À esquerda, dois adaptadores de entrada, que acionam a aplicação: a rota FastAPI e o teste automatizado, ligados a uma porta de entrada. À direita, dois adaptadores de saída, que a aplicação aciona: SQLAlchemy com MySQL e httpx2 com Gemini, ligados a portas de saída. Todas as setas de dependência de código apontam para o hexágono. Legenda: a aplicação define as portas e não importa FastAPI, SQLAlchemy nem httpx2." style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <h2>A regra de dependência</h2>
+  <p class="definicao" style="font-size:.72em">As dependências do código-fonte só podem apontar para dentro.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li>Robert C. Martin, <em>The Clean Architecture</em> (2012) - em tradução livre;</li>
+    <li><strong>Princípio da inversão de dependência</strong> (Martin, 1996): módulos de alto nível não dependem de módulos de baixo nível; os dois dependem de abstrações;</li>
+    <li>A aplicação declara a porta; o adaptador importa a aplicação para implementá-la, nunca o contrário;</li>
+    <li>A Onion Architecture (Jeffrey Palermo, 2008) e a Clean Architecture (Martin, 2012) aplicam a mesma regra, com outros nomes de camadas.</li>
+  </ul>
+  <p class="cite">MARTIN, R. C. - The Clean Architecture, 2012 · MARTIN, R. C. - The Dependency Inversion Principle, C++ Report, 1996 · PALERMO, J. - The Onion Architecture, 2008</p>
+</section>
+
+<section>
+  <h2>A mesma funcionalidade nas duas organizações</h2>
+  <img src="img/mesma-funcionalidade.svg" alt="Comparação dos arquivos que implementam o AI Summary em duas organizações. À esquerda, o MVC por tipo de arquivo, a organização atual do projeto, com quatro arquivos: routers/books.py, que concentra o HTTP, o acesso, a sequência do resumo e as falhas do Gemini; models.py; schemas.py; e gemini.py. À direita, uma organização ilustrativa em Ports and Adapters, com sete arquivos: domain/book.py, application/ports.py, application/summarize_book.py, adapters/http/books.py, adapters/db/books.py, adapters/ai/gemini.py e main.py, cada um com uma responsabilidade." style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <h2>Ports and Adapters: o ganho e o custo</h2>
+  <div class="duas-colunas">
+    <div>
+      <p class="os-label">Ganho</p>
+      <ul style="font-size:.56em">
+        <li>A regra é testada sem HTTP, sem banco e sem rede: um <strong>dublê de teste</strong> (<em>test double</em>), objeto que substitui um componente real no teste, ocupa o lugar de cada adaptador;</li>
+        <li>Trocar o Gemini por outro provedor altera um adaptador;</li>
+        <li>O domínio não importa nenhum framework.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="os-label">Custo</p>
+      <ul style="font-size:.56em">
+        <li>Mais arquivos e mais interfaces para o mesmo comportamento;</li>
+        <li>Cada funcionalidade nova atravessa a porta, o caso de uso e os adaptadores;</li>
+        <li>O adaptador do banco converte entre os objetos do domínio e as classes do ORM.</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:.55em;margin-top:.6em">Com uma só tecnologia por porta e poucas regras do domínio, o custo pode superar o ganho.</p>
+  <p class="cite">MESZAROS, G. - xUnit Test Patterns, 2007 (dublê de teste)</p>
+</section>
+
+<section>
+  <h2>Três perguntas sobre a arquitetura do próprio projeto</h2>
+  <ol style="font-size:.7em">
+    <li>Em qual arquivo fica uma regra do domínio nova, e por quê?</li>
+    <li>Qual módulo pode importar qual?</li>
+    <li>O que a equipe ganha e o que ela paga por essa organização?</li>
+  </ol>
+  <p style="font-size:.6em;margin-top:1em">Uma equipe que não responde às três perguntas tem as pastas de um padrão, sem a decisão que as justifica.</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - dois padrões arquiteturais</span></h2>
+  <ul style="font-size:.76em">
+    <li>Padrão: um nome, um problema, uma solução e as consequências (Alexander, 1977). O padrão arquitetural divide o sistema inteiro: partes, responsabilidades e relações (Buschmann et al., 1996);</li>
+    <li>MVC (Reenskaug, 1979): separa as regras da apresentação. O Model não conhece a View nem o Controller;</li>
+    <li>Ports and Adapters (Cockburn, 2005): separa as regras da tecnologia. A aplicação não conhece os adaptadores;</li>
+    <li>Nenhum dos dois é o correto em todo projeto: cada um é uma troca.</li>
+  </ul>
+</section>
+
+<!-- ============ Teoria 4: o agente de IA e as decisões da equipe ============ -->
+
+<section>
+  <h2>Um agente de codificação lê, edita e executa</h2>
+  <ul style="font-size:.6em">
+    <li><strong>Modelo de linguagem</strong>: modelo de aprendizado de máquina que prevê as próximas palavras de um texto (Jurafsky e Martin);</li>
+    <li><strong>Agente de codificação</strong> (<em>coding agent</em>): programa que usa um modelo de linguagem num ciclo - lê arquivos do repositório, propõe alterações, executa comandos e observa o resultado. Exemplos: OpenCode, Codex, Cursor, Claude Code e GitHub Copilot;</li>
+    <li>A geração sorteia cada trecho do texto segundo probabilidades: o mesmo pedido pode produzir organizações de código diferentes.</li>
+  </ul>
+  <p class="cite">JURAFSKY, D.; MARTIN, J. H. - Speech and Language Processing, 3ª ed.</p>
+</section>
+
+<section>
+  <h2>Duas perguntas à turma</h2>
+  <p class="pergunta">No projeto da sua equipe, em qual arquivo fica uma regra de negócio nova? Quem tomou essa decisão: a equipe ou o assistente de IA?</p>
+  <p class="pergunta" style="margin-top:.8em">O que um integrante novo, ou um agente de IA, precisa ler para alterar o projeto sem contrariar as decisões da equipe?</p>
+</section>
+
+<section>
+  <h2>O que o pedido não informa, o modelo infere</h2>
+  <ul style="font-size:.62em">
+    <li>Pedido: "adicione a busca de livros por autor". Ficam em aberto o arquivo da consulta ao banco, a regra de acesso, o nome da rota, o teste e a dependência nova;</li>
+    <li>O modelo preenche cada lacuna com a continuação mais provável, a partir do código vizinho e dos projetos em que foi treinado;</li>
+    <li>O resultado segue o que é mais frequente, não o que a equipe decidiu;</li>
+    <li>Se a equipe não decidiu nada, não há critério para dizer que o resultado está errado.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Com assistente de IA: código menos seguro, mais confiança</h2>
+  <ul style="font-size:.6em">
+    <li>Perry, Srivastava, Kumar e Boneh (Stanford, 2023) compararam participantes com e sem um assistente de IA em tarefas de programação ligadas à segurança;</li>
+    <li>Quem usou o assistente escreveu código significativamente menos seguro;</li>
+    <li>Quem usou o assistente teve mais tendência a acreditar que o próprio código era seguro;</li>
+    <li>Os participantes que confiaram menos na IA e trabalharam mais a formulação dos pedidos entregaram código com menos vulnerabilidades.</li>
+  </ul>
+  <p class="cite">PERRY, N.; SRIVASTAVA, M.; KUMAR, D.; BONEH, D. - Do Users Write More Insecure Code with AI Assistants?, ACM CCS, 2023</p>
+</section>
+
+<section>
+  <h2>Delegar a geração reduz a compreensão do código</h2>
+  <ul style="font-size:.6em">
+    <li>Shen e Tamkin (Anthropic, 2026): experimento aleatorizado com 52 desenvolvedores, a maioria em início de carreira, aprendendo uma biblioteca Python nova, com e sem assistente de IA;</li>
+    <li>O grupo com IA obteve nota 17% menor na prova de compreensão aplicada em seguida; o ganho de velocidade não foi estatisticamente significativo;</li>
+    <li>Os autores identificaram seis padrões de uso. Preservaram o aprendizado os que exigem esforço de compreensão: pedir explicações e fazer perguntas conceituais. Delegar a escrita do código ficou entre os de pior resultado;</li>
+    <li>A relação entre padrão de uso e nota é uma observação qualitativa: o estudo não a demonstra como causa.</li>
+  </ul>
+  <p class="cite">SHEN, J. H.; TAMKIN, A. - How AI Impacts Skill Formation, arXiv:2601.20245, 2026</p>
+</section>
+
+<section>
+  <h2>O arquivo de instruções serve ao que foge do padrão</h2>
+  <ul style="font-size:.6em">
+    <li>Gloaguen e colegas (ETH Zurich, 2026) mediram o efeito de arquivos de contexto como o <code>AGENTS.md</code> na taxa de sucesso de agentes de codificação;</li>
+    <li>Arquivos gerados por um modelo de linguagem tiveram efeito marginal negativo; arquivos escritos pelos desenvolvedores, ganho marginal. Nenhum dos dois foi estatisticamente significativo;</li>
+    <li>A conclusão dos autores: os arquivos de contexto são úteis para especificar práticas de codificação que fogem do padrão, e toda tentativa de melhorar o desempenho deve ser avaliada com rigor;</li>
+    <li>O que foge do padrão num projeto são as decisões da própria equipe: só ela pode escrevê-las.</li>
+  </ul>
+  <p class="cite">GLOAGUEN, T. et al. - Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?, arXiv:2602.11988, versão 3, 2026</p>
+</section>
+
+<section>
+  <h2>O programa é a teoria que a equipe tem dele</h2>
+  <p class="definicao" style="font-size:.66em">A morte de um programa acontece quando a equipe de programadores que possui a teoria dele é dissolvida.</p>
+  <ul style="font-size:.6em;margin-top:.6em">
+    <li>Peter Naur, <em>Programming as Theory Building</em> (1985), em tradução livre: programar é a atividade pela qual os programadores formam uma teoria do problema e da solução; o código é só a parte escrita dela;</li>
+    <li>Quem tem a teoria explica por que cada parte é como é e sabe modificar o programa sem desfazer a estrutura dele;</li>
+    <li>Uma equipe que aceita código sem construir essa teoria não sabe dizer se a próxima alteração respeita ou desfaz a organização do projeto;</li>
+    <li>O conhecimento de engenharia e de arquitetura é o que permite construir a teoria - e declará-la ao agente.</li>
+  </ul>
+  <p class="cite">NAUR, P. - Programming as Theory Building, Microprocessing and Microprogramming, 1985</p>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - o agente e as decisões da equipe</span></h2>
+  <ul style="font-size:.76em">
+    <li>O agente de codificação infere tudo o que o pedido não informa;</li>
+    <li>Com assistente de IA, o código saiu menos seguro e a confiança aumentou (Perry et al., 2023); a compreensão caiu (Shen e Tamkin, 2026);</li>
+    <li>O arquivo de instruções serve às práticas que fogem do padrão: as decisões da equipe (Gloaguen et al., 2026);</li>
+    <li>Quem não sabe o que pedir não tem critério para recusar o que recebe.</li>
+  </ul>
+</section>
+
+<!-- ============ Etapa 1: o pedido sem instruções ============ -->
+
+<section>
+  <p class="etapa">Etapa 1 · O pedido sem instruções</p>
+  <h2>Iniciar o agente na pasta do projeto</h2>
+  <div class="duas-colunas">
+    <div>
+      <p class="os-label">Mac (zsh)</p>
+      <pre><code class="language-bash" data-trim>
+cd projeto
+opencode
+      </code></pre>
+    </div>
+    <div>
+      <p class="os-label">Windows (PowerShell)</p>
+      <pre><code class="language-powershell" data-trim>
+cd projeto
+opencode
+      </code></pre>
+    </div>
+  </div>
+  <ul style="font-size:.58em">
+    <li><strong>OpenCode</strong>: um agente de codificação de código aberto, usado no terminal. O comando <code>opencode</code> o inicia na pasta atual;</li>
+    <li>Com outro agente, muda só o comando: <code>codex</code> no Codex, <code>claude</code> no Claude Code. No Cursor e no VS Code, abra a pasta <code>projeto</code> no editor;</li>
+    <li>O agente carrega os arquivos de instrução da pasta em que foi iniciado. Neste momento, a pasta <code>projeto</code> não tem nenhum.</li>
+  </ul>
+  <p class="cite">Documentação do OpenCode - opencode.ai/docs</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 1 · O pedido sem instruções</p>
+  <h2>Uma análise sem critério declarado</h2>
+  <pre class="quebra"><code class="language-plaintext" data-trim>
+Analise a arquitetura do backend deste projeto e aponte os problemas.
+Não altere nenhum arquivo.
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Copie a resposta para um arquivo fora do repositório: ela será comparada com a análise feita depois das regras;</li>
+    <li>Quais critérios o agente usou para chamar algo de problema? De onde eles vieram?</li>
+    <li>A resposta cita alguma decisão do projeto, como um ADR?</li>
+    <li>O agente propõe trocar a organização do projeto por outra? Com qual justificativa?</li>
+  </ul>
+</section>
+
+<!-- ============ Etapa 2: AGENTS.md ============ -->
+
+<section>
+  <p class="etapa">Etapa 2 · AGENTS.md</p>
+  <h2>AGENTS.md: um formato aberto de instruções para agentes</h2>
+  <p class="definicao" style="font-size:.7em">AGENTS.md é um formato simples e aberto para orientar agentes de codificação.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li>Publicado em agosto de 2025, a partir do trabalho conjunto de OpenAI Codex, Amp, Jules (Google), Cursor e Factory; desde dezembro de 2025 é mantido pela Agentic AI Foundation, da Linux Foundation;</li>
+    <li>É um arquivo Markdown comum, sem campos obrigatórios, na raiz do repositório;</li>
+    <li>Com mais de um <code>AGENTS.md</code> no repositório, vale o mais próximo do arquivo editado;</li>
+    <li>O README é escrito para pessoas; o <code>AGENTS.md</code>, para o agente. A documentação do OpenCode indica o conteúdo: comandos de build, notas de arquitetura, convenções de código e requisitos de verificação.</li>
+  </ul>
+  <p class="cite">agents.md, tradução livre · Documentação do OpenCode - Instructions · OPENAI - OpenAI co-founds the Agentic AI Foundation, 2025</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · AGENTS.md</p>
+  <h2>Cada ferramenta lê os próprios arquivos</h2>
+  <table class="status-tab" style="font-size:.46em">
+    <tr><th>Ferramenta</th><th>Instruções do projeto</th><th>Outros arquivos de regras</th><th>Skills</th></tr>
+    <tr><td>OpenCode</td><td><code>AGENTS.md</code></td><td>o campo <code>instructions</code> do <code>opencode.json</code></td><td><code>.opencode/skills/</code>, <code>.agents/skills/</code>, <code>.claude/skills/</code></td></tr>
+    <tr><td>Codex</td><td><code>AGENTS.md</code></td><td><code>AGENTS.md</code> em subpastas</td><td><code>.agents/skills/</code></td></tr>
+    <tr><td>Cursor</td><td><code>AGENTS.md</code></td><td><code>.cursor/rules/*.mdc</code></td><td><code>.cursor/skills/</code>, <code>.agents/skills/</code>, <code>.claude/skills/</code></td></tr>
+    <tr><td>GitHub Copilot</td><td><code>AGENTS.md</code>, <code>.github/copilot-instructions.md</code></td><td><code>.github/instructions/*.instructions.md</code></td><td><code>.github/skills/</code>, <code>.agents/skills/</code>, <code>.claude/skills/</code></td></tr>
+    <tr><td>Gemini CLI</td><td><code>GEMINI.md</code>; o <code>AGENTS.md</code>, por configuração</td><td>-</td><td><code>.gemini/skills/</code>, <code>.agents/skills/</code></td></tr>
+    <tr><td>Claude Code</td><td><code>CLAUDE.md</code>; o <code>AGENTS.md</code>, se não houver <code>CLAUDE.md</code></td><td><code>.claude/rules/*.md</code></td><td><code>.claude/skills/</code></td></tr>
+  </table>
+  <p style="font-size:.55em;margin-top:.8em">O projeto usa o que a maioria lê: o <code>AGENTS.md</code>, regras em Markdown comum e skills em <code>.agents/skills/</code>.</p>
+  <p class="cite">Documentação oficial de cada ferramenta, consultada em novembro de 2026: opencode.ai/docs · agents.md · cursor.com/docs · docs.github.com/copilot · geminicli.com/docs · code.claude.com/docs</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · AGENTS.md</p>
+  <h2>O que o agente não descobre lendo o código?</h2>
+  <p class="pergunta">Um agente lê todos os arquivos do repositório em segundos. O que ele continua sem saber sobre o projeto?</p>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li class="fragment">Os comandos que executam e que testam o sistema, e o que precisa estar no ar;</li>
+    <li class="fragment">Onde estão registradas as decisões e os motivos;</li>
+    <li class="fragment">A arquitetura pretendida, que pode diferir da que o código tem hoje;</li>
+    <li class="fragment">As convenções e os limites: o que ele não pode fazer sem perguntar.</li>
+  </ul>
+  <p class="cite">Documentação do OpenCode - Instructions (opencode.ai/docs/instructions)</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · AGENTS.md</p>
+  <h2>O projeto e os comandos</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+# Reading Tracker
+
+Rastreador de leituras: um User cadastra Books e acompanha o Reading Progress.
+Backend em FastAPI, SQLAlchemy e MySQL. Frontend em React, Vite e Tailwind.
+
+## Comandos
+
+- Backend, em `backend/` com a venv ativa: `uvicorn main:app --reload`
+- Testes do backend, em `backend/` e com o MySQL no ar: `pytest`
+- Frontend, em `frontend/`: `npm run dev`
+- Testes do frontend, em `frontend/`: `npm test -- --run`
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>Arquivo novo: <code>projeto/AGENTS.md</code>;</li>
+    <li>Com o comando de teste escrito, o agente verifica o próprio trabalho antes de encerrar a tarefa;</li>
+    <li>"Com o MySQL no ar" é um fato que o código não mostra: importar o <code>main.py</code> executa o <code>create_all</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · AGENTS.md</p>
+  <h2>Onde estão as decisões</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## Onde estão as decisões
+
+- `CONTEXT.md`: o glossário do domínio. Use os termos exatamente como estão lá.
+- `docs/adr/`: as decisões do projeto e o motivo de cada uma. Leia o ADR antes de alterar o que ele decide.
+- `README.md`: como executar, os endpoints e as dependências. Atualize-o quando um deles mudar.
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>O <code>AGENTS.md</code> aponta para as decisões, sem copiá-las: um texto copiado fica desatualizado;</li>
+    <li>Cada linha diz o que o arquivo contém e quando o agente deve lê-lo ou atualizá-lo.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · AGENTS.md</p>
+  <h2>A arquitetura, declarada</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## Arquitetura do backend
+
+O backend segue a separação do MVC, com um tipo de arquivo para cada responsabilidade:
+
+- `routers/` é o Controller: recebe a requisição, aciona o model e devolve o status e o schema de saída.
+- `models.py` é o Model: as tabelas e as regras do domínio, como `User.can_access` e `Book.progress`.
+- `schemas.py` define a representação: o formato de entrada e de saída da API.
+- A integração com um serviço externo fica num módulo próprio, como `gemini.py`.
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>A resposta à primeira das três perguntas: uma regra do domínio nova é um método do model;</li>
+    <li>Escrever esta seção exige conhecer o padrão: o nome MVC, os papéis e o que cabe a cada um.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 2 · AGENTS.md</p>
+  <h2>Convenções e limites</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## Convenções
+
+- Código em inglês. Comentário em pt-BR imediatamente acima de cada bloco.
+- Toda mudança de comportamento tem um teste, e o `pytest` passa antes de a tarefa terminar.
+- Segredos ficam em variáveis de ambiente, nunca no código.
+
+## Limites
+
+- Não instale dependência nova sem perguntar.
+- Não altere `CONTEXT.md` nem `docs/adr/` sem pedido explícito.
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>Convenção: o que todo código do projeto segue. Limite: o que o agente não faz por iniciativa própria;</li>
+    <li>O arquivo inteiro tem 37 linhas. Ele entra no contexto em toda sessão: um arquivo longo deixa menos espaço para o código, e as instruções passam a ser menos seguidas. O Codex limita o total a 32 KiB; a documentação do Claude Code recomenda menos de 200 linhas por arquivo.</li>
+  </ul>
+  <p class="cite">Documentação do Codex - AGENTS.md · Documentação do Claude Code - Memory</p>
+</section>
+
+<!-- ============ Etapa 3: rules ============ -->
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>Rule: uma restrição curta, por assunto</h2>
+  <ul style="font-size:.6em">
+    <li><strong>Rule</strong> (regra): um arquivo Markdown com as restrições de um assunto - a arquitetura, as rotas, os testes. Fica fora do <code>AGENTS.md</code> para que ele continue curto;</li>
+    <li>Não existe uma pasta de rules comum a todas as ferramentas. Cada uma tem a sua: <code>.cursor/rules/</code> no Cursor, <code>.github/instructions/</code> no GitHub Copilot, <code>.claude/rules/</code> no Claude Code;</li>
+    <li>A forma que serve a todas: arquivos Markdown comuns no repositório, e o <code>AGENTS.md</code> diz quando ler cada um;</li>
+    <li>A documentação do OpenCode descreve esse uso: o <code>AGENTS.md</code> continua conciso e aponta para as diretrizes detalhadas, que o agente carrega só quando a tarefa precisa delas.</li>
+  </ul>
+  <p class="cite">Documentação do OpenCode - Rules (Referencing External Files) · cursor.com/docs/rules · docs.github.com/copilot · code.claude.com/docs</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>As pastas das rules e da skill</h2>
+  <div class="duas-colunas">
+    <div>
+      <p class="os-label">Mac (zsh)</p>
+      <pre class="quebra"><code class="language-bash" data-trim>
+mkdir -p docs/rules .agents/skills/revisao-de-codigo
+      </code></pre>
+    </div>
+    <div>
+      <p class="os-label">Windows (PowerShell)</p>
+      <pre class="quebra"><code class="language-powershell" data-trim>
+mkdir docs\rules, .agents\skills\revisao-de-codigo
+      </code></pre>
+    </div>
+  </div>
+  <ul style="font-size:.58em">
+    <li>Dentro de <code>projeto/</code>. As rules ficam em <code>docs/rules/</code>, ao lado dos ADRs; a skill, em <code>.agents/skills/</code>, a pasta de skills que a maioria das ferramentas lê;</li>
+    <li>A pasta <code>.agents</code> começa com ponto: no Mac, o Finder a oculta; no terminal, <code>ls -a</code> a mostra;</li>
+    <li>As duas pastas entram no git: as regras valem para toda a equipe, não para uma máquina.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>Quais decisões um agente violaria sem saber?</h2>
+  <p class="pergunta">Pedimos uma rota nova. O que, no código gerado, a equipe recusaria na revisão - mesmo com a rota funcionando?</p>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li class="fragment">Uma regra do domínio escrita dentro da rota;</li>
+    <li class="fragment">A mesma regra escrita em dois arquivos;</li>
+    <li class="fragment">Um módulo que importa o que não deveria conhecer;</li>
+    <li class="fragment">Uma rota fora das convenções de URI, de status e de autenticação.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>A rule de arquitetura</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+# Arquitetura do backend
+
+- Uma rota trata de HTTP: lê a requisição, aciona o model e devolve o status e o schema de saída.
+- Regra do domínio é método do model. Uma rota não decide quem acessa um Book nem quando um AI Summary é gravado.
+- Cada regra do domínio existe em um só lugar. O acesso a Books é `User.can_access`.
+- As dependências apontam para o model: `routers/` conhece `models` e `schemas`; `models.py` não importa `fastapi`, `schemas` nem `routers`.
+- Só o módulo de uma integração conhece a biblioteca que ela usa. Uma rota não importa `httpx2`.
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li>Arquivo novo: <code>docs/rules/architecture.md</code>;</li>
+    <li>As duas primeiras linhas são a separação de responsabilidades do MVC; a quarta, a direção das dependências; a quinta, a ocultação de informação de Parnas.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>A rule das rotas</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+# Rotas da API
+
+- URI por recurso, no plural, sob `/api`: `/api/books/{book_id}`. As rotas de autenticação `/signup` e `/login` são a exceção.
+- Toda rota com corpo de resposta declara `response_model`; o `status_code` é declarado quando não for 200.
+- Toda rota sob `/api` exige `get_current_user`. Recurso inexistente e recurso sem acesso respondem o mesmo 404.
+- `def` quando a rota usa a sessão do banco ou outra chamada bloqueante; `async def` quando não há chamada bloqueante (ADR-0003).
+- O corpo da requisição é um schema Pydantic, nunca um dicionário.
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li>Arquivo novo: <code>docs/rules/api.md</code>;</li>
+    <li>Cada linha resume uma decisão já registrada no ADR-0002 ou no ADR-0003; a exceção também é escrita.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>O AGENTS.md diz quando ler cada rule</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## Regras
+
+Leia a regra antes de alterar os arquivos que ela cobre:
+
+- `docs/rules/architecture.md`: a arquitetura do backend. Vale para todo arquivo de `backend/`.
+- `docs/rules/api.md`: as rotas da API. Vale para os arquivos de `backend/routers/`.
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Seção nova no <code>AGENTS.md</code>, depois da seção de arquitetura;</li>
+    <li>Cada linha liga uma rule aos arquivos que ela cobre: o agente lê a regra das rotas quando a tarefa alcança as rotas;</li>
+    <li>Vale para todo agente que lê o <code>AGENTS.md</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>No OpenCode, as rules entram em toda sessão</h2>
+  <pre><code class="language-json" data-trim>
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["docs/rules/*.md"]
+}
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Arquivo novo: <code>projeto/opencode.json</code>, a configuração do OpenCode para o projeto;</li>
+    <li><code>instructions</code>: arquivos, padrões com <code>*</code> ou URLs que o OpenCode carrega junto do <code>AGENTS.md</code>, em toda sessão;</li>
+    <li>É o único arquivo do projeto que pertence a uma ferramenta. As regras continuam em Markdown comum: os outros agentes chegam a elas pelo <code>AGENTS.md</code>.</li>
+  </ul>
+  <p class="cite">Documentação do OpenCode - Instructions e Config (opencode.ai/docs)</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 3 · Rules</p>
+  <h2>Uma regra útil pode ser verificada</h2>
+  <table class="status-tab">
+    <tr><th>Regra</th><th>Como se verifica</th></tr>
+    <tr><td>"Siga as boas práticas"</td><td>não se verifica: cada leitor entende uma coisa</td></tr>
+    <tr><td>"Escreva código limpo"</td><td>não se verifica</td></tr>
+    <tr><td>"Uma rota não importa <code>httpx2</code>"</td><td>uma busca no arquivo aponta a linha</td></tr>
+    <tr><td>"Toda rota sob <code>/api</code> exige <code>get_current_user</code>"</td><td>confere-se rota por rota</td></tr>
+  </table>
+  <ul style="font-size:.58em;margin-top:.8em">
+    <li>A documentação do Claude Code, da Anthropic, registra o efeito: quanto mais específicas e concisas as instruções, mais consistentemente o modelo as segue;</li>
+    <li>Só escreve uma regra específica quem conhece a decisão e o motivo dela.</li>
+  </ul>
+  <p class="cite">Documentação do Claude Code - Memory, tradução livre</p>
+</section>
+
+<!-- ============ Etapa 4: skill ============ -->
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>Revisão de código: o exame por quem não escreveu</h2>
+  <ul style="font-size:.6em">
+    <li><strong>Revisão de código</strong> (<em>code review</em>): o exame de uma mudança por alguém que não a escreveu, antes de ela entrar no código principal;</li>
+    <li>Michael Fagan (IBM, 1976) formalizou a inspeção de código: papéis definidos e uma lista de verificação;</li>
+    <li>Bacchelli e Bird (2013) estudaram a revisão na Microsoft: o motivo declarado é encontrar defeitos, e os resultados mais frequentes são a transferência de conhecimento e as soluções alternativas;</li>
+    <li>A lista de verificação da equipe pode ser escrita uma vez e executada pelo agente sempre na mesma ordem.</li>
+  </ul>
+  <p class="cite">FAGAN, M. E. - Design and code inspections to reduce errors in program development, IBM Systems Journal, 1976 · BACCHELLI, A.; BIRD, C. - Expectations, Outcomes, and Challenges of Modern Code Review, ICSE, 2013</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>Agent Skill: um procedimento carregado sob demanda</h2>
+  <ul style="font-size:.6em">
+    <li><strong>Skill</strong>: uma pasta com um arquivo <code>SKILL.md</code> que ensina ao agente um procedimento - os passos, a ordem e o formato do resultado;</li>
+    <li>Lançada pela Anthropic em outubro de 2025 e publicada como padrão aberto em dezembro de 2025 (agentskills.io); desde outubro de 2026 é um projeto da Agentic AI Foundation;</li>
+    <li>O arquivo começa com o <em>frontmatter</em>, um bloco de metadados em YAML entre linhas <code>---</code>. O padrão exige dois campos: <code>name</code> e <code>description</code>;</li>
+    <li>O agente mantém no contexto só o nome e a descrição; o corpo é carregado quando a tarefa pede;</li>
+    <li>O padrão não fixa a pasta. <code>.agents/skills/</code> é a convenção adotada entre ferramentas: OpenCode, Codex, Cursor, GitHub Copilot e Gemini CLI a leem.</li>
+  </ul>
+  <p class="cite">Agent Skills - agentskills.io/specification · Documentação do OpenCode - Skills · LINUX FOUNDATION - Agentic AI Foundation, 2026</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>Três artefatos, três momentos de carga</h2>
+  <img src="img/contexto-do-agente.svg" alt="Três arquivos do repositório e o momento em que cada um entra no contexto do modelo, que é o texto lido a cada pedido. O AGENTS.md, com o projeto, os comandos e onde estão as decisões, entra em toda sessão. As rules em docs/rules, com as restrições de cada parte do código, entram quando o AGENTS.md manda ler, ou sempre, por configuração. A skill revisao-de-codigo, em .agents/skills, um procedimento de vários passos, tem a descrição carregada em toda sessão e o corpo carregado quando a tarefa pede. Legenda: o contexto é limitado; o que entra em toda sessão precisa ser curto e específico." style="width:100%;max-width:760px">
+</section>
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>O que um revisor confere antes de aprovar?</h2>
+  <p class="pergunta">A mudança funciona e os testes passam. O que mais um revisor experiente examina antes de aprovar?</p>
+  <ul style="font-size:.6em;margin-top:.8em">
+    <li class="fragment"><strong>Arquitetura</strong>: cada responsabilidade está no lugar que a equipe decidiu?</li>
+    <li class="fragment"><strong>Correção</strong>: quais entradas quebram o código?</li>
+    <li class="fragment"><strong>Segurança</strong>: quem pode chamar, e o que essa pessoa alcança?</li>
+    <li class="fragment"><strong>Testes</strong>: o caminho de sucesso e os caminhos de erro estão cobertos?</li>
+    <li class="fragment"><strong>Clareza</strong>: os nomes dizem o que o código faz?</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>O frontmatter: o nome e quando usar</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+---
+name: revisao-de-codigo
+description: Revisa o código do Reading Tracker contra as decisões do projeto. Use quando pedirem revisão de código (code review), antes de um commit ou de um pull request.
+---
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Arquivo novo: <code>.agents/skills/revisao-de-codigo/SKILL.md</code>;</li>
+    <li><code>name</code>: até 64 caracteres, só letras minúsculas, números e hífens, igual ao nome da pasta. É por esse nome que o agente carrega a skill;</li>
+    <li><code>description</code>: até 1.024 caracteres. É o único trecho que o agente lê antes de decidir se usa a skill: diga o que ela faz e quando usá-la;</li>
+    <li>O nome em português evita a colisão com os comandos de revisão que as ferramentas já trazem.</li>
+  </ul>
+  <p class="cite">Agent Skills - agentskills.io/specification</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>O que ler antes de revisar</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+# Revisão de código
+
+Aponte o que diverge das decisões do projeto, com evidência.
+A revisão só relata: não altere arquivos.
+
+## Antes de revisar
+
+1. Leia `AGENTS.md`, `CONTEXT.md`, as rules em `docs/rules/` e os ADRs em `docs/adr/`.
+2. Se o pedido indica arquivos, revise esses arquivos.
+3. Sem indicação, revise as mudanças pendentes: `git status` e `git diff`.
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>A revisão compara o código com as decisões do projeto: por isso o primeiro passo é lê-las;</li>
+    <li>"Só relata" separa a revisão da correção: a equipe decide o que fazer com cada achado.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>A lista de verificação, em ordem</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## O que conferir, nesta ordem
+
+1. **Arquitetura**: cada responsabilidade está no arquivo que a rule de arquitetura define? As dependências apontam na direção permitida?
+2. **Correção**: o código faz o que promete? Quais entradas o quebram?
+3. **Segurança**: toda rota sob `/api` exige autenticação e aplica a regra de acesso? Há segredo no código?
+4. **Testes**: o caminho de sucesso e cada caminho de erro têm teste?
+5. **Clareza**: os nomes revelam a intenção? Os termos do domínio seguem o `CONTEXT.md`?
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>A arquitetura vem primeiro: um erro de estrutura invalida o detalhe que vem depois;</li>
+    <li>Cada item é uma pergunta com resposta verificável no código.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 4 · Skill</p>
+  <h2>O formato do relato</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## Como relatar
+
+Para cada achado, informe o arquivo e a linha, a regra ou o ADR violado, a consequência e a correção sugerida.
+
+Classifique cada achado:
+
+- **bloqueia**: viola uma regra ou um ADR, ou quebra um comportamento;
+- **melhoria**: não viola regra, mas reduz risco ou esforço;
+- **dúvida**: depende de uma decisão que o projeto ainda não registrou.
+
+Sem achados numa etapa, escreva o que foi conferido nela.
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>Arquivo, linha e regra tornam cada achado conferível: a equipe abre o arquivo e confirma ou recusa;</li>
+    <li>A classe <strong>dúvida</strong> expõe as decisões que a equipe ainda não tomou.</li>
+  </ul>
+</section>
+
+<!-- ============ Etapa 5: ADRs e specs ============ -->
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>ADR: o registro de uma decisão de arquitetura</h2>
+  <p class="definicao" style="font-size:.64em">Manteremos uma coleção de registros das decisões "arquiteturalmente significativas": as que afetam a estrutura, as características não funcionais, as dependências, as interfaces ou as técnicas de construção.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li>Michael Nygard, <em>Documenting Architecture Decisions</em> (2011) - em tradução livre;</li>
+    <li><strong>ADR</strong> (<em>architecture decision record</em>, registro de decisão de arquitetura): um arquivo de texto curto por decisão, guardado no repositório do projeto;</li>
+    <li>As partes: título, contexto, decisão, status e consequências;</li>
+    <li>Uma decisão revertida não é apagada: o registro antigo permanece, marcado como substituído.</li>
+  </ul>
+  <p class="cite">NYGARD, M. - Documenting Architecture Decisions, cognitect.com, 2011</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>O código mostra o que foi feito; o ADR, o porquê</h2>
+  <table class="status-tab" style="font-size:.52em">
+    <tr><th>ADR do projeto</th><th>A decisão</th><th>O que o código não mostra</th></tr>
+    <tr><td><code>0003</code></td><td><code>async def</code> onde há motivo, <code>def</code> no resto</td><td>a alternativa rejeitada: tornar tudo <code>async def</code>; revisa uma decisão do ADR-0002</td></tr>
+    <tr><td><code>0005</code></td><td>AI Summary pelo Gemini, chamado com o <code>httpx2</code></td><td>o SDK do Google foi rejeitado: esconde a requisição HTTP e acrescenta dependências</td></tr>
+    <tr><td><code>0001</code></td><td>rotas sem autenticação</td><td>status revogado: a decisão não vale mais, e o registro permanece</td></tr>
+  </table>
+  <ul style="font-size:.58em;margin-top:.8em">
+    <li>Um agente que lê só o código não sabe que o SDK foi rejeitado, e pode propor a instalação dele;</li>
+    <li>A rule diz o que fazer, em uma linha; o ADR guarda o motivo e as alternativas.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>A decisão de arquitetura ganha um ADR</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+# Regras do domínio no model, rotas só com HTTP
+
+O ADR-0002 definiu a estrutura por tipo de arquivo, sem dizer em qual arquivo fica uma regra do domínio.
+Sem essa decisão, cada rota nova escolhe um lugar: a regra de acesso a Books já aparece em `models.py` e em `routers/books.py`.
+
+## A decisão
+
+- O backend segue a separação do MVC: `routers/` é o Controller, `models.py` é o Model e `schemas.py` define a representação.
+- Regra do domínio é método do model. A rota lê a requisição, aciona o model e devolve o status e o schema de saída.
+- As restrições que decorrem desta decisão ficam em `docs/rules/architecture.md`.
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li>Arquivo novo: <code>docs/adr/0006-regras-do-dominio-no-model.md</code>. O título é a decisão; o primeiro parágrafo, o contexto;</li>
+    <li>A rule de arquitetura já existe: o ADR registra de onde ela vem.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>As consequências e as alternativas rejeitadas</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## Consequências
+
+- Uma regra do domínio é testada no model, sem HTTP.
+- O model continua ligado ao SQLAlchemy: testar uma regra que consulta o banco exige um banco.
+- O código atual diverge em três pontos de `routers/books.py`, registrados como problema em aberto.
+
+## Alternativas rejeitadas
+
+- **Ports and Adapters.** Isola as regras do domínio de FastAPI, SQLAlchemy e httpx2, e permite testá-las com dublês. O AI Summary passaria de quatro para sete arquivos. O projeto tem uma tecnologia por porta e poucas regras: hoje o custo supera o ganho. A decisão muda se surgir um segundo provedor de IA ou uma segunda forma de entrada.
+- **Deixar sem registro.** Cada pessoa e cada agente de IA inferem uma organização diferente a partir do código.
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li>As consequências listam o ganho e o custo: a decisão é uma troca;</li>
+    <li>A alternativa rejeitada traz a condição em que a decisão muda. Nesse dia, um ADR novo substitui este.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>Spec: o que construir, de forma verificável</h2>
+  <p class="definicao" style="font-size:.62em">Especificação: um documento que especifica, de maneira completa, precisa e verificável, os requisitos, o projeto, o comportamento ou outras características de um sistema ou componente e, com frequência, os procedimentos para determinar se essas condições foram satisfeitas.</p>
+  <ul style="font-size:.58em;margin-top:.6em">
+    <li><strong>Spec</strong> (<em>specification</em>, especificação): a resposta escrita à dificuldade apontada por Brooks - decidir precisamente o que construir;</li>
+    <li>Entre as qualidades que a IEEE 830 (1998) exige de uma especificação de requisitos: não ambígua, completa, consistente e verificável;</li>
+    <li>Com agentes de IA, a prática recebeu o nome de <em>spec-driven development</em> (desenvolvimento guiado por especificação): a spec é escrita antes do código, e o agente implementa a partir dela.</li>
+  </ul>
+  <p class="cite">IEEE Std 610.12-1990, tradução livre · IEEE Std 830-1998 · GITHUB - Spec-driven development with AI, github.blog, 2025</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>Critério de aceitação: dado, quando, então</h2>
+  <pre><code class="language-plaintext" data-trim>
+Dado um contexto inicial,
+quando um evento ocorre,
+então certos resultados são garantidos.
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li><strong>Critério de aceitação</strong>: uma condição verificável que a funcionalidade precisa cumprir para ser aceita;</li>
+    <li>O formato <em>Given, When, Then</em> foi publicado por Dan North em <em>Introducing BDD</em> (2006), com a exigência de que os critérios de aceitação sejam executáveis;</li>
+    <li>Cada critério corresponde a um teste automatizado: o "dado" prepara, o "quando" executa, o "então" verifica.</li>
+  </ul>
+  <p class="cite">NORTH, D. - Introducing BDD, Better Software, 2006, tradução livre</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>A spec do AI Summary: o objetivo e as regras</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+# Spec: AI Summary
+
+## Objetivo
+
+O User pede um resumo curto de um Book, sem revelar o final, gerado por um modelo de linguagem.
+
+## Regras
+
+- O resumo fica gravado no Book. Cada novo pedido substitui o anterior.
+- Se o modelo declara não conhecer o livro, nenhum resumo é gravado.
+- Só quem pode acessar o Book pede o resumo dele.
+  </code></pre>
+  <ul style="font-size:.56em">
+    <li>Arquivo novo: <code>docs/specs/ai-summary.md</code>;</li>
+    <li>A spec usa os termos do glossário - User, Book - e não cita arquivo, biblioteca nem framework: ela descreve o comportamento, não a implementação.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>A spec do AI Summary: os critérios de aceitação</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+## Critérios de aceitação
+
+- Dado um Book que o User pode acessar, quando ele pede o resumo, então a API responde 200 e o Book traz o `ai_summary` gerado.
+- Dado um Book que o modelo declara não conhecer, quando o User pede o resumo, então a API responde 422 e o `ai_summary` não muda.
+- Dado um Book inexistente ou que o User não pode acessar, quando ele pede o resumo, então a API responde 404.
+- Dada uma falha do serviço de IA, quando o User pede o resumo, então a API responde 502 e o `ai_summary` não muda.
+
+## Fora do escopo
+
+- Histórico dos resumos anteriores.
+- Edição do resumo pelo User.
+  </code></pre>
+  <ul style="font-size:.54em">
+    <li>Quatro critérios, quatro testes possíveis. "Fora do escopo" impede que o agente acrescente o que ninguém pediu.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>O AGENTS.md passa a apontar para as specs</h2>
+  <pre class="quebra"><code class="language-markdown" data-trim>
+- `docs/specs/`: o comportamento esperado de cada funcionalidade e os critérios de aceitação. Leia a spec antes de alterar a funcionalidade.
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Uma linha nova na seção "Onde estão as decisões" do <code>AGENTS.md</code>, abaixo da linha do <code>docs/adr/</code>;</li>
+    <li>O <code>AGENTS.md</code> é o índice: cada documento novo do projeto entra nele com uma linha.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 5 · ADRs e specs</p>
+  <h2>Cada documento responde a uma pergunta</h2>
+  <table class="status-tab" style="font-size:.58em">
+    <tr><th>Documento</th><th>Pergunta</th><th>No projeto</th></tr>
+    <tr><td>Spec</td><td>O que o sistema deve fazer?</td><td><code>docs/specs/ai-summary.md</code></td></tr>
+    <tr><td>ADR</td><td>Por que esta decisão, e não outra?</td><td><code>docs/adr/0006-...</code></td></tr>
+    <tr><td>Rule</td><td>O que vale em todo código desta parte?</td><td><code>docs/rules/architecture.md</code></td></tr>
+    <tr><td>Skill</td><td>Como executar este procedimento?</td><td><code>.agents/skills/revisao-de-codigo/</code></td></tr>
+    <tr><td><code>AGENTS.md</code></td><td>Onde está cada um deles?</td><td><code>AGENTS.md</code></td></tr>
+  </table>
+  <p style="font-size:.58em;margin-top:.8em">A spec é assunto da engenharia de requisitos; o ADR, da arquitetura. Os dois existiam antes dos agentes de IA: o agente é mais um leitor.</p>
+</section>
+
+<!-- ============ Etapa 6: análise e revisão ============ -->
+
+<section>
+  <p class="etapa">Etapa 6 · Análise e revisão</p>
+  <h2>O mesmo projeto, agora com critério declarado</h2>
+  <pre class="quebra"><code class="language-plaintext" data-trim>
+Analise o backend conforme o AGENTS.md e as rules do projeto.
+Liste cada divergência com o arquivo, a linha e a regra violada.
+Não altere nenhum arquivo.
+  </code></pre>
+  <ul style="font-size:.6em">
+    <li>Encerre o agente e inicie-o de novo em <code>projeto/</code>: os arquivos de instrução são carregados no início da sessão;</li>
+    <li>O pedido cita o critério: as regras que a turma escreveu;</li>
+    <li>"Não altere nenhum arquivo": primeiro a lista, depois a decisão da equipe sobre cada item.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Checkpoint: as divergências que o código tem hoje</h2>
+  <table class="status-tab" style="font-size:.5em">
+    <tr><th>Arquivo e linha</th><th>O que o código faz</th><th>Regra ou decisão</th></tr>
+    <tr><td><code>routers/books.py:2</code> e <code>:99</code></td><td>importa <code>httpx2</code> e captura <code>httpx2.HTTPError</code></td><td>"Uma rota não importa <code>httpx2</code>"</td></tr>
+    <tr><td><code>routers/books.py:24</code></td><td>filtra a lista por <code>is_admin</code> e <code>user_id</code></td><td>"Cada regra do domínio existe em um só lugar"</td></tr>
+    <tr><td><code>routers/books.py:102</code></td><td>decide não gravar o resumo de livro desconhecido</td><td>"Uma rota não decide [...] quando um AI Summary é gravado"</td></tr>
+    <tr><td><code>security.py:16</code></td><td><code>SECRET_KEY</code> escrita no código</td><td>"Segredos ficam em variáveis de ambiente"</td></tr>
+    <tr><td><code>main.py:35</code></td><td><code>def read_health</code>, sem chamada bloqueante</td><td>ADR-0003: <code>async def</code> quando não há chamada bloqueante</td></tr>
+  </table>
+  <ul style="font-size:.56em;margin-top:.8em">
+    <li>A lista do agente varia a cada execução: abra o arquivo na linha citada e confirme cada achado antes de aceitá-lo;</li>
+    <li>Um achado que cita regra que não existe, ou linha que não contém o que ele descreve, é recusado.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 6 · Análise e revisão</p>
+  <h2>A revisão com a skill</h2>
+  <pre class="quebra"><code class="language-plaintext" data-trim>
+Revise backend/routers/books.py com a skill revisao-de-codigo.
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>O pedido em texto, com o nome da skill, serve a qualquer agente: o modelo carrega a skill pelo nome. Algumas ferramentas têm atalho: <code>$</code> no Codex, <code>/</code> no Cursor e no Claude Code;</li>
+    <li>Confira o relato: os cinco itens aparecem na ordem? Cada achado tem arquivo, linha, regra, consequência e correção?</li>
+    <li>Compare com o Checkpoint: quais achados se repetem? A skill encontrou algo de correção, de segurança ou de testes que a análise não trouxe?</li>
+    <li>Escolha um achado classificado como <strong>dúvida</strong>: qual decisão a equipe precisa registrar para resolvê-lo?</li>
+  </ul>
+  <p class="cite">Documentação do OpenCode - Skills · Documentação do Codex - Skills · cursor.com/docs/skills</p>
+</section>
+
+<section>
+  <p class="etapa">Etapa 6 · Análise e revisão</p>
+  <h2>O código cumpre a spec?</h2>
+  <pre class="quebra"><code class="language-plaintext" data-trim>
+Verifique se o backend cumpre docs/specs/ai-summary.md.
+Para cada critério de aceitação, cite o código que o cumpre e o teste que o verifica.
+Não altere nenhum arquivo.
+  </code></pre>
+  <ul style="font-size:.58em">
+    <li>Três dos quatro critérios não têm teste: <code>tests/test_books_api.py</code> verifica só o caminho de sucesso;</li>
+    <li>O critério do 502 não é cumprido em todos os casos: uma resposta do Gemini sem o campo <code>steps</code> lança <code>KeyError</code> em <code>gemini.py:48</code>, a rota não o captura, e a API responde 500;</li>
+    <li>Cada lacuna vira um pedido preciso: um teste a escrever ou uma correção a fazer, com o critério que a justifica.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="etapa">Etapa 6 · Análise e revisão</p>
+  <h2>As duas análises, lado a lado</h2>
+  <table class="status-tab" style="font-size:.54em">
+    <tr><th></th><th>Sem instruções</th><th>Com as decisões escritas</th></tr>
+    <tr><td><strong>Critério</strong></td><td>inferido pelo modelo</td><td>declarado pela equipe</td></tr>
+    <tr><td><strong>Achado</strong></td><td>uma opinião sobre o código</td><td>um arquivo, uma linha e uma regra</td></tr>
+    <tr><td><strong>Como se confere</strong></td><td>não há com o que comparar</td><td>abre-se o arquivo e lê-se a regra</td></tr>
+    <tr><td><strong>Quem decide</strong></td><td>o modelo propõe e ninguém tem base para recusar</td><td>a equipe aceita, recusa ou muda a regra</td></tr>
+  </table>
+  <ul style="font-size:.58em;margin-top:.8em">
+    <li>Aceitar um achado, recusá-lo ou mudar a regra são três decisões de engenharia;</li>
+    <li>Nenhuma delas pode ser tomada por quem não conhece o motivo da regra.</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.1em"><span class="recap">Recapitulando - as decisões escritas para o agente</span></h2>
+  <ul style="font-size:.74em">
+    <li><code>AGENTS.md</code>: o projeto, os comandos, onde estão as decisões, a arquitetura e os limites - em toda sessão;</li>
+    <li>Rules: restrições curtas e verificáveis, uma por assunto; o <code>AGENTS.md</code> diz quando ler cada uma;</li>
+    <li>Skill: um procedimento com ordem e formato de relato, carregado quando a tarefa pede;</li>
+    <li>ADR (Nygard, 2011): o porquê de uma decisão. Spec: o que construir, com critérios de aceitação verificáveis;</li>
+    <li>Todos só carregam o que a equipe decidiu. Sem decisão, não há o que escrever.</li>
+  </ul>
+</section>
+
+<!-- ============ Exercício e fechamento ============ -->
+
+<section>
+  <h2>Exercício em sala</h2>
+  <ol style="font-size:.62em">
+    <li><strong>A rule dos testes:</strong> escreva <code>docs/rules/tests.md</code>, com três restrições que a turma considera obrigatórias num teste, e acrescente a linha dela na seção de regras do <code>AGENTS.md</code>. Cada restrição precisa ser verificável. Peça ao agente a lista de divergências em <code>backend/tests/</code>;</li>
+    <li><strong>No projeto da equipe:</strong> escreva um ADR com a decisão de arquitetura do backend - o contexto, a decisão, as consequências e uma alternativa rejeitada. Resuma-o na seção de arquitetura do <code>AGENTS.md</code>, peça ao agente as divergências e classifique cada achado: aceito, recusado ou a regra muda.</li>
+  </ol>
+  <div class="nota">O <code>tests.md</code> do primeiro exercício é descartável: apague-o, com a linha do <code>AGENTS.md</code>, ao final. No segundo, a equipe apresenta as consequências que registrou no ADR, um achado aceito e um recusado, com o motivo de cada decisão.</div>
+</section>
+
+<section>
+  <h2>Síntese da aula</h2>
+  <ul style="font-size:.54em">
+    <li>Engenharia de software é a aplicação de uma abordagem sistemática, disciplinada e quantificável ao desenvolvimento, à operação e à manutenção (IEEE 610.12). O domínio é o assunto a que o usuário aplica o programa, e a linguagem ubíqua dá um só nome a cada conceito dele (Evans, 2003);</li>
+    <li>Arquitetura é a estrutura do sistema - elementos, relações e princípios de evolução (ISO/IEC/IEEE 42010) - e uma das áreas da engenharia; reúne as decisões difíceis de mudar, e cada uma é uma troca (Richards e Ford, 2020);</li>
+    <li>Um padrão arquitetural define as partes do sistema, a responsabilidade de cada uma e as relações entre elas (Buschmann et al., 1996). O MVC (Reenskaug, 1979) separa as regras da apresentação; o Ports and Adapters (Cockburn, 2005) separa as regras da tecnologia. Cada padrão tem um ganho e um custo;</li>
+    <li>Um agente de codificação infere o que o pedido não informa. O <code>AGENTS.md</code>, as rules e a skill declaram as decisões da equipe; o ADR (Nygard, 2011) guarda o porquê, e a spec, o que construir. A análise passa a citar arquivo, linha e regra;</li>
+    <li>Escrever uma regra verificável e julgar um achado exigem conhecer a decisão e o motivo dela: quem não sabe o que pedir não tem critério para recusar o que recebe.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Referências</h2>
+  <ul style="font-size:.37em">
+    <li>NAUR, P.; RANDELL, B. (eds.). <em>Software Engineering: Report on a Conference Sponsored by the NATO Science Committee</em>. Garmisch, 1968; OTAN, 1969.</li>
+    <li>IEEE. <em>IEEE Standard Glossary of Software Engineering Terminology</em> (IEEE Std 610.12-1990).</li>
+    <li>IEEE COMPUTER SOCIETY. <em>Guide to the Software Engineering Body of Knowledge (SWEBOK Guide)</em>, versão 4.0, 2024.</li>
+    <li>BROOKS, F. P. <em>No Silver Bullet: Essence and Accidents of Software Engineering</em>. IEEE Computer, 1987.</li>
+    <li>ISO/IEC/IEEE 42010:2011. <em>Systems and software engineering - Architecture description</em>.</li>
+    <li>BASS, L.; CLEMENTS, P.; KAZMAN, R. <em>Software Architecture in Practice</em>. 2ª ed., Addison-Wesley, 2003.</li>
+    <li>FOWLER, M. <em>Who Needs an Architect?</em>. IEEE Software, 2003. FOWLER, M. <em>Patterns of Enterprise Application Architecture</em>. Addison-Wesley, 2002.</li>
+    <li>RICHARDS, M.; FORD, N. <em>Fundamentals of Software Architecture</em>. O'Reilly, 2020.</li>
+    <li>DIJKSTRA, E. W. <em>On the role of scientific thought</em> (EWD 447), 1974. PARNAS, D. <em>On the Criteria To Be Used in Decomposing Systems into Modules</em>. CACM, 1972.</li>
+    <li>EVANS, E. <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em>. Addison-Wesley, 2003. EVANS, E. <em>Domain-Driven Design Reference</em>. domainlanguage.com, 2015.</li>
+    <li>ALEXANDER, C. et al. <em>A Pattern Language</em>. Oxford University Press, 1977. GAMMA, E. et al. <em>Design Patterns</em>. Addison-Wesley, 1994. BUSCHMANN, F. et al. <em>Pattern-Oriented Software Architecture, Volume 1: A System of Patterns</em>. Wiley, 1996.</li>
+    <li>REENSKAUG, T. <em>Models-Views-Controllers</em>. Nota técnica, Xerox PARC, 1979.</li>
+    <li>COCKBURN, A. <em>Hexagonal Architecture</em>. alistair.cockburn.us, 2005.</li>
+    <li>MARTIN, R. C. <em>The Dependency Inversion Principle</em>. C++ Report, 1996. MARTIN, R. C. <em>The Clean Architecture</em>. blog.cleancoder.com, 2012. PALERMO, J. <em>The Onion Architecture</em>. jeffreypalermo.com, 2008.</li>
+    <li>MESZAROS, G. <em>xUnit Test Patterns: Refactoring Test Code</em>. Addison-Wesley, 2007.</li>
+    <li>JURAFSKY, D.; MARTIN, J. H. <em>Speech and Language Processing</em>. 3ª ed., rascunho - web.stanford.edu/~jurafsky/slp3.</li>
+    <li>PERRY, N.; SRIVASTAVA, M.; KUMAR, D.; BONEH, D. <em>Do Users Write More Insecure Code with AI Assistants?</em>. ACM CCS, 2023.</li>
+    <li>SHEN, J. H.; TAMKIN, A. <em>How AI Impacts Skill Formation</em>. arXiv:2601.20245, 2026.</li>
+    <li>GLOAGUEN, T. et al. <em>Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?</em>. arXiv:2602.11988, versão 3, 2026.</li>
+    <li>NAUR, P. <em>Programming as Theory Building</em>. Microprocessing and Microprogramming, 1985.</li>
+    <li>FAGAN, M. E. <em>Design and code inspections to reduce errors in program development</em>. IBM Systems Journal, 1976. BACCHELLI, A.; BIRD, C. <em>Expectations, Outcomes, and Challenges of Modern Code Review</em>. ICSE, 2013.</li>
+    <li>NYGARD, M. <em>Documenting Architecture Decisions</em>. cognitect.com, 2011. NORTH, D. <em>Introducing BDD</em>. Better Software, 2006. IEEE Std 830-1998, <em>Recommended Practice for Software Requirements Specifications</em>. GITHUB. <em>Spec-driven development with AI</em>. github.blog, 2025.</li>
+    <li>AGENTS.md - agents.md. Agent Skills - agentskills.io/specification. Documentação do OpenCode - opencode.ai/docs (<em>Instructions</em>, <em>Rules</em>, <em>Skills</em>, <em>Config</em>); do Codex - learn.chatgpt.com/docs; do Claude Code - code.claude.com/docs (<em>Memory</em>); do Cursor - cursor.com/docs; do GitHub Copilot - docs.github.com/copilot; do Gemini CLI - geminicli.com/docs.</li>
+  </ul>
+</section>
+
+</div>
+</div>
+
+<script src="reveal/dist/reveal.js"></script>
+<script src="reveal/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    plugins: [ RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>

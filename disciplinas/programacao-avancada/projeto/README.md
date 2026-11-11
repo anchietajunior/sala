@@ -114,6 +114,47 @@ Com o backend (uvicorn) e o frontend (npm run dev) rodando, em outro terminal:
 Os testes de ponta a ponta cadastram usuários de verdade no banco de desenvolvimento,
 com e-mails aleatórios (`leitor-<id>@exemplo.com`).
 
+## Decisões do projeto e agentes de IA
+
+As decisões do projeto ficam em arquivos Markdown, lidos por pessoas e por agentes
+de codificação (OpenCode, Codex, Cursor, GitHub Copilot, Claude Code):
+
+    projeto/
+    ├── AGENTS.md        ← o projeto, os comandos, onde estão as decisões, a arquitetura, as regras e os limites
+    ├── opencode.json    ← configuração do OpenCode: carrega docs/rules/*.md em toda sessão
+    ├── CONTEXT.md       ← o glossário do domínio
+    ├── docs/
+    │   ├── adr/         ← uma decisão por arquivo, com o motivo e as alternativas rejeitadas
+    │   ├── specs/       ← o comportamento esperado de cada funcionalidade e os critérios de aceitação
+    │   └── rules/
+    │       ├── architecture.md  ← restrições da arquitetura do backend
+    │       └── api.md           ← restrições das rotas da API
+    └── .agents/
+        └── skills/
+            └── revisao-de-codigo/SKILL.md  ← o procedimento de revisão de código
+
+Os arquivos seguem formatos abertos: o `AGENTS.md` (agents.md) e as Agent Skills
+(agentskills.io), na pasta `.agents/skills/`. As rules são Markdown comum; o `AGENTS.md`
+diz quando ler cada uma, e o `opencode.json` é o único arquivo próprio de uma ferramenta.
+
+Inicie o agente dentro de `projeto/` (Mac e Windows):
+
+    cd projeto
+    opencode
+
+Para revisar um arquivo, peça: `Revise backend/routers/books.py com a skill revisao-de-codigo.`
+O Claude Code não lê `.agents/skills/`: nele, copie a pasta da skill para `.claude/skills/`.
+
+O backend segue a separação do MVC, com as regras do domínio no model (ADR-0006).
+A análise do código contra essas decisões aponta divergências, que seguem em aberto:
+
+- `routers/books.py` importa `httpx2`, repete a regra de acesso na listagem e decide
+  quando o AI Summary é gravado;
+- a `SECRET_KEY` está escrita em `security.py`;
+- `GET /health` é `def`, e o ADR-0003 pede `async def` quando não há chamada bloqueante;
+- três dos quatro critérios de aceitação de `docs/specs/ai-summary.md` não têm teste, e
+  uma resposta do Gemini sem o campo `steps` responde 500 em vez de 502.
+
 ## Estrutura do backend
 
     backend/

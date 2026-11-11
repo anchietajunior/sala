@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <text x="175" y="26" text-anchor="middle" font-size="12" fill="#666">arquivo do repositório</text>
+  <text x="465" y="26" text-anchor="middle" font-size="12" fill="#666">quando é carregado</text>
+
+  <!-- o contexto do modelo -->
+  <rect x="600" y="40" width="180" height="214" rx="8" fill="#2b2b2b"/>
+  <text x="690" y="130" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Contexto</text>
+  <text x="690" y="150" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">do modelo</text>
+  <text x="690" y="176" text-anchor="middle" font-size="12" fill="#bbb">o texto que o modelo</text>
+  <text x="690" y="192" text-anchor="middle" font-size="12" fill="#bbb">lê a cada pedido</text>
+
+  <!-- AGENTS.md -->
+  <rect x="20" y="40" width="310" height="62" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="34" y="64" font-size="12.5" font-family="monospace" fill="#8a6508">AGENTS.md</text>
+  <text x="34" y="86" font-size="12" fill="#333">o projeto, os comandos e onde estão as decisões</text>
+  <path d="M 332 71 L 596 71" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="465" y="62" text-anchor="middle" font-size="12" fill="#333">em toda sessão</text>
+
+  <!-- rules -->
+  <rect x="20" y="116" width="310" height="62" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.8"/>
+  <text x="34" y="140" font-size="12.5" font-family="monospace" fill="#8a6508">docs/rules/*.md</text>
+  <text x="34" y="162" font-size="12" fill="#333">as restrições de cada parte do código</text>
+  <path d="M 332 147 L 596 147" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="7 4" marker-end="url(#seta)"/>
+  <text x="465" y="138" text-anchor="middle" font-size="12" fill="#333">quando o AGENTS.md manda ler,</text>
+  <text x="465" y="164" text-anchor="middle" font-size="12" fill="#333">ou sempre, por configuração</text>
+
+  <!-- skill -->
+  <rect x="20" y="192" width="310" height="62" rx="8" fill="#fdf6e3" stroke="#b8962e" stroke-width="1.8"/>
+  <text x="34" y="216" font-size="12.5" font-family="monospace" fill="#8a6508">.agents/skills/revisao-de-codigo/</text>
+  <text x="34" y="238" font-size="12" fill="#333">um procedimento de vários passos</text>
+  <path d="M 332 223 L 596 223" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="7 4" marker-end="url(#seta)"/>
+  <text x="465" y="214" text-anchor="middle" font-size="12" fill="#333">a descrição, em toda sessão;</text>
+  <text x="465" y="240" text-anchor="middle" font-size="12" fill="#333">o corpo, quando a tarefa pede</text>
+
+  <text x="400" y="290" text-anchor="middle" font-size="13" fill="#222">O contexto é limitado: o que entra em toda sessão precisa ser curto e específico.</text>
+  <text x="400" y="316" text-anchor="middle" font-size="12" fill="#999">Documentação do OpenCode - Instructions e Skills · Agent Skills - agentskills.io/specification</text>
+</svg>

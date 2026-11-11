@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370">
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- cliente -->
+  <rect x="10" y="130" width="130" height="80" rx="8" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="75" y="165" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Cliente</text>
+  <text x="75" y="187" text-anchor="middle" font-size="12.5" fill="#555">navegador</text>
+
+  <!-- controller -->
+  <rect x="270" y="30" width="200" height="96" rx="8" fill="#eef4fa" stroke="#2e6da4" stroke-width="1.8"/>
+  <text x="370" y="56" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Controller</text>
+  <text x="370" y="77" text-anchor="middle" font-size="12" fill="#333">recebe a requisição e</text>
+  <text x="370" y="93" text-anchor="middle" font-size="12" fill="#333">decide o que acionar</text>
+  <text x="370" y="114" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#8a6508">routers/</text>
+
+  <!-- model -->
+  <rect x="590" y="30" width="200" height="96" rx="8" fill="#eef7ee" stroke="#3c8d3c" stroke-width="1.8"/>
+  <text x="690" y="56" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Model</text>
+  <text x="690" y="77" text-anchor="middle" font-size="12" fill="#333">os dados e as regras</text>
+  <text x="690" y="93" text-anchor="middle" font-size="12" fill="#333">do domínio</text>
+  <text x="690" y="114" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#8a6508">models.py</text>
+
+  <!-- view -->
+  <rect x="270" y="214" width="200" height="96" rx="8" fill="#fdf6e3" stroke="#b8962e" stroke-width="1.8"/>
+  <text x="370" y="240" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">View</text>
+  <text x="370" y="261" text-anchor="middle" font-size="12" fill="#333">a representação</text>
+  <text x="370" y="277" text-anchor="middle" font-size="12" fill="#333">entregue ao cliente</text>
+  <text x="370" y="298" text-anchor="middle" font-size="11.5" font-family="monospace" fill="#8a6508">schemas.py → JSON</text>
+
+  <!-- banco de dados -->
+  <path d="M 640 222 L 640 282 A 50 12 0 0 0 740 282 L 740 222" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <ellipse cx="690" cy="222" rx="50" ry="12" fill="#fff" stroke="#555" stroke-width="1.8"/>
+  <text x="690" y="264" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">MySQL</text>
+
+  <!-- 1: requisição -->
+  <path d="M 75 128 L 75 78 L 266 78" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="170" y="68" text-anchor="middle" font-size="12" fill="#333">1 · requisição HTTP</text>
+
+  <!-- 2: controller aciona o model -->
+  <path d="M 472 78 L 586 78" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="530" y="60" text-anchor="middle" font-size="12" fill="#333">2 · consulta</text>
+  <text x="530" y="98" text-anchor="middle" font-size="12" fill="#333">ou altera</text>
+
+  <!-- 3: model e banco -->
+  <path d="M 690 128 L 690 206" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="700" y="172" font-size="12" fill="#333">3 · SQL</text>
+
+  <!-- 4: controller entrega os dados à view -->
+  <path d="M 370 128 L 370 210" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="380" y="174" font-size="12" fill="#333">4 · entrega os dados</text>
+
+  <!-- 5: resposta -->
+  <path d="M 268 262 L 75 262 L 75 214" fill="none" stroke="#555" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="170" y="282" text-anchor="middle" font-size="12" fill="#333">5 · resposta</text>
+
+  <text x="400" y="340" text-anchor="middle" font-size="13" fill="#222">O Model não conhece o Controller nem a View: as regras do domínio não dependem de HTTP.</text>
+  <text x="400" y="362" text-anchor="middle" font-size="12" fill="#999">REENSKAUG, T. - Models-Views-Controllers, Xerox PARC, 1979 · FOWLER, M. - PoEAA, 2002</text>
+</svg>
